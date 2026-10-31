@@ -8101,6 +8101,24 @@
 								},
 								"stances": {
 									"type": "string"
+								},
+								"forms": {
+									"type": "string"
+								},
+								"cat": {
+									"type": "string"
+								},
+								"stealth": {
+									"type": "string"
+								},
+								"bear": {
+									"type": "string"
+								},
+								"utility": {
+									"type": "string"
+								},
+								"druid": {
+									"type": "string"
 								}
 							},
 							"additionalProperties": false,
@@ -8146,7 +8164,13 @@
 								"external_debuffs",
 								"variables",
 								"groups",
-								"stances"
+								"stances",
+								"forms",
+								"cat",
+								"stealth",
+								"bear",
+								"utility",
+								"druid"
 							]
 						},
 						"item_swap_sets": {
