@@ -3,6 +3,7 @@ import type { LevelDefaultsResult } from '@generated/proto/api';
 import { Stat } from '@generated/proto/common';
 import i18n from '@i18n/config';
 import { BOSS_LEVEL, CHARACTER_LEVEL } from '@sim/constants/mechanics';
+import { LaunchStatus } from '@sim/constants/other';
 import type { Player } from '@sim/player/player';
 import { Stats } from '@sim/proto/stats';
 import { getTalentPoints } from '@sim/proto/utils';
@@ -13,7 +14,7 @@ import { SimRunKind } from '@sim/state/sim_store';
 import { errorHeadline } from '@sim/utils/format';
 import { toastManager } from '@ui-kit/Toast';
 
-import { levelPresetFile, presetLevelDefaults } from './level_presets';
+import { levelPresetFile, plannerLevelDefaults, presetLevelDefaults } from './level_presets';
 
 // Sets the character's level, kept between the spec's minimum (`minLevel`, 1 by default) and 60. A first target at the
 // boss level, or at or 3 above the old level, moves with the character: to the same level below 60 and back to the boss
@@ -88,10 +89,14 @@ const loadLevelDefaults = async (host: IndividualSimHost<any>, level: number, ta
 	const { player, sim, individualConfig: config } = host;
 	let busy: string | undefined;
 	try {
-		const file = await levelPresetFile(player);
+		// A gear planner page has no sim to work a level out with, and no file of worked-out levels.
+		const canSim = player.getPlayerSpec().launch.status > LaunchStatus.GearPlanner;
+		const file = canSim ? await levelPresetFile(player) : undefined;
 		if (player.getLevel() != level) return;
 		let result: LevelDefaultsResult;
-		if (file) {
+		if (!canSim) {
+			result = await plannerLevelDefaults(host, level, gearOnly);
+		} else if (file) {
 			result = await presetLevelDefaults(host, file, level, gearOnly);
 		} else {
 			busy = toastManager.add({ variant: 'info', body: i18n.t('settings_tab.player.level.loading', { level }), autohide: false, canClose: false });
@@ -115,7 +120,7 @@ const loadLevelDefaults = async (host: IndividualSimHost<any>, level: number, ta
 			player.setTalentsString(talentsString);
 			if (dps?.epValues) player.setEpWeights(Stats.fromProto(dps.epValues));
 			applyDefaultOptions(host);
-			if (targetFollows) setTargetArmor(host, targetArmor);
+			if (targetFollows && canSim) setTargetArmor(host, targetArmor);
 		});
 		loadedToast(level);
 	} catch (error) {

@@ -3,6 +3,7 @@ import { ConsumesSpec, EquipmentSpec, ItemSlot, ItemSpec, ItemType, Spec, Stat }
 import { SavedTalents, UIDatabase, UIItem } from '@generated/proto/ui';
 import { SITE_BASE } from '@sim/constants/other';
 import { Stats } from '@sim/proto/stats';
+import { getTalentPoints } from '@sim/proto/utils';
 import { makeIndividualSim, serveDatabase } from '@testing/sim/individual_sim';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
@@ -127,5 +128,29 @@ describe('applyLevelEdit with worked-out levels', () => {
 		await applyLevelEdit(host, 31);
 		expect(levelDefaults).toHaveBeenCalledTimes(2);
 		expect(fetchesOf(fetch, 'mage_dps')).toBe(2);
+	});
+});
+
+describe('applyLevelEdit on a gear planner page', () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+		serveDatabase();
+	});
+
+	it('trims the default talents and picks the gear by the current EP, without the sim or a file', async () => {
+		const fetch = serveSite({});
+		const { host, player, levelDefaults, bisGear, head } = await setup(Spec.SpecHolyPaladin);
+
+		await applyLevelEdit(host, 30);
+
+		expect(levelDefaults).not.toHaveBeenCalled();
+		expect(fetchesOf(fetch, 'paladin_holy')).toBe(0);
+		expect(bisGear).toHaveBeenCalledOnce();
+		expect(bisGear.mock.calls[0][1]).toBe(30);
+		// The fixture's talents are a warrior's, which the paladin tree takes only in part; the trim is trim_talents.test.ts'.
+		const points = getTalentPoints(player.getTalentsString());
+		expect(points).toBeGreaterThan(0);
+		expect(points).toBeLessThanOrEqual(21);
+		expect(head()).toBe(7915);
 	});
 });

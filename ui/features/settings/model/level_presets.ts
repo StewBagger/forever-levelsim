@@ -103,3 +103,13 @@ export const presetLevelDefaults = async (
 		targetArmor: file.creatureArmor[level - 1],
 	});
 };
+
+// A level's talents and gear for a spec page that cannot sim (a gear planner): the spec's default talents trimmed to the
+// level's points and the best gear in slot for the level by the player's current EP, which sims nothing. There is no
+// stat weight run behind it, so the EP stays the player's, and no target to set.
+export const plannerLevelDefaults = async (host: IndividualSimHost<any>, level: number, gearOnly: boolean): Promise<LevelDefaultsResult> => {
+	const { player, sim, individualConfig: config } = host;
+	const talentsString = gearOnly ? player.getTalentsString() : trimTalents(config.defaults.talents.talentsString, maxTalentPoints(level));
+	player.setTalentsString(talentsString);
+	return LevelDefaultsResult.create({ talentsString, equipment: await sim.bisGear(player, level, player.getEpWeights()) });
+};
