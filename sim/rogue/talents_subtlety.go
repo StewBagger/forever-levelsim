@@ -69,10 +69,12 @@ func (rogue *Rogue) registerInitiative() {
 	rogue.MakeProcTriggerAura(trigger)
 }
 
-var ghostlyStrikeRank = spellData.GhostlyStrike.Highest()
-
 func (rogue *Rogue) registerGhostlyStrike() {
 	if !rogue.Talents.GhostlyStrike {
+		return
+	}
+	ghostlyStrikeRank := spelldata.LearnedRank(&rogue.Unit, spellData.GhostlyStrike, spellData.GhostlyStrike.Highest())
+	if ghostlyStrikeRank == spelldata.Nil {
 		return
 	}
 
@@ -90,7 +92,7 @@ func (rogue *Rogue) registerGhostlyStrike() {
 		result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 		if result.Landed() {
-			rogue.AddComboPoints(sim, int32(ghostlyStrikeRank.ProcEnergizeEffect().Roll(sim)), spell.ComboPointMetrics())
+			rogue.AddComboPoints(sim, int32(ghostlyStrikeRank.ProcEnergizeEffect().RollAt(sim, rogue.Level)), spell.ComboPointMetrics())
 		} else {
 			spell.IssueRefund(sim)
 		}
@@ -136,8 +138,12 @@ func (rogue *Rogue) registerPreparation() {
 	}
 
 	// Prep purely runs a server-side script, so no client data to reference.
+	preparationRank := spelldata.LearnedRank(&rogue.Unit, spellData.Preparation, spellData.Preparation.Highest())
+	if preparationRank == spelldata.Nil {
+		return
+	}
 
-	config := spelldata.SpellConfig(&rogue.Unit, spellData.Preparation.Highest(), spelldata.Flags(core.SpellFlagAPL|core.SpellFlagMCD))
+	config := spelldata.SpellConfig(&rogue.Unit, preparationRank, spelldata.Flags(core.SpellFlagAPL|core.SpellFlagMCD))
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		if rogue.ColdBlood != nil {
 			rogue.ColdBlood.CD.Set(0)
@@ -176,10 +182,12 @@ func (rogue *Rogue) registerDirtyDeeds() {
 		spellData.DirtyDeeds.Rank(rogue.Talents.DirtyDeeds))
 }
 
-var hemorrhageRank = spellData.Hemorrhage.Highest()
-
 func (rogue *Rogue) registerHemorrhage() {
 	if !rogue.Talents.Hemorrhage {
+		return
+	}
+	hemorrhageRank := spelldata.LearnedRank(&rogue.Unit, spellData.Hemorrhage, spellData.Hemorrhage.Highest())
+	if hemorrhageRank == spelldata.Nil {
 		return
 	}
 
@@ -190,7 +198,7 @@ func (rogue *Rogue) registerHemorrhage() {
 
 	hemoAuras := rogue.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		hemoAura := target.GetOrRegisterAura(spelldata.AuraConfig(hemorrhageRank))
-		spelldata.ParseEffects(nil, hemoAura, spellData.Hemorrhage.Highest(),
+		spelldata.ParseEffects(nil, hemoAura, hemorrhageRank,
 			spelldata.FromCaster(&rogue.Unit, DDBC_Hemorrhage, DDBC_Total))
 		return hemoAura
 	})
@@ -201,7 +209,7 @@ func (rogue *Rogue) registerHemorrhage() {
 		result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 		if result.Landed() {
 			hemoAuras.Get(target).Activate(sim)
-			rogue.AddComboPoints(sim, int32(hemorrhageRank.ProcEnergizeEffect().Roll(sim)), spell.ComboPointMetrics())
+			rogue.AddComboPoints(sim, int32(hemorrhageRank.ProcEnergizeEffect().RollAt(sim, rogue.Level)), spell.ComboPointMetrics())
 		} else {
 			spell.IssueRefund(sim)
 		}
@@ -214,10 +222,12 @@ func (rogue *Rogue) registerHemorrhage() {
 	})
 }
 
-var premeditationRank = spellData.Premeditation.Highest()
-
 func (rogue *Rogue) registerPremeditation() {
 	if !rogue.Talents.Premeditation {
+		return
+	}
+	premeditationRank := spelldata.LearnedRank(&rogue.Unit, spellData.Premeditation, spellData.Premeditation.Highest())
+	if premeditationRank == spelldata.Nil {
 		return
 	}
 
@@ -225,7 +235,7 @@ func (rogue *Rogue) registerPremeditation() {
 	premedMetrics := rogue.NewComboPointMetrics(core.ActionID{SpellID: premeditationRank.ID})
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		rogue.AddComboPoints(sim, int32(premeditationRank.ProcEnergizeEffect().Roll(sim)), premedMetrics)
+		rogue.AddComboPoints(sim, int32(premeditationRank.ProcEnergizeEffect().RollAt(sim, rogue.Level)), premedMetrics)
 	}
 
 	rogue.Premeditation = rogue.GetOrRegisterSpell(config)
@@ -273,10 +283,14 @@ func (rogue *Rogue) registerCutthroat() {
 	cutthroatTrigger := spellData.CutthroatTriggered.Highest()
 	rogue.CutthroatAura = rogue.RegisterAura(spelldata.AuraConfig(cutthroatTrigger)).
 		ApplyOnGain(func(_ *core.Aura, _ *core.Simulation) {
-			rogue.Ambush.CastRequirement.CasterForm = true
+			if rogue.Ambush != nil {
+				rogue.Ambush.CastRequirement.CasterForm = true
+			}
 		}).
 		ApplyOnExpire(func(_ *core.Aura, _ *core.Simulation) {
-			rogue.Ambush.CastRequirement.CasterForm = false
+			if rogue.Ambush != nil {
+				rogue.Ambush.CastRequirement.CasterForm = false
+			}
 		})
 
 	cutthroatRank := spellData.Cutthroat.Rank(rogue.Talents.Cutthroat)

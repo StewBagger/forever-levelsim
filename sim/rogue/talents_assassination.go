@@ -95,10 +95,12 @@ func (rogue *Rogue) registerVilePoisons() {
 		spellData.VilePoisons.Rank(rogue.Talents.VilePoisons))
 }
 
-var coldBloodRank = spellData.ColdBlood.Highest()
-
 func (rogue *Rogue) registerColdBlood() {
 	if !rogue.Talents.ColdBlood {
+		return
+	}
+	coldBloodRank := spelldata.LearnedRank(&rogue.Unit, spellData.ColdBlood, spellData.ColdBlood.Highest())
+	if coldBloodRank == spelldata.Nil {
 		return
 	}
 
@@ -155,19 +157,21 @@ func (rogue *Rogue) registerSealFate() {
 	rogue.MakeProcTriggerAura(trigger)
 }
 
-var mutilateCastRank = spellData.Mutilate.Highest()
-
 func (rogue *Rogue) registerMutilate() {
 	if !rogue.Talents.Mutilate {
 		return
 	}
+	mutilateCastRank := spelldata.LearnedRank(&rogue.Unit, spellData.Mutilate, spellData.Mutilate.Highest())
+	if mutilateCastRank == spelldata.Nil {
+		return
+	}
 
-	rogue.MutilateMH = rogue.newMutilateHitSpell(true)
-	rogue.MutilateOH = rogue.newMutilateHitSpell(false)
+	rogue.MutilateMH = rogue.newMutilateHitSpell(mutilateCastRank, true)
+	rogue.MutilateOH = rogue.newMutilateHitSpell(mutilateCastRank, false)
 
 	// TODO: Verify if Mutilate (Cast) can proc MH poisons itself (detected as a double MH poison proc)
 	config := spelldata.SpellConfig(&rogue.Unit, mutilateCastRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
-	pointGen := mutilateCastRank.EnergizeEffect().Average()
+	pointGen := mutilateCastRank.EnergizeEffect().AverageAt(rogue.Level)
 	config.ExtraCastCondition = func(sim *core.Simulation, target *core.Unit) bool {
 		return rogue.HasDagger(core.MainHand) && rogue.HasDagger(core.OffHand)
 	}
@@ -188,14 +192,15 @@ func (rogue *Rogue) registerMutilate() {
 	rogue.Mutilate = rogue.RegisterSpell(config)
 }
 
-func (rogue *Rogue) newMutilateHitSpell(isMH bool) *core.Spell {
-	hitRank := mutilateCastRank.EffectN(3).Trigger() // 1241590, off hand
+// The strikes are the cast rank's own triggers: at rank 4, 1241586 in the main hand and 1241590 in the off hand.
+func (rogue *Rogue) newMutilateHitSpell(mutilateCastRank *spelldata.Spell, isMH bool) *core.Spell {
+	hitRank := mutilateCastRank.EffectN(3).Trigger()
 	spellOpt := spelldata.Melee(core.ProcMaskMeleeOHSpecial)
 	if isMH {
-		hitRank = mutilateCastRank.EffectN(2).Trigger() // 1241586, main hand
+		hitRank = mutilateCastRank.EffectN(2).Trigger()
 		spellOpt = spelldata.Melee(core.ProcMaskMeleeMHSpecial)
 	}
-	mutilateHitBaseDamage := hitRank.DamageEffect().Average()
+	mutilateHitBaseDamage := hitRank.DamageEffect().AverageAt(rogue.Level)
 	config := spelldata.SpellConfig(&rogue.Unit, hitRank, spellOpt)
 	// Part of the Mutilate cast: its spell id, so metrics see one cast, and its class flags, so whatever
 	// names the cast reaches the strikes, Eureka!'s damage modifier and Head Rush alike.
@@ -230,10 +235,12 @@ func (rogue *Rogue) newMutilateHitSpell(isMH bool) *core.Spell {
 	return rogue.RegisterSpell(config)
 }
 
-var venomRank = spellData.Venom.Highest()
-
 func (rogue *Rogue) registerVenom() {
 	if !rogue.Talents.Venom {
+		return
+	}
+	venomRank := spelldata.LearnedRank(&rogue.Unit, spellData.Venom, spellData.Venom.Highest())
+	if venomRank == spelldata.Nil {
 		return
 	}
 

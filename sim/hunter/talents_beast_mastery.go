@@ -109,12 +109,14 @@ func (hunter *Hunter) registerFrenzy() {
 	})
 }
 
-var bestialWrathRank = spellData.BestialWrath.Highest()
-
 // Effect 2, the pet's damage, is the one the sim measures: effect 1 is its size and the rest its
 // immunities.
 func (hunter *Hunter) registerBestialWrath() {
 	if !hunter.Talents.BestialWrath || hunter.Pet == nil {
+		return
+	}
+	bestialWrathRank := spelldata.LearnedRank(&hunter.Unit, spellData.BestialWrath, spellData.BestialWrath.Highest())
+	if bestialWrathRank == spelldata.Nil {
 		return
 	}
 
@@ -155,12 +157,17 @@ func (hunter *Hunter) registerBestialSwiftness() {
 	aura.NewActiveMovementSpeedEffect(rank.EffectN(1).Percent())
 }
 
+// The rank a rotation names; the hunter registers the one it has learned in its place.
 var intimidationRank = spellData.Intimidation.Highest()
 
 // The pet's next attack crits, effect 2, and spends the row's one charge. Effect 1 is the stun that
 // attack carries.
 func (hunter *Hunter) registerIntimidation() {
 	if !hunter.Talents.Intimidation || hunter.Pet == nil {
+		return
+	}
+	intimidationRank := spelldata.LearnedRank(&hunter.Unit, spellData.Intimidation, intimidationRank)
+	if intimidationRank == spelldata.Nil {
 		return
 	}
 

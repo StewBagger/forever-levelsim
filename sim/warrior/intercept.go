@@ -5,13 +5,16 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var interceptRank = spellData.Intercept.Highest()
-
-// The damage sits on the stun the charge triggers, not on Intercept itself.
-var interceptStun = interceptRank.EffectN(2).Trigger()
-var interceptStunDamage = interceptStun.DamageEffect().Average()
-
 func (warrior *Warrior) registerIntercept() {
+	interceptRank := warrior.learnedRank(spellData.Intercept, spellData.Intercept.Highest())
+	if interceptRank == spelldata.Nil {
+		return
+	}
+
+	// The damage sits on the stun the charge triggers, not on Intercept itself.
+	interceptStun := interceptRank.EffectN(2).Trigger()
+	interceptStunDamage := interceptStun.DamageEffect().AverageAt(warrior.Level)
+
 	actionID := core.ActionID{SpellID: interceptRank.ID}
 	chargeMinRange := float64(interceptRank.MinRange)
 

@@ -5,10 +5,14 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+// Only the highest rank the mage knows at its level is registered, not every rank
 // spellData.ArcaneBlast lists.
 func (mage *Mage) registerArcaneBlastSpell() {
-	mage.registerArcaneBlastRank(spellData.ArcaneBlast.Len(), spellData.ArcaneBlast.Highest())
+	index, rank := mage.learnedRank(spellData.ArcaneBlast, spellData.ArcaneBlast.Highest())
+	if rank == spelldata.Nil {
+		return
+	}
+	mage.registerArcaneBlastRank(index, rank)
 }
 
 func (mage *Mage) registerArcaneBlastRank(_ int32, rank *spelldata.Spell) {
@@ -18,7 +22,7 @@ func (mage *Mage) registerArcaneBlastRank(_ int32, rank *spelldata.Spell) {
 	config.ClassSpellMask = MageSpellArcaneBlast
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		spell.CalcAndDealDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		spell.CalcAndDealDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 
 		if !mage.ArcaneChargesAura.IsActive() {
 			mage.ArcaneChargesAura.Activate(sim)

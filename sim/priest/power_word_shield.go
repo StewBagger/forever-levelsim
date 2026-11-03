@@ -13,7 +13,10 @@ func (priest *Priest) registerPowerWordShield() {
 
 	// Every rank puts up the same shield on a target, so a cast of any rank replaces the one up. The
 	// damage it absorbs is credited as shielding to the rank that cast it.
-	highest := spellData.PowerWordShield.Highest()
+	highest := priest.learnedTopRank(spellData.PowerWordShield)
+	if highest == spelldata.Nil {
+		return
+	}
 	schools := core.SpellSchool(highest.AbsorbEffect().Misc)
 	absorbLabel := spelldata.Label(highest.Name + " - " + priest.Label)
 	var strength float64
@@ -40,7 +43,7 @@ func (priest *Priest) registerPowerWordShield() {
 	shieldAura := spelldata.AuraConfig(highest)
 	shieldAura.ActionID = shieldAura.ActionID.WithTag(1)
 
-	spellData.PowerWordShield.Each(func(_ int32, rank *spelldata.Spell) {
+	priest.eachLearnedRank(spellData.PowerWordShield, func(_ int32, rank *spelldata.Spell) {
 		baseAbsorb := rank.AbsorbEffect()
 
 		config := spelldata.SpellConfig(&priest.Unit, rank, spelldata.Magic(core.ProcMaskSpellHealing))
@@ -57,7 +60,7 @@ func (priest *Priest) registerPowerWordShield() {
 			priest.weakenedSoulAuras.Get(target).Activate(sim)
 			// A shield takes the spell's own modifiers (Improved Power Word: Shield), not healing done
 			// or healing taken.
-			strength = (baseAbsorb.Average() + spell.BonusCoefficient*spell.HealingPower(target)) *
+			strength = (baseAbsorb.AverageAt(priest.Level) + spell.BonusCoefficient*spell.HealingPower(target)) *
 				spell.DamageMultiplier * spell.DamageMultiplierAdditive
 			castBy[target.UnitIndex] = spell
 			absorbs.Get(target).Activate(sim)

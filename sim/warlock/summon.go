@@ -9,14 +9,37 @@ import (
 // The summons the APL casts, each by its own row: a 10 sec cast for a share of base mana, both of which
 // Master Summoner and Fel Domination lower through the class flags the four rows share. The Voidwalker,
 // Succubus and Felhunter take the Soul Shard their rows state; the Imp's row states none.
+// A demon the warlock has not learned to summon at its level has no summon and no registered demon.
 func (warlock *Warlock) registerSummons() {
-	warlock.SummonImp = warlock.registerSummon(spellData.SummonImp.Highest(), warlock.Imp)
-	warlock.SummonVoidwalker = warlock.registerSummon(spellData.SummonVoidwalker.Highest(), warlock.Voidwalker)
-	warlock.SummonSuccubus = warlock.registerSummon(spellData.SummonSuccubus.Highest(), warlock.Succubus)
-	warlock.SummonFelhunter = warlock.registerSummon(spellData.SummonFelhunter.Highest(), warlock.Felhunter)
+	warlock.SummonImp = warlock.registerSummon(warlock.Imp)
+	warlock.SummonVoidwalker = warlock.registerSummon(warlock.Voidwalker)
+	warlock.SummonSuccubus = warlock.registerSummon(warlock.Succubus)
+	warlock.SummonFelhunter = warlock.registerSummon(warlock.Felhunter)
 }
 
-func (warlock *Warlock) registerSummon(row *spelldata.Spell, pet *WarlockPet) *core.Spell {
+// Each demon's summon, one rank each.
+var summonLadders = map[proto.WarlockOptions_Summon]spelldata.Ladder{
+	proto.WarlockOptions_Imp:        spellData.SummonImp,
+	proto.WarlockOptions_Voidwalker: spellData.SummonVoidwalker,
+	proto.WarlockOptions_Succubus:   spellData.SummonSuccubus,
+	proto.WarlockOptions_Felhunter:  spellData.SummonFelhunter,
+}
+
+// Whether the warlock has learned to summon the demon at its level. No demon needs no summon.
+func (warlock *Warlock) knowsSummon(summon proto.WarlockOptions_Summon) bool {
+	ladder, ok := summonLadders[summon]
+	return !ok || spelldata.TaughtAt(ladder.Rank(1)) <= warlock.Level
+}
+
+func (warlock *Warlock) registerSummon(pet *WarlockPet) *core.Spell {
+	if pet == nil {
+		return nil
+	}
+	ladder := summonLadders[pet.summon]
+	row := spelldata.LearnedRank(&warlock.Unit, ladder, ladder.Rank(1))
+	if row == spelldata.Nil {
+		return nil
+	}
 	config := spelldata.SpellConfig(&warlock.Unit, row, spelldata.Flags(core.SpellFlagAPL))
 	config.ProcMask = core.ProcMaskEmpty
 	config.ClassSpellMask = WarlockSpellSummonDemon

@@ -18,11 +18,6 @@ const trapTotalAPShare = 0.10
 const trapTriggerRadius = 5
 const trapArmingDelay = 500 * time.Millisecond
 
-var immolationTrapRank = spellData.ImmolationTrap.Highest()
-var immolationTrapEffectRank = spellData.ImmolationTrapTriggered.Highest()
-var explosiveTrapRank = spellData.ExplosiveTrap.Highest()
-var explosiveTrapEffectRank = spellData.ExplosiveTrapTriggered.Highest()
-
 func (hunter *Hunter) registerTraps() {
 	hunter.registerImmolationTrap()
 	hunter.registerExplosiveTrap()
@@ -51,8 +46,24 @@ func (hunter *Hunter) trapConfig(rank *spelldata.Spell, trigger *core.Spell) cor
 	return config
 }
 
+// The ranks a rotation names; the hunter registers the ones it has learned in their place.
+var immolationTrapRank = spellData.ImmolationTrap.Highest()
+var immolationTrapEffectRank = spellData.ImmolationTrapTriggered.Highest()
+var explosiveTrapRank = spellData.ExplosiveTrap.Highest()
+var explosiveTrapEffectRank = spellData.ExplosiveTrapTriggered.Highest()
+
+// The trap's rank and the rank of the effect it springs, which the trainer teaches at the same levels.
+func (hunter *Hunter) learnedTrap(trap, effect spelldata.Ladder, named, namedEffect *spelldata.Spell) (*spelldata.Spell, *spelldata.Spell) {
+	return spelldata.LearnedRank(&hunter.Unit, trap, named), spelldata.LearnedRank(&hunter.Unit, effect, namedEffect)
+}
+
 func (hunter *Hunter) registerImmolationTrap() {
+	immolationTrapRank, immolationTrapEffectRank := hunter.learnedTrap(spellData.ImmolationTrap, spellData.ImmolationTrapTriggered, immolationTrapRank, immolationTrapEffectRank)
+	if immolationTrapRank == spelldata.Nil || immolationTrapEffectRank == spelldata.Nil {
+		return
+	}
 	tick := immolationTrapEffectRank.PeriodicEffect()
+	tickDamage := tick.AverageAt(hunter.Level)
 
 	config := spelldata.SpellConfig(&hunter.Unit, immolationTrapEffectRank,
 		spelldata.Magic(core.ProcMaskSpellDamage), spelldata.RemoveFlags(core.SpellFlagAPL),
@@ -63,7 +74,7 @@ func (hunter *Hunter) registerImmolationTrap() {
 	config.Dot = spelldata.DotConfig(immolationTrapEffectRank, tick)
 	tickAPShare := trapTotalAPShare / float64(config.Dot.NumberOfTicks)
 	config.Dot.OnTick = func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-		baseDamage := tick.Average() + tickAPShare*dot.Spell.RangedAttackPower(target)
+		baseDamage := tickDamage + tickAPShare*dot.Spell.RangedAttackPower(target)
 		dot.Spell.CalcAndDealPeriodicDamage(sim, target, baseDamage, immolationTrapEffectRank.TickOutcome(dot))
 	}
 
@@ -78,11 +89,16 @@ func (hunter *Hunter) registerImmolationTrap() {
 }
 
 func (hunter *Hunter) registerExplosiveTrap() {
+	explosiveTrapRank, explosiveTrapEffectRank := hunter.learnedTrap(spellData.ExplosiveTrap, spellData.ExplosiveTrapTriggered, explosiveTrapRank, explosiveTrapEffectRank)
+	if explosiveTrapRank == spelldata.Nil || explosiveTrapEffectRank == spelldata.Nil {
+		return
+	}
 	hit := explosiveTrapEffectRank.EffectN(1)
 	// Effect 2 is a persistent area aura the resolvers do not read, so its dot is built here.
 	area := explosiveTrapEffectRank.EffectN(2)
 	numberOfTicks := int32(explosiveTrapEffectRank.Duration() / area.Period())
 	tickAPShare := trapTotalAPShare / float64(numberOfTicks)
+	areaDamage := area.AverageAt(hunter.Level)
 
 	config := spelldata.SpellConfig(&hunter.Unit, explosiveTrapEffectRank,
 		spelldata.Magic(core.ProcMaskSpellDamage), spelldata.RemoveFlags(core.SpellFlagAPL),
@@ -100,7 +116,7 @@ func (hunter *Hunter) registerExplosiveTrap() {
 		TickLength:    area.Period(),
 		OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
 			for _, target := range sim.Encounter.ActiveTargetUnits {
-				baseDamage := area.Average() + tickAPShare*dot.Spell.RangedAttackPower(target)
+				baseDamage := areaDamage + tickAPShare*dot.Spell.RangedAttackPower(target)
 				dot.Spell.CalcAndDealPeriodicDamage(sim, target, baseDamage, dot.Spell.OutcomeTickMagicHitAndCrit)
 			}
 		},
@@ -108,7 +124,7 @@ func (hunter *Hunter) registerExplosiveTrap() {
 
 	config.ApplyEffects = func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 		for _, target := range sim.Encounter.ActiveTargetUnits {
-			spell.CalcAndDealDamage(sim, target, hit.Roll(sim)+trapTotalAPShare*spell.RangedAttackPower(target), spell.OutcomeMagicHitAndCrit)
+			spell.CalcAndDealDamage(sim, target, hit.RollAt(sim, spell.Unit.Level)+trapTotalAPShare*spell.RangedAttackPower(target), spell.OutcomeMagicHitAndCrit)
 		}
 		spell.AOEDot().Apply(sim)
 	}

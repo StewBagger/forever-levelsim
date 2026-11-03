@@ -29,7 +29,7 @@ func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs) *
 
 	// Add Shaman stat dependencies
 	shaman.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
-	shaman.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[shaman.Class])
+	shaman.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiAtLevel(shaman.Class, shaman.Level))
 	shaman.EnableManaBarWithModifier()
 
 	shaman.AddStatDependency(stats.Strength, stats.AttackPower, 2.0)
@@ -131,7 +131,8 @@ func (shaman *Shaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 }
 
 // The shocks, Lightning Bolt, Chain Lightning and Lava Burst register every rank in castableRanks; the
-// other spells register their highest rank only.
+// other spells register the highest rank learned at the shaman's level only, and nothing before the
+// first rank's level.
 func (shaman *Shaman) Initialize() {
 	shaman.registerChainLightningSpell()
 	shaman.registerLightningBoltSpell()

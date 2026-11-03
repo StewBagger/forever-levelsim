@@ -5,6 +5,7 @@ import (
 
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/proto"
+	"github.com/wowsims/forever/sim/core/spelldata"
 	"github.com/wowsims/forever/sim/core/stats"
 )
 
@@ -28,6 +29,10 @@ type Hunter struct {
 
 	AspectOfTheBeastAura *core.Aura
 	MongooseBiteAura     *core.Aura
+
+	// The ranks learned at the hunter's level, each Nil while the spell is not yet known.
+	mongooseBiteRank *spelldata.Spell
+	summonHawkRank   *spelldata.Spell
 
 	rapidRecuperationAura  *core.Aura
 	rapidRecuperationShare float64 // The share of regeneration while casting the aura grants, set by what granted it.
@@ -104,7 +109,10 @@ func NewHunter(character *core.Character, options *proto.Player, hunterOptions *
 	hunter.AddStatDependency(stats.Strength, stats.AttackPower, 1)
 	hunter.AddStatDependency(stats.Agility, stats.AttackPower, 1)
 	hunter.AddStatDependency(stats.Agility, stats.RangedAttackPower, 2)
-	hunter.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[hunter.Class])
+	hunter.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiAtLevel(hunter.Class, hunter.Level))
+
+	// Read before the talents register, which Lacerating Strikes needs it for.
+	hunter.mongooseBiteRank = spelldata.LearnedRank(&hunter.Unit, spellData.MongooseBite, mongooseBiteRank)
 
 	hunter.Pet = hunter.NewHunterPet()
 	hunter.Hawks = hunter.newHawks()
@@ -154,7 +162,11 @@ func dropOtherSting(sim *core.Simulation, sting *core.Aura) {
 }
 
 func isSerpentSting(aura *core.Aura) bool {
-	return aura.ActionID.SpellID == serpentStingTrainerRank.ID || aura.ActionID.SpellID == serpentStingBookRank.ID
+	found := false
+	spellData.SerpentSting.Each(func(_ int32, rank *spelldata.Spell) {
+		found = found || aura.ActionID.SpellID == rank.ID
+	})
+	return found
 }
 
 func (hunter *Hunter) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {

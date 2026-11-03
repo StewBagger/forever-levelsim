@@ -9,7 +9,10 @@ func (druid *Druid) registerPrimalBiteSpell() {
 	if !druid.Talents.PrimalBite {
 		return
 	}
-	rank := spellData.PrimalBite.Highest()
+	rank := druid.learned(spellData.PrimalBite)
+	if rank == spelldata.Nil {
+		return
+	}
 	config := spelldata.SpellConfig(&druid.Unit, rank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 	// TODO: Ingame research needed -- the tooltip's "generating a high amount of threat"; the row states no
 	// threat effect, so the cast threatens only for its damage.

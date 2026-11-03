@@ -29,20 +29,44 @@ func (druid *Druid) setForm(form DruidForm) {
 	case form.Matches(DireBear):
 		// Dire Bear keeps the bear bit so a bear-only cast and InForm(Bear) both match.
 		druid.form = Bear | DireBear
-		druid.ShapeshiftForm = shapeshiftOf(spellData.DireBearForm.Highest())
 	case form.Matches(Bear):
 		druid.form = Bear
-		druid.ShapeshiftForm = shapeshiftOf(spellData.BearForm.Highest())
 	case form.Matches(Cat):
 		druid.form = Cat
-		druid.ShapeshiftForm = shapeshiftOf(spellData.CatForm.Highest())
 	case form.Matches(Moonkin):
 		druid.form = Moonkin
-		druid.ShapeshiftForm = shapeshiftOf(spellData.MoonkinForm.Highest())
 	default:
 		druid.form = Humanoid
 		druid.ShapeshiftForm = 0
+		return
 	}
+	druid.ShapeshiftForm = shapeshiftOf(formLadder(form).Highest())
+}
+
+// The ladder of the spell that shifts into a form. Tree of Life and caster form have none.
+func formLadder(form DruidForm) spelldata.Ladder {
+	switch {
+	case form.Matches(DireBear):
+		return spellData.DireBearForm
+	case form.Matches(Bear):
+		return spellData.BearForm
+	case form.Matches(Cat):
+		return spellData.CatForm
+	case form.Matches(Moonkin):
+		return spellData.MoonkinForm
+	default:
+		return spelldata.Ladder{}
+	}
+}
+
+// FormLevel is the level a druid learns a form at: Bear Form at 10, Cat Form at 20, Dire Bear Form and
+// Moonkin Form at 40. A form with no spell answers 1.
+func FormLevel(form DruidForm) int32 {
+	row := formLadder(form).Highest()
+	if row == spelldata.Nil {
+		return 1
+	}
+	return spelldata.TaughtAt(row)
 }
 
 // The shapeshift aura's misc value is the game files' form id.
@@ -116,7 +140,10 @@ func (druid *Druid) GetBearWeapon() core.Weapon {
 }
 
 func (druid *Druid) RegisterCatFormAura() {
-	form := spellData.CatForm.Highest()
+	form := druid.learned(spellData.CatForm)
+	if form == spelldata.Nil {
+		return
+	}
 	druid.CatFormAura = druid.registerFormAura(form, druid.StartingForm.Matches(Cat))
 	spelldata.ParseEffects(&druid.Character, druid.CatFormAura, spellData.CatFormTriggered.Highest())
 	druid.CatFormAura.AttachStatDependency(druid.NewDynamicStatDependency(stats.FeralAttackPower, stats.AttackPower, 1))
@@ -144,8 +171,12 @@ func (druid *Druid) RegisterCatFormAura() {
 const bearFormThreatMultiplier = 1.5
 
 func (druid *Druid) RegisterBearFormAura() {
-	druid.BearFormAura = druid.registerBearAura(spellData.BearForm.Highest(), spellData.BearFormTriggered.Highest(), Bear, druid.StartingForm == Bear)
-	druid.DireBearFormAura = druid.registerBearAura(spellData.DireBearForm.Highest(), spellData.DireBearFormTriggered.Highest(), DireBear, druid.StartingForm.Matches(DireBear))
+	if form := druid.learned(spellData.BearForm); form != spelldata.Nil {
+		druid.BearFormAura = druid.registerBearAura(form, spellData.BearFormTriggered.Highest(), Bear, druid.StartingForm == Bear)
+	}
+	if form := druid.learned(spellData.DireBearForm); form != spelldata.Nil {
+		druid.DireBearFormAura = druid.registerBearAura(form, spellData.DireBearFormTriggered.Highest(), DireBear, druid.StartingForm.Matches(DireBear))
+	}
 }
 
 func (druid *Druid) registerBearAura(form *spelldata.Spell, passive *spelldata.Spell, kind DruidForm, starting bool) *core.Aura {
@@ -228,12 +259,18 @@ func (druid *Druid) restoreHumanoidBody() {
 }
 
 func (druid *Druid) registerCatFormSpell() {
-	druid.CatForm = druid.registerShapeshiftSpell(spellData.CatForm.Highest(), druid.CatFormAura)
+	if druid.CatFormAura != nil {
+		druid.CatForm = druid.registerShapeshiftSpell(spellData.CatForm.Highest(), druid.CatFormAura)
+	}
 }
 
 func (druid *Druid) registerBearFormSpell() {
-	druid.BearForm = druid.registerShapeshiftSpell(spellData.BearForm.Highest(), druid.BearFormAura)
-	druid.DireBearForm = druid.registerShapeshiftSpell(spellData.DireBearForm.Highest(), druid.DireBearFormAura)
+	if druid.BearFormAura != nil {
+		druid.BearForm = druid.registerShapeshiftSpell(spellData.BearForm.Highest(), druid.BearFormAura)
+	}
+	if druid.DireBearFormAura != nil {
+		druid.DireBearForm = druid.registerShapeshiftSpell(spellData.DireBearForm.Highest(), druid.DireBearFormAura)
+	}
 }
 
 func (druid *Druid) registerShapeshiftSpell(rank *spelldata.Spell, aura *core.Aura) *DruidSpell {
@@ -347,7 +384,11 @@ func (druid *Druid) RegisterMoonkinFormAura() {
 	if !druid.Talents.MoonkinForm {
 		return
 	}
-	druid.MoonkinFormAura = druid.registerFormAura(spellData.MoonkinForm.Highest(), druid.StartingForm.Matches(Moonkin))
+	form := druid.learned(spellData.MoonkinForm)
+	if form == spelldata.Nil {
+		return
+	}
+	druid.MoonkinFormAura = druid.registerFormAura(form, druid.StartingForm.Matches(Moonkin))
 	// Moonkin Form (Passive) 24905 states the form's armor from items, base and bonus. The crit of
 	// Moonkin Aura 24907 is the raid buff AddRaidBuffs turns on.
 	spelldata.ParseEffects(&druid.Character, druid.MoonkinFormAura, spellData.MoonkinFormTriggered.ByID(24905))

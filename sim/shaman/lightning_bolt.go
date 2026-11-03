@@ -5,10 +5,8 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var lightningBoltRanks = castableRanks(spellData.LightningBolt)
-
 func (shaman *Shaman) registerLightningBoltSpell() {
-	shaman.registerWithOverloads(lightningBoltRanks, lightningBoltOverloadRanks, shaman.newLightningBoltSpellConfig)
+	shaman.registerWithOverloads(castableRanks(&shaman.Unit, spellData.LightningBolt), lightningBoltOverloadRanks, shaman.newLightningBoltSpellConfig)
 }
 
 // The cast, with the overload it may trigger; the overload itself, from its own row, where overload is nil.
@@ -21,7 +19,7 @@ func (shaman *Shaman) newLightningBoltSpellConfig(rank *spelldata.Spell, overloa
 
 	damage := rank.DamageEffect()
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DealCastResult(sim, result)
 
 		// The bolt lands before its overload is priced, so a debuff charge the bolt spends does

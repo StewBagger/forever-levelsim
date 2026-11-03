@@ -16,7 +16,10 @@ import (
 // melee strikes will refresh the spell's duration. Only one Judgement per Paladin can be active at
 // any one time.
 func (paladin *Paladin) registerSealOfJustice() {
-	rank := spellData.SealOfJustice.Highest()
+	rank := paladin.learned(spellData.SealOfJustice)
+	if rank == nil {
+		return
+	}
 	judgementRank := spellData.SealOfJusticeTriggered.ByID(int32(rank.EffectN(2).BaseValue()))
 	judgementAuras := paladin.newJudgementAuras(func(target *core.Unit) *core.Aura {
 		return target.GetOrRegisterAura(core.Aura{

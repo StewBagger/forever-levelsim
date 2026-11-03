@@ -10,10 +10,14 @@ import (
 // it; its tooltip does ("$1326891s1%").
 var frigidPowerRank = spellData.IceBarrierTriggered.ByID(1326891)
 
-// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+// Only the highest rank the mage knows at its level is registered, not every rank
 // spellData.IceBarrier lists.
 func (mage *Mage) registerIceBarrierSpell() {
-	mage.registerIceBarrierRank(spellData.IceBarrier.Len(), spellData.IceBarrier.Highest())
+	index, rank := mage.learnedRank(spellData.IceBarrier, spellData.IceBarrier.Highest())
+	if rank == spelldata.Nil {
+		return
+	}
+	mage.registerIceBarrierRank(index, rank)
 }
 
 // Ice Barrier
@@ -32,7 +36,7 @@ func (mage *Mage) registerIceBarrierRank(_ int32, rank *spelldata.Spell) {
 	spelldata.ParseEffects(&mage.Character, frigidPower, frigidPowerRank)
 
 	warding := 1 + spellData.FrostWarding.EffectAt(3).FractionAt(mage.Talents.FrostWarding)
-	base := rank.EffectN(1).Average()
+	base := rank.EffectN(1).AverageAt(mage.Level)
 	var absorb float64
 
 	shield := mage.NewDamageAbsorptionAura(core.AbsorptionAuraConfig{

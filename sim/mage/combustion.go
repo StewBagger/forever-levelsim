@@ -5,9 +5,6 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var combustionRank = spellData.Combustion.Highest()
-var combustionBuffRank = spellData.CombustionTriggered.Highest()
-
 // Combustion
 // https://www.wowhead.com/forever/spell=11129
 //
@@ -18,6 +15,12 @@ var combustionBuffRank = spellData.CombustionTriggered.Highest()
 // Two auras: 11129 counts the crits left in its stacks (its ProcCharges), and 28682 carries the
 // crit, a SPELLMOD_CRITICAL_CHANCE per stack on its own class mask, up to 10 stacks.
 func (mage *Mage) registerCombustionSpell() {
+	_, combustionRank := mage.learnedRank(spellData.Combustion, spellData.Combustion.Highest())
+	if combustionRank == spelldata.Nil {
+		return
+	}
+	combustionBuffRank := spellData.CombustionTriggered.Highest()
+
 	buffAura := mage.RegisterAura(spelldata.AuraConfig(combustionBuffRank, spelldata.Label("Combustion Crit")))
 	spelldata.ParseEffects(&mage.Character, buffAura, combustionBuffRank)
 

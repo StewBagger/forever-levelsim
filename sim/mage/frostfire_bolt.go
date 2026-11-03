@@ -5,10 +5,14 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+// Only the highest rank the mage knows at its level is registered, not every rank
 // spellData.FrostfireBolt lists.
 func (mage *Mage) registerFrostfireBoltSpell() {
-	mage.registerFrostfireBoltRank(spellData.FrostfireBolt.Len(), spellData.FrostfireBolt.Highest())
+	index, rank := mage.learnedRank(spellData.FrostfireBolt, spellData.FrostfireBolt.Highest())
+	if rank == spelldata.Nil {
+		return
+	}
+	mage.registerFrostfireBoltRank(index, rank)
 }
 
 // The DoT (effect 3) is its own spell, like Fireball's.
@@ -21,7 +25,7 @@ func (mage *Mage) registerFrostfireBoltRank(_ int32, rank *spelldata.Spell) {
 	dotConfig.ClassSpellMask = MageSpellFrostfireBoltDot
 	tick := rank.PeriodicEffect()
 	dotConfig.Dot = spelldata.DotConfig(rank, tick)
-	dotConfig.Dot.OnTick = spelldata.PeriodicDamageTick(tick, rank.TickOutcome)
+	dotConfig.Dot.OnTick = periodicDamageTick(tick, rank.TickOutcome)
 	dotConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		spell.Dot(target).Apply(sim)
 	}
@@ -34,7 +38,7 @@ func (mage *Mage) registerFrostfireBoltRank(_ int32, rank *spelldata.Spell) {
 	config.ClassSpellMask = MageSpellFrostfireBolt
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DealCastResult(sim, result)
 		spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 			spell.DealDamage(sim, result)

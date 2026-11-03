@@ -5,11 +5,13 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var slamRank = spellData.Slam.Highest()
-
-var improvedSlamRank = slamRank.OverriddenBy(spellData.ImprovedSlam.Highest())
-
 func (warrior *Warrior) registerSlam() {
+	slamRank := warrior.learnedRank(spellData.Slam, spellData.Slam.Highest())
+	if slamRank == spelldata.Nil {
+		return
+	}
+	improvedSlamRank := slamRank.OverriddenBy(spellData.ImprovedSlam.Highest())
+
 	rank := core.Ternary(warrior.Talents.ImprovedSlam > 0, improvedSlamRank, slamRank)
 
 	config := spelldata.SpellConfig(&warrior.Unit, rank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))

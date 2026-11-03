@@ -78,16 +78,36 @@ func (paladin *Paladin) Initialize() {
 	paladin.registerSeals()
 	paladin.registerAuras()
 
-	HolyStrikeRankMap.Each(paladin.registerHolyStrike)
+	paladin.eachLearnedRank(HolyStrikeRankMap, paladin.registerHolyStrike)
 	paladin.registerConsecrationMark()
-	ConsecrationRankMap.Each(paladin.registerConsecration)
-	ExorcismRankMap.Each(paladin.registerExorcism)
-	HammerOfWrathRankMap.Each(paladin.registerHammerOfWrath)
-	HolyWrathRankMap.Each(paladin.registerHolyWrath)
+	paladin.eachLearnedRank(ConsecrationRankMap, paladin.registerConsecration)
+	paladin.eachLearnedRank(ExorcismRankMap, paladin.registerExorcism)
+	paladin.eachLearnedRank(HammerOfWrathRankMap, paladin.registerHammerOfWrath)
+	paladin.eachLearnedRank(HolyWrathRankMap, paladin.registerHolyWrath)
 
-	HolyLightRankMap.Each(paladin.registerHolyLight)
-	FlashOfLightRankMap.Each(paladin.registerFlashOfLight)
-	LayOnHandsRankMap.Each(paladin.registerLayOnHands)
+	paladin.eachLearnedRank(HolyLightRankMap, paladin.registerHolyLight)
+	paladin.eachLearnedRank(FlashOfLightRankMap, paladin.registerFlashOfLight)
+	paladin.eachLearnedRank(LayOnHandsRankMap, paladin.registerLayOnHands)
+}
+
+// Registers each rank of the ladder the paladin has learned at its level. A rank above the level is
+// aliased to the highest learned one below it, so a rotation naming that rank casts the learned one.
+func (paladin *Paladin) eachLearnedRank(ladder spelldata.Ladder, register func(n int32, rank *spelldata.Spell)) {
+	ladder.Each(func(n int32, rank *spelldata.Spell) {
+		if spelldata.TaughtAt(rank) <= paladin.Level {
+			register(n, rank)
+			return
+		}
+		spelldata.LearnedRank(&paladin.Unit, ladder, rank)
+	})
+}
+
+// The single-rank spell if the paladin has learned it at its level, or nil.
+func (paladin *Paladin) learned(ladder spelldata.Ladder) *spelldata.Spell {
+	if rank := spelldata.LearnedRank(&paladin.Unit, ladder, ladder.Highest()); rank != spelldata.Nil {
+		return rank
+	}
+	return nil
 }
 
 func (paladin *Paladin) Reset(_ *core.Simulation) {
@@ -120,7 +140,7 @@ func NewPaladin(character *core.Character, talentsStr string, _ *proto.PaladinOp
 	})
 
 	paladin.AddStatDependency(stats.Strength, stats.AttackPower, 2)
-	paladin.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
+	paladin.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiAtLevel(character.Class, character.Level))
 	paladin.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
 
 	return paladin

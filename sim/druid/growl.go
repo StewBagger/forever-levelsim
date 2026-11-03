@@ -6,13 +6,18 @@ import (
 )
 
 func (druid *Druid) registerGrowlSpell() {
-	druid.Growl = druid.registerBearUtility(spellData.Growl.Highest(), func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+	druid.Growl = druid.registerBearUtility(spellData.Growl, func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit)
 	})
 }
 
-// A taunt castable from an APL. applyEffects rolls its hit; the taunt itself is not modelled.
-func (druid *Druid) registerBearUtility(rank *spelldata.Spell, applyEffects core.ApplySpellResults) *DruidSpell {
+// A taunt castable from an APL, nil below the level its first rank is taught at. applyEffects rolls its
+// hit; the taunt itself is not modelled.
+func (druid *Druid) registerBearUtility(ladder spelldata.Ladder, applyEffects core.ApplySpellResults) *DruidSpell {
+	rank := druid.learned(ladder)
+	if rank == spelldata.Nil {
+		return nil
+	}
 	config := spelldata.SpellConfig(&druid.Unit, rank)
 	config.Flags |= core.SpellFlagAPL
 	config.ProcMask = core.ProcMaskEmpty // A landed taunt rolls no proc, Omen of Clarity included.

@@ -8,14 +8,8 @@ import (
 	"github.com/wowsims/forever/sim/core/stats"
 )
 
-var summonHawkRank = spellData.SummonHawk.Highest()
-var summonHawkBaseDamage = summonHawkRank.DamageEffect().Average()
-
 // The creature the dive leaves behind, up for 18 s.
 var hawkSummon = spellData.SummonHawkTriggered.ByID(1293248)
-
-// The tooltip's ${$s1+($rap*($s4/100))}: effect 4 is the share of ranged attack power.
-var summonHawkAPShare = summonHawkRank.EffectN(4).Percent()
 
 // A hawk the dive leaves behind: a guardian with a pet's base stats and swing damage, summoned at
 // the enemy by the cast.
@@ -36,23 +30,24 @@ func (hawk *HawkPet) ExecuteCustomRotation(sim *core.Simulation) {
 // 5% of the creature health for its level and no armor or attack power of its own; 80% of the owner's
 // ranged attack power and 30% of the owner's armor on top. The row that scales a hawk, Hunter Guardian
 // Hawk Pet Scaling 01 (1293586), is not in the store, so the swing below is fitted to those logs.
-var hawkBaseStats = stats.Stats{
-	stats.Health: 0.05 * core.CreatureHealthMaxLevel,
-}
-
+//
 // A swing before armor read 0.0815 of the creature dps over the 2.5 s, spanning a third either side, plus
 // 0.0179 a point of the owner's ranged attack power: 112 attack power a point of dps at 80% of it. Both
 // are fitted (3.3-6.7 plus 0.0179 × ranged attack power at level 30), not stated in the game files, and
-// were read with Unleashed Fury 5/5, which reaches the hawks, so the swing here is before it.
+// were read with Unleashed Fury 5/5, which reaches the hawks, so the swing here is before it. The hawk
+// takes its owner's level.
 var hawkLogDamageMultiplier = spellData.UnleashedFury.MultiplierAt(5)
-var hawkSwingAverage = 0.0815 * core.CreatureAutoAttackDpsMaxLevel * 2.5 / hawkLogDamageMultiplier
 
-var hawkSwing = core.Weapon{
-	BaseDamageMin:     hawkSwingAverage * (1 - 1.0/3),
-	BaseDamageMax:     hawkSwingAverage * (1 + 1.0/3),
-	SwingSpeed:        2.5,
-	AttackPowerPerDPS: 112 * hawkLogDamageMultiplier,
-	MaxRange:          core.MaxMeleeRange,
+func hawkStatsAt(level int32) (stats.Stats, core.Weapon) {
+	health, _, dps := core.CreatureStatsAtLevel(level)
+	swingAverage := 0.0815 * dps * 2.5 / hawkLogDamageMultiplier
+	return stats.Stats{stats.Health: 0.05 * health}, core.Weapon{
+		BaseDamageMin:     swingAverage * (1 - 1.0/3),
+		BaseDamageMax:     swingAverage * (1 + 1.0/3),
+		SwingSpeed:        2.5,
+		AttackPowerPerDPS: 112 * hawkLogDamageMultiplier,
+		MaxRange:          core.MaxMeleeRange,
+	}
 }
 
 // Effect 3 is the number of hawks up at once. A hawk's swing follows its owner's ranged speed while
@@ -66,8 +61,13 @@ func (hunter *Hunter) newHawks() []*HawkPet {
 	if !hunter.Talents.SummonHawk {
 		return nil
 	}
+	hunter.summonHawkRank = spelldata.LearnedRank(&hunter.Unit, spellData.SummonHawk, spellData.SummonHawk.Highest())
+	if hunter.summonHawkRank == spelldata.Nil {
+		return nil
+	}
 
-	hawks := make([]*HawkPet, int(summonHawkRank.EffectN(3).BaseValue()))
+	hawkBaseStats, hawkSwing := hawkStatsAt(hunter.Level)
+	hawks := make([]*HawkPet, int(hunter.summonHawkRank.EffectN(3).BaseValue()))
 	for i := range hawks {
 		hawk := &HawkPet{Pet: core.NewPet(core.PetConfig{
 			Name:      "Hawk " + strconv.Itoa(i+1),
@@ -120,10 +120,14 @@ func (hunter *Hunter) pets() []*core.Pet {
 
 // The dive's damage, then a hawk for 18 s. The hawks take turns, so one past the count replaces
 // the one with the least time left.
+// The tooltip's ${$s1+($rap*($s4/100))}: effect 4 is the share of ranged attack power.
 func (hunter *Hunter) registerSummonHawk() {
-	if !hunter.Talents.SummonHawk {
+	summonHawkRank := hunter.summonHawkRank
+	if !hunter.Talents.SummonHawk || summonHawkRank == nil || summonHawkRank == spelldata.Nil {
 		return
 	}
+	summonHawkBaseDamage := summonHawkRank.DamageEffect().AverageAt(hunter.Level)
+	summonHawkAPShare := summonHawkRank.EffectN(4).Percent()
 
 	config := spelldata.SpellConfig(&hunter.Unit, summonHawkRank, spelldata.Melee(core.ProcMaskRangedSpecial))
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

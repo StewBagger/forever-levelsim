@@ -18,7 +18,7 @@ func (paladin *Paladin) registerExorcism(_ int32, rank *spelldata.Spell) {
 	config.ClassSpellMask = SpellMaskExorcism
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		spell.CalcAndDealDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		spell.CalcAndDealDamage(sim, target, damage.AverageAt(paladin.Level), spell.OutcomeMagicHitAndCrit)
 	}
 
 	paladin.RegisterSpell(config)

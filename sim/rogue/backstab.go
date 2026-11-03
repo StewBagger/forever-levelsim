@@ -9,14 +9,21 @@ import (
 var backstabTrainerRank = spellData.Backstab.ByID(11281)
 var backstabBookRank = spellData.Backstab.ByID(25300)
 
+// Below the book's level both resolve to the same learned rank, which registers once.
 func (rogue *Rogue) registerBackstabSpell() {
-	rogue.registerBackstabRank(backstabTrainerRank)
-	rogue.registerBackstabRank(backstabBookRank)
+	trainer := spelldata.LearnedRank(&rogue.Unit, spellData.Backstab, backstabTrainerRank)
+	book := spelldata.LearnedRank(&rogue.Unit, spellData.Backstab, backstabBookRank)
+	if trainer != spelldata.Nil {
+		rogue.registerBackstabRank(trainer)
+	}
+	if book != spelldata.Nil && book.ID != trainer.ID {
+		rogue.registerBackstabRank(book)
+	}
 }
 
 func (rogue *Rogue) registerBackstabRank(rank *spelldata.Spell) {
-	backstabBaseDamage := rank.DamageEffect().Average()
-	comboPointGen := rank.EnergizeEffect().Average()
+	backstabBaseDamage := rank.DamageEffect().AverageAt(rogue.Level)
+	comboPointGen := rank.EnergizeEffect().AverageAt(rogue.Level)
 	config := spelldata.SpellConfig(&rogue.Unit, rank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 	config.Flags |= SpellFlagBuilder | SpellFlagColdBlooded
 	config.ClassSpellMask = RogueSpellBackstab

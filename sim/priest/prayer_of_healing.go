@@ -34,7 +34,7 @@ func (priest *Priest) registerPrayerOfHealing(_ int32, rank *spelldata.Spell) {
 		}
 
 		for _, target := range targets {
-			spell.CalcAndDealHealing(sim, target, heal.Average(), spell.OutcomeHealingCrit)
+			spell.CalcAndDealHealing(sim, target, heal.AverageAt(priest.Level), spell.OutcomeHealingCrit)
 		}
 	}
 

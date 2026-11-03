@@ -10,8 +10,12 @@ var frostboltTrainerRank = spellData.Frostbolt.ByID(10181)
 var frostboltBookRank = spellData.Frostbolt.ByID(25304)
 
 func (mage *Mage) registerFrostboltSpell() {
-	mage.registerFrostboltRank(frostboltTrainerRank)
-	mage.registerFrostboltRank(frostboltBookRank)
+	if _, rank := mage.learnedRank(spellData.Frostbolt, frostboltTrainerRank); rank != spelldata.Nil {
+		mage.registerFrostboltRank(rank)
+	}
+	if mage.knowsBookRank(spellData.Frostbolt, frostboltBookRank) {
+		mage.registerFrostboltRank(frostboltBookRank)
+	}
 }
 
 func (mage *Mage) registerFrostboltRank(rank *spelldata.Spell) {
@@ -24,7 +28,7 @@ func (mage *Mage) registerFrostboltRank(rank *spelldata.Spell) {
 	config.ClassSpellMask = MageSpellFrostbolt
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DealDamageAfterTravel(sim, result)
 	}
 

@@ -1,6 +1,8 @@
 package feralbear
 
 import (
+	"fmt"
+
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/buffs"
 	"github.com/wowsims/forever/sim/core/proto"
@@ -28,8 +30,17 @@ func NewFeralBearDruid(character *core.Character, options *proto.Player) *Guardi
 	tankOptions := options.GetFeralBearDruid()
 	selfBuffs := druid.SelfBuffs{}
 
+	if learnedAt := druid.FormLevel(druid.Bear); character.Level < learnedAt {
+		panic(fmt.Sprintf("Feral Bear needs Bear Form, which a druid learns at level %d; this druid is level %d.", learnedAt, character.Level))
+	}
+	// Below Dire Bear Form's level the tank fights in Bear Form.
+	form := druid.DireBear
+	if character.Level < druid.FormLevel(druid.DireBear) {
+		form = druid.Bear
+	}
+
 	bear := &GuardianDruid{
-		Druid:   druid.New(character, druid.DireBear, selfBuffs, options.TalentsString),
+		Druid:   druid.New(character, form, selfBuffs, options.TalentsString),
 		Options: tankOptions.Options,
 	}
 	bear.AssumeBleedActive = tankOptions.Options.GetAssumeBleedActive()
@@ -92,7 +103,11 @@ func (bear *GuardianDruid) Initialize() {
 func (bear *GuardianDruid) Reset(sim *core.Simulation) {
 	bear.Druid.Reset(sim)
 	bear.Druid.ClearForm(sim)
-	bear.DireBearFormAura.Activate(sim)
+	if bear.DireBearFormAura != nil {
+		bear.DireBearFormAura.Activate(sim)
+	} else {
+		bear.BearFormAura.Activate(sim)
+	}
 	bear.Druid.PseudoStats.Stunned = false
 }
 

@@ -145,7 +145,8 @@ func (warlock *Warlock) applyPandemic() {
 
 // --- Tier 4 ---
 
-// The class flags also name Lash of Pain, which the Succubus casts, so the row is parsed on the Succubus too.
+// The class flags also name Lash of Pain, which the Succubus casts, so the row is parsed on the Succubus too,
+// once the warlock can summon it.
 func (warlock *Warlock) applyMalevolence() {
 	if warlock.Talents.Malevolence == 0 {
 		return
@@ -153,7 +154,9 @@ func (warlock *Warlock) applyMalevolence() {
 
 	rank := spellData.Malevolence.Rank(warlock.Talents.Malevolence)
 	spelldata.ParseStatic(&warlock.Character, rank)
-	spelldata.ParseStatic(&warlock.Succubus.Character, rank)
+	if warlock.Succubus != nil {
+		spelldata.ParseStatic(&warlock.Succubus.Character, rank)
+	}
 }
 
 func (warlock *Warlock) applyNightfall() {
@@ -242,7 +245,7 @@ func (warlock *Warlock) soulSiphonChannelConfig(rankedSpell *spelldata.Spell, ti
 	// neither AffectedByCastSpeed nor HasteReducesDuration is set.
 	config.Dot = spelldata.DotConfig(rankedSpell, tick)
 	config.Dot.OnTick = func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-		result := dot.Spell.CalcPeriodicDamage(sim, target, tick.Average(), rankedSpell.TickOutcome(dot))
+		result := dot.Spell.CalcPeriodicDamage(sim, target, tick.AverageAt(warlock.Level), rankedSpell.TickOutcome(dot))
 		scaleResult(sim, dot.Spell, result, warlock.soulSiphonMultiplier(target, soulSiphonMult))
 		dot.Spell.DealPeriodicDamage(sim, result)
 		if afterTick != nil {
@@ -261,7 +264,7 @@ func (warlock *Warlock) soulSiphonChannelConfig(rankedSpell *spelldata.Spell, ti
 
 	// Calculate expected damage, scaled by Soul Siphon multiplier.
 	config.ExpectedTickDamage = func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-		result := spell.CalcPeriodicDamage(sim, target, tick.Average(), spell.OutcomeExpectedMagicAlwaysHit)
+		result := spell.CalcPeriodicDamage(sim, target, tick.AverageAt(warlock.Level), spell.OutcomeExpectedMagicAlwaysHit)
 		result.Damage *= warlock.soulSiphonMultiplier(target, soulSiphonMult)
 		return result
 	}

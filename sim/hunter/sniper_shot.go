@@ -5,10 +5,15 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
+// The rank a rotation names; the hunter registers the one it has learned in its place.
 var sniperShotRank = spellData.SniperShot.Highest()
 
 func (hunter *Hunter) registerSniperShot() {
 	if !hunter.Talents.SniperShot {
+		return
+	}
+	sniperShotRank := spelldata.LearnedRank(&hunter.Unit, spellData.SniperShot, sniperShotRank)
+	if sniperShotRank == spelldata.Nil {
 		return
 	}
 

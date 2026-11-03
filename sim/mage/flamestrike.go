@@ -6,10 +6,14 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+// Only the highest rank the mage knows at its level is registered, not every rank
 // spellData.Flamestrike lists.
 func (mage *Mage) registerFlamestrikeSpells() {
-	mage.registerFlamestrikeSpell(spellData.Flamestrike.Len(), spellData.Flamestrike.Highest())
+	index, rank := mage.learnedRank(spellData.Flamestrike, spellData.Flamestrike.Highest())
+	if rank == spelldata.Nil {
+		return
+	}
+	mage.registerFlamestrikeSpell(index, rank)
 }
 
 // The burn is its own spell (MageSpellFlamestrikeDot) on the cast's row, tagged like Fireball's DoT so
@@ -32,7 +36,7 @@ func (mage *Mage) registerFlamestrikeSpell(rank int32, castRank *spelldata.Spell
 		if cannotCrit {
 			outcome = dot.OutcomeTickMagicHit
 		}
-		dot.Spell.CalcAndDealPeriodicAoeDamage(sim, tickDamage.Average(), outcome)
+		dot.Spell.CalcAndDealPeriodicAoeDamage(sim, tickDamage.AverageAt(dot.Spell.Unit.Level), outcome)
 	}
 	dotConfig.ApplyEffects = func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 		spell.AOEDot().Apply(sim)

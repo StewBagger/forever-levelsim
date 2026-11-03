@@ -5,5 +5,5 @@ import (
 )
 
 func (priest *Priest) registerPrayerOfFortitude() {
-	priest.registerPrayer(spellData.PrayerOfFortitude.Highest(), buffs.NewSpellDataPrayerOfFortitudeAura)
+	priest.registerPrayer(priest.learnedTopRank(spellData.PrayerOfFortitude), buffs.NewSpellDataPrayerOfFortitudeAura)
 }

@@ -6,12 +6,18 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var mongooseBiteRank = spellData.MongooseBite.Highest()
-
 // The window the hunter's own dodge opens: the aura Defensive State fires when the hunter dodges an attack.
 var mongooseBiteWindow = spellData.DefensiveStateTriggered.Highest()
 
+// The rank a rotation names; the hunter registers the one it has learned in its place (Hunter.mongooseBiteRank).
+var mongooseBiteRank = spellData.MongooseBite.Highest()
+
 func (hunter *Hunter) registerMongooseBite() {
+	mongooseBiteRank := hunter.mongooseBiteRank
+	if mongooseBiteRank == spelldata.Nil {
+		return
+	}
+
 	hunter.MongooseBiteAura = hunter.RegisterAura(spelldata.AuraConfig(mongooseBiteWindow))
 
 	hunter.MakeProcTriggerAura(core.ProcTrigger{

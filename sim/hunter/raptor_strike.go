@@ -6,9 +6,12 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var raptorStrikeRank = spellData.RaptorStrike.Highest()
-
 func (hunter *Hunter) registerRaptorStrike() {
+	raptorStrikeRank := spelldata.LearnedRank(&hunter.Unit, spellData.RaptorStrike, spellData.RaptorStrike.Highest())
+	if raptorStrikeRank == spelldata.Nil {
+		return
+	}
+
 	config := spelldata.SpellConfig(&hunter.Unit, raptorStrikeRank,
 		spelldata.Melee(core.ProcMaskMeleeMHSpecial), spelldata.Flags(core.SpellFlagNoOnCastComplete))
 	// The APL queues it through the tag 1 spell below; the next swing casts it.
@@ -58,7 +61,7 @@ func (hunter *Hunter) registerRaptorStrike() {
 // The swing a main-hand auto becomes: the queued Raptor Strike when it can still be cast, the plain
 // swing otherwise. A swing that cannot cast it drops the queue.
 func (hunter *Hunter) TryRaptorStrike(sim *core.Simulation, mhSwingSpell *core.Spell) *core.Spell {
-	if mhSwingSpell.ActionID.Tag != int32(proto.ItemSlot_ItemSlotMainHand) || !hunter.raptorStrikeQueue.IsActive() {
+	if mhSwingSpell.ActionID.Tag != int32(proto.ItemSlot_ItemSlotMainHand) || hunter.raptorStrikeQueue == nil || !hunter.raptorStrikeQueue.IsActive() {
 		return mhSwingSpell
 	}
 

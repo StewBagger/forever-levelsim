@@ -29,7 +29,7 @@ func (paladin *Paladin) registerSealOfTheCrusader(_ int32, rank *spelldata.Spell
 		return buffs.NewSpellDataJudgementOfTheCrusaderAuraRank(target, buffs.JudgementRank{
 			SpellID: judgementRank.ID,
 			Rank:    rank.RankNumber(),
-			Value:   judgementRank.Effect(dbcenums.A_MOD_DAMAGE_TAKEN, 2).Average() + paladin.judgementOfTheCrusaderBonus,
+			Value:   judgementRank.Effect(dbcenums.A_MOD_DAMAGE_TAKEN, 2).AverageAt(paladin.Level) + paladin.judgementOfTheCrusaderBonus,
 		})
 	})
 
@@ -44,7 +44,7 @@ func (paladin *Paladin) registerSealOfTheCrusader(_ int32, rank *spelldata.Spell
 	judgement := paladin.RegisterSpell(judgementConfig)
 
 	// The high end of the attack power, which is the number the game shows where the two differ.
-	attackPower := rank.Effect(dbcenums.A_MOD_ATTACK_POWER, 0).Max() + paladin.sealOfTheCrusaderBonusAttackPower
+	attackPower := rank.Effect(dbcenums.A_MOD_ATTACK_POWER, 0).MaxAt(paladin.Level) + paladin.sealOfTheCrusaderBonusAttackPower
 	speed := 1 + rank.Effect(dbcenums.A_MOD_ATTACKSPEED, 0).Percent()
 
 	aura := paladin.makeSealExclusive(paladin.RegisterAura(core.Aura{

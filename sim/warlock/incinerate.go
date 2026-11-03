@@ -8,7 +8,10 @@ import (
 // Granted by the Incinerate talent: effect 2 is the bonus against a target afflicted by Immolate.
 // TODO: Assumed any Immolate counts, not only this warlock's; confirm in-game.
 func (warlock *Warlock) registerIncinerate() {
-	rankedSpell := spellData.Incinerate.ByID(1293813)
+	rankedSpell := warlock.learnedRank(spellData.Incinerate, 1293813)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	incinerateHit := rankedSpell.DamageEffect()
 	immolateMult := 1 + rankedSpell.EffectN(2).Percent()
 
@@ -18,7 +21,7 @@ func (warlock *Warlock) registerIncinerate() {
 	// Roll the damage and to hit, raised if any Immolate burns on the target, then land it after travel
 	// TODO: Confirm in game that the 25% raises the whole hit, spell power included.
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, incinerateHit.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, incinerateHit.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		if target.HasActiveAuraWithTag(immolateTag) {
 			scaleResult(sim, spell, result, immolateMult)
 		}
@@ -27,7 +30,7 @@ func (warlock *Warlock) registerIncinerate() {
 
 	// Calculate expected damage from the row's average hit, raised if any Immolate burns on the target
 	config.ExpectedInitialDamage = func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-		result := spell.CalcDamage(sim, target, incinerateHit.Average(), spell.OutcomeExpectedMagicCrit)
+		result := spell.CalcDamage(sim, target, incinerateHit.AverageAt(spell.Unit.Level), spell.OutcomeExpectedMagicCrit)
 		if target.HasActiveAuraWithTag(immolateTag) {
 			scaleResult(sim, spell, result, immolateMult)
 		}

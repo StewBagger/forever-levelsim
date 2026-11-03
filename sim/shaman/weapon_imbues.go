@@ -11,19 +11,15 @@ import (
 )
 
 // Windfury Weapon and Flametongue Weapon put the same passive on the weapon at every rank, and the
-// rank decides only which spells the passive fires, so they are read off the top rank's refs.
+// rank decides only which spells the passive fires, so those are read off the learned rank's refs.
 var (
 	windfuryWeaponPassive    = spelldata.MustFind(439431)
-	windfuryWeaponAttack     = spellData.WindfuryWeapon.Highest().Refs()[0]
 	flametongueWeaponPassive = spelldata.MustFind(436519)
-	flametongueWeaponProc    = spellData.FlametongueWeapon.Highest().Refs()[0]
-	flametongueWeaponAttack  = spellData.FlametongueWeapon.Highest().Refs()[1]
-	frostbrandWeaponAttack   = spellData.FrostbrandWeapon.Highest().Refs()[0]
-	rockbiterWeaponPassive   = spellData.RockbiterWeapon.Highest().Refs()[0]
 	rockbiterWeaponProc      = spelldata.MustFind(20871)
 )
 
-// Every imbue has its top rank's cast and an aura, so a rotation can put any of them on the main hand.
+// Every imbue the shaman has learned has its learned rank's cast and an aura, so a rotation can put any
+// of them on the main hand.
 // The effects register wherever the shaman has a main hand, equipped or in the swap set, and each
 // does nothing while the main hand in use carries another imbue. A shaman's imbue sits beside an oil
 // or a stone on the same weapon, so it is kept apart from the weapon's temporary enchant.
@@ -34,19 +30,27 @@ func (shaman *Shaman) registerImbues() {
 	}
 	shaman.imbues = [2]proto.ShamanImbue{shaman.SelfBuffs.ImbueMH, shaman.SelfBuffs.ImbueMHSwap}
 
-	shaman.registerImbueCast(proto.ShamanImbue_WindfuryWeapon, spellData.WindfuryWeapon.Highest())
-	shaman.registerImbueCast(proto.ShamanImbue_FlametongueWeapon, spellData.FlametongueWeapon.Highest())
-	shaman.registerImbueCast(proto.ShamanImbue_FrostbrandWeapon, spellData.FrostbrandWeapon.Highest())
-	shaman.registerImbueCast(proto.ShamanImbue_RockbiterWeapon, spellData.RockbiterWeapon.Highest())
+	windfury := shaman.registerImbueCast(proto.ShamanImbue_WindfuryWeapon, spellData.WindfuryWeapon)
+	flametongue := shaman.registerImbueCast(proto.ShamanImbue_FlametongueWeapon, spellData.FlametongueWeapon)
+	frostbrand := shaman.registerImbueCast(proto.ShamanImbue_FrostbrandWeapon, spellData.FrostbrandWeapon)
+	rockbiter := shaman.registerImbueCast(proto.ShamanImbue_RockbiterWeapon, spellData.RockbiterWeapon)
 
 	if shaman.mainHandID == 0 && shaman.swapMainHandID == 0 {
 		return
 	}
 
-	shaman.RegisterWindfuryImbue()
-	shaman.RegisterFlametongueImbue()
-	shaman.RegisterFrostbrandImbue()
-	shaman.RegisterRockbiterImbue()
+	if windfury != spelldata.Nil {
+		shaman.RegisterWindfuryImbue(windfury.Refs()[0])
+	}
+	if flametongue != spelldata.Nil {
+		shaman.RegisterFlametongueImbue(flametongue.Refs()[0], flametongue.Refs()[1])
+	}
+	if frostbrand != spelldata.Nil {
+		shaman.RegisterFrostbrandImbue(frostbrand.Refs()[0])
+	}
+	if rockbiter != spelldata.Nil {
+		shaman.RegisterRockbiterImbue(rockbiter.Refs()[0])
+	}
 
 	shaman.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}, func(sim *core.Simulation, _ proto.ItemSlot) {
 		shaman.applyImbues(sim)
@@ -55,8 +59,14 @@ func (shaman *Shaman) registerImbues() {
 
 // The aura is the cast's buff, so a rotation can ask which imbue the main hand carries. The imbue
 // lasts 60 minutes, longer than any fight, so the aura never runs out. The cast replaces the imbue on
-// the main hand in use, and the GCD, the mana and the melee weapon it needs come from the row.
-func (shaman *Shaman) registerImbueCast(imbue proto.ShamanImbue, cast *spelldata.Spell) {
+// the main hand in use, and the GCD, the mana and the melee weapon it needs come from the row. Answers
+// the learned rank, or Nil, registering nothing, when the shaman is below the first rank's level.
+func (shaman *Shaman) registerImbueCast(imbue proto.ShamanImbue, ladder spelldata.Ladder) *spelldata.Spell {
+	cast := spelldata.LearnedRank(&shaman.Unit, ladder, ladder.Highest())
+	if cast == spelldata.Nil {
+		return cast
+	}
+
 	aura := shaman.RegisterAura(core.Aura{
 		Label:    cast.Name + " (Main Hand)",
 		ActionID: core.ActionID{SpellID: cast.ID},
@@ -72,6 +82,7 @@ func (shaman *Shaman) registerImbueCast(imbue proto.ShamanImbue, cast *spelldata
 		shaman.applyImbues(sim)
 	}
 	shaman.RegisterSpell(config)
+	return cast
 }
 
 // Which of the two main hands is in use. They are told apart by item id, so a swap set holding the
@@ -142,9 +153,9 @@ func (shaman *Shaman) holdTotemCategoryOnMainHand(category string, imbue proto.S
 // only: auto attack procs such as Flametongue Totem hear them, but they roll the weapon special's
 // table of miss, dodge, parry and crit, never glance, and spend no Flurry charge. Like every extra
 // attack they report as a main-hand attack tagged with the spell that grants them.
-func (shaman *Shaman) newWindfuryImbueSpell() *core.Spell {
+func (shaman *Shaman) newWindfuryImbueSpell(windfuryWeaponAttack *spelldata.Spell) *core.Spell {
 	// Elemental Weapons raises effect 1, which the parse would read as damage.
-	attackPower := windfuryWeaponAttack.EffectN(1).Average() * shaman.windfuryWeaponMultiplier
+	attackPower := windfuryWeaponAttack.EffectN(1).AverageAt(shaman.Level) * shaman.windfuryWeaponMultiplier
 
 	return shaman.RegisterSpell(core.SpellConfig{
 		ActionID:         core.ActionID{OtherID: proto.OtherAction_OtherActionAttack, Tag: windfuryWeaponAttack.ID},
@@ -164,8 +175,8 @@ func (shaman *Shaman) newWindfuryImbueSpell() *core.Spell {
 // 439431 rolls its 20% on the main hand's melee hits, once per 1.5 s, and fires the rank's 16361,
 // whose extra attacks count is how many strikes follow. It rolls off the hit's cast result, and the
 // strikes follow once that hit has been dealt, in the same instant.
-func (shaman *Shaman) RegisterWindfuryImbue() {
-	strike := shaman.newWindfuryImbueSpell()
+func (shaman *Shaman) RegisterWindfuryImbue(windfuryWeaponAttack *spelldata.Spell) {
+	strike := shaman.newWindfuryImbueSpell(windfuryWeaponAttack)
 	shaman.windfuryWeaponStrike = strike
 	count := int(windfuryWeaponAttack.ExtraAttacksEffect().BaseValue())
 
@@ -194,7 +205,7 @@ func (shaman *Shaman) RegisterWindfuryImbue() {
 
 // The hit is 10444, and the tooltip's ${$16344m1/77-1+($10444m1)} to ${$16344m1/25+($10444m1)}
 // over weapon speeds of 1.3 to 4.0 s adds 16344's m1 for every 100 s of swing to its damage.
-func (shaman *Shaman) newFlametongueImbueSpell() *core.Spell {
+func (shaman *Shaman) newFlametongueImbueSpell(flametongueWeaponProc, flametongueWeaponAttack *spelldata.Spell) *core.Spell {
 	config := spelldata.SpellConfig(&shaman.Unit, flametongueWeaponAttack,
 		spelldata.Magic(core.ProcMaskSpellDamageProc), spelldata.Proc(),
 		spelldata.Flags(core.SpellFlagProc|SpellFlagShamanSpell))
@@ -203,15 +214,15 @@ func (shaman *Shaman) newFlametongueImbueSpell() *core.Spell {
 	perSwing := flametongueWeaponProc.EffectN(1)
 	damage := flametongueWeaponAttack.EffectN(1)
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		baseDamage := perSwing.Average()*shaman.AutoAttacks.MH().SwingSpeed/100 + damage.Average()
+		baseDamage := perSwing.AverageAt(spell.Unit.Level)*shaman.AutoAttacks.MH().SwingSpeed/100 + damage.AverageAt(spell.Unit.Level)
 		spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 	}
 	return shaman.RegisterSpell(config)
 }
 
 // 436519 has no roll: every melee hit of the main hand adds its fire damage.
-func (shaman *Shaman) RegisterFlametongueImbue() {
-	flametongueSpell := shaman.newFlametongueImbueSpell()
+func (shaman *Shaman) RegisterFlametongueImbue(flametongueWeaponProc, flametongueWeaponAttack *spelldata.Spell) {
+	flametongueSpell := shaman.newFlametongueImbueSpell(flametongueWeaponProc, flametongueWeaponAttack)
 
 	trigger := spelldata.ProcTrigger(&shaman.Character, flametongueWeaponPassive, func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
 		flametongueSpell.Cast(sim, result.Target)
@@ -226,15 +237,15 @@ func (shaman *Shaman) RegisterFlametongueImbue() {
 	shaman.holdTotemCategoryOnMainHand(buffs.FlametongueTotemCategory, proto.ShamanImbue_FlametongueWeapon)
 }
 
-// Enchant 1668 casts 16353 off the main hand's hits. The slow, effect 1, is not
-// modelled.
-func (shaman *Shaman) RegisterFrostbrandImbue() {
+// Enchant 1668 casts 16353 off the main hand's hits, and each rank's enchant its rank's ref. The slow,
+// effect 1, is not modelled.
+func (shaman *Shaman) RegisterFrostbrandImbue(frostbrandWeaponAttack *spelldata.Spell) {
 	config := spelldata.SpellConfig(&shaman.Unit, frostbrandWeaponAttack,
 		spelldata.Magic(core.ProcMaskSpellDamageProc), spelldata.Proc(), spelldata.Flags(core.SpellFlagProc|SpellFlagShamanSpell))
 	config.ClassSpellMask = SpellMaskFrostbrandWeapon
 	damage := frostbrandWeaponAttack.DamageEffect()
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		spell.CalcAndDealDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		spell.CalcAndDealDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 	}
 	frostbrandSpell := shaman.RegisterSpell(config)
 
@@ -249,17 +260,23 @@ func (shaman *Shaman) RegisterFrostbrandImbue() {
 	shaman.MakeProcTriggerAura(trigger)
 }
 
-// Enchant 1664 puts 16313 on the main hand as an equip aura: the attack power, and the threat Spirit
-// Weapons gives effect 2, which the row states as 0. Both ride on the imbue's aura.
-func (shaman *Shaman) RegisterRockbiterImbue() {
+// Enchant 1664 puts 16313 on the main hand as an equip aura, and each rank's enchant its rank's ref: the
+// attack power, and the threat Spirit Weapons gives effect 2, which the row states as 0. Both ride on the
+// imbue's aura.
+func (shaman *Shaman) RegisterRockbiterImbue(rockbiterWeaponPassive *spelldata.Spell) {
 	// Elemental Weapons raises effect 1, which the parse would read as damage.
-	attackPower := rockbiterWeaponPassive.EffectN(1).Average() * shaman.rockbiterWeaponMultiplier
+	attackPower := rockbiterWeaponPassive.EffectN(1).AverageAt(shaman.Level) * shaman.rockbiterWeaponMultiplier
 	threat := 1 + rockbiterWeaponPassive.EffectN(2).Percent() + shaman.spiritWeaponsRockbiterThreat
 
 	shaman.imbueAuras[proto.ShamanImbue_RockbiterWeapon].
 		AttachStatBuff(stats.AttackPower, attackPower).
 		AttachMultiplicativePseudoStatBuff(&shaman.PseudoStats.ThreatMultiplier, threat)
 
+	// TODO: The store carries no lower rank of 20871's ladder, so a lower rank of the imbue adds no
+	// threat per hit.
+	if spelldata.TaughtAt(rockbiterWeaponProc) > shaman.Level {
+		return
+	}
 	threatSpell := shaman.newRockbiterThreatSpell()
 	trigger := spelldata.ProcTrigger(&shaman.Character, rockbiterWeaponPassive, func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
 		threatSpell.Cast(sim, result.Target)
@@ -278,7 +295,7 @@ func (shaman *Shaman) newRockbiterThreatSpell() *core.Spell {
 	config := spelldata.SpellConfig(&shaman.Unit, rockbiterWeaponProc, spelldata.Proc())
 	config.ProcMask = core.ProcMaskEmpty
 	config.ThreatMultiplier = 1
-	config.FlatThreatBonus = rockbiterWeaponProc.EffectN(1).Average()
+	config.FlatThreatBonus = rockbiterWeaponProc.EffectN(1).AverageAt(shaman.Level)
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		perSecond := spell.FlatThreatBonus
 		spell.FlatThreatBonus *= shaman.AutoAttacks.MH().SwingSpeed

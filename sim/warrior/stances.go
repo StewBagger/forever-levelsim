@@ -23,7 +23,10 @@ var berserkerStancePassive = spellData.BerserkerStancePassive.Highest()
 func (warrior *Warrior) makeStanceSpell(rank *spelldata.Spell, aura *core.Aura) *core.Spell {
 	form := rank.ShapeshiftForm()
 	rageMetrics := warrior.NewRageMetrics(aura.ActionID)
-	maxRetainedRage := spellData.TacticalMastery.ValueAt(1) + spellData.ImprovedTacticalMastery.ValueAt(warrior.Talents.ImprovedTacticalMastery)
+	maxRetainedRage := spellData.ImprovedTacticalMastery.ValueAt(warrior.Talents.ImprovedTacticalMastery)
+	if warrior.learnedRank(spellData.TacticalMastery, spellData.TacticalMastery.Highest()) != spelldata.Nil {
+		maxRetainedRage += spellData.TacticalMastery.ValueAt(1)
+	}
 
 	config := spelldata.SpellConfig(&warrior.Unit, rank, spelldata.Flags(core.SpellFlagNoOnCastComplete|core.SpellFlagAPL))
 	config.MenuGroup = "stances"
@@ -108,13 +111,40 @@ func (warrior *Warrior) registerBerserkerStanceAura() *core.Aura {
 	return aura
 }
 
+// The stance a WarriorStance option names, or nil for none.
+func defaultStanceRank(stance proto.WarriorStance) *spelldata.Spell {
+	switch stance {
+	case proto.WarriorStance_WarriorStanceBattle:
+		return battleStanceRank
+	case proto.WarriorStance_WarriorStanceDefensive:
+		return defensiveStanceRank
+	case proto.WarriorStance_WarriorStanceBerserker:
+		return berserkerStanceRank
+	}
+	return nil
+}
+
+// Defensive Stance is taught at 10 and Berserker Stance at 30; a stance not yet taught is not
+// registered, and its field stays nil.
 func (warrior *Warrior) registerStances() {
+	knowsDefensive := warrior.learnedRank(spellData.DefensiveStance, defensiveStanceRank) != spelldata.Nil
+	knowsBerserker := warrior.learnedRank(spellData.BerserkerStance, berserkerStanceRank) != spelldata.Nil
+
 	battleStanceAura := warrior.registerBattleStanceAura()
-	defensiveStanceAura := warrior.registerDefensiveStanceAura()
-	berserkerStanceAura := warrior.registerBerserkerStanceAura()
+	var defensiveStanceAura, berserkerStanceAura *core.Aura
+	if knowsDefensive {
+		defensiveStanceAura = warrior.registerDefensiveStanceAura()
+	}
+	if knowsBerserker {
+		berserkerStanceAura = warrior.registerBerserkerStanceAura()
+	}
 	warrior.BattleStance = warrior.makeStanceSpell(battleStanceRank, battleStanceAura)
-	warrior.DefensiveStance = warrior.makeStanceSpell(defensiveStanceRank, defensiveStanceAura)
-	warrior.BerserkerStance = warrior.makeStanceSpell(berserkerStanceRank, berserkerStanceAura)
+	if knowsDefensive {
+		warrior.DefensiveStance = warrior.makeStanceSpell(defensiveStanceRank, defensiveStanceAura)
+	}
+	if knowsBerserker {
+		warrior.BerserkerStance = warrior.makeStanceSpell(berserkerStanceRank, berserkerStanceAura)
+	}
 
 	switch warrior.DefaultStance {
 	case proto.WarriorStance_WarriorStanceBattle:

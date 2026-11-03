@@ -6,7 +6,10 @@ import (
 )
 
 func (druid *Druid) registerProwlSpell() {
-	rank := spellData.Prowl.Highest()
+	rank := druid.learned(spellData.Prowl)
+	if rank == spelldata.Nil {
+		return
+	}
 	druid.ProwlAura = druid.RegisterAura(spelldata.AuraConfig(rank))
 	speed := 1 + rank.EffectN(2).Percent()
 	// Attribute word 0 cancels auto attack (0x100000), which core does not read, so the aura pauses

@@ -8,6 +8,10 @@ import (
 )
 
 func (druid *Druid) registerFeralChargeSpell() {
+	// The trained Feral Charge row carries the level both forms' charges are learned at.
+	if druid.learned(spellData.FeralCharge) == spelldata.Nil {
+		return
+	}
 	root := spellData.FeralChargeTriggered.Highest()
 	roots := druid.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		return target.RegisterAura(spelldata.AuraConfig(root))

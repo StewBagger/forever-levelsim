@@ -273,10 +273,12 @@ func (warrior *Warrior) activateGoreDrinker(sim *core.Simulation) {
 	warrior.GoreDrinkerAura.SetStacks(sim, warrior.GoreDrinkerAura.MaxStacks)
 }
 
-var bloodthirstRank = spellData.Bloodthirst.ByID(23894)
-
 func (warrior *Warrior) registerBloodthirst() {
 	if !warrior.Talents.Bloodthirst {
+		return
+	}
+	bloodthirstRank := warrior.learnedRank(spellData.Bloodthirst, spellData.Bloodthirst.ByID(23894))
+	if bloodthirstRank == spelldata.Nil {
 		return
 	}
 
@@ -285,7 +287,7 @@ func (warrior *Warrior) registerBloodthirst() {
 	config := spelldata.SpellConfig(&warrior.Unit, bloodthirstRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		baseDamage := spell.MeleeAttackPower(target)*apShare + bloodthirstRank.DamageEffect().Roll(sim)
+		baseDamage := spell.MeleeAttackPower(target)*apShare + bloodthirstRank.DamageEffect().RollAt(sim, spell.Unit.Level)
 		result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 		if !result.Landed() {
 			spell.IssueRefund(sim)
@@ -295,11 +297,13 @@ func (warrior *Warrior) registerBloodthirst() {
 	warrior.RegisterSpell(config)
 }
 
-var piercingHowlRank = spellData.PiercingHowl.Highest()
-
 // TODO: In-game test required if there's any threat interaction
 func (warrior *Warrior) registerPiercingHowl() {
 	if !warrior.Talents.PiercingHowl {
+		return
+	}
+	piercingHowlRank := warrior.learnedRank(spellData.PiercingHowl, spellData.PiercingHowl.Highest())
+	if piercingHowlRank == spelldata.Nil {
 		return
 	}
 
@@ -357,10 +361,12 @@ func (warrior *Warrior) registerRagingBlows() {
 	spelldata.ParseStatic(&warrior.Character, spellData.RagingBlows.Rank(1))
 }
 
-var deathWishRank = spellData.DeathWish.Highest()
-
 func (warrior *Warrior) registerDeathWish() {
 	if !warrior.Talents.DeathWish {
+		return
+	}
+	deathWishRank := warrior.learnedRank(spellData.DeathWish, spellData.DeathWish.Highest())
+	if deathWishRank == spelldata.Nil {
 		return
 	}
 

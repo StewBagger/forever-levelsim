@@ -6,8 +6,11 @@ import (
 )
 
 func (druid *Druid) registerPounceSpell() {
-	rank := spellData.Pounce.Highest()
-	bleedRank := spellData.PounceBleed.Highest()
+	rank := druid.learned(spellData.Pounce)
+	if rank == spelldata.Nil {
+		return
+	}
+	bleedRank := druid.learned(spellData.PounceBleed)
 
 	// TODO: Ingame research needed -- Genesis names Pounce 9827 by its class flags, and the bleed 9826
 	// states none, so the bleed here takes no class-flag modifier.
@@ -15,7 +18,7 @@ func (druid *Druid) registerPounceSpell() {
 	bleedTick := bleedRank.PeriodicDamageEffect()
 	bleedConfig.Dot = spelldata.DotConfig(bleedRank, bleedTick)
 	bleedConfig.Dot.OnTick = func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-		dot.Spell.CalcAndDealPeriodicDamage(sim, target, bleedTick.Average()*druid.rendAndTearMultiplier(target), bleedRank.TickOutcome(dot))
+		dot.Spell.CalcAndDealPeriodicDamage(sim, target, bleedTick.AverageAt(druid.level())*druid.rendAndTearMultiplier(target), bleedRank.TickOutcome(dot))
 	}
 	druid.PounceBleed = druid.RegisterSpell(bleedConfig)
 

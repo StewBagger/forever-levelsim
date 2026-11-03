@@ -41,7 +41,7 @@ func (paladin *Paladin) registerSealOfLight(_ int32, rank *spelldata.Spell) {
 	judgement := paladin.RegisterSpell(judgementConfig)
 
 	procRank := rank.Refs()[0]
-	heal := procRank.HealEffect().Average()
+	heal := procRank.HealEffect().AverageAt(paladin.Level)
 	procConfig := spelldata.SpellConfig(&paladin.Unit, procRank, spelldata.Magic(core.ProcMaskSpellHealing), spelldata.Proc(),
 		spelldata.Flags(core.SpellFlagProc)) // The heals lack Not a Proc.
 	procConfig.ClassSpellMask = SpellMaskSealOfLightProc

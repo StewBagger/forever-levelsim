@@ -7,7 +7,10 @@ import (
 )
 
 func (druid *Druid) registerThornsSpell() {
-	rank := spellData.Thorns.Highest()
+	rank := druid.learned(spellData.Thorns)
+	if rank == spelldata.Nil {
+		return
+	}
 	aura := buffs.NewSpellDataThornsAuraWithSpellPower(&druid.Unit, true, 0)
 	config := spelldata.SpellConfig(&druid.Unit, rank)
 	config.Flags |= core.SpellFlagAPL | core.SpellFlagHelpful

@@ -14,7 +14,10 @@ const (
 )
 
 func (druid *Druid) registerEnrageSpell() {
-	rank := spellData.Enrage.Highest()
+	rank := druid.learned(spellData.Enrage)
+	if rank == spelldata.Nil {
+		return
+	}
 	periodic := rank.PeriodicEffect()
 	config := spelldata.SpellConfig(&druid.Unit, rank)
 	config.Flags |= core.SpellFlagAPL

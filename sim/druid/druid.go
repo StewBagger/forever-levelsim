@@ -113,13 +113,24 @@ func (druid *Druid) GetCharacter() *core.Character {
 func (druid *Druid) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 	if druid.InForm(Cat|Bear) && druid.Talents.LeaderOfThePack {
 		raidBuffs.LeaderOfThePack = true
-	} else if druid.InForm(Moonkin) && druid.Talents.MoonkinForm {
+	} else if druid.InForm(Moonkin) && druid.Talents.MoonkinForm && druid.MoonkinFormAura != nil {
 		raidBuffs.MoonkinAura = true
 	}
 }
 
 func (druid *Druid) RegisterSpell(config core.SpellConfig) *DruidSpell {
 	return &DruidSpell{Spell: druid.Unit.RegisterSpell(config)}
+}
+
+// The rank of the ladder the druid knows at its level, at or below named, or spelldata.Nil when the
+// druid is below the level of its first rank.
+func (druid *Druid) learnedRank(ladder spelldata.Ladder, named *spelldata.Spell) *spelldata.Spell {
+	return spelldata.LearnedRank(&druid.Unit, ladder, named)
+}
+
+// The highest rank of the ladder the druid knows at its level, or spelldata.Nil.
+func (druid *Druid) learned(ladder spelldata.Ladder) *spelldata.Spell {
+	return druid.learnedRank(ladder, ladder.Highest())
 }
 
 func (druid *Druid) Initialize() {
@@ -152,7 +163,7 @@ func (druid *Druid) RegisterBaselineSpells() {
 }
 
 func (druid *Druid) RegisterBalanceSpells() {
-	StarfireRankMap.Each(func(_ int32, r *spelldata.Spell) { druid.registerStarfireSpell(r) })
+	druid.registerStarfireSpells()
 	druid.registerMoonfireSpell()
 	druid.registerWrathSpell()
 	druid.registerHurricaneSpell()
@@ -165,6 +176,9 @@ func (druid *Druid) RegisterFeralCatSpells() {
 
 func (druid *Druid) RegisterFeralTankSpells() {
 	druid.registerFeralKit()
+	if druid.Barkskin == nil {
+		return
+	}
 	// A cat would spend a 1.5s GCD on it whenever it comes off cooldown.
 	druid.AddMajorCooldown(core.MajorCooldown{
 		Spell: druid.Barkskin.Spell,
@@ -225,7 +239,7 @@ func New(char *core.Character, form DruidForm, selfBuffs SelfBuffs, talents stri
 
 	druid.AddStatDependency(stats.Strength, stats.AttackPower, 2)
 	druid.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
-	druid.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[char.Class])
+	druid.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiAtLevel(char.Class, char.Level))
 
 	return druid
 }

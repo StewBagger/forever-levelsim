@@ -11,7 +11,9 @@ import (
 // Unleash the energy of a Seal spell upon an enemy. Does not consume the Seal. Refer to individual
 // Seals for Judgement effect.
 func (paladin *Paladin) registerJudgement() {
-	paladin.Judgement = paladin.RegisterSpell(paladin.judgementConfig(spellData.Judgement.Highest(), SpellMaskJudgement))
+	if rank := paladin.learned(spellData.Judgement); rank != nil {
+		paladin.Judgement = paladin.RegisterSpell(paladin.judgementConfig(rank, SpellMaskJudgement))
+	}
 
 	// Every melee strike that lands refreshes the judgement debuffs on its target.
 	paladin.MakeProcTriggerAura(core.ProcTrigger{

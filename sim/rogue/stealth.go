@@ -5,9 +5,9 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var stealthRank = spellData.Stealth.Highest()
-
+// Rank 1 is taught at level 1, so every rogue registers the aura the other abilities read.
 func (rogue *Rogue) registerStealthAura() {
+	stealthRank := spelldata.LearnedRank(&rogue.Unit, spellData.Stealth, spellData.Stealth.Highest())
 	config := spelldata.SpellConfig(&rogue.Unit, stealthRank, spelldata.Flags(core.SpellFlagAPL|core.SpellFlagPrepullOnly))
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

@@ -2,10 +2,14 @@ package warlock
 
 import (
 	"github.com/wowsims/forever/sim/core"
+	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
 func (warlock *Warlock) registerDrainLife() {
-	rankedSpell := spellData.DrainLife.ByID(11700)
+	rankedSpell := warlock.learnedRank(spellData.DrainLife, 11700)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	drainLifeTick := rankedSpell.PeriodicEffect()
 
 	healthMetrics := warlock.NewHealthMetrics(core.ActionID{SpellID: rankedSpell.ID})

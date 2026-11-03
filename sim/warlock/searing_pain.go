@@ -6,7 +6,10 @@ import (
 )
 
 func (warlock *Warlock) registerSearingPain() {
-	rankedSpell := spellData.SearingPain.ByID(17923)
+	rankedSpell := warlock.learnedRank(spellData.SearingPain, 17923)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	searingPainHit := rankedSpell.DamageEffect()
 
 	config := spelldata.SpellConfig(&warlock.Unit, rankedSpell, spelldata.Magic(core.ProcMaskSpellDamage))
@@ -16,13 +19,13 @@ func (warlock *Warlock) registerSearingPain() {
 
 	// Roll the damage and to hit
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, searingPainHit.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, searingPainHit.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DealDamage(sim, result)
 	}
 
 	// Calculate expected damage from the row's average hit
 	config.ExpectedInitialDamage = func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-		return spell.CalcDamage(sim, target, searingPainHit.Average(), spell.OutcomeExpectedMagicCrit)
+		return spell.CalcDamage(sim, target, searingPainHit.AverageAt(spell.Unit.Level), spell.OutcomeExpectedMagicCrit)
 	}
 
 	warlock.SearingPain = warlock.RegisterSpell(config)

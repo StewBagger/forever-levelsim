@@ -10,8 +10,12 @@ var fireballTrainerRank = spellData.Fireball.ByID(10151)
 var fireballBookRank = spellData.Fireball.ByID(25306)
 
 func (mage *Mage) registerFireballSpell() {
-	mage.registerFireballRank(fireballTrainerRank)
-	mage.registerFireballRank(fireballBookRank)
+	if _, rank := mage.learnedRank(spellData.Fireball, fireballTrainerRank); rank != spelldata.Nil {
+		mage.registerFireballRank(rank)
+	}
+	if mage.knowsBookRank(spellData.Fireball, fireballBookRank) {
+		mage.registerFireballRank(fireballBookRank)
+	}
 }
 
 func (mage *Mage) registerFireballRank(rank *spelldata.Spell) {
@@ -24,7 +28,7 @@ func (mage *Mage) registerFireballRank(rank *spelldata.Spell) {
 	dotConfig.ClassSpellMask = MageSpellFireballDot
 	tick := rank.PeriodicEffect()
 	dotConfig.Dot = spelldata.DotConfig(rank, tick)
-	dotConfig.Dot.OnTick = spelldata.PeriodicDamageTick(tick, rank.TickOutcome)
+	dotConfig.Dot.OnTick = periodicDamageTick(tick, rank.TickOutcome)
 	dotConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		spell.Dot(target).Apply(sim)
 	}
@@ -35,7 +39,7 @@ func (mage *Mage) registerFireballRank(rank *spelldata.Spell) {
 	spellConfig.ClassSpellMask = MageSpellFireball
 
 	spellConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DealCastResult(sim, result)
 		spell.WaitTravelTime(sim, func(s *core.Simulation) {
 			spell.DealDamage(sim, result)

@@ -20,7 +20,7 @@ func (paladin *Paladin) registerHolyLight(_ int32, rank *spelldata.Spell) {
 	config.ThreatMultiplier = 0.5
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		amount := heal.Average()
+		amount := heal.AverageAt(paladin.Level)
 		if paladin.hasOathOfLight(target) {
 			amount += paladin.oathOfLight.holyLight
 		}

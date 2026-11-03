@@ -1,6 +1,8 @@
 package feralcat
 
 import (
+	"fmt"
+
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/proto"
 	"github.com/wowsims/forever/sim/druid"
@@ -26,6 +28,10 @@ func RegisterFeralCatDruid() {
 func NewFeralCatDruid(character *core.Character, options *proto.Player) *FeralDruid {
 	feralOptions := options.GetFeralCatDruid()
 	selfBuffs := druid.SelfBuffs{}
+
+	if learnedAt := druid.FormLevel(druid.Cat); character.Level < learnedAt {
+		panic(fmt.Sprintf("Feral Cat needs Cat Form, which a druid learns at level %d; this druid is level %d.", learnedAt, character.Level))
+	}
 
 	cat := &FeralDruid{
 		Druid: druid.New(character, druid.Cat, selfBuffs, options.TalentsString),
@@ -78,6 +84,9 @@ func (cat *FeralDruid) Initialize() {
 		// shift back to Cat Form takes a GCD before the pull. The proc started Omen of Clarity's ICD
 		// then at the latest.
 		cat.RegisterPrepullAction(-core.GCDDefault, func(sim *core.Simulation) {
+			if cat.ClearcastingAura == nil {
+				return
+			}
 			cat.ClearcastingAura.Activate(sim)
 			cat.OmenOfClarityAura.Icd.Use(sim)
 		})

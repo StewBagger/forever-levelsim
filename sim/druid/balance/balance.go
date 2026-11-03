@@ -31,9 +31,6 @@ func NewBalanceDruid(character *core.Character, options *proto.Player) *BalanceD
 		Druid:   druid.New(character, druid.Moonkin, selfBuffs, options.TalentsString),
 		Options: balanceOptions.Options,
 	}
-	if !moonkin.Talents.MoonkinForm {
-		moonkin.StartingForm = druid.Humanoid
-	}
 
 	moonkin.SelfBuffs.InnervateTarget = &proto.UnitReference{}
 	if balanceOptions.Options.ClassOptions.InnervateTarget != nil {
@@ -42,6 +39,10 @@ func NewBalanceDruid(character *core.Character, options *proto.Player) *BalanceD
 
 	moonkin.RegisterMoonkinFormAura()
 	moonkin.RegisterMoonkinFormSpell()
+	// Without the talent, or below the form's level, the druid casts in caster form.
+	if moonkin.MoonkinFormAura == nil {
+		moonkin.StartingForm = druid.Humanoid
+	}
 
 	return moonkin
 }

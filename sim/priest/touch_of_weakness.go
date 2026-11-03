@@ -20,7 +20,7 @@ func (priest *Priest) registerTouchOfWeakness(_ int32, rank *spelldata.Spell) {
 	strikeConfig := spelldata.SpellConfig(&priest.Unit, strikeRank,
 		spelldata.Magic(core.ProcMaskSpellDamageProc), spelldata.Proc())
 	strikeConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcAndDealDamage(sim, target, strikeDamage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcAndDealDamage(sim, target, strikeDamage.AverageAt(priest.Level), spell.OutcomeMagicHitAndCrit)
 		if result.Landed() {
 			weakened.Get(target).Activate(sim)
 		}

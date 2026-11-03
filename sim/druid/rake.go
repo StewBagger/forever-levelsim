@@ -6,7 +6,10 @@ import (
 )
 
 func (druid *Druid) registerRakeSpell() {
-	rank := spellData.Rake.Highest()
+	rank := druid.learned(spellData.Rake)
+	if rank == spelldata.Nil {
+		return
+	}
 	// TODO: Verify the direct hit's attack power share independently of the periodic damage.
 	config := spelldata.SpellConfig(&druid.Unit, rank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 	// The initial hit is not reduced by armor in game, as a tester's report on PR #149 states, although

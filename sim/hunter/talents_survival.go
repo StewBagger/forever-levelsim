@@ -140,15 +140,19 @@ func (hunter *Hunter) registerSurvivalistsDiscipline() {
 	spelldata.ParseStatic(&hunter.Character, spellData.SurvivalistsDiscipline.Rank(hunter.Talents.SurvivalistsDiscipline))
 }
 
+// The rank a rotation names; the hunter registers the one it has learned in its place.
 var striderKickRank = spellData.StriderKick.Highest()
 
 // Effect 1 is normalised weapon damage with no bonus; effect 2 is the share of it, 100%.
-var striderKickWeaponShare = striderKickRank.EffectN(2).Percent()
-
 func (hunter *Hunter) registerStriderKick() {
 	if !hunter.Talents.StriderKick {
 		return
 	}
+	striderKickRank := spelldata.LearnedRank(&hunter.Unit, spellData.StriderKick, striderKickRank)
+	if striderKickRank == spelldata.Nil {
+		return
+	}
+	striderKickWeaponShare := striderKickRank.EffectN(2).Percent()
 
 	config := spelldata.SpellConfig(&hunter.Unit, striderKickRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 
@@ -177,7 +181,8 @@ func (hunter *Hunter) registerLightningReflexes() {
 var laceratingStrikesBleed = spellData.LaceratingStrikesTriggered.Highest()
 
 func (hunter *Hunter) registerLaceratingStrikes() {
-	if !hunter.Talents.LaceratingStrikes {
+	mongooseBiteRank := hunter.mongooseBiteRank
+	if !hunter.Talents.LaceratingStrikes || mongooseBiteRank == spelldata.Nil {
 		return
 	}
 

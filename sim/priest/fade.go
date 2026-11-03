@@ -6,7 +6,7 @@ import (
 )
 
 func (priest *Priest) registerFade(_ int32, rank *spelldata.Spell) {
-	threatDrop := rank.EffectN(1).Average()
+	threatDrop := rank.EffectN(1).AverageAt(priest.Level)
 	var spell *core.Spell
 
 	// A_MOD_TOTAL_THREAT lowers the priest's threat on every enemy while the aura is up and gives it

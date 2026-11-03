@@ -19,7 +19,7 @@ func (priest *Priest) registerPenance(_ int32, rank *spelldata.Spell) {
 	boltConfig := spelldata.SpellConfig(&priest.Unit, boltRow, spelldata.Magic(core.ProcMaskSpellDamage), spelldata.Proc())
 	boltConfig.ClassSpellMask = PriestSpellPenance
 	boltConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, bolt.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, bolt.AverageAt(priest.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DealDamageAfterTravel(sim, result)
 	}
 	boltSpell := priest.RegisterSpell(boltConfig)
@@ -30,7 +30,7 @@ func (priest *Priest) registerPenance(_ int32, rank *spelldata.Spell) {
 		target = priest.healTarget(target)
 		var result *core.SpellResult
 		priest.withRenewedHopeBolt(target, spell, func() {
-			result = spell.CalcHealing(sim, target, healBolt.Average(), spell.OutcomeHealingCrit)
+			result = spell.CalcHealing(sim, target, healBolt.AverageAt(priest.Level), spell.OutcomeHealingCrit)
 		})
 		// A bolt on the priest lands at once. The sim has no distance to an ally, so a bolt on one flies
 		// the enemy distance at the row's speed.
@@ -59,7 +59,7 @@ func (priest *Priest) registerPenance(_ int32, rank *spelldata.Spell) {
 
 	bolts := float64(1 + config.Dot.NumberOfTicks)
 	config.ExpectedInitialDamage = func(sim *core.Simulation, target *core.Unit, _ *core.Spell, _ bool) *core.SpellResult {
-		result := boltSpell.CalcDamage(sim, target, bolt.Average(), boltSpell.OutcomeExpectedMagicCrit)
+		result := boltSpell.CalcDamage(sim, target, bolt.AverageAt(priest.Level), boltSpell.OutcomeExpectedMagicCrit)
 		result.Damage *= bolts
 		return result
 	}

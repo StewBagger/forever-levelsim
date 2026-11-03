@@ -24,7 +24,7 @@ type WarlockPet struct {
 	reach             float64      // how far from the target the demon fights: melee, or the Imp's Firebolt range
 }
 
-// A demon's level 60 stats and what its own stats convert into, from the team's pet model sheet where no
+// A demon's stats at its level and what its own stats convert into, from the team's pet model sheet where no
 // share of the creature values below is known.
 type petModel struct {
 	baseStats stats.Stats // before the conversions below: Health and Mana are the base pools
@@ -43,86 +43,96 @@ type petModel struct {
 }
 
 // A demon's own health, armor and weapon are fixed shares of the creature values for its level in the game
-// files (core.CreatureHealthMaxLevel, core.CreatureArmorMaxLevel, core.CreatureAutoAttackDpsMaxLevel), each
-// demon with its own shares.
+// files (core.CreatureStatsAtLevel), each demon with its own shares. A demon's level is the warlock's.
 // TODO: The shares are read at levels 20 and 30 (the Voidwalker's at 30 only), not yet at 60.
 //
 // The Sayaad's average swing before attack power: 0.698 of the creature dps at 2.0 s. Its sheet's damage range
 // spans 22.8% either side of the average at level 20 and 20.7% at 30, so 21.5%.
-const sayaadSwingAverage = 0.698 * core.CreatureAutoAttackDpsMaxLevel * 2
-
+//
 // The Voidwalker's average swing before attack power and before its melee is halved: 0.494 of the creature dps
 // at 2.0 s, spanning 26.4% either side. The best fit to three level 30 sheets at attack power 96, 108 and 116
 // (16-22, 17-23 and 17-24).
-const voidwalkerSwingAverage = 0.494 * core.CreatureAutoAttackDpsMaxLevel * 2
-
+//
 // The sheet gives no crit from Agility or Intellect, and a demon's own stats give no regen. A demon has
 // no crit of its own: its crit is the warlock's (see petStatInheritance). The Imp's, Voidwalker's and Sayaad's
 // own health and armor are shares of the creature values and the Voidwalker's and Sayaad's attack power is
 // fixed, with nothing from Stamina or Strength; the Felhunter has no armor of its own.
-var petModels = map[proto.WarlockOptions_Summon]petModel{
-	proto.WarlockOptions_Imp: {
-		baseStats: stats.Stats{
-			stats.Strength:  122,
-			stats.Agility:   35,
-			stats.Stamina:   86,
-			stats.Intellect: 264,
-			stats.Spirit:    260,
+// TODO: The attributes, mana and the Felhunter's weapon are the level 60 sheet's at every level.
+func petModelAt(summon proto.WarlockOptions_Summon, level int32) petModel {
+	creatureHealth, creatureArmor, creatureDps := core.CreatureStatsAtLevel(level)
+	sayaadSwingAverage := 0.698 * creatureDps * 2
+	voidwalkerSwingAverage := 0.494 * creatureDps * 2
+	// 3 × level + 6, a line through the Sayaad's levels 20 and 30, not yet read at 60. The Voidwalker's is
+	// read at level 30 only.
+	meleeDemonAttackPower := 3*float64(level) + 6
 
-			stats.Health: 0.359 * core.CreatureHealthMaxLevel,
-			stats.Armor:  0.325 * core.CreatureArmorMaxLevel,
-			stats.Mana:   576,
-		},
-		healthPerStamina:     0,
-		manaPerIntellect:     5,
-		apPerStrength:        2,
-		mp5PerOwnerIntellect: 0.30,
-		damageMod:            1,
-	},
-	proto.WarlockOptions_Voidwalker: {
-		baseStats: meleeDemonStats(1.400 * core.CreatureHealthMaxLevel).Add(stats.Stats{
-			stats.Armor: 1.352 * core.CreatureArmorMaxLevel,
-			// TODO: 3 × level + 6 as the Sayaad's, read at level 30 only.
-			stats.AttackPower: 186,
-		}),
-		healthPerStamina:     0,
-		manaPerIntellect:     11.5,
-		apPerStrength:        0,
-		mp5PerOwnerIntellect: 0.10,
-		meleeMin:             voidwalkerSwingAverage * (1 - 0.264),
-		meleeMax:             voidwalkerSwingAverage * (1 + 0.264),
-		swingSpeed:           2,
-		// Its melee is halved: at level 30, +20 attack power moved its sheet's damage by half of 20 × 2 / 14.
-		damageMod: 0.5,
-	},
-	proto.WarlockOptions_Succubus: {
-		baseStats: meleeDemonStats(0.699 * core.CreatureHealthMaxLevel).Add(stats.Stats{
-			stats.Armor: 0.630 * core.CreatureArmorMaxLevel,
-			// TODO: 3 × level + 6, a line through levels 20 and 30, not yet read at 60.
-			stats.AttackPower: 186,
-		}),
-		healthPerStamina:     0,
-		manaPerIntellect:     11.5,
-		apPerStrength:        0,
-		mp5PerOwnerIntellect: 0.10,
-		meleeMin:             sayaadSwingAverage * (1 - 0.215),
-		meleeMax:             sayaadSwingAverage * (1 + 0.215),
-		swingSpeed:           2,
-		// In the logs Lash of Pain deals (16 + 0.429 × Spell Damage) × 1.10 under 5/5 Unholy Power, with no
-		// multiplier of the Sayaad's own.
-		damageMod: 1,
-	},
-	proto.WarlockOptions_Felhunter: {
-		baseStats:            meleeDemonStats(0),
-		healthPerStamina:     9.5,
-		manaPerIntellect:     11.55,
-		apPerStrength:        2,
-		mp5PerOwnerIntellect: 0.10, // The Voidwalker's and Sayaad's share, until the Felhunter's is read in game.
-		meleeMin:             70,
-		meleeMax:             97,
-		swingSpeed:           2,
-		damageMod:            0.8,
-	},
+	switch summon {
+	case proto.WarlockOptions_Imp:
+		return petModel{
+			baseStats: stats.Stats{
+				stats.Strength:  122,
+				stats.Agility:   35,
+				stats.Stamina:   86,
+				stats.Intellect: 264,
+				stats.Spirit:    260,
+
+				stats.Health: 0.359 * creatureHealth,
+				stats.Armor:  0.325 * creatureArmor,
+				stats.Mana:   576,
+			},
+			healthPerStamina:     0,
+			manaPerIntellect:     5,
+			apPerStrength:        2,
+			mp5PerOwnerIntellect: 0.30,
+			damageMod:            1,
+		}
+	case proto.WarlockOptions_Voidwalker:
+		return petModel{
+			baseStats: meleeDemonStats(1.400 * creatureHealth).Add(stats.Stats{
+				stats.Armor:       1.352 * creatureArmor,
+				stats.AttackPower: meleeDemonAttackPower,
+			}),
+			healthPerStamina:     0,
+			manaPerIntellect:     11.5,
+			apPerStrength:        0,
+			mp5PerOwnerIntellect: 0.10,
+			meleeMin:             voidwalkerSwingAverage * (1 - 0.264),
+			meleeMax:             voidwalkerSwingAverage * (1 + 0.264),
+			swingSpeed:           2,
+			// Its melee is halved: at level 30, +20 attack power moved its sheet's damage by half of 20 × 2 / 14.
+			damageMod: 0.5,
+		}
+	case proto.WarlockOptions_Succubus:
+		return petModel{
+			baseStats: meleeDemonStats(0.699 * creatureHealth).Add(stats.Stats{
+				stats.Armor:       0.630 * creatureArmor,
+				stats.AttackPower: meleeDemonAttackPower,
+			}),
+			healthPerStamina:     0,
+			manaPerIntellect:     11.5,
+			apPerStrength:        0,
+			mp5PerOwnerIntellect: 0.10,
+			meleeMin:             sayaadSwingAverage * (1 - 0.215),
+			meleeMax:             sayaadSwingAverage * (1 + 0.215),
+			swingSpeed:           2,
+			// In the logs Lash of Pain deals (16 + 0.429 × Spell Damage) × 1.10 under 5/5 Unholy Power, with no
+			// multiplier of the Sayaad's own.
+			damageMod: 1,
+		}
+	case proto.WarlockOptions_Felhunter:
+		return petModel{
+			baseStats:            meleeDemonStats(0),
+			healthPerStamina:     9.5,
+			manaPerIntellect:     11.55,
+			apPerStrength:        2,
+			mp5PerOwnerIntellect: 0.10, // The Voidwalker's and Sayaad's share, until the Felhunter's is read in game.
+			meleeMin:             70,
+			meleeMax:             97,
+			swingSpeed:           2,
+			damageMod:            0.8,
+		}
+	}
+	return petModel{}
 }
 
 // The Voidwalker, Succubus and Felhunter share their level 60 stats and base mana, each with its own base health.
@@ -185,6 +195,7 @@ func (warlock *Warlock) petStatInheritance(mp5PerOwnerIntellect float64) core.Pe
 	}
 }
 
+// A demon the warlock has not learned to summon at its level is not registered.
 func (warlock *Warlock) registerPets() {
 	warlock.Imp = warlock.registerPet(proto.WarlockOptions_Imp, "Imp")
 	warlock.Voidwalker = warlock.registerPet(proto.WarlockOptions_Voidwalker, "Voidwalker")
@@ -210,8 +221,11 @@ func (warlock *Warlock) demon(summon proto.WarlockOptions_Summon) *WarlockPet {
 }
 
 func (warlock *Warlock) registerPet(summon proto.WarlockOptions_Summon, name string) *WarlockPet {
+	if !warlock.knowsSummon(summon) {
+		return nil
+	}
 	enabledOnStart := warlock.Options.Summon == summon
-	model := petModels[summon]
+	model := petModelAt(summon, warlock.Level)
 
 	pet := &WarlockPet{
 		owner:  warlock,
@@ -374,6 +388,9 @@ func (pet *WarlockPet) ExecuteCustomRotation(sim *core.Simulation) {
 // category, so a Blood Pact ticked in the settings and the Imp's own are worth one buff. Each warlock's
 // Imp puts up its own copy, and with two Imps out the strongest applies.
 func (warlock *Warlock) registerBloodPact() {
+	if warlock.Imp == nil {
+		return
+	}
 	impAtStart := warlock.Imp.EnabledOnStart()
 	auras := warlock.NewPartyAuraArray(func(member *core.Character) *core.Aura {
 		aura := buffs.NewSpellDataBloodPactAuraFor(&member.Unit, &warlock.Unit)
@@ -392,7 +409,10 @@ func (warlock *Warlock) registerBloodPact() {
 }
 
 func (pet *WarlockPet) registerFirebolt() {
-	rankedSpell := spellData.Firebolt.ByID(11763)
+	rankedSpell := spelldata.LearnedRank(&pet.Unit, spellData.Firebolt, spellData.Firebolt.ByID(11763))
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	fireboltHit := rankedSpell.DamageEffect()
 
 	pet.MinMana = rankedSpell.Cost()
@@ -403,7 +423,7 @@ func (pet *WarlockPet) registerFirebolt() {
 
 	// Roll the damage and to hit, then land it after the bolt's travel time
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, fireboltHit.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, fireboltHit.AverageAt(pet.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DealDamageAfterTravel(sim, result)
 	}
 
@@ -414,7 +434,10 @@ func (pet *WarlockPet) registerFirebolt() {
 
 // The 12s cooldown is the row's category cooldown, which SpellConfig reads.
 func (pet *WarlockPet) registerLashOfPain() {
-	rankedSpell := spellData.LashOfPain.ByID(11780)
+	rankedSpell := spelldata.LearnedRank(&pet.Unit, spellData.LashOfPain, spellData.LashOfPain.ByID(11780))
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	lashHit := rankedSpell.DamageEffect()
 
 	pet.MinMana = rankedSpell.Cost()
@@ -424,7 +447,7 @@ func (pet *WarlockPet) registerLashOfPain() {
 
 	// Roll the damage and to hit
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		spell.CalcAndDealDamage(sim, target, lashHit.Average(), spell.OutcomeMagicHitAndCrit)
+		spell.CalcAndDealDamage(sim, target, lashHit.AverageAt(pet.Level), spell.OutcomeMagicHitAndCrit)
 	}
 
 	pet.AutoCastAbilities = append(pet.AutoCastAbilities, pet.RegisterSpell(config))

@@ -194,10 +194,12 @@ func (warrior *Warrior) registerImpale() {
 	spelldata.ParseStatic(&warrior.Character, spellData.Impale.Rank(warrior.Talents.Impale))
 }
 
-var mortalStrikeRank = spellData.MortalStrike.Highest()
-
 func (warrior *Warrior) registerMortalStrike() {
 	if !warrior.Talents.MortalStrike {
+		return
+	}
+	mortalStrikeRank := warrior.learnedRank(spellData.MortalStrike, spellData.MortalStrike.Highest())
+	if mortalStrikeRank == spelldata.Nil {
 		return
 	}
 
@@ -215,17 +217,19 @@ func (warrior *Warrior) registerMortalStrike() {
 	warrior.MortalStrike = warrior.RegisterSpell(config)
 }
 
-var spearingStrikeRank = spellData.SpearingStrike.Highest()
-
-// The tooltip reads "deals $s2% weapon damage" and "an additional ${$s2*$s3}%" against Giants and
-// Dragonkin, and the effects share an aura and misc value, so both are taken by effect index.
-var spearingStrikeWeaponShare = spearingStrikeRank.EffectN(2).Percent()
-var spearingStrikeGiantMultiplier = 1 + spearingStrikeRank.EffectN(3).Average()
-
 func (warrior *Warrior) registerSpearingStrike() {
 	if !warrior.Talents.SpearingStrike {
 		return
 	}
+	spearingStrikeRank := warrior.learnedRank(spellData.SpearingStrike, spellData.SpearingStrike.Highest())
+	if spearingStrikeRank == spelldata.Nil {
+		return
+	}
+
+	// The tooltip reads "deals $s2% weapon damage" and "an additional ${$s2*$s3}%" against Giants and
+	// Dragonkin, and the effects share an aura and misc value, so both are taken by effect index.
+	spearingStrikeWeaponShare := spearingStrikeRank.EffectN(2).Percent()
+	spearingStrikeGiantMultiplier := 1 + spearingStrikeRank.EffectN(3).AverageAt(warrior.Level)
 
 	config := spelldata.SpellConfig(&warrior.Unit, spearingStrikeRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 
@@ -267,7 +271,8 @@ func (warrior *Warrior) registerBloodthrill() {
 	trigger.ExtraCondition = func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) bool {
 		swing := spell.ProcMask.Matches(core.ProcMaskMeleeMHAuto) ||
 			spellData.HeroicStrike.Contains(spell) || spellData.Cleave.Contains(spell)
-		return swing && warrior.Rend.Dot(result.Target).IsActive()
+		// Rend and Overpower register after the talents, and below their levels not at all.
+		return swing && warrior.Rend != nil && warrior.OverpowerAura != nil && warrior.Rend.Dot(result.Target).IsActive()
 	}
 
 	warrior.MakeProcTriggerAura(trigger)
@@ -403,10 +408,12 @@ func (warrior *Warrior) registerImprovedSlam() {
 	spelldata.ParseStatic(&warrior.Character, spellData.ImprovedSlam.Rank(warrior.Talents.ImprovedSlam))
 }
 
-var sweepingStrikesRank = spellData.SweepingStrikes.Highest()
-
 func (warrior *Warrior) registerSweepingStrikes() {
 	if !warrior.Talents.SweepingStrikes {
+		return
+	}
+	sweepingStrikesRank := warrior.learnedRank(spellData.SweepingStrikes, spellData.SweepingStrikes.Highest())
+	if sweepingStrikesRank == spelldata.Nil {
 		return
 	}
 

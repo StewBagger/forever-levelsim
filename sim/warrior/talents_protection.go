@@ -92,11 +92,14 @@ func (warrior *Warrior) registerRageOnAvoid(driver *spelldata.Spell, energize *s
 	warrior.MakeProcTriggerAura(trigger)
 }
 
-var lastStandRank = spellData.LastStand.Highest()
 var lastStandBuff = spellData.LastStandTriggered.Highest()
 
 func (warrior *Warrior) registerLastStand() {
 	if !warrior.Talents.LastStand {
+		return
+	}
+	lastStandRank := warrior.learnedRank(spellData.LastStand, spellData.LastStand.Highest())
+	if lastStandRank == spelldata.Nil {
 		return
 	}
 
@@ -153,11 +156,13 @@ func (warrior *Warrior) registerImprovedShieldWall() {
 	spelldata.ParseStatic(&warrior.Character, spellData.ImprovedShieldWall.Rank(warrior.Talents.ImprovedShieldWall))
 }
 
-var concussionBlowRank = spellData.ConcussionBlow.Highest()
-
 // TODO: In-game testing if this generates threat
 func (warrior *Warrior) registerConcussionBlow() {
 	if !warrior.Talents.ConcussionBlow {
+		return
+	}
+	concussionBlowRank := warrior.learnedRank(spellData.ConcussionBlow, spellData.ConcussionBlow.Highest())
+	if concussionBlowRank == spelldata.Nil {
 		return
 	}
 
@@ -174,10 +179,12 @@ func (warrior *Warrior) registerConcussionBlow() {
 	warrior.RegisterSpell(config)
 }
 
-var shieldSlamRank = spellData.ShieldSlam.Highest()
-
 func (warrior *Warrior) registerShieldSlam() {
 	if !warrior.Talents.ShieldSlam {
+		return
+	}
+	shieldSlamRank := warrior.learnedRank(spellData.ShieldSlam, spellData.ShieldSlam.Highest())
+	if shieldSlamRank == spelldata.Nil {
 		return
 	}
 
@@ -186,7 +193,7 @@ func (warrior *Warrior) registerShieldSlam() {
 	config.FlatThreatBonus = 0
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		baseDamage := shieldSlamRank.DamageEffect().Roll(sim) + warrior.BlockDamageReduction()
+		baseDamage := shieldSlamRank.DamageEffect().RollAt(sim, spell.Unit.Level) + warrior.BlockDamageReduction()
 		result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 
 		if !result.Landed() {

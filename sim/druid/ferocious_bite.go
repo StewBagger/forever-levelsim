@@ -5,13 +5,18 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-// Rank 5 is the last rank the trainer teaches; rank 6 comes from the Book of Ferocious Bite V.
-var ferociousBiteTrainerRank = spellData.FerociousBite.ByID(22829)
-var ferociousBiteBookRank = spellData.FerociousBite.ByID(31018)
-
+// Rank 5 is the last rank the trainer teaches; rank 6 comes from the Book of Ferocious Bite V. Below
+// the book's level both name the same learned rank, which is registered once.
 func (druid *Druid) registerFerociousBiteSpell() {
-	druid.FerociousBite = druid.registerFerociousBiteRank(ferociousBiteTrainerRank)
-	druid.registerFerociousBiteRank(ferociousBiteBookRank)
+	trainerRank := druid.learnedRank(spellData.FerociousBite, spellData.FerociousBite.ByID(22829))
+	bookRank := druid.learnedRank(spellData.FerociousBite, spellData.FerociousBite.ByID(31018))
+	if trainerRank == spelldata.Nil {
+		return
+	}
+	druid.FerociousBite = druid.registerFerociousBiteRank(trainerRank)
+	if bookRank != trainerRank {
+		druid.registerFerociousBiteRank(bookRank)
+	}
 }
 
 func (druid *Druid) registerFerociousBiteRank(rank *spelldata.Spell) *DruidSpell {

@@ -85,10 +85,12 @@ func (rogue *Rogue) registerDualWieldSpecialization() {
 		spellData.DualWieldSpecialization.Rank(rogue.Talents.DualWieldSpecialization))
 }
 
-var bladeFlurryRank = spellData.BladeFlurry.Highest()
-
 func (rogue *Rogue) registerBladeFlurry() {
 	if !rogue.Talents.BladeFlurry {
+		return
+	}
+	bladeFlurryRank := spelldata.LearnedRank(&rogue.Unit, spellData.BladeFlurry, spellData.BladeFlurry.Highest())
+	if bladeFlurryRank == spelldata.Nil {
 		return
 	}
 
@@ -257,10 +259,12 @@ func (rogue *Rogue) registerAggression() {
 		spellData.Aggression.Rank(rogue.Talents.Aggression))
 }
 
-var adrenalineRushRank = spellData.AdrenalineRush.Highest()
-
 func (rogue *Rogue) registerAdrenalineRush() {
 	if !rogue.Talents.AdrenalineRush {
+		return
+	}
+	adrenalineRushRank := spelldata.LearnedRank(&rogue.Unit, spellData.AdrenalineRush, spellData.AdrenalineRush.Highest())
+	if adrenalineRushRank == spelldata.Nil {
 		return
 	}
 

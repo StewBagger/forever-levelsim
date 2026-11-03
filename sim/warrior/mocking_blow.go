@@ -5,10 +5,13 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var mockingBlowRank = spellData.MockingBlow.Highest()
-var mockingBlowBaseDamage = mockingBlowRank.DamageEffect().Average()
-
 func (warrior *Warrior) registerMockingBlow() {
+	mockingBlowRank := warrior.learnedRank(spellData.MockingBlow, spellData.MockingBlow.Highest())
+	if mockingBlowRank == spelldata.Nil {
+		return
+	}
+	mockingBlowBaseDamage := mockingBlowRank.DamageEffect().AverageAt(warrior.Level)
+
 	// TODO: Test the threat multiplier in-game
 	config := spelldata.SpellConfig(&warrior.Unit, mockingBlowRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 

@@ -6,9 +6,11 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var shieldBlockRank = spellData.ShieldBlock.Highest()
-
 func (warrior *Warrior) registerShieldBlock() {
+	shieldBlockRank := warrior.learnedRank(spellData.ShieldBlock, spellData.ShieldBlock.Highest())
+	if shieldBlockRank == spelldata.Nil {
+		return
+	}
 	aura := warrior.RegisterAura(spelldata.AuraConfig(shieldBlockRank))
 	spelldata.ParseEffects(&warrior.Character, aura, shieldBlockRank)
 

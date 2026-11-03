@@ -3,13 +3,17 @@ package warlock
 import (
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/dbcenums"
+	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
 // The debuff half is A_MOD_SPELL_DAMAGE_FROM_CASTER: while the channel is on the target, it takes 10%
 // more damage from the caster's spells the effect's class flags name. Those are Corruption and Bane of
 // Agony (0x2 | 0x400); Siphon Life, a leech rather than periodic damage, and the drains are not named.
 func (warlock *Warlock) registerWrackSpell() {
-	rankedSpell := spellData.Wrack.ByID(1316697)
+	rankedSpell := warlock.learnedRank(spellData.Wrack, 1316697)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	wrackTick := rankedSpell.PeriodicEffect()
 	wrackAmplify := rankedSpell.Effect(dbcenums.A_MOD_SPELL_DAMAGE_FROM_CASTER, 0)
 

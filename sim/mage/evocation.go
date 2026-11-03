@@ -6,12 +6,15 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var evocationRank = spellData.Evocation.Highest()
-
 // While channeling, spirit regen is increased by 1500% (effect 1) and all of it continues while
 // casting (effect 2). Both are parsed onto the channel's aura; the casting share stops at all of
 // the spirit regen, so Mage Armor and Arcane Meditation add nothing during it.
 func (mage *Mage) registerEvocation() {
+	_, evocationRank := mage.learnedRank(spellData.Evocation, spellData.Evocation.Highest())
+	if evocationRank == spelldata.Nil {
+		return
+	}
+
 	config := spelldata.SpellConfig(&mage.Unit, evocationRank, spelldata.Flags(core.SpellFlagAPL))
 	config.ClassSpellMask = MageSpellEvocation
 

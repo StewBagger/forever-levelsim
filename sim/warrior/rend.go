@@ -5,11 +5,13 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var rendRank = spellData.Rend.Highest()
-
 // TODO: The Attack Power share per tick (0.02) is verified in game on Rank 2 only; Ranks 1 and 3 to 7
 // carry the same share unmeasured. Verify it on the higher ranks once logs at their level exist.
 func (warrior *Warrior) registerRend() {
+	rendRank := warrior.learnedRank(spellData.Rend, spellData.Rend.Highest())
+	if rendRank == spelldata.Nil {
+		return
+	}
 	tick := rendRank.PeriodicEffect()
 
 	config := spelldata.SpellConfig(&warrior.Unit, rendRank,
@@ -17,7 +19,7 @@ func (warrior *Warrior) registerRend() {
 
 	config.Dot = spelldata.DotConfig(rendRank, tick)
 	config.Dot.OnTick = func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-		damage := tick.Average() + tick.APCoeff()*dot.Spell.MeleeAttackPower(target)
+		damage := tick.AverageAt(dot.Spell.Unit.Level) + tick.APCoeff()*dot.Spell.MeleeAttackPower(target)
 		dot.Spell.CalcAndDealPeriodicDamage(sim, target, damage, rendRank.TickOutcome(dot))
 	}
 

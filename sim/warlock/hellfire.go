@@ -10,7 +10,10 @@ import (
 // for the same, spell power included. An area effect that ticks rolls hit on every tick, and crit unless
 // Hellfire Effect's row bars it.
 func (warlock *Warlock) registerHellfire() {
-	rankedSpell := spellData.Hellfire.ByID(11684)
+	rankedSpell := warlock.learnedRank(spellData.Hellfire, 11684)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	channelTick := rankedSpell.PeriodicEffect()
 	selfBurn := rankedSpell.EffectN(2)
 
@@ -27,7 +30,7 @@ func (warlock *Warlock) registerHellfire() {
 			outcome = spell.OutcomeMagicHit
 		}
 		for _, target := range sim.Encounter.ActiveTargetUnits {
-			spell.CalcAndDealDamage(sim, target, effectHit.Average(), outcome)
+			spell.CalcAndDealDamage(sim, target, effectHit.AverageAt(spell.Unit.Level), outcome)
 		}
 	}
 	hellfireEffect := warlock.RegisterSpell(effectConfig)
@@ -41,7 +44,7 @@ func (warlock *Warlock) registerHellfire() {
 	config.Dot.OnTick = func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 		hellfireEffect.Cast(sim, target)
 		spellPower := warlock.GetStat(stats.SpellDamage) + warlock.GetStat(stats.FireDamage)
-		warlock.RemoveHealth(sim, selfBurn.Average()+selfBurn.Coeff()*spellPower)
+		warlock.RemoveHealth(sim, selfBurn.AverageAt(warlock.Level)+selfBurn.Coeff()*spellPower)
 	}
 
 	// Channel on the caster

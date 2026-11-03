@@ -7,6 +7,7 @@ import (
 	"github.com/wowsims/forever/sim/common/shared"
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/proto"
+	"github.com/wowsims/forever/sim/core/spelldata"
 	"github.com/wowsims/forever/sim/core/stats"
 )
 
@@ -187,19 +188,40 @@ func NewWarlock(character *core.Character, options *proto.Player, warlockOptions
 
 	warlock.EnableManaBar()
 	warlock.AddStatDependency(stats.Strength, stats.AttackPower, 1)
-	warlock.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
+	warlock.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiAtLevel(character.Class, character.Level))
 
 	warlock.registerPets()
 
 	return warlock
 }
 
+// The rank of the ladder the warlock knows at its level, at or below the rank `named`, which the rotation
+// finds under the named rank's id. Nil below the level the first rank is taught at.
+func (warlock *Warlock) learnedRank(ladder spelldata.Ladder, named int32) *spelldata.Spell {
+	return spelldata.LearnedRank(&warlock.Unit, ladder, ladder.ByID(named))
+}
+
+// A dot's tick at the caster's level, rolling only the crit its outcome allows.
+func periodicDamageTick(tick *spelldata.Effect, outcome func(*core.Dot) core.OutcomeApplier) core.OnTick {
+	return func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+		dot.Spell.CalcAndDealPeriodicDamage(sim, target, tick.RollAt(sim, dot.Spell.Unit.Level), outcome(dot))
+	}
+}
+
 // Settles which demon is sacrificed and which is out, once, so everything after reads them as settled:
 //   - Without Demonic Sacrifice, nothing is sacrificed.
 //   - Without Demonic Pact, summoning any demon cancels the effect, so no demon is out.
 //   - With it, the demon out may be another; resummoning the sacrificed one still cancels the effect.
+//
+// A demon the warlock has not learned to summon at its level is neither out nor sacrificed.
 func (warlock *Warlock) resolveSacrifice() {
 	options := warlock.Options
+	if !warlock.knowsSummon(options.Summon) {
+		options.Summon = proto.WarlockOptions_NoSummon
+	}
+	if !warlock.knowsSummon(options.SacrificedDemon) {
+		options.SacrificedDemon = proto.WarlockOptions_NoSummon
+	}
 	switch {
 	case !warlock.Talents.DemonicSacrifice:
 		options.SacrificedDemon = proto.WarlockOptions_NoSummon

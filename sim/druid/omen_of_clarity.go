@@ -6,6 +6,10 @@ import (
 )
 
 func (druid *Druid) registerOmenOfClarity() {
+	omen := druid.learned(spellData.OmenOfClarity)
+	if omen == spelldata.Nil {
+		return
+	}
 	clearRow := spellData.OmenOfClarityTriggered.Highest()
 	druid.ClearcastingAura = druid.RegisterAura(spelldata.AuraConfig(clearRow))
 	spelldata.ParseEffects(&druid.Character, druid.ClearcastingAura, clearRow)
@@ -16,7 +20,6 @@ func (druid *Druid) registerOmenOfClarity() {
 		}
 	}
 
-	omen := spellData.OmenOfClarity.Highest()
 	trigger := spelldata.ProcTrigger(&druid.Character, omen, func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 		druid.ClearcastingAura.Activate(sim)
 	}, spelldata.Chance(1))

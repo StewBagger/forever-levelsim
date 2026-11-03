@@ -13,14 +13,14 @@ func (priest *Priest) registerHolyFireSpell(_ int32, rank *spelldata.Spell) {
 	priest.attachPowerInLightMarker(&config)
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcAndDealDamage(sim, target, holyFireHit.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcAndDealDamage(sim, target, holyFireHit.AverageAt(priest.Level), spell.OutcomeMagicHitAndCrit)
 		if result.Landed() {
 			spell.Dot(target).Apply(sim)
 		}
 	}
 
 	config.ExpectedInitialDamage = func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-		return spell.CalcDamage(sim, target, holyFireHit.Average(), spell.OutcomeExpectedMagicCrit)
+		return spell.CalcDamage(sim, target, holyFireHit.AverageAt(priest.Level), spell.OutcomeExpectedMagicCrit)
 	}
 
 	priest.RegisterSpell(config)

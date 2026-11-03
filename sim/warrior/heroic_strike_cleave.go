@@ -9,12 +9,17 @@ import (
 var heroicStrikeTrainerRank = spellData.HeroicStrike.ByID(11567)
 var heroicStrikeBookRank = spellData.HeroicStrike.ByID(25286)
 
-var cleaveRank = spellData.Cleave.Highest()
-var cleaveTargets = int32(cleaveRank.DamageEffect().ChainTargets)
-
+// Below the book's level both resolve to the same learned rank, which is registered once.
 func (warrior *Warrior) registerHeroicStrike() {
-	warrior.registerHeroicStrikeRank(heroicStrikeTrainerRank)
-	warrior.registerHeroicStrikeRank(heroicStrikeBookRank)
+	trainerRank := warrior.learnedRank(spellData.HeroicStrike, heroicStrikeTrainerRank)
+	bookRank := warrior.learnedRank(spellData.HeroicStrike, heroicStrikeBookRank)
+	if trainerRank == spelldata.Nil {
+		return
+	}
+	warrior.registerHeroicStrikeRank(trainerRank)
+	if bookRank != trainerRank {
+		warrior.registerHeroicStrikeRank(bookRank)
+	}
 }
 
 func (warrior *Warrior) registerHeroicStrikeRank(rank *spelldata.Spell) {
@@ -34,6 +39,12 @@ func (warrior *Warrior) registerHeroicStrikeRank(rank *spelldata.Spell) {
 }
 
 func (warrior *Warrior) registerCleave() {
+	cleaveRank := warrior.learnedRank(spellData.Cleave, spellData.Cleave.Highest())
+	if cleaveRank == spelldata.Nil {
+		return
+	}
+	cleaveTargets := int32(cleaveRank.DamageEffect().ChainTargets)
+
 	config := spelldata.SpellConfig(&warrior.Unit, cleaveRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 	config.Flags &^= core.SpellFlagAPL
 

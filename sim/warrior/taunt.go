@@ -5,9 +5,11 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var tauntRank = spellData.Taunt.Highest()
-
 func (warrior *Warrior) registerTaunt() {
+	tauntRank := warrior.learnedRank(spellData.Taunt, spellData.Taunt.Highest())
+	if tauntRank == spelldata.Nil {
+		return
+	}
 	config := spelldata.SpellConfig(&warrior.Unit, tauntRank, spelldata.Flags(core.SpellFlagAPL))
 	config.ProcMask = core.ProcMaskEmpty
 	config.ThreatMultiplier = 1

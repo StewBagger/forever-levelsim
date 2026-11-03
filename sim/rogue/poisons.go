@@ -61,8 +61,9 @@ func poisonRank(ladder spelldata.Ladder, consumable core.Consumable) int32 {
 	return rank
 }
 
-// The highest rank of the ladder that any imbue the rogue carries casts. Both hands and both weapon
-// sets share the one poison spell, so a lower rank on another weapon procs at this one.
+// The highest rank of the ladder that any imbue the rogue carries casts, held to the rank learned at
+// the rogue's level. Both hands and both weapon sets share the one poison spell, so a lower rank on
+// another weapon procs at this one. Nil when the rogue knows no rank of the poison.
 func (rogue *Rogue) highestPoisonRank(ladder spelldata.Ladder) *spelldata.Spell {
 	var highest int32
 	for _, id := range rogue.SelectedConsumableIDs() {
@@ -71,7 +72,10 @@ func (rogue *Rogue) highestPoisonRank(ladder spelldata.Ladder) *spelldata.Spell 
 			highest = rank
 		}
 	}
-	return ladder.Rank(highest)
+	if highest == 0 {
+		return spelldata.Nil
+	}
+	return spelldata.LearnedRank(&rogue.Unit, ladder, ladder.Rank(highest))
 }
 
 // Casts the poison off the melee hits of the weapons carrying the consumable's imbue, at their own
@@ -105,7 +109,7 @@ func (rogue *Rogue) registerDeadlyPoisonSpell(deadlyPoisonRank *spelldata.Spell)
 	config.Dot = spelldata.DotConfig(deadlyPoisonRank, tick)
 	config.Dot.OnTick = func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 		stacks := dot.GetStacks()
-		baseTick := tick.Average()
+		baseTick := tick.AverageAt(rogue.Level)
 		apFactor := dot.Spell.MeleeAttackPower(target) * apScaling
 		dot.Spell.CalcAndDealPeriodicDamage(sim, target, (baseTick+apFactor)*float64(stacks), deadlyPoisonRank.TickOutcome(dot))
 	}
@@ -130,7 +134,7 @@ func (rogue *Rogue) registerDeadlyPoisonSpell(deadlyPoisonRank *spelldata.Spell)
 }
 
 func (rogue *Rogue) registerInstantPoisonSpell(instantPoisonRank *spelldata.Spell) {
-	ipBaseDamage := instantPoisonRank.DamageEffect().Average()
+	ipBaseDamage := instantPoisonRank.DamageEffect().AverageAt(rogue.Level)
 	config := spelldata.SpellConfig(&rogue.Unit, instantPoisonRank, spelldata.Magic(core.ProcMaskSpellDamageProc))
 	config.ClassSpellMask = RogueSpellInstantPoison
 	apScaling := 0.005 // Confirmed by Zirene
@@ -147,7 +151,11 @@ func (rogue *Rogue) applyDeadlyPoison(consumable core.Consumable) {
 		return
 	}
 	if rogue.DeadlyPoison == nil {
-		rogue.registerDeadlyPoisonSpell(rogue.highestPoisonRank(spellData.DeadlyPoison))
+		rank := rogue.highestPoisonRank(spellData.DeadlyPoison)
+		if rank == spelldata.Nil {
+			return
+		}
+		rogue.registerDeadlyPoisonSpell(rank)
 	}
 	rogue.registerPoisonProc(consumable, 0.3, rogue.DeadlyPoison)
 }
@@ -157,7 +165,11 @@ func (rogue *Rogue) applyInstantPoison(consumable core.Consumable) {
 		return
 	}
 	if rogue.InstantPoison == nil {
-		rogue.registerInstantPoisonSpell(rogue.highestPoisonRank(spellData.InstantPoison))
+		rank := rogue.highestPoisonRank(spellData.InstantPoison)
+		if rank == spelldata.Nil {
+			return
+		}
+		rogue.registerInstantPoisonSpell(rank)
 	}
 	rogue.registerPoisonProc(consumable, 0.2, rogue.InstantPoison) //Confirmed in game 9/30/2026
 }

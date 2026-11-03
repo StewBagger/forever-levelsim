@@ -10,7 +10,10 @@ import (
 // on every tick, and does not ramp. Amplify Curse raises the whole tick, base and share. Damage multipliers
 // apply as each tick lands.
 func (warlock *Warlock) registerBaneOfAgony() {
-	rankedSpell := spellData.BaneOfAgony.ByID(11713)
+	rankedSpell := warlock.learnedRank(spellData.BaneOfAgony, 11713)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	agonyTick := rankedSpell.PeriodicEffect()
 
 	// What each target's Bane landed with: the Amplify Curse bonus, which the cast spends, and the spell
@@ -42,7 +45,7 @@ func (warlock *Warlock) registerBaneOfAgony() {
 
 	// Sets the dot's snapshot to a tick of the cast at the ramp, with the damage multipliers of now.
 	setTick := func(target *core.Unit, dot *core.Dot, cast agonyCast, ramp float64) {
-		dot.SnapshotBaseDamage = (agonyTick.Average()*ramp + cast.spellPowerShare) * cast.ampMult
+		dot.SnapshotBaseDamage = (agonyTick.AverageAt(warlock.Level)*ramp + cast.spellPowerShare) * cast.ampMult
 		dot.SnapshotAttackerMultiplier = dot.Spell.AttackerDamageMultiplier(warlock.AttackTables[target.UnitIndex], true) *
 			dot.PeriodicDamageMultiplier
 	}

@@ -41,7 +41,7 @@ func (paladin *Paladin) registerConsecration(n int32, rank *spelldata.Spell) {
 	bonus := tickSpell.EffectN(2)
 
 	dummy := rank.Effect(dbcenums.A_PERIODIC_DUMMY, 0)
-	bonusTargets := int(dummy.Average())
+	bonusTargets := int(dummy.AverageAt(paladin.Level))
 	tickLength := dummy.Period()
 	numberOfTicks := int32(rank.Duration() / tickLength)
 	markTail := spellData.ConsecratedGroundTriggered.Highest().Duration()
@@ -79,9 +79,9 @@ func (paladin *Paladin) registerConsecration(n int32, rank *spelldata.Spell) {
 		OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
 			markTargets(sim, dot.RemainingDuration(sim))
 			for _, target := range sim.Encounter.ActiveTargetUnits {
-				damage := tick.Average()
+				damage := tick.AverageAt(paladin.Level)
 				if paladin.consecrationMarks.Get(target).IsActive() {
-					damage += bonus.Average() + bonus.Coeff()*(dot.Spell.BonusDamage(dot.Spell.Unit.AttackTables[target.UnitIndex])+
+					damage += bonus.AverageAt(paladin.Level) + bonus.Coeff()*(dot.Spell.BonusDamage(dot.Spell.Unit.AttackTables[target.UnitIndex])+
 						target.PseudoStats.SchoolBonusSpellDamage[stats.SchoolIndexHoly])
 				}
 				dot.Spell.CalcAndDealPeriodicDamage(sim, target, damage, dot.Spell.OutcomeTickMagicHitAndCrit)

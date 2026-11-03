@@ -8,7 +8,10 @@ import (
 )
 
 func (druid *Druid) registerMaulSpell() {
-	rank := spellData.Maul.Highest()
+	rank := druid.learned(spellData.Maul)
+	if rank == spelldata.Nil {
+		return
+	}
 	config := spelldata.SpellConfig(&druid.Unit, rank, spelldata.Melee(core.ProcMaskMeleeMHSpecial),
 		spelldata.RemoveFlags(core.SpellFlagAPL))
 	// The queued cast keeps the spell id the APL names. The swing's damage is the same id, tagged,

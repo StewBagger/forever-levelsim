@@ -5,10 +5,12 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var sinisterStrikeRank = spellData.SinisterStrike.Highest()
-
 func (rogue *Rogue) registerSinisterStrikeSpell() {
-	sinisterStrikeBaseDamage := sinisterStrikeRank.DamageEffect().Average()
+	sinisterStrikeRank := spelldata.LearnedRank(&rogue.Unit, spellData.SinisterStrike, spellData.SinisterStrike.Highest())
+	if sinisterStrikeRank == spelldata.Nil {
+		return
+	}
+	sinisterStrikeBaseDamage := sinisterStrikeRank.DamageEffect().AverageAt(rogue.Level)
 	config := spelldata.SpellConfig(&rogue.Unit, sinisterStrikeRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 	config.Flags |= SpellFlagBuilder | SpellFlagColdBlooded
 	config.ClassSpellMask = RogueSpellSinisterStrike
@@ -21,7 +23,7 @@ func (rogue *Rogue) registerSinisterStrikeSpell() {
 		result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 		if result.Landed() {
-			rogue.AddComboPoints(sim, int32(sinisterStrikeRank.ProcEnergizeEffect().Roll(sim)), spell.ComboPointMetrics())
+			rogue.AddComboPoints(sim, int32(sinisterStrikeRank.ProcEnergizeEffect().RollAt(sim, rogue.Level)), spell.ComboPointMetrics())
 
 		} else {
 			spell.IssueRefund(sim)

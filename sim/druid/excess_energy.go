@@ -44,7 +44,7 @@ func (druid *Druid) excessEnergy(sim *core.Simulation) float64 {
 	shiftEnergy := 0.0
 	shiftReadyAt := core.NeverExpires
 	if druid.ShiftingPower != nil && druid.Talents.ShiftingPower {
-		shiftEnergy = spellData.ShiftingPower.Highest().EnergizeEffect().Average() + druid.WolfsheadEnergyBonus
+		shiftEnergy = spellData.ShiftingPower.Highest().EnergizeEffect().AverageAt(druid.level()) + druid.WolfsheadEnergyBonus
 		shiftReadyAt = druid.ShiftingPower.ReadyAt()
 	}
 	keep := 0.0

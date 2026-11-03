@@ -6,7 +6,10 @@ import (
 )
 
 func (druid *Druid) registerRavageSpell() {
-	rank := spellData.Ravage.Highest()
+	rank := druid.learned(spellData.Ravage)
+	if rank == spelldata.Nil {
+		return
+	}
 	config := spelldata.SpellConfig(&druid.Unit, rank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 	// CastRequirement does not enforce ATTR_REQ_STEALTH. These attacks require Prowl;
 	// Shadowmeld does not meet that requirement.

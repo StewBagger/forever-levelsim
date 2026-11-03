@@ -5,10 +5,14 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+// Only the highest rank the mage knows at its level is registered, not every rank
 // spellData.ArcaneWrath lists.
 func (mage *Mage) registerArcaneWrathSpell() {
-	mage.registerArcaneWrathRank(spellData.ArcaneWrath.Len(), spellData.ArcaneWrath.Highest())
+	index, rank := mage.learnedRank(spellData.ArcaneWrath, spellData.ArcaneWrath.Highest())
+	if rank == spelldata.Nil {
+		return
+	}
+	mage.registerArcaneWrathRank(index, rank)
 }
 
 // Arcane Wrath
@@ -29,7 +33,7 @@ func (mage *Mage) registerArcaneWrathRank(_ int32, rank *spelldata.Spell) {
 		bonus := maxManaShare * mage.MaxMana()
 
 		spell.BonusSpellDamage += bonus
-		result := spell.CalcDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.BonusSpellDamage -= bonus
 
 		spell.DealDamageAfterTravel(sim, result)

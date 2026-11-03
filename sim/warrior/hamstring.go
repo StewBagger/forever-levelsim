@@ -5,10 +5,13 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var hamstringRank = spellData.Hamstring.Highest()
-var hamstringBaseDamage = hamstringRank.DamageEffect().Average()
-
 func (warrior *Warrior) registerHamstring() {
+	hamstringRank := warrior.learnedRank(spellData.Hamstring, spellData.Hamstring.Highest())
+	if hamstringRank == spelldata.Nil {
+		return
+	}
+	hamstringBaseDamage := hamstringRank.DamageEffect().AverageAt(warrior.Level)
+
 	// TODO: Manual review needed -- the game files state no threat coefficient; 1 until measured in game.
 	config := spelldata.SpellConfig(&warrior.Unit, hamstringRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 

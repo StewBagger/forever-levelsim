@@ -97,7 +97,7 @@ func (priest *Priest) applyMindFlay() {
 	if !priest.Talents.MindFlay {
 		return
 	}
-	spellData.MindFlay.Each(priest.registerMindFlaySpell)
+	priest.eachLearnedRank(spellData.MindFlay, priest.registerMindFlaySpell)
 }
 
 // Each instance of damage of Mind Flay deals X% more damage than its previous instance of damage.
@@ -144,7 +144,7 @@ func (priest *Priest) applyVampiricEmbrace() {
 		return
 	}
 
-	spellData.VampiricEmbrace.Each(priest.registerVampiricEmbrace)
+	priest.eachLearnedRank(spellData.VampiricEmbrace, priest.registerVampiricEmbrace)
 }
 
 // Your Shadow damage spells have a X% chance to increase the Shadow damage you deal by 2% for 15 sec, stacking up to 5 times.
@@ -229,7 +229,10 @@ func (priest *Priest) applyShadowform() {
 		return
 	}
 
-	rank := spellData.Shadowform.Highest()
+	rank := priest.learnedTopRank(spellData.Shadowform)
+	if rank == spelldata.Nil {
+		return
+	}
 	form := rank.ShapeshiftForm()
 
 	auraConfig := spelldata.AuraConfig(rank)

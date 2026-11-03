@@ -9,9 +9,16 @@ import (
 var eviscerateTrainerRank = spellData.Eviscerate.ByID(11300)
 var eviscerateBookRank = spellData.Eviscerate.ByID(31016)
 
+// Below the book's level both resolve to the same learned rank, which registers once.
 func (rogue *Rogue) registerEviscerate() {
-	rogue.registerEviscerateRank(eviscerateTrainerRank)
-	rogue.registerEviscerateRank(eviscerateBookRank)
+	trainer := spelldata.LearnedRank(&rogue.Unit, spellData.Eviscerate, eviscerateTrainerRank)
+	book := spelldata.LearnedRank(&rogue.Unit, spellData.Eviscerate, eviscerateBookRank)
+	if trainer != spelldata.Nil {
+		rogue.registerEviscerateRank(trainer)
+	}
+	if book != spelldata.Nil && book.ID != trainer.ID {
+		rogue.registerEviscerateRank(book)
+	}
 }
 
 func (rogue *Rogue) registerEviscerateRank(rank *spelldata.Spell) {
@@ -26,7 +33,7 @@ func (rogue *Rogue) registerEviscerateRank(rank *spelldata.Spell) {
 		rogue.BreakStealth(sim)
 		comboPoints := float64(rogue.ComboPoints())
 		// The roll spreads the base points alone; the per-point damage and attack power add on top.
-		flatBaseDamage := eviscerateBaseDamage.Roll(sim) + eviscerateDamagePerPoint*comboPoints
+		flatBaseDamage := eviscerateBaseDamage.RollAt(sim, rogue.Level) + eviscerateDamagePerPoint*comboPoints
 
 		baseDamage := flatBaseDamage + eviscerateApScalingPerPoint*comboPoints*spell.MeleeAttackPower(target)
 

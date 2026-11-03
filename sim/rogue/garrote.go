@@ -5,12 +5,14 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var garroteRank = spellData.Garrote.Highest()
-
 func (rogue *Rogue) registerGarrote() {
+	garroteRank := spelldata.LearnedRank(&rogue.Unit, spellData.Garrote, spellData.Garrote.Highest())
+	if garroteRank == spelldata.Nil {
+		return
+	}
 	tick := garroteRank.PeriodicEffect()
 	apScaling := 0.03 // Estimated from in-game tests.
-	comboPointGen := garroteRank.EnergizeEffect().Average()
+	comboPointGen := garroteRank.EnergizeEffect().AverageAt(rogue.Level)
 
 	config := spelldata.SpellConfig(&rogue.Unit, garroteRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 	config.Flags |= SpellFlagBuilder
@@ -21,7 +23,7 @@ func (rogue *Rogue) registerGarrote() {
 
 	config.Dot = spelldata.DotConfig(garroteRank, tick)
 	config.Dot.OnTick = func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-		dot.Spell.CalcAndDealPeriodicDamage(sim, target, tick.Average()+dot.Spell.MeleeAttackPower(target)*apScaling, garroteRank.TickOutcome(dot))
+		dot.Spell.CalcAndDealPeriodicDamage(sim, target, tick.AverageAt(rogue.Level)+dot.Spell.MeleeAttackPower(target)*apScaling, garroteRank.TickOutcome(dot))
 	}
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

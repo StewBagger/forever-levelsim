@@ -7,7 +7,10 @@ import (
 )
 
 func (druid *Druid) registerInnervateCD() {
-	rank := spellData.Innervate.Highest()
+	rank := druid.learned(spellData.Innervate)
+	if rank == spelldata.Nil {
+		return
+	}
 	// Every raid player can receive Innervate; RegisterAura cannot run after finalize.
 	for _, unit := range druid.Env.Raid.AllPlayerUnits {
 		buffs.NewSpellDataInnervatesAura(unit, true, 0)

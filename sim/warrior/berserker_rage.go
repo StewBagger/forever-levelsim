@@ -9,9 +9,11 @@ import (
 // generates while Berserker Rage is up; doubled.
 const berserkerRageDamageTakenRageMultiplier = 2.0
 
-var berserkerRageRank = spellData.BerserkerRage.Highest()
-
 func (warrior *Warrior) registerBerserkerRage() {
+	berserkerRageRank := warrior.learnedRank(spellData.BerserkerRage, spellData.BerserkerRage.Highest())
+	if berserkerRageRank == spelldata.Nil {
+		return
+	}
 	rageMetrics := warrior.NewRageMetrics(core.ActionID{SpellID: berserkerRageRank.ID})
 	rageGain := spellData.ImprovedBerserkerRage.EffectAt(1).TenthsAt(warrior.Talents.ImprovedBerserkerRage)
 

@@ -5,10 +5,8 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var chainLightningRanks = castableRanks(spellData.ChainLightning)
-
 func (shaman *Shaman) registerChainLightningSpell() {
-	shaman.registerWithOverloads(chainLightningRanks, chainLightningOverloadRanks, shaman.newChainLightningSpellConfig)
+	shaman.registerWithOverloads(castableRanks(&shaman.Unit, spellData.ChainLightning), chainLightningOverloadRanks, shaman.newChainLightningSpellConfig)
 }
 
 // The cast, with the overload it may trigger; the overload itself, from its own row, where overload is
@@ -34,7 +32,7 @@ func (shaman *Shaman) newChainLightningSpellConfig(rank *spelldata.Spell, overlo
 		// damage of the next.
 		curTarget := target
 		for hitIndex := range numHits {
-			results[hitIndex] = spell.CalcDamage(sim, curTarget, damage.Average(), spell.OutcomeMagicHitAndCrit)
+			results[hitIndex] = spell.CalcDamage(sim, curTarget, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 			curTarget = sim.Environment.NextActiveTargetUnit(curTarget)
 			spell.DamageMultiplier *= bounce
 		}

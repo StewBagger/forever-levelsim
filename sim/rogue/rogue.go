@@ -5,6 +5,7 @@ import (
 
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/proto"
+	"github.com/wowsims/forever/sim/core/spelldata"
 	"github.com/wowsims/forever/sim/core/stats"
 )
 
@@ -75,6 +76,8 @@ type Rogue struct {
 	ruthlessnessChance                float64
 	relentlessStrikesMetrics          *core.ResourceMetrics
 	puncturingWoundsComboPointMetrics *core.ResourceMetrics
+
+	exposeArmorRank *spelldata.Spell // The rank learned at the rogue's level, which prices the armor a cast removes.
 
 	HasPvpEnergy              bool
 	DeathmantleBonus          float64
@@ -191,7 +194,7 @@ func NewRogue(character *core.Character, options *proto.Player, talents string) 
 
 	rogue.AddStatDependency(stats.Strength, stats.AttackPower, 1)
 	rogue.AddStatDependency(stats.Agility, stats.AttackPower, 1)
-	rogue.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
+	rogue.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiAtLevel(character.Class, character.Level))
 
 	return rogue
 }

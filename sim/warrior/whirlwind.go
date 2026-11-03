@@ -6,9 +6,11 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var whirlwindRank = spellData.Whirlwind.Highest()
-
 func (warrior *Warrior) registerWhirlwind() {
+	whirlwindRank := warrior.learnedRank(spellData.Whirlwind, spellData.Whirlwind.Highest())
+	if whirlwindRank == spelldata.Nil {
+		return
+	}
 	// The tooltip of 1680 strikes with both melee weapons, and the row states only the one weapon
 	// damage effect, so the off-hand strike is a sub-spell on the same row.
 	ohConfig := spelldata.SpellConfig(&warrior.Unit, whirlwindRank,

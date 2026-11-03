@@ -13,13 +13,21 @@ var serpentStingBookRank = spellData.SerpentSting.ByID(25295)
 // power, read at each tick, and spell power adds nothing.
 const serpentStingTickAPShare = 0.030
 
+// Below the book's level both resolve to the same learned rank, which is registered once.
 func (hunter *Hunter) registerSerpentSting() {
-	hunter.registerSerpentStingRank(serpentStingTrainerRank)
-	hunter.registerSerpentStingRank(serpentStingBookRank)
+	trainer := spelldata.LearnedRank(&hunter.Unit, spellData.SerpentSting, serpentStingTrainerRank)
+	book := spelldata.LearnedRank(&hunter.Unit, spellData.SerpentSting, serpentStingBookRank)
+	if trainer != spelldata.Nil {
+		hunter.registerSerpentStingRank(trainer)
+	}
+	if book != spelldata.Nil && book != trainer {
+		hunter.registerSerpentStingRank(book)
+	}
 }
 
 func (hunter *Hunter) registerSerpentStingRank(rank *spelldata.Spell) {
 	tick := rank.PeriodicEffect()
+	tickDamage := tick.AverageAt(hunter.Level)
 
 	config := spelldata.SpellConfig(&hunter.Unit, rank, spelldata.Flags(core.SpellFlagAPL))
 	// A ranged ability, as the game files' ranged-ability procs (Rapid Recuperation) see it, so the
@@ -32,7 +40,7 @@ func (hunter *Hunter) registerSerpentStingRank(rank *spelldata.Spell) {
 	config.Dot = spelldata.DotConfig(rank, tick)
 	config.Dot.Aura.Tag = hunter.stingTag()
 	config.Dot.OnTick = func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-		baseDamage := tick.Average() + serpentStingTickAPShare*dot.Spell.RangedAttackPower(target)
+		baseDamage := tickDamage + serpentStingTickAPShare*dot.Spell.RangedAttackPower(target)
 		dot.Spell.CalcAndDealPeriodicDamage(sim, target, baseDamage, rank.TickOutcome(dot))
 	}
 

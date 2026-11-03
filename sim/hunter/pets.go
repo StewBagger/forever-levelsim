@@ -30,34 +30,34 @@ var petAttackSpeeds = map[proto.HunterOptions_PetAttackSpeed]spelldata.Ladder{
 }
 
 // A tamed pet's own armor and health are the creature values for its level in the game files
-// (core.CreatureArmorMaxLevel, core.CreatureHealthMaxLevel), and its own attack power is 30% of the creature
-// dps (core.CreatureAutoAttackDpsMaxLevel) as attack power, 14 a point of dps, with nothing from Strength:
-// 36, 61 and 103 on the sheets of a level 11 Carrion Bird, a level 17 Cat and a level 30 pet, each the
-// creature dps × 4.2 rounded down, with the owner's 10% rounded down beside it.
+// (core.CreatureStatsAtLevel), and its own attack power is 30% of the creature dps as attack power, 14 a
+// point of dps, with nothing from Strength: 36, 61 and 103 on the sheets of a level 11 Carrion Bird, a
+// level 17 Cat and a level 30 pet, each the creature dps × 4.2 rounded down, with the owner's 10% rounded
+// down beside it. The pet takes its owner's level.
 // TODO: Health is one reading, 550 with Great Stamina 2 at 35 owner Stamina, which the creature health
 // fits with ~1.1 health a point of the owner's Stamina, and half of it with the warlock's 7.5. The creature
 // health is kept until a second reading at another Stamina.
-var petBaseStats = stats.Stats{
-	stats.Health:      core.CreatureHealthMaxLevel,
-	stats.Armor:       core.CreatureArmorMaxLevel,
-	stats.AttackPower: petAttackPower,
-}
-
-const petAttackPower = 0.3 * 14 * core.CreatureAutoAttackDpsMaxLevel
-
+//
 // The creature dps is the pet's auto attack damage with its own attack power in it, so the swing before
 // attack power is the creature dps less that attack power over 14, over the 2.0 s, spanning 20% either side:
 // a level 30 Cat's logged swings before armor, 42-55 and 46-59 at 119 and 146 attack power, swinging at 1.2 s
 // with Unleashed Fury 5/5, are this swing plus attack power over 14, over the swing as sped up, with the Cat's
 // +10% and happiness. The pet sheet shows the whole creature dps as the weapon and leaves happiness out, so
 // its damage range is not the damage the pet deals.
-const petSwingAverage = (core.CreatureAutoAttackDpsMaxLevel - petAttackPower/14) * 2
-
-var petSwing = core.Weapon{
-	BaseDamageMin: petSwingAverage * (1 - 0.2),
-	BaseDamageMax: petSwingAverage * (1 + 0.2),
-	SwingSpeed:    2,
-	MaxRange:      core.MaxMeleeRange,
+func petStatsAt(level int32) (stats.Stats, core.Weapon) {
+	health, armor, dps := core.CreatureStatsAtLevel(level)
+	attackPower := 0.3 * 14 * dps
+	swingAverage := (dps - attackPower/14) * 2
+	return stats.Stats{
+			stats.Health:      health,
+			stats.Armor:       armor,
+			stats.AttackPower: attackPower,
+		}, core.Weapon{
+			BaseDamageMin: swingAverage * (1 - 0.2),
+			BaseDamageMax: swingAverage * (1 + 0.2),
+			SwingSpeed:    2,
+			MaxRange:      core.MaxMeleeRange,
+		}
 }
 
 type HunterPet struct {
@@ -74,11 +74,13 @@ type HunterPet struct {
 	uptimePercent float64
 }
 
+// A hunter tames its first pet at the level it learns Call Pet.
 func (hunter *Hunter) NewHunterPet() *HunterPet {
 	family, ok := petFamilies[hunter.Options.PetType.String()]
-	if !ok || hunter.Options.PetUptime <= 0 {
+	if !ok || hunter.Options.PetUptime <= 0 || hunter.Level < spelldata.TaughtAt(spellData.CallPet.Highest()) {
 		return nil
 	}
+	petBaseStats, petSwing := petStatsAt(hunter.Level)
 
 	hp := &HunterPet{
 		Pet: core.NewPet(core.PetConfig{
@@ -206,7 +208,9 @@ func (hp *HunterPet) Initialize() {
 	hp.Pet.Initialize()
 	hp.registerStatInheritance()
 	for _, ladder := range hp.family.Abilities {
-		hp.registerAbility(ladder.Highest())
+		if rank := spelldata.LearnedRank(&hp.Unit, ladder, ladder.Highest()); rank != spelldata.Nil {
+			hp.registerAbility(rank)
+		}
 	}
 	slices.SortStableFunc(hp.abilities, func(a, b *core.Spell) int {
 		return cmp.Compare(max(b.CD.Duration, b.SharedCD.Duration), max(a.CD.Duration, a.SharedCD.Duration))
@@ -343,15 +347,24 @@ func targetsOf(rank *spelldata.Spell, damage *spelldata.Effect) int32 {
 func (hp *HunterPet) registerStrike(rank *spelldata.Spell, onCast func(sim *core.Simulation, target *core.Unit)) *core.Spell {
 	damage := rank.DamageEffect()
 	targets := targetsOf(rank, damage)
+	level := hp.Level
+	// The effect's DirectAmount, priced at the pet's level: the average where core rolls the whole
+	// amount, one roll of the base points otherwise.
+	amount := func(sim *core.Simulation) float64 {
+		if damage.DirectVariance() > 0 {
+			return damage.AverageAt(level)
+		}
+		return damage.RollAt(sim, level)
+	}
 
 	config := hp.spellConfig(rank, schoolOpt(rank))
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		if targets > 1 {
 			spell.CalcCleaveDamageWithVariance(sim, target, targets, hitAndCritOutcome(spell, rank),
-				func(sim *core.Simulation, spell *core.Spell) float64 { return damage.DirectAmount(sim) })
+				func(sim *core.Simulation, spell *core.Spell) float64 { return amount(sim) })
 			spell.DealBatchedAoeDamage(sim)
 		} else {
-			spell.CalcAndDealDamage(sim, target, damage.DirectAmount(sim), hitAndCritOutcome(spell, rank))
+			spell.CalcAndDealDamage(sim, target, amount(sim), hitAndCritOutcome(spell, rank))
 		}
 		if onCast != nil {
 			onCast(sim, target)
@@ -377,8 +390,15 @@ func (hp *HunterPet) registerDemoralizingScreech(rank *spelldata.Spell) *core.Sp
 
 // A periodic effect the row's roll puts on the enemy.
 func (hp *HunterPet) registerDot(rank *spelldata.Spell) *core.Spell {
+	tick := rank.PeriodicEffect()
+	level := hp.Level
+
 	config := hp.spellConfig(rank, schoolOpt(rank))
-	config.Dot = spelldata.DotConfig(rank, rank.PeriodicEffect())
+	config.Dot = spelldata.DotConfig(rank, tick)
+	// The resolver's tick, priced at the pet's level.
+	config.Dot.OnTick = func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+		dot.Spell.CalcAndDealPeriodicDamage(sim, target, tick.RollAt(sim, level), rank.TickOutcome(dot))
+	}
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		result := spell.CalcOutcome(sim, target, hitOutcome(spell, rank))
 		if result.Landed() {
@@ -393,11 +413,12 @@ func (hp *HunterPet) registerDot(rank *spelldata.Spell) *core.Spell {
 // row's amount once per stack.
 func (hp *HunterPet) registerScorpidPoison(rank *spelldata.Spell) *core.Spell {
 	tick := rank.PeriodicEffect()
+	tickDamage := tick.AverageAt(hp.Level)
 
 	config := hp.spellConfig(rank, schoolOpt(rank))
 	config.Dot = spelldata.DotConfig(rank, tick)
 	config.Dot.OnTick = func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-		dot.Spell.CalcAndDealPeriodicDamage(sim, target, tick.Average()*float64(dot.GetStacks()), rank.TickOutcome(dot))
+		dot.Spell.CalcAndDealPeriodicDamage(sim, target, tickDamage*float64(dot.GetStacks()), rank.TickOutcome(dot))
 	}
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		result := spell.CalcOutcome(sim, target, hitOutcome(spell, rank))

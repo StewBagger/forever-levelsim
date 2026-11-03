@@ -5,9 +5,12 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var rapidFireRank = spellData.RapidFire.Highest()
-
 func (hunter *Hunter) registerRapidFire() {
+	rapidFireRank := spelldata.LearnedRank(&hunter.Unit, spellData.RapidFire, spellData.RapidFire.Highest())
+	if rapidFireRank == spelldata.Nil {
+		return
+	}
+
 	aura := hunter.RegisterAura(spelldata.AuraConfig(rapidFireRank))
 
 	spelldata.ParseEffects(&hunter.Character, aura, rapidFireRank)

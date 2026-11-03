@@ -5,8 +5,6 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var iceBlockRank = spellData.IceBlock.Highest()
-
 // Ice Block
 // https://www.wowhead.com/forever/spell=11958
 //
@@ -18,6 +16,11 @@ var iceBlockRank = spellData.IceBlock.Highest()
 // Being core's stun, its duration also takes the mage's StunDurationMultiplier, which nothing a
 // mage wears changes.
 func (mage *Mage) registerIceBlockSpell() {
+	_, iceBlockRank := mage.learnedRank(spellData.IceBlock, spellData.IceBlock.Highest())
+	if iceBlockRank == spelldata.Nil {
+		return
+	}
+
 	iceBlockAura := mage.RegisterStunAura(iceBlockRank.Name, core.ActionID{SpellID: iceBlockRank.ID}, iceBlockRank.Duration())
 
 	mage.AddDynamicDamageTakenModifier(func(_ *core.Simulation, _ *core.Spell, result *core.SpellResult, _ bool) {

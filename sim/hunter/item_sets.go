@@ -60,7 +60,7 @@ func (hunter *Hunter) addPvpGloves() {
 		pvpGloveItemIDs,
 		core.SpellModConfig{
 			Kind:       core.SpellMod_DirectDamageDone_Pct,
-			ClassFlags: multiShotRank.ClassFlags,
+			ClassFlags: spellData.MultiShot.Highest().ClassFlags,
 			FloatValue: pvpGloveMultiShot.EffectN(1).Percent(),
 		})
 }

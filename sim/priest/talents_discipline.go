@@ -161,7 +161,10 @@ func (priest *Priest) applyInnerFocus() {
 		return
 	}
 
-	innerFocusRank := spellData.InnerFocus.Highest()
+	innerFocusRank := priest.learnedTopRank(spellData.InnerFocus)
+	if innerFocusRank == spelldata.Nil {
+		return
+	}
 	var innerFocusSpell *core.Spell
 
 	auraConfig := spelldata.AuraConfig(innerFocusRank)
@@ -242,7 +245,7 @@ func (priest *Priest) applyPenance() {
 		return
 	}
 
-	spellData.Penance.Each(priest.registerPenance)
+	priest.eachLearnedRank(spellData.Penance, priest.registerPenance)
 }
 
 // Your non-periodic critical heals create a protective shield on the target, absorbing X% of the amount healed.
@@ -295,9 +298,13 @@ func (priest *Priest) applyPowerInfusion() {
 		return
 	}
 
+	rank := priest.learnedTopRank(spellData.PowerInfusion)
+	if rank == spelldata.Nil {
+		return
+	}
 	piAura := buffs.NewSpellDataPowerInfusionsAura(&priest.Unit, true, 0)
 
-	config := spelldata.SpellConfig(&priest.Unit, spellData.PowerInfusion.Highest(), spelldata.Flags(core.SpellFlagAPL))
+	config := spelldata.SpellConfig(&priest.Unit, rank, spelldata.Flags(core.SpellFlagAPL))
 	config.ApplyEffects = func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
 		piAura.Activate(sim)
 	}

@@ -10,9 +10,16 @@ var feintTrainerRank = spellData.Feint.ByID(11303)
 var feintBookRank = spellData.Feint.ByID(25302)
 
 // This exists purely to model the DPS loss of having to occasionally feint
+// Below the book's level both resolve to the same learned rank, which registers once.
 func (rogue *Rogue) registerFeintSpell() {
-	rogue.registerFeintRank(feintTrainerRank)
-	rogue.registerFeintRank(feintBookRank)
+	trainer := spelldata.LearnedRank(&rogue.Unit, spellData.Feint, feintTrainerRank)
+	book := spelldata.LearnedRank(&rogue.Unit, spellData.Feint, feintBookRank)
+	if trainer != spelldata.Nil {
+		rogue.registerFeintRank(trainer)
+	}
+	if book != spelldata.Nil && book.ID != trainer.ID {
+		rogue.registerFeintRank(book)
+	}
 }
 
 func (rogue *Rogue) registerFeintRank(rank *spelldata.Spell) {

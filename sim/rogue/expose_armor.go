@@ -8,17 +8,19 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var exposeArmorRank = spellData.ExposeArmor.Highest()
-
 func (rogue *Rogue) registerExposeArmorSpell() {
+	rogue.exposeArmorRank = spelldata.LearnedRank(&rogue.Unit, spellData.ExposeArmor, spellData.ExposeArmor.Highest())
+	if rogue.exposeArmorRank == spelldata.Nil {
+		return
+	}
 	rogue.ExposeArmorAuras = rogue.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		// The generated aura is the five-point finisher, which is what the raid
 		// config applies; a cast that spends fewer combo points needs a driver
 		// that prices the aura from rogue.ComboPoints, and there is none yet.
-		return buffs.NewSpellDataExposeArmorAura(target, true, 0)
+		return buffs.NewSpellDataExposeArmorAuraAtRank(target, true, 0, rogue.exposeArmorRank)
 	})
 
-	config := spelldata.SpellConfig(&rogue.Unit, exposeArmorRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
+	config := spelldata.SpellConfig(&rogue.Unit, rogue.exposeArmorRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 	config.ExtraCastCondition = rogue.FinisherExtraCastCondition
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		if rogue.CanApplyExposeArmorAura(target) {
@@ -50,7 +52,7 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 }
 
 func (rogue *Rogue) GetExposeArmorValue() float64 {
-	return math.Abs((float64(exposeArmorRank.EffectN(1).PointsPerResource) * float64(rogue.ComboPoints())))
+	return math.Abs((float64(rogue.exposeArmorRank.EffectN(1).PointsPerResource) * float64(rogue.ComboPoints())))
 }
 
 func (rogue *Rogue) CanApplyExposeArmorAura(target *core.Unit) bool {

@@ -15,7 +15,7 @@ func (priest *Priest) registerDevouringPlagueSpell(_ int32, rank *spelldata.Spel
 
 	config := priest.periodicDamageSpellConfig(rank, PriestSpellDevouringPlague)
 	config.Dot.OnTick = func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-		result := dot.Spell.CalcAndDealPeriodicDamage(sim, target, tick.Roll(sim), rank.TickOutcome(dot))
+		result := dot.Spell.CalcAndDealPeriodicDamage(sim, target, tick.RollAt(sim, priest.Level), rank.TickOutcome(dot))
 
 		priest.GainHealth(sim, result.Damage, healthMetrics)
 	}

@@ -5,9 +5,11 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var intimidatingShoutRank = spellData.IntimidatingShout.Highest()
-
 func (warrior *Warrior) registerIntimidatingShout() {
+	intimidatingShoutRank := warrior.learnedRank(spellData.IntimidatingShout, spellData.IntimidatingShout.Highest())
+	if intimidatingShoutRank == spelldata.Nil {
+		return
+	}
 	config := spelldata.SpellConfig(&warrior.Unit, intimidatingShoutRank, spelldata.Flags(core.SpellFlagAPL))
 	config.ProcMask = core.ProcMaskEmpty
 	config.ThreatMultiplier = 1

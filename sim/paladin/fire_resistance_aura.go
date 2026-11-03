@@ -13,7 +13,7 @@ var FireResistanceAuraRankMap = spellData.FireResistanceAura
 // Gives 60 additional Fire resistance to all party and raid members within 30 yards. Players may
 // only have one Aura on them per Paladin at any one time.
 func (paladin *Paladin) registerFireResistanceAura() {
-	FireResistanceAuraRankMap.Each(func(_ int32, rank *spelldata.Spell) {
+	paladin.eachLearnedRank(FireResistanceAuraRankMap, func(_ int32, rank *spelldata.Spell) {
 		aura := buffs.NewSpellDataFireResistanceAuraRank(&paladin.Character, auraRank(rank))
 		paladin.registerAuraSpell(rank, aura, SpellMaskFireResistanceAura)
 	})

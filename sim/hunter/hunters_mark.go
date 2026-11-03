@@ -6,9 +6,15 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
+// The rank a rotation names; the hunter registers the one it has learned in its place.
 var huntersMarkRank = spellData.HuntersMark.Highest()
 
 func (hunter *Hunter) registerHuntersMark() {
+	huntersMarkRank := spelldata.LearnedRank(&hunter.Unit, spellData.HuntersMark, huntersMarkRank)
+	if huntersMarkRank == spelldata.Nil {
+		return
+	}
+
 	auras := hunter.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		return buffs.NewSpellDataHuntersMarkAura(target, true, 0)
 	})

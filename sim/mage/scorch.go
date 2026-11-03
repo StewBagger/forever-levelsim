@@ -12,9 +12,11 @@ func (mage *Mage) registerScorchSpell() {
 		mage.ImprovedScorchAuras = mage.newFireVulnerabilityAuras()
 	}
 
-	// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+	// Only the highest rank the mage knows at its level is registered, not every rank
 	// spellData.Scorch lists.
-	mage.registerScorchRank(spellData.Scorch.Highest(), procChance)
+	if _, rank := mage.learnedRank(spellData.Scorch, spellData.Scorch.Highest()); rank != spelldata.Nil {
+		mage.registerScorchRank(rank, procChance)
+	}
 }
 
 func (mage *Mage) registerScorchRank(rank *spelldata.Spell, procChance float64) {
@@ -24,7 +26,7 @@ func (mage *Mage) registerScorchRank(rank *spelldata.Spell, procChance float64) 
 	config.ClassSpellMask = MageSpellScorch
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcAndDealDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcAndDealDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		if result.Landed() && sim.Proc(procChance, "Improved Scorch") {
 			aura := mage.ImprovedScorchAuras.Get(target)
 			aura.Activate(sim)

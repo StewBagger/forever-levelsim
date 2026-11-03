@@ -26,7 +26,7 @@ func (paladin *Paladin) registerHammerOfWrath(_ int32, rank *spelldata.Spell) {
 	}
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, damage.Average(), spell.OutcomeRangedHitAndCrit)
+		result := spell.CalcDamage(sim, target, damage.AverageAt(paladin.Level), spell.OutcomeRangedHitAndCrit)
 		spell.DealDamageAfterTravel(sim, result)
 	}
 

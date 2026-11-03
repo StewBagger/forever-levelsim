@@ -23,7 +23,7 @@ func (priest *Priest) registerHolyNovaSpell(_ int32, rank *spelldata.Spell) {
 	config.ClassSpellMask = PriestSpellHolyNova
 
 	config.ApplyEffects = func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-		spell.CalcAndDealAoeDamage(sim, baseDamage.Average(), spell.OutcomeMagicHitAndCrit)
+		spell.CalcAndDealAoeDamage(sim, baseDamage.AverageAt(priest.Level), spell.OutcomeMagicHitAndCrit)
 
 		if priest.Party == nil || priest.HolyNovaHealTargets <= 0 {
 			return
@@ -39,12 +39,12 @@ func (priest *Priest) registerHolyNovaSpell(_ int32, rank *spelldata.Spell) {
 			targets[i], targets[j] = targets[j], targets[i]
 		}
 		for _, target := range targets[:healCount] {
-			healSpell.CalcAndDealHealing(sim, target, heal.Average(), healSpell.OutcomeHealingCrit)
+			healSpell.CalcAndDealHealing(sim, target, heal.AverageAt(priest.Level), healSpell.OutcomeHealingCrit)
 		}
 	}
 
 	config.ExpectedInitialDamage = func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-		return spell.CalcDamage(sim, target, baseDamage.Average(), spell.OutcomeExpectedMagicCrit)
+		return spell.CalcDamage(sim, target, baseDamage.AverageAt(priest.Level), spell.OutcomeExpectedMagicCrit)
 	}
 
 	priest.RegisterSpell(config)

@@ -7,7 +7,10 @@ import (
 
 // The 1 min cooldown is the row's category cooldown, and the Soul Shard each cast takes the row's reagent.
 func (warlock *Warlock) registerSoulfire() {
-	rankedSpell := spellData.SoulFire.ByID(17924)
+	rankedSpell := warlock.learnedRank(spellData.SoulFire, 17924)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	soulFireHit := rankedSpell.DamageEffect()
 
 	config := spelldata.SpellConfig(&warlock.Unit, rankedSpell, spelldata.Magic(core.ProcMaskSpellDamage))
@@ -15,13 +18,13 @@ func (warlock *Warlock) registerSoulfire() {
 
 	// Roll the damage and to hit, then land it after the travel time
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, soulFireHit.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, soulFireHit.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DealDamageAfterTravel(sim, result)
 	}
 
 	// Calculate expected damage from the row's average hit
 	config.ExpectedInitialDamage = func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-		return spell.CalcDamage(sim, target, soulFireHit.Average(), spell.OutcomeExpectedMagicCrit)
+		return spell.CalcDamage(sim, target, soulFireHit.AverageAt(spell.Unit.Level), spell.OutcomeExpectedMagicCrit)
 	}
 
 	warlock.useReagents(&config, rankedSpell)

@@ -5,12 +5,15 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var ruptureRank = spellData.Rupture.Highest()
 var ruptureApScaling = [6]float64{0, 0.01, 0.02, 0.03, 0.03, 0.03}
 
 func (rogue *Rogue) registerRupture() {
+	ruptureRank := spelldata.LearnedRank(&rogue.Unit, spellData.Rupture, spellData.Rupture.Highest())
+	if ruptureRank == spelldata.Nil {
+		return
+	}
 	tick := ruptureRank.PeriodicEffect()
-	tickBase := tick.Average()
+	tickBase := tick.AverageAt(rogue.Level)
 	tickPerPoint := float64(tick.PointsPerResource)
 	baseTicks := int32(ruptureRank.Duration() / tick.Period())
 	var comboPoints int32

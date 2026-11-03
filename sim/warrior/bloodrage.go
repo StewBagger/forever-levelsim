@@ -7,11 +7,14 @@ import (
 	"github.com/wowsims/forever/sim/core/stats"
 )
 
-var bloodrageRank = spellData.Bloodrage.Highest()
-var bloodrageOverTime = bloodrageRank.EffectN(2).Trigger()
-var bloodrageOverTimeTick = bloodrageOverTime.PeriodicEffect()
-
 func (warrior *Warrior) registerBloodrage() {
+	bloodrageRank := warrior.learnedRank(spellData.Bloodrage, spellData.Bloodrage.Highest())
+	if bloodrageRank == spelldata.Nil {
+		return
+	}
+	bloodrageOverTime := bloodrageRank.EffectN(2).Trigger()
+	bloodrageOverTimeTick := bloodrageOverTime.PeriodicEffect()
+
 	rageMetrics := warrior.NewRageMetrics(core.ActionID{SpellID: bloodrageRank.ID})
 	healthCost := warrior.GetBaseStats()[stats.Health] * float64(bloodrageRank.Power(dbcenums.POWER_HEALTH).CostPct) / 100
 	improvedBloodrage := spellData.ImprovedBloodrage.MultiplierAt(warrior.Talents.ImprovedBloodrage)

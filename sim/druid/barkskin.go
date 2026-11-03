@@ -6,7 +6,10 @@ import (
 )
 
 func (druid *Druid) registerBarkskin() {
-	rank := spellData.Barkskin.Highest()
+	rank := druid.learned(spellData.Barkskin)
+	if rank == spelldata.Nil {
+		return
+	}
 	aura := druid.RegisterAura(spelldata.AuraConfig(rank))
 	spelldata.ParseEffects(&druid.Character, aura, rank)
 	config := spelldata.SpellConfig(&druid.Unit, rank)

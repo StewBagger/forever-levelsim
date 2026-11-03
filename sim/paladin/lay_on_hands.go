@@ -15,7 +15,7 @@ var LayOnHandsRankMap = spellData.LayOnHands
 // Mana regeneration.
 func (paladin *Paladin) registerLayOnHands(_ int32, rank *spelldata.Spell) {
 	// Rank 1 restores no mana and has no energize effect, which reads as 0.
-	manaRestore := rank.EnergizeEffect().Average()
+	manaRestore := rank.EnergizeEffect().AverageAt(paladin.Level)
 	manaMetrics := paladin.NewManaMetrics(core.ActionID{SpellID: rank.ID})
 
 	config := spelldata.SpellConfig(&paladin.Unit, rank, spelldata.Magic(core.ProcMaskSpellHealing))

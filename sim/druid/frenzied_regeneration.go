@@ -10,7 +10,10 @@ import (
 const frenziedRegenerationRagePerTick = 10.0
 
 func (druid *Druid) registerFrenziedRegenerationSpell() {
-	rank := spellData.FrenziedRegeneration.Highest()
+	rank := druid.learned(spellData.FrenziedRegeneration)
+	if rank == spelldata.Nil {
+		return
+	}
 	tick := rank.PeriodicEffect()
 	rageMetrics := druid.NewRageMetrics(core.ActionID{SpellID: rank.ID})
 

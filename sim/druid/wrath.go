@@ -5,13 +5,16 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var wrathRank = spellData.Wrath.Highest()
-var wrathDamage = wrathRank.DamageEffect()
-
 func (druid *Druid) registerWrathSpell() {
-	config := spelldata.SpellConfig(&druid.Unit, wrathRank, spelldata.Magic(core.ProcMaskSpellDamage))
+	rank := druid.learned(spellData.Wrath)
+	if rank == spelldata.Nil {
+		return
+	}
+	damage := rank.DamageEffect()
+
+	config := spelldata.SpellConfig(&druid.Unit, rank, spelldata.Magic(core.ProcMaskSpellDamage))
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, wrathDamage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, damage.AverageAt(druid.level()), spell.OutcomeMagicHitAndCrit)
 		spell.DealDamageAfterTravel(sim, result)
 	}
 

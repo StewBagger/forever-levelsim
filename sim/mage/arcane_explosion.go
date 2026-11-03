@@ -5,10 +5,14 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+// Only the highest rank the mage knows at its level is registered, not every rank
 // spellData.ArcaneExplosion lists.
 func (mage *Mage) registerArcaneExplosionSpell() {
-	mage.registerArcaneExplosionRank(spellData.ArcaneExplosion.Len(), spellData.ArcaneExplosion.Highest())
+	index, rank := mage.learnedRank(spellData.ArcaneExplosion, spellData.ArcaneExplosion.Highest())
+	if rank == spelldata.Nil {
+		return
+	}
+	mage.registerArcaneExplosionRank(index, rank)
 }
 
 func (mage *Mage) registerArcaneExplosionRank(_ int32, rank *spelldata.Spell) {

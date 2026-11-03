@@ -49,7 +49,7 @@ func (paladin *Paladin) registerSealOfFury(_ int32, rank *spelldata.Spell) {
 	judgementConfig.BonusCoefficient = judgementDamage.Coeff()
 	judgementConfig.DirectVariance = judgementDamage.DirectVariance()
 	judgementConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		spell.CalcAndDealDamage(sim, target, judgementDamage.Average(), spell.OutcomeMeleeSpecialHitAndCrit)
+		spell.CalcAndDealDamage(sim, target, judgementDamage.AverageAt(paladin.Level), spell.OutcomeMeleeSpecialHitAndCrit)
 		paladin.sealOfFuryTaunt.Cast(sim, target)
 	}
 	judgement := paladin.RegisterSpell(judgementConfig)
@@ -67,7 +67,7 @@ func (paladin *Paladin) registerSealOfFury(_ int32, rank *spelldata.Spell) {
 		},
 	})
 
-	damage := procDamage.Mean()
+	damage := procDamage.MeanAt(paladin.Level)
 	// The damage spells carry the same flags as Seal of Righteousness's: procs themselves, and no
 	// Suppress Weapon Procs, so a weapon's "Chance on hit" rolls on the seal's hit too.
 	procConfig := spelldata.SpellConfig(&paladin.Unit, procRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial), spelldata.Proc(), spelldata.Flags(core.SpellFlagProc))

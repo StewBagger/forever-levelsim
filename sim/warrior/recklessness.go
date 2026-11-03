@@ -5,9 +5,11 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var recklessnessRank = spellData.Recklessness.Highest()
-
 func (warrior *Warrior) registerRecklessness() {
+	recklessnessRank := warrior.learnedRank(spellData.Recklessness, spellData.Recklessness.Highest())
+	if recklessnessRank == spelldata.Nil {
+		return
+	}
 	aura := warrior.RegisterAura(spelldata.AuraConfig(recklessnessRank))
 	spelldata.ParseEffects(&warrior.Character, aura, recklessnessRank)
 

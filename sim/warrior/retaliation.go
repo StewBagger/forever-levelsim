@@ -5,11 +5,15 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var retaliationRank = spellData.Retaliation.Highest()
 var retaliationHit = spellData.RetaliationTriggered.Highest()
-var retaliationHitBaseDamage = retaliationHit.DamageEffect().Average()
 
 func (warrior *Warrior) registerRetaliation() {
+	retaliationRank := warrior.learnedRank(spellData.Retaliation, spellData.Retaliation.Highest())
+	if retaliationRank == spelldata.Nil {
+		return
+	}
+	retaliationHitBaseDamage := retaliationHit.DamageEffect().AverageAt(warrior.Level)
+
 	// The aura casts the counterattack, but it does not take spelldata.Proc(): that marks the spell
 	// passive, and the metrics aggregator counts no cast for a passive spell, while the sim reports
 	// every counterattack as a cast.

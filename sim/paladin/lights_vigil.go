@@ -28,7 +28,7 @@ type lightsVigil struct {
 // incurs no cooldown and heals the target and their party for 700 to 740. Only one Vigil per Paladin
 // may be active in each party.
 func (paladin *Paladin) registerLightsVigil() {
-	LightsVigilRankMap.Each(func(_ int32, rank *spelldata.Spell) {
+	paladin.eachLearnedRank(LightsVigilRankMap, func(_ int32, rank *spelldata.Spell) {
 		paladin.registerLightsVigilRank(rank)
 	})
 }
@@ -55,7 +55,7 @@ func (paladin *Paladin) registerLightsVigilRank(rank *spelldata.Spell) {
 	healConfig.Flags |= core.SpellFlagHelpful
 	healConfig.ClassSpellMask = SpellMaskLightsVigilHeal
 	healConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		spell.CalcAndDealHealing(sim, target, heal.Average(), spell.OutcomeHealingCrit)
+		spell.CalcAndDealHealing(sim, target, heal.AverageAt(paladin.Level), spell.OutcomeHealingCrit)
 	}
 	vigil.heal = paladin.RegisterSpell(healConfig)
 

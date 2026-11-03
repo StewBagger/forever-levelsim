@@ -9,7 +9,10 @@ func (druid *Druid) registerLacerateSpell() {
 	if !druid.Talents.Lacerate {
 		return
 	}
-	rank := spellData.Lacerate.Highest()
+	rank := druid.learned(spellData.Lacerate)
+	if rank == spelldata.Nil {
+		return
+	}
 	tick := rank.PeriodicDamageEffect()
 	perStack := rank.EffectN(2).Percent()
 	config := spelldata.SpellConfig(&druid.Unit, rank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))

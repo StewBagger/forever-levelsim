@@ -8,9 +8,9 @@ import (
 )
 
 func (priest *Priest) registerDarkSacrifice(_ int32, rank *spelldata.Spell) {
-	healthPerTick := rank.Effect(dbcenums.A_PERIODIC_DUMMY, 0).Average()
+	healthPerTick := rank.Effect(dbcenums.A_PERIODIC_DUMMY, 0).AverageAt(priest.Level)
 	manaTick := rank.FirstAura(dbcenums.A_PERIODIC_ENERGIZE)
-	manaPerTick := manaTick.Average()
+	manaPerTick := manaTick.AverageAt(priest.Level)
 	manaMetrics := priest.NewManaMetrics(core.ActionID{SpellID: rank.ID})
 
 	config := spelldata.SpellConfig(&priest.Unit, rank, spelldata.Flags(core.SpellFlagAPL))
@@ -30,7 +30,7 @@ func (priest *Priest) registerDarkSacrifice(_ int32, rank *spelldata.Spell) {
 	}
 
 	darkSacrifice := priest.RegisterSpell(config)
-	if rank != spellData.DarkSacrifice.Highest() {
+	if rank != priest.learnedTopRank(spellData.DarkSacrifice) {
 		return
 	}
 

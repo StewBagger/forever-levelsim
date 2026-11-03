@@ -8,7 +8,10 @@ import (
 // E_HEALTH_LEECH: the caster heals for all the damage dealt. The fear (effect 2) does not affect sims, and
 // the 2 min cooldown is the row's category cooldown.
 func (warlock *Warlock) registerDeathCoil() {
-	rankedSpell := spellData.DeathCoil.ByID(17926)
+	rankedSpell := warlock.learnedRank(spellData.DeathCoil, 17926)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	deathCoilHit := rankedSpell.EffectN(1)
 
 	healthMetrics := warlock.NewHealthMetrics(core.ActionID{SpellID: rankedSpell.ID})
@@ -20,7 +23,7 @@ func (warlock *Warlock) registerDeathCoil() {
 
 	// Roll the damage and to hit, then land it after the travel time and heal for what it dealt
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, deathCoilHit.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, deathCoilHit.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DealCastResult(sim, result)
 		spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 			spell.DealDamage(sim, result)
@@ -31,7 +34,7 @@ func (warlock *Warlock) registerDeathCoil() {
 
 	// Calculate expected damage from the row's average hit
 	config.ExpectedInitialDamage = func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-		return spell.CalcDamage(sim, target, deathCoilHit.Average(), spell.OutcomeExpectedMagicCrit)
+		return spell.CalcDamage(sim, target, deathCoilHit.AverageAt(spell.Unit.Level), spell.OutcomeExpectedMagicCrit)
 	}
 
 	warlock.RegisterSpell(config)

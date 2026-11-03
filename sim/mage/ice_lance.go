@@ -5,10 +5,14 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+// Only the highest rank the mage knows at its level is registered, not every rank
 // spellData.IceLance lists.
 func (mage *Mage) registerIceLanceSpell() {
-	mage.registerIceLanceRank(spellData.IceLance.Len(), spellData.IceLance.Highest())
+	index, rank := mage.learnedRank(spellData.IceLance, spellData.IceLance.Highest())
+	if rank == spelldata.Nil {
+		return
+	}
+	mage.registerIceLanceRank(index, rank)
 }
 
 // Ice Lance
@@ -35,7 +39,7 @@ func (mage *Mage) registerIceLanceRank(_ int32, rank *spelldata.Spell) {
 		}
 
 		spell.DamageMultiplier *= multiplier
-		result := spell.CalcDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DamageMultiplier /= multiplier
 
 		spell.DealDamageAfterTravel(sim, result)

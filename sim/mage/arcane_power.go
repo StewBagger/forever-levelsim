@@ -5,13 +5,16 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var arcanePowerRank = spellData.ArcanePower.Highest()
-
 // Arcane Power
 // https://www.wowhead.com/forever/spell=12042
 //
 // "For the next 15 sec, your spells deal 30% more damage while costing 30% more mana to cast."
 func (mage *Mage) registerArcanePowerSpell() {
+	_, arcanePowerRank := mage.learnedRank(spellData.ArcanePower, spellData.ArcanePower.Highest())
+	if arcanePowerRank == spelldata.Nil {
+		return
+	}
+
 	mage.ArcanePowerAura = mage.RegisterAura(spelldata.AuraConfig(arcanePowerRank))
 
 	// Effect 1's SPELLMOD_DAMAGE raises the direct hits and effect 3's SPELLMOD_DOT the ticks.

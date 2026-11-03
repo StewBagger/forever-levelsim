@@ -5,9 +5,11 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var challengingShoutRank = spellData.ChallengingShout.Highest()
-
 func (warrior *Warrior) registerChallengingShout() {
+	challengingShoutRank := warrior.learnedRank(spellData.ChallengingShout, spellData.ChallengingShout.Highest())
+	if challengingShoutRank == spelldata.Nil {
+		return
+	}
 	config := spelldata.SpellConfig(&warrior.Unit, challengingShoutRank, spelldata.Flags(core.SpellFlagAPL))
 	config.ProcMask = core.ProcMaskEmpty
 	config.ThreatMultiplier = 1

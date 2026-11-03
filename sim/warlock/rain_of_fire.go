@@ -10,7 +10,10 @@ import (
 // in it, each wave rolling hit and crit on each target. Both rows carry Rain of Fire's class flags, so the
 // talents naming it reach the waves.
 func (warlock *Warlock) registerRainOfFire() {
-	rankedSpell := spellData.RainOfFire.ByID(11678)
+	rankedSpell := warlock.learnedRank(spellData.RainOfFire, 11678)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	channelTick := rankedSpell.Effect(dbcenums.A_PERIODIC_DUMMY, 0)
 
 	waveRow := rankedSpell.Refs()[0]
@@ -21,7 +24,7 @@ func (warlock *Warlock) registerRainOfFire() {
 	waveConfig.ClassSpellMask = WarlockSpellRainOfFire
 	waveConfig.ApplyEffects = func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 		for _, target := range sim.Encounter.ActiveTargetUnits {
-			spell.CalcAndDealDamage(sim, target, waveHit.Average(), spell.OutcomeMagicHitAndCrit)
+			spell.CalcAndDealDamage(sim, target, waveHit.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		}
 	}
 	wave := warlock.RegisterSpell(waveConfig)

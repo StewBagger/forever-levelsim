@@ -13,7 +13,7 @@ var HolyShockRankMap = spellData.HolyShock
 // Blasts the target with Holy energy, causing 334 to 362 Holy damage to an enemy, or 307 to 333
 // healing to an ally.
 func (paladin *Paladin) registerHolyShock() {
-	HolyShockRankMap.Each(paladin.registerHolyShockRank)
+	paladin.eachLearnedRank(HolyShockRankMap, paladin.registerHolyShockRank)
 }
 
 // One of the rank's two spells off the cast row, with the effect row's id, defense type, class
@@ -37,7 +37,7 @@ func (paladin *Paladin) registerHolyShockRank(_ int32, rank *spelldata.Spell) {
 	damageConfig := paladin.holyShockConfig(rank, damageRow.ID, damageRow, damage, core.ProcMaskSpellDamage)
 	damageConfig.ClassSpellMask = SpellMaskHolyShock
 	damageConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		spell.CalcAndDealDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		spell.CalcAndDealDamage(sim, target, damage.AverageAt(paladin.Level), spell.OutcomeMagicHitAndCrit)
 	}
 	paladin.RegisterSpell(damageConfig)
 
@@ -55,7 +55,7 @@ func (paladin *Paladin) registerHolyShockRank(_ int32, rank *spelldata.Spell) {
 		if paladin.consumeLightsVigil(sim, target) {
 			spell.CD.Reset()
 		}
-		amount := heal.Average()
+		amount := heal.AverageAt(paladin.Level)
 		crit := boundlessLight
 		if paladin.hasOathOfLight(target) {
 			amount += paladin.oathOfLight.holyShock

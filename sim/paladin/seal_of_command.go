@@ -44,7 +44,7 @@ func (paladin *Paladin) registerSealOfCommand(_ int32, rank *spelldata.Spell) {
 	judgementConfig.BonusCoefficient = judgeDamage.Coeff()
 	judgementConfig.DirectVariance = judgeDamage.DirectVariance()
 	judgementConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		baseDamage := judgeDamage.Average()
+		baseDamage := judgeDamage.AverageAt(paladin.Level)
 		if !target.PseudoStats.Stunned {
 			baseDamage /= 2
 		}

@@ -6,9 +6,12 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var scorpidStingRank = spellData.ScorpidSting.Highest()
-
 func (hunter *Hunter) registerScorpidSting() {
+	scorpidStingRank := spelldata.LearnedRank(&hunter.Unit, spellData.ScorpidSting, spellData.ScorpidSting.Highest())
+	if scorpidStingRank == spelldata.Nil {
+		return
+	}
+
 	auras := hunter.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		// TODO: verify in game that Scorpid Sting and Insect Swarm share one slot.
 		return buffs.NewSpellDataScorpidStingAuraFor(target, &hunter.Unit, hunter.stingTag())

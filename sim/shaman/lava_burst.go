@@ -5,10 +5,8 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var lavaBurstRanks = castableRanks(spellData.LavaBurst)
-
 func (shaman *Shaman) registerLavaBurstSpells() {
-	lavaBurstRanks.Each(func(_ int32, rank *spelldata.Spell) { shaman.registerLavaBurstSpell(rank) })
+	castableRanks(&shaman.Unit, spellData.LavaBurst).Each(func(_ int32, rank *spelldata.Spell) { shaman.registerLavaBurstSpell(rank) })
 }
 
 // Lightning Overload names Lightning Bolt and Chain Lightning only, so Lava Burst has no overload.
@@ -19,7 +17,7 @@ func (shaman *Shaman) registerLavaBurstSpell(rank *spelldata.Spell) {
 
 	// "If your Flame Shock is on the target, Lava Burst deals $s2% increased damage."
 	damage := rank.DamageEffect()
-	flameShockBonus := 1 + rank.EffectN(2).Average()/100
+	flameShockBonus := 1 + rank.EffectN(2).AverageAt(shaman.Level)/100
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		multiplier := 1.0
@@ -28,7 +26,7 @@ func (shaman *Shaman) registerLavaBurstSpell(rank *spelldata.Spell) {
 		}
 
 		spell.DamageMultiplier *= multiplier
-		result := spell.CalcDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DamageMultiplier /= multiplier
 
 		spell.DealDamageAfterTravel(sim, result)

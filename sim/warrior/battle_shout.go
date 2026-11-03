@@ -16,12 +16,25 @@ const ShoutExpirationThreshold = time.Second * 3
 var battleShoutTrainerRank = spellData.BattleShout.ByID(11551)
 var battleShoutBookRank = spellData.BattleShout.ByID(25289)
 
+// Below the book's level both resolve to the same learned rank, which is registered once.
 func (warrior *Warrior) registerBattleShout() {
-	warrior.registerBattleShoutRank(battleShoutTrainerRank)
-	warrior.registerBattleShoutRank(battleShoutBookRank)
+	trainerRank := warrior.learnedRank(spellData.BattleShout, battleShoutTrainerRank)
+	bookRank := warrior.learnedRank(spellData.BattleShout, battleShoutBookRank)
+	if trainerRank == spelldata.Nil {
+		return
+	}
+
+	// The class option decides which rank's own copy the character sheet shows, as the rank the
+	// rotation picks is unknown when the sheet is built. The rotation alone decides the rank cast.
+	sheetRank := core.Ternary(warrior.HasBattleShoutRank7, bookRank, trainerRank)
+
+	warrior.registerBattleShoutRank(trainerRank, sheetRank)
+	if bookRank != trainerRank {
+		warrior.registerBattleShoutRank(bookRank, sheetRank)
+	}
 }
 
-func (warrior *Warrior) registerBattleShoutRank(rank *spelldata.Spell) {
+func (warrior *Warrior) registerBattleShoutRank(rank *spelldata.Spell, sheetRank *spelldata.Spell) {
 	// A warrior that shouts builds its own copy. One that never shouts gets the
 	// isPlayer=false constructor, whose aura is the raid's external copy, and the
 	// raid's Battle Shout state sets what that copy is worth.
@@ -38,9 +51,6 @@ func (warrior *Warrior) registerBattleShoutRank(rank *spelldata.Spell) {
 		battleShoutValue += buffs.BattleShoutT2Bonus
 	}
 
-	// The class option decides which rank's own copy the character sheet shows, as the rank the
-	// rotation picks is unknown when the sheet is built. The rotation alone decides the rank cast.
-	sheetRank := core.Ternary(warrior.HasBattleShoutRank7, battleShoutBookRank, battleShoutTrainerRank)
 	ownBuildPhase := core.Ternary(castsOwnShout && rank == sheetRank, core.CharacterBuildPhaseBuffs, core.CharacterBuildPhaseNone)
 
 	auras := warrior.NewAllyAuraArray(func(unit *core.Unit) *core.Aura {

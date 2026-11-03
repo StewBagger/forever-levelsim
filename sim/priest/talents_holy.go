@@ -92,7 +92,7 @@ func (priest *Priest) applyHolyNova() {
 		return
 	}
 
-	HolyNovaRankMap.Each(priest.registerHolyNovaSpell)
+	priest.eachLearnedRank(HolyNovaRankMap, priest.registerHolyNovaSpell)
 }
 
 var HolyNovaRankMap = spellData.HolyNova
@@ -281,5 +281,5 @@ func (priest *Priest) applyPrayerOfMending() {
 		return
 	}
 
-	spellData.PrayerOfMending.Each(priest.registerPrayerOfMending)
+	priest.eachLearnedRank(spellData.PrayerOfMending, priest.registerPrayerOfMending)
 }

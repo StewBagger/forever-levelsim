@@ -10,10 +10,14 @@ import (
 // Overheat (400615) swaps onto the action bar. Overheat is an Engrave grant with no place in
 // Forever, and the generator drops its stand-ins.
 
-// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+// Only the highest rank the mage knows at its level is registered, not every rank
 // spellData.FireBlast lists.
 func (mage *Mage) registerFireBlastSpell() {
-	mage.registerFireBlastRank(spellData.FireBlast.Len(), spellData.FireBlast.Highest())
+	index, rank := mage.learnedRank(spellData.FireBlast, spellData.FireBlast.Highest())
+	if rank == spelldata.Nil {
+		return
+	}
+	mage.registerFireBlastRank(index, rank)
 }
 
 func (mage *Mage) registerFireBlastRank(_ int32, rank *spelldata.Spell) {
@@ -23,7 +27,7 @@ func (mage *Mage) registerFireBlastRank(_ int32, rank *spelldata.Spell) {
 	config.ClassSpellMask = MageSpellFireBlast
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		spell.CalcAndDealDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		spell.CalcAndDealDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 	}
 
 	mage.RegisterSpell(config)

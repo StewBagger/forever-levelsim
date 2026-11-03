@@ -45,29 +45,29 @@ func (priest *Priest) AddPartyBuffs(_ *proto.PartyBuffs) {
 }
 
 func (priest *Priest) Initialize() {
-	spellData.HolyFire.Each(priest.registerHolyFireSpell)
-	MindBlastRankMap.Each(priest.registerMindBlastSpell)
-	ShadowWordPainRankMap.Each(priest.registerShadowWordPainSpell)
-	ShadowWordDeathRankMap.Each(priest.registerShadowWordDeathSpell)
-	SmiteRankMap.Each(priest.registerSmiteSpell)
-	DevouringPlagueRankMap.Each(priest.registerDevouringPlagueSpell)
-	spellData.InnerFire.Each(priest.registerInnerFire)
-	spellData.Fade.Each(priest.registerFade)
+	priest.eachLearnedRank(spellData.HolyFire, priest.registerHolyFireSpell)
+	priest.eachLearnedRank(MindBlastRankMap, priest.registerMindBlastSpell)
+	priest.eachLearnedRank(ShadowWordPainRankMap, priest.registerShadowWordPainSpell)
+	priest.eachLearnedRank(ShadowWordDeathRankMap, priest.registerShadowWordDeathSpell)
+	priest.eachLearnedRank(SmiteRankMap, priest.registerSmiteSpell)
+	priest.eachLearnedRank(DevouringPlagueRankMap, priest.registerDevouringPlagueSpell)
+	priest.eachLearnedRank(spellData.InnerFire, priest.registerInnerFire)
+	priest.eachLearnedRank(spellData.Fade, priest.registerFade)
 	shared.RegisterShoot(&priest.Character)
 
 	switch priest.Race {
 	case proto.Race_RaceNightElf:
-		StarshardsRankMap.Each(priest.registerStarshardsSpell)
-		spellData.ElunesGrace.Each(priest.registerElunesGrace)
+		priest.eachLearnedRank(StarshardsRankMap, priest.registerStarshardsSpell)
+		priest.eachLearnedRank(spellData.ElunesGrace, priest.registerElunesGrace)
 	case proto.Race_RaceTroll:
-		spellData.HexOfWeakness.Each(priest.registerHexOfWeakness)
-		spellData.Shadowguard.Each(priest.registerShadowguard)
+		priest.eachLearnedRank(spellData.HexOfWeakness, priest.registerHexOfWeakness)
+		priest.eachLearnedRank(spellData.Shadowguard, priest.registerShadowguard)
 	case proto.Race_RaceUndead:
-		spellData.TouchOfWeakness.Each(priest.registerTouchOfWeakness)
-		spellData.DarkSacrifice.Each(priest.registerDarkSacrifice)
+		priest.eachLearnedRank(spellData.TouchOfWeakness, priest.registerTouchOfWeakness)
+		priest.eachLearnedRank(spellData.DarkSacrifice, priest.registerDarkSacrifice)
 	case proto.Race_RaceDwarf:
-		spellData.Chastise.Each(priest.registerChastise)
-		spellData.DesperatePrayer.Each(priest.registerDesperatePrayer)
+		priest.eachLearnedRank(spellData.Chastise, priest.registerChastise)
+		priest.eachLearnedRank(spellData.DesperatePrayer, priest.registerDesperatePrayer)
 	}
 
 	priest.registerPrayerOfFortitude()
@@ -77,12 +77,27 @@ func (priest *Priest) Initialize() {
 
 func (priest *Priest) InitializeHealingSpells() {
 	priest.registerPowerWordShield()
-	spellData.FlashHeal.Each(priest.registerFlashHeal)
-	spellData.Heal.Each(priest.registerHeal)
-	spellData.LesserHeal.Each(priest.registerLesserHeal)
-	spellData.GreaterHeal.Each(priest.registerGreaterHeal)
-	spellData.PrayerOfHealing.Each(priest.registerPrayerOfHealing)
-	spellData.Renew.Each(priest.registerRenew)
+	priest.eachLearnedRank(spellData.FlashHeal, priest.registerFlashHeal)
+	priest.eachLearnedRank(spellData.Heal, priest.registerHeal)
+	priest.eachLearnedRank(spellData.LesserHeal, priest.registerLesserHeal)
+	priest.eachLearnedRank(spellData.GreaterHeal, priest.registerGreaterHeal)
+	priest.eachLearnedRank(spellData.PrayerOfHealing, priest.registerPrayerOfHealing)
+	priest.eachLearnedRank(spellData.Renew, priest.registerRenew)
+}
+
+// Registers each rank of the ladder the priest knows at its level. A rank above that is aliased to the
+// highest known one, so a rotation naming it casts the known rank.
+func (priest *Priest) eachLearnedRank(ladder spelldata.Ladder, register func(int32, *spelldata.Spell)) {
+	ladder.Each(func(n int32, rank *spelldata.Spell) {
+		if spelldata.LearnedRank(&priest.Unit, ladder, rank) == rank {
+			register(n, rank)
+		}
+	})
+}
+
+// The highest rank of the ladder the priest knows at its level, or spelldata.Nil below its first rank.
+func (priest *Priest) learnedTopRank(ladder spelldata.Ladder) *spelldata.Spell {
+	return spelldata.LearnedRank(&priest.Unit, ladder, ladder.Highest())
 }
 
 func (priest *Priest) registerSelfBuffSpell(rank *spelldata.Spell, aura *core.Aura) *core.Spell {
@@ -102,7 +117,10 @@ func (priest *Priest) registerSelfBuffSpell(rank *spelldata.Spell, aura *core.Au
 // A prayer's own copy on every player in the raid, up once the priest casts it. It bids in the same
 // category as the raid buff of its stat, so the two count once. The cast waits until nothing as
 // strong holds the category, which a raid buff as strong, permanent from the start, always does.
-func (priest *Priest) registerPrayer(rank *spelldata.Spell, newAura func(*core.Unit, bool, int32) *core.Aura) *core.Spell {
+func (priest *Priest) registerPrayer(rank *spelldata.Spell, newAura func(*core.Unit, bool, int32) *core.Aura) {
+	if rank == spelldata.Nil {
+		return
+	}
 	auras := priest.NewAllyAuraArray(func(unit *core.Unit) *core.Aura {
 		return newAura(unit, true, 0)
 	})
@@ -118,7 +136,7 @@ func (priest *Priest) registerPrayer(rank *spelldata.Spell, newAura func(*core.U
 	}
 	config.RelatedAuraArrays = auras.ToMap()
 
-	return priest.RegisterSpell(config)
+	priest.RegisterSpell(config)
 }
 
 func (priest *Priest) periodicDamageSpellConfig(rank *spelldata.Spell, classSpellMask int64) core.SpellConfig {
@@ -139,9 +157,9 @@ func (priest *Priest) periodicDamageSpellConfig(rank *spelldata.Spell, classSpel
 
 	config.ExpectedTickDamage = func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
 		if rank.PeriodicCanCrit() {
-			return spell.CalcPeriodicDamage(sim, target, tick.Average(), spell.OutcomeExpectedMagicCrit)
+			return spell.CalcPeriodicDamage(sim, target, tick.AverageAt(priest.Level), spell.OutcomeExpectedMagicCrit)
 		}
-		return spell.CalcPeriodicDamage(sim, target, tick.Average(), spell.OutcomeExpectedMagicAlwaysHit)
+		return spell.CalcPeriodicDamage(sim, target, tick.AverageAt(priest.Level), spell.OutcomeExpectedMagicAlwaysHit)
 	}
 
 	return config
@@ -154,11 +172,11 @@ func (priest *Priest) directDamageSpellConfig(rank *spelldata.Spell, classSpellM
 	config.ClassSpellMask = classSpellMask
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		spell.CalcAndDealDamage(sim, target, baseDamage.Average(), spell.OutcomeMagicHitAndCrit)
+		spell.CalcAndDealDamage(sim, target, baseDamage.AverageAt(priest.Level), spell.OutcomeMagicHitAndCrit)
 	}
 
 	config.ExpectedInitialDamage = func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-		return spell.CalcDamage(sim, target, baseDamage.Average(), spell.OutcomeExpectedMagicCrit)
+		return spell.CalcDamage(sim, target, baseDamage.AverageAt(priest.Level), spell.OutcomeExpectedMagicCrit)
 	}
 
 	return config
@@ -172,7 +190,7 @@ func (priest *Priest) directHealSpellConfig(rank *spelldata.Spell, classSpellMas
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		target = priest.healTarget(target)
 		priest.withRenewedHope(sim, target, spell, func() {
-			spell.CalcAndDealHealing(sim, target, heal.Average(), spell.OutcomeHealingCrit)
+			spell.CalcAndDealHealing(sim, target, heal.AverageAt(priest.Level), spell.OutcomeHealingCrit)
 		})
 	}
 
@@ -203,7 +221,7 @@ func New(char *core.Character, selfBuffs SelfBuffs, talents string) *Priest {
 	priest.FillTalentsProto(priest.Talents.ProtoReflect(), talents, TalentTreeSizes)
 	priest.EnableManaBar()
 	priest.AddStatDependency(stats.Strength, stats.AttackPower, 1)
-	priest.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[char.Class])
+	priest.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiAtLevel(char.Class, char.Level))
 
 	return priest
 }

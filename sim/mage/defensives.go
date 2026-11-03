@@ -5,21 +5,27 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var counterspellRank = spellData.Counterspell.Highest()
-
 // Rank 4 is the last rank the trainer teaches; rank 5 comes from the Tome of Frost Ward V book.
 var frostWardTrainerRank = spellData.FrostWard.ByID(10177)
 var frostWardBookRank = spellData.FrostWard.ByID(28609)
 
 func (mage *Mage) registerDefensiveSpells() {
-	// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+	// Only the highest rank the mage knows at its level is registered, not every rank
 	// spellData.FireWard lists.
-	mage.registerWardSpell(spellData.FireWard.Highest(), nil, nil)
-	mage.registerFrostWardSpell(frostWardTrainerRank)
-	mage.registerFrostWardSpell(frostWardBookRank)
-	// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+	if _, rank := mage.learnedRank(spellData.FireWard, spellData.FireWard.Highest()); rank != spelldata.Nil {
+		mage.registerWardSpell(rank, nil, nil)
+	}
+	if _, rank := mage.learnedRank(spellData.FrostWard, frostWardTrainerRank); rank != spelldata.Nil {
+		mage.registerFrostWardSpell(rank)
+	}
+	if mage.knowsBookRank(spellData.FrostWard, frostWardBookRank) {
+		mage.registerFrostWardSpell(frostWardBookRank)
+	}
+	// Only the highest rank the mage knows at its level is registered, not every rank
 	// spellData.ManaShield lists.
-	mage.registerManaShieldSpell(spellData.ManaShield.Len(), spellData.ManaShield.Highest())
+	if index, rank := mage.learnedRank(spellData.ManaShield, spellData.ManaShield.Highest()); rank != spelldata.Nil {
+		mage.registerManaShieldSpell(index, rank)
+	}
 	mage.registerCounterspellSpell()
 }
 
@@ -27,7 +33,7 @@ func (mage *Mage) registerDefensiveSpells() {
 // tooltip's, since the row states no coefficient, and Frost Warding's effect 3 raises the whole absorb.
 func (mage *Mage) registerFrostWardSpell(rank *spelldata.Spell) {
 	warding := 1 + spellData.FrostWarding.EffectAt(3).FractionAt(mage.Talents.FrostWarding)
-	base := rank.EffectN(1).Average()
+	base := rank.EffectN(1).AverageAt(mage.Level)
 
 	mage.registerWardSpell(rank, func() float64 {
 		return warding * (base + 0.1*mage.frostSpellPower())
@@ -41,7 +47,7 @@ func (mage *Mage) registerFrostWardSpell(rank *spelldata.Spell) {
 func (mage *Mage) registerWardSpell(rank *spelldata.Spell, absorbAt func() float64, onAbsorbed core.OnDamageAbsorbedCallback) *core.DamageAbsorptionAura {
 	absorbEffect := rank.EffectN(1)
 	school := core.SpellSchool(absorbEffect.Misc)
-	strength := absorbEffect.Average()
+	strength := absorbEffect.AverageAt(mage.Level)
 
 	shield := mage.NewDamageAbsorptionAura(core.AbsorptionAuraConfig{
 		Aura: spelldata.AuraConfig(rank, spelldata.RankLabel(rank, &mage.Unit)),
@@ -91,6 +97,11 @@ func (mage *Mage) registerManaShieldSpell(_ int32, rank *spelldata.Spell) {
 // Counterspell interrupts the target's cast and locks it out of that school for 10 sec. The sim has
 // no enemy cast to stop, so the spell only takes its mana, global cooldown and cooldown.
 func (mage *Mage) registerCounterspellSpell() {
+	_, counterspellRank := mage.learnedRank(spellData.Counterspell, spellData.Counterspell.Highest())
+	if counterspellRank == spelldata.Nil {
+		return
+	}
+
 	config := spelldata.SpellConfig(&mage.Unit, counterspellRank, spelldata.Flags(core.SpellFlagAPL))
 
 	config.ApplyEffects = func(_ *core.Simulation, _ *core.Unit, _ *core.Spell) {}

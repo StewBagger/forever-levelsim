@@ -5,10 +5,14 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+// Only the highest rank the mage knows at its level is registered, not every rank
 // spellData.Pyroblast lists.
 func (mage *Mage) registerPyroblastSpell() {
-	mage.registerPyroblastRank(spellData.Pyroblast.Len(), spellData.Pyroblast.Highest())
+	index, rank := mage.learnedRank(spellData.Pyroblast, spellData.Pyroblast.Highest())
+	if rank == spelldata.Nil {
+		return
+	}
+	mage.registerPyroblastRank(index, rank)
 }
 
 // Pyroblast
@@ -25,6 +29,7 @@ func (mage *Mage) registerPyroblastRank(_ int32, rank *spelldata.Spell) {
 
 	tick := rank.PeriodicEffect()
 	dotConfig.Dot = spelldata.DotConfig(rank, tick)
+	dotConfig.Dot.OnTick = periodicDamageTick(tick, rank.TickOutcome)
 
 	dotConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		spell.Dot(target).Apply(sim)
@@ -36,7 +41,7 @@ func (mage *Mage) registerPyroblastRank(_ int32, rank *spelldata.Spell) {
 	config.ClassSpellMask = MageSpellPyroblast
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, damage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DealCastResult(sim, result)
 		spell.WaitTravelTime(sim, func(s *core.Simulation) {
 			spell.DealDamage(sim, result)

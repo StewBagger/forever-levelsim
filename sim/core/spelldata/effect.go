@@ -164,10 +164,15 @@ func (e *Effect) MeanAt(level int32) float64 {
 // The amount to hand CalcDamage or CalcHealing for one cast: the average where core rolls the whole
 // amount (DirectVariance), one roll of the base points otherwise.
 func (e *Effect) DirectAmount(sim *core.Simulation) float64 {
+	return e.DirectAmountAt(sim, core.CharacterLevel)
+}
+
+// DirectAmount for a caster of the level given.
+func (e *Effect) DirectAmountAt(sim *core.Simulation, level int32) float64 {
 	if e.DirectVariance() > 0 {
-		return e.Average()
+		return e.AverageAt(level)
 	}
-	return e.Roll(sim)
+	return e.RollAt(sim, level)
 }
 
 // What core.SpellConfig.DirectVariance takes: the Variance of a spell-school hit or of a heal of any

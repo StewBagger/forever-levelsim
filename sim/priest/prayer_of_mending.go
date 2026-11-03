@@ -43,7 +43,7 @@ func (priest *Priest) registerPrayerOfMending(_ int32, rank *spelldata.Spell) {
 			pa := sim.GetConsumedPendingActionFromPool()
 			pa.NextActionAt = sim.CurrentTime + core.DurationFromSeconds(delay)
 			pa.OnAction = func(sim *core.Simulation) {
-				spell.CalcAndDealHealing(sim, healTarget, heal.Average(), spell.OutcomeHealingCrit)
+				spell.CalcAndDealHealing(sim, healTarget, heal.AverageAt(priest.Level), spell.OutcomeHealingCrit)
 				if remainingJumps <= 0 || priest.Party == nil {
 					return
 				}

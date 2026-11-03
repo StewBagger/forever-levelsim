@@ -5,8 +5,6 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var coldSnapRank = spellData.ColdSnap.Highest()
-
 // Cold Snap
 // https://www.wowhead.com/forever/spell=12472
 //
@@ -15,6 +13,11 @@ var coldSnapRank = spellData.ColdSnap.Highest()
 // cooldown a spell of another school also runs on is left alone, so Frost Ward, which shares
 // category 56 with Fire Ward, is not reset.
 func (mage *Mage) registerColdSnapSpell() {
+	_, coldSnapRank := mage.learnedRank(spellData.ColdSnap, spellData.ColdSnap.Highest())
+	if coldSnapRank == spelldata.Nil {
+		return
+	}
+
 	var resets []*core.Spell
 
 	config := spelldata.SpellConfig(&mage.Unit, coldSnapRank, spelldata.Flags(core.SpellFlagAPL))

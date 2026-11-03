@@ -8,7 +8,6 @@ import (
 // Rank 6 is the last rank the trainer teaches; rank 7 comes from the Guide: Aspect of the Hawk VII book.
 var aspectOfTheHawkTrainerRank = spellData.AspectOfTheHawk.ByID(14322)
 var aspectOfTheHawkBookRank = spellData.AspectOfTheHawk.ByID(25296)
-var aspectOfTheBeastRank = spellData.AspectOfTheBeast.Highest()
 var aspectOfTheCheetahRank = spellData.AspectOfTheCheetah.Highest()
 var dazedRank = spellData.AspectOfTheCheetahTriggered.Highest()
 
@@ -16,12 +15,25 @@ var dazedRank = spellData.AspectOfTheCheetahTriggered.Highest()
 var quickShots = spellData.AspectOfTheHawkTriggered.Highest()
 var quickStrikes = spellData.AspectOfTheBeastTriggered.Highest()
 
+// Below the book's level both Hawk ranks resolve to the same learned rank, which is registered once.
 func (hunter *Hunter) registerAspects() {
-	hawkAuras := []*core.Aura{hunter.registerAspect(aspectOfTheHawkTrainerRank), hunter.registerAspect(aspectOfTheHawkBookRank)}
-	hunter.AspectOfTheBeastAura = hunter.registerAspect(aspectOfTheBeastRank)
+	hawkTrainer := spelldata.LearnedRank(&hunter.Unit, spellData.AspectOfTheHawk, aspectOfTheHawkTrainerRank)
+	hawkBook := spelldata.LearnedRank(&hunter.Unit, spellData.AspectOfTheHawk, aspectOfTheHawkBookRank)
+	var hawkAuras []*core.Aura
+	if hawkTrainer != spelldata.Nil {
+		hawkAuras = append(hawkAuras, hunter.registerAspect(hawkTrainer))
+	}
+	if hawkBook != spelldata.Nil && hawkBook != hawkTrainer {
+		hawkAuras = append(hawkAuras, hunter.registerAspect(hawkBook))
+	}
+
+	beast := spelldata.LearnedRank(&hunter.Unit, spellData.AspectOfTheBeast, spellData.AspectOfTheBeast.Highest())
+	if beast != spelldata.Nil {
+		hunter.AspectOfTheBeastAura = hunter.registerAspect(beast)
+	}
 	hunter.registerAspectOfTheCheetah()
 
-	hunter.registerDeadlyAspects(hawkAuras)
+	hunter.registerDeadlyAspects(hawkAuras, hawkBook, beast)
 }
 
 // One aspect at a time: a permanent self-buff the row's effects parse onto, and the spell that swaps
@@ -48,6 +60,11 @@ func (hunter *Hunter) registerAspect(row *spelldata.Spell) *core.Aura {
 // SPELLMOD_EFFECT1 added to it. Effect 2 dazes the hunter when struck: a slow of its own, which
 // MultiplyMovementSpeed stacks on the aspect's speed.
 func (hunter *Hunter) registerAspectOfTheCheetah() {
+	aspectOfTheCheetahRank := spelldata.LearnedRank(&hunter.Unit, spellData.AspectOfTheCheetah, aspectOfTheCheetahRank)
+	if aspectOfTheCheetahRank == spelldata.Nil {
+		return
+	}
+
 	speed := aspectOfTheCheetahRank.EffectN(1).Percent() + spellData.Pathfinding.EffectAt(1).FractionAt(hunter.Talents.Pathfinding)
 	aura := hunter.registerAspect(aspectOfTheCheetahRank)
 	aura.NewActiveMovementSpeedEffect(speed)
@@ -73,8 +90,9 @@ func (hunter *Hunter) registerAspectOfTheCheetah() {
 // Deadly Aspects is the chance the aspects' own procs fire with: the Hawk and Beast rows state the
 // trigger and no rate, and the talent adds SPELLMOD_CHANCE_OF_SUCCESS to each - 2% a rank - which
 // the parse has no row for. The tooltip names Auto Shot and melee auto attacks where the rows hear
-// every ranged and melee hit, so each mask is narrowed to the white hits by hand.
-func (hunter *Hunter) registerDeadlyAspects(hawkAuras []*core.Aura) {
+// every ranged and melee hit, so each mask is narrowed to the white hits by hand. An aspect not yet
+// learned gets no trigger.
+func (hunter *Hunter) registerDeadlyAspects(hawkAuras []*core.Aura, hawkRank, beastRank *spelldata.Spell) {
 	rank := hunter.Talents.DeadlyAspects
 	if rank == 0 {
 		return
@@ -85,7 +103,16 @@ func (hunter *Hunter) registerDeadlyAspects(hawkAuras []*core.Aura) {
 	quickStrikesAura := hunter.RegisterAura(spelldata.AuraConfig(quickStrikes))
 	spelldata.ParseEffects(&hunter.Character, quickStrikesAura, quickStrikes)
 
-	hawk := spelldata.ProcTrigger(&hunter.Character, aspectOfTheHawkBookRank,
+	if hawkRank != spelldata.Nil {
+		hunter.attachQuickShots(hawkAuras, hawkRank, quickShotsAura, rank)
+	}
+	if beastRank != spelldata.Nil {
+		hunter.attachQuickStrikes(beastRank, quickStrikesAura, rank)
+	}
+}
+
+func (hunter *Hunter) attachQuickShots(hawkAuras []*core.Aura, hawkRank *spelldata.Spell, quickShotsAura *core.Aura, rank int32) {
+	hawk := spelldata.ProcTrigger(&hunter.Character, hawkRank,
 		func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			quickShotsAura.Activate(sim)
 		},
@@ -100,8 +127,10 @@ func (hunter *Hunter) registerDeadlyAspects(hawkAuras []*core.Aura) {
 	for _, aura := range hawkAuras {
 		aura.AttachProcTrigger(hawk)
 	}
+}
 
-	beast := spelldata.ProcTrigger(&hunter.Character, aspectOfTheBeastRank,
+func (hunter *Hunter) attachQuickStrikes(beastRank *spelldata.Spell, quickStrikesAura *core.Aura, rank int32) {
+	beast := spelldata.ProcTrigger(&hunter.Character, beastRank,
 		func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			quickStrikesAura.Activate(sim)
 		},

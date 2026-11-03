@@ -8,7 +8,10 @@ import (
 // Granted by the Conflagrate talent: ignites the warlock's own Immolate and consumes it, unless Shadow and
 // Flame keeps it burning. The 10 sec cooldown is the row's category cooldown.
 func (warlock *Warlock) registerConflagrate() {
-	rankedSpell := spellData.Conflagrate.ByID(18932)
+	rankedSpell := warlock.learnedRank(spellData.Conflagrate, 18932)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 	conflagrateHit := rankedSpell.DamageEffect()
 
 	config := spelldata.SpellConfig(&warlock.Unit, rankedSpell, spelldata.Magic(core.ProcMaskSpellDamage))
@@ -21,7 +24,7 @@ func (warlock *Warlock) registerConflagrate() {
 
 	// Roll the damage and to hit, then consume the Immolate unless Shadow and Flame keeps it
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcAndDealDamage(sim, target, conflagrateHit.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcAndDealDamage(sim, target, conflagrateHit.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		if result.Landed() && !sim.Proc(warlock.conflagrateKeepsImmolate, "Shadow and Flame") {
 			warlock.activeImmolate(target).Deactivate(sim)
 		}
@@ -29,7 +32,7 @@ func (warlock *Warlock) registerConflagrate() {
 
 	// Calculate expected damage from the row's average hit
 	config.ExpectedInitialDamage = func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-		return spell.CalcDamage(sim, target, conflagrateHit.Average(), spell.OutcomeExpectedMagicCrit)
+		return spell.CalcDamage(sim, target, conflagrateHit.AverageAt(spell.Unit.Level), spell.OutcomeExpectedMagicCrit)
 	}
 
 	warlock.Conflagrate = warlock.RegisterSpell(config)

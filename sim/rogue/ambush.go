@@ -5,11 +5,13 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var ambushRank = spellData.Ambush.Highest()
-
 func (rogue *Rogue) registerAmbushSpell() {
-	ambushBaseDamage := ambushRank.DamageEffect().Average()
-	comboPointGen := ambushRank.EnergizeEffect().Average()
+	ambushRank := spelldata.LearnedRank(&rogue.Unit, spellData.Ambush, spellData.Ambush.Highest())
+	if ambushRank == spelldata.Nil {
+		return
+	}
+	ambushBaseDamage := ambushRank.DamageEffect().AverageAt(rogue.Level)
+	comboPointGen := ambushRank.EnergizeEffect().AverageAt(rogue.Level)
 	config := spelldata.SpellConfig(&rogue.Unit, ambushRank, spelldata.Melee(core.ProcMaskMeleeMHSpecial))
 	config.Flags |= SpellFlagBuilder | SpellFlagColdBlooded
 	config.ClassSpellMask = RogueSpellAmbush

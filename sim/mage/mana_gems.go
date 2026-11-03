@@ -45,6 +45,10 @@ func (mage *Mage) registerManaGems() {
 	// The charges of the gems already registered, which are the better ones.
 	var betterCharges []*core.Aura
 	for _, gem := range manaGems {
+		// A gem is conjured: the mage has it from the level its Replenish Mana row states, its conjure spell's.
+		if spelldata.TaughtAt(gem.rank) > mage.Level {
+			continue
+		}
 		gemRank := gem.rank
 		actionID := core.ActionID{ItemID: gem.itemID}
 		manaMetrics := mage.NewManaMetrics(actionID)
@@ -71,7 +75,7 @@ func (mage *Mage) registerManaGems() {
 
 		config.ApplyEffects = func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
 			charge.RemoveStack(sim)
-			mage.AddMana(sim, manaEffect.Roll(sim), manaMetrics)
+			mage.AddMana(sim, manaEffect.RollAt(sim, mage.Level), manaMetrics)
 		}
 
 		// Hold this gem until every better one has been used.
@@ -87,7 +91,7 @@ func (mage *Mage) registerManaGems() {
 						return false
 					}
 				}
-				return character.CurrentMana()+manaEffect.Max() <= character.MaxMana()
+				return character.CurrentMana()+manaEffect.MaxAt(mage.Level) <= character.MaxMana()
 			},
 		})
 	}

@@ -19,6 +19,12 @@ const revengeThreatMultiplier = 2.25
 var revengeWindow = spellData.DefensiveStateTriggered.Highest()
 
 func (warrior *Warrior) registerRevenge() {
+	trainerRank := warrior.learnedRank(spellData.Revenge, revengeTrainerRank)
+	bookRank := warrior.learnedRank(spellData.Revenge, revengeBookRank)
+	if trainerRank == spelldata.Nil {
+		return
+	}
+
 	aura := warrior.RegisterAura(core.Aura{
 		Label:    "Revenge",
 		Duration: revengeWindow.Duration(),
@@ -34,8 +40,11 @@ func (warrior *Warrior) registerRevenge() {
 	trigger.TriggerImmediately = true
 	warrior.MakeProcTriggerAura(trigger)
 
-	warrior.registerRevengeRank(revengeTrainerRank, aura)
-	warrior.registerRevengeRank(revengeBookRank, aura)
+	// Below the book's level both resolve to the same learned rank, which is registered once.
+	warrior.registerRevengeRank(trainerRank, aura)
+	if bookRank != trainerRank {
+		warrior.registerRevengeRank(bookRank, aura)
+	}
 }
 
 func (warrior *Warrior) registerRevengeRank(rank *spelldata.Spell, aura *core.Aura) {
@@ -47,7 +56,7 @@ func (warrior *Warrior) registerRevengeRank(rank *spelldata.Spell, aura *core.Au
 	}
 
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		baseDamage := rank.DamageEffect().Roll(sim) + rank.DamageEffect().APCoeff()*spell.MeleeAttackPower(target)
+		baseDamage := rank.DamageEffect().RollAt(sim, spell.Unit.Level) + rank.DamageEffect().APCoeff()*spell.MeleeAttackPower(target)
 		result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 		aura.Deactivate(sim)
 

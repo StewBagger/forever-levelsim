@@ -5,10 +5,14 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+// Only the highest rank the mage knows at its level is registered, not every rank
 // spellData.ConeOfCold lists.
 func (mage *Mage) registerConeOfColdSpell() {
-	mage.registerConeOfColdRank(spellData.ConeOfCold.Len(), spellData.ConeOfCold.Highest())
+	index, rank := mage.learnedRank(spellData.ConeOfCold, spellData.ConeOfCold.Highest())
+	if rank == spelldata.Nil {
+		return
+	}
+	mage.registerConeOfColdRank(index, rank)
 }
 
 // The slow (effect 1) does nothing to a boss.
@@ -28,7 +32,7 @@ func (mage *Mage) registerConeOfColdRank(_ int32, rank *spelldata.Spell) {
 			bonusCoefficient := mage.wintersChillCoefficient(aoeTarget)
 
 			spell.BonusCoefficient += bonusCoefficient
-			result := spell.CalcAndDealDamage(sim, aoeTarget, damage.DirectAmount(sim), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcAndDealDamage(sim, aoeTarget, directAmountAt(sim, damage, spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 			spell.BonusCoefficient -= bonusCoefficient
 
 			if result.Landed() {

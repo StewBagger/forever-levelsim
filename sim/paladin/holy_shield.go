@@ -17,7 +17,7 @@ var HolyShieldRankMap = spellData.HolyShield
 func (paladin *Paladin) registerHolyShield(_ int32, rank *spelldata.Spell) {
 	actionID := core.ActionID{SpellID: rank.ID}
 	damageEffect := rank.Effect(dbcenums.A_PROC_TRIGGER_DAMAGE, 0)
-	damage := damageEffect.Mean()
+	damage := damageEffect.MeanAt(paladin.Level)
 	blockPercent := rank.Effect(dbcenums.A_MOD_BLOCK_PERCENT, 0).BaseValue()
 	charges := int32(rank.ProcCharges)
 

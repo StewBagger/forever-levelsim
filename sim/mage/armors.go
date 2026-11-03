@@ -16,40 +16,50 @@ func (mage *Mage) registerArmorSpells() {
 	// scaled here; the casting regen (effect 2) is parsed.
 	shielding := 1 + spellData.ArcaneShielding.EffectAt(2).FractionAt(mage.Talents.ArcaneShielding)
 
-	// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+	// Only the highest rank the mage knows at its level is registered, not every rank
 	// spellData.FrostArmor lists.
-	frostArmorRank := spellData.FrostArmor.Highest()
-	mage.registerArmor(frostArmorRank, MageSpellFrostArmor, stats.Stats{
-		stats.Armor: warding * frostArmorRank.EffectN(1).BaseValue(),
-	})
+	var frostArmor, iceArmor, mageArmor *core.Aura
+	if _, frostArmorRank := mage.learnedRank(spellData.FrostArmor, spellData.FrostArmor.Highest()); frostArmorRank != spelldata.Nil {
+		frostArmor = mage.registerArmor(frostArmorRank, MageSpellFrostArmor, stats.Stats{
+			stats.Armor: warding * frostArmorRank.EffectN(1).BaseValue(),
+		})
+	}
 
-	// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+	// Only the highest rank the mage knows at its level is registered, not every rank
 	// spellData.IceArmor lists.
-	iceArmorRank := spellData.IceArmor.Highest()
-	iceArmor := mage.registerArmor(iceArmorRank, MageSpellIceArmor, stats.Stats{
-		stats.Armor:           warding * iceArmorRank.EffectN(1).BaseValue(),
-		stats.FrostResistance: warding * iceArmorRank.EffectN(3).BaseValue(),
-	})
+	if _, iceArmorRank := mage.learnedRank(spellData.IceArmor, spellData.IceArmor.Highest()); iceArmorRank != spelldata.Nil {
+		iceArmor = mage.registerArmor(iceArmorRank, MageSpellIceArmor, stats.Stats{
+			stats.Armor:           warding * iceArmorRank.EffectN(1).BaseValue(),
+			stats.FrostResistance: warding * iceArmorRank.EffectN(3).BaseValue(),
+		})
+	}
 
-	// Only the highest rank is registered: the mage casts the rank configured here, not every rank
+	// Only the highest rank the mage knows at its level is registered, not every rank
 	// spellData.MageArmor lists.
-	mageArmorRank := spellData.MageArmor.Highest()
-	resist := shielding * mageArmorRank.EffectN(1).BaseValue()
-	mageArmor := mage.registerArmor(mageArmorRank, MageSpellMageArmor, stats.Stats{
-		stats.ArcaneResistance: resist,
-		stats.FireResistance:   resist,
-		stats.FrostResistance:  resist,
-		stats.NatureResistance: resist,
-		stats.ShadowResistance: resist,
-	})
-	spelldata.ParseEffects(&mage.Character, mageArmor, mageArmorRank, spelldata.Effects(2))
+	if _, mageArmorRank := mage.learnedRank(spellData.MageArmor, spellData.MageArmor.Highest()); mageArmorRank != spelldata.Nil {
+		resist := shielding * mageArmorRank.EffectN(1).BaseValue()
+		mageArmor = mage.registerArmor(mageArmorRank, MageSpellMageArmor, stats.Stats{
+			stats.ArcaneResistance: resist,
+			stats.FireResistance:   resist,
+			stats.FrostResistance:  resist,
+			stats.NatureResistance: resist,
+			stats.ShadowResistance: resist,
+		})
+		spelldata.ParseEffects(&mage.Character, mageArmor, mageArmorRank, spelldata.Effects(2))
+	}
+
+	// The frost option is Ice Armor, or Frost Armor below the level Ice Armor is taught at.
+	frostOption := iceArmor
+	if frostOption == nil {
+		frostOption = frostArmor
+	}
 
 	if mage.Options == nil {
 		return
 	}
 
 	defaultArmor := map[proto.MageArmor]*core.Aura{
-		proto.MageArmor_MageArmorFrostArmor: iceArmor,
+		proto.MageArmor_MageArmorFrostArmor: frostOption,
 		proto.MageArmor_MageArmorMageArmor:  mageArmor,
 	}[mage.Options.DefaultMageArmor]
 

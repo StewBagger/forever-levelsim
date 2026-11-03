@@ -10,8 +10,12 @@ var arcaneMissilesTrainerRank = spellData.ArcaneMissiles.ByID(10212)
 var arcaneMissilesBookRank = spellData.ArcaneMissiles.ByID(25345)
 
 func (mage *Mage) registerArcaneMissilesSpell() {
-	mage.registerArcaneMissilesRank(arcaneMissilesTrainerRank)
-	mage.registerArcaneMissilesRank(arcaneMissilesBookRank)
+	if _, rank := mage.learnedRank(spellData.ArcaneMissiles, arcaneMissilesTrainerRank); rank != spelldata.Nil {
+		mage.registerArcaneMissilesRank(rank)
+	}
+	if mage.knowsBookRank(spellData.ArcaneMissiles, arcaneMissilesBookRank) {
+		mage.registerArcaneMissilesRank(arcaneMissilesBookRank)
+	}
 }
 
 // The channel's periodic effect names the missile it fires each tick, a rank of
@@ -24,7 +28,7 @@ func (mage *Mage) registerArcaneMissilesRank(rank *spelldata.Spell) {
 	tickConfig.ClassSpellMask = MageSpellArcaneMissilesTick
 	// Each missile rolls when the tick fires it and lands after flying at the row's speed.
 	tickConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		result := spell.CalcDamage(sim, target, missileDamage.Average(), spell.OutcomeMagicHitAndCrit)
+		result := spell.CalcDamage(sim, target, missileDamage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHitAndCrit)
 		spell.DealDamageAfterTravel(sim, result)
 		spell.SpellMetrics[target.UnitIndex].Casts--
 	}

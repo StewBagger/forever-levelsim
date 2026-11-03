@@ -8,8 +8,6 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var blinkRank = spellData.Blink.Highest()
-
 // Blink
 // https://www.wowhead.com/forever/spell=1953
 //
@@ -19,6 +17,11 @@ var blinkRank = spellData.Blink.Highest()
 // lands the rest of the way past it. The sim has no facing, so that move is a straight walk to where
 // the mage lands, and only its end point is right.
 func (mage *Mage) registerBlinkSpell() {
+	_, blinkRank := mage.learnedRank(spellData.Blink, spellData.Blink.Highest())
+	if blinkRank == spelldata.Nil {
+		return
+	}
+
 	leap := float64(blinkRank.FindEffect(dbcenums.E_LEAP, 0, 0).RadiusMax)
 	aura := mage.RegisterAura(spelldata.AuraConfig(blinkRank))
 

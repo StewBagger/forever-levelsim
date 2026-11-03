@@ -28,9 +28,9 @@ func (paladin *Paladin) registerOathOfLight() {
 	rank := spellData.OathOfLight.Highest()
 
 	oath := &oathOfLight{
-		holyLight:    rank.EffectN(1).Average(),
-		flashOfLight: rank.EffectN(2).Average(),
-		holyShock:    rank.EffectN(3).Average(),
+		holyLight:    rank.EffectN(1).AverageAt(paladin.Level),
+		flashOfLight: rank.EffectN(2).AverageAt(paladin.Level),
+		holyShock:    rank.EffectN(3).AverageAt(paladin.Level),
 	}
 	oath.auras = paladin.NewAllyAuraArray(func(target *core.Unit) *core.Aura {
 		return target.GetOrRegisterAura(core.Aura{

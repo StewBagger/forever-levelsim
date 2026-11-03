@@ -6,8 +6,11 @@ import (
 )
 
 func (druid *Druid) registerShiftingPowerSpell() {
-	rank := spellData.ShiftingPower.Highest()
-	energy := rank.EnergizeEffect().Average()
+	rank := druid.learned(spellData.ShiftingPower)
+	if rank == spelldata.Nil {
+		return
+	}
+	energy := rank.EnergizeEffect().AverageAt(druid.level())
 	metrics := druid.NewEnergyMetrics(core.ActionID{SpellID: rank.ID})
 	config := spelldata.SpellConfig(&druid.Unit, rank)
 	config.Flags |= core.SpellFlagAPL

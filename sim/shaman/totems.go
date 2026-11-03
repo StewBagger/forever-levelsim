@@ -1,6 +1,7 @@
 package shaman
 
 import (
+	"slices"
 	"time"
 
 	"github.com/wowsims/forever/sim/core"
@@ -8,16 +9,23 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var windfuryTotemRank = spellData.WindfuryTotem.Highest()
-
 // Strength of Earth's rank 4 and Grace of Air's rank 2 are the last ranks the trainer teaches; the Tablet of
 // Strength of Earth Totem V and Tablet of Grace of Air Totem III books teach the ranks above them.
-var strengthOfEarthTotemRanks = []*spelldata.Spell{spellData.StrengthOfEarthTotem.ByID(10442), spellData.StrengthOfEarthTotem.ByID(25361)}
-var graceOfAirTotemRanks = []*spelldata.Spell{spellData.GraceOfAirTotem.ByID(10627), spellData.GraceOfAirTotem.ByID(25359)}
+var strengthOfEarthTotemRanks = []int32{10442, 25361}
+var graceOfAirTotemRanks = []int32{10627, 25359}
 
-var manaSpringTotemRank = spellData.ManaSpringTotem.Highest()
-var flametongueTotemRank = spellData.FlametongueTotem.Highest()
-var frostResistanceTotemRank = spellData.FrostResistanceTotem.Highest()
+// The ranks the shaman knows of those `named`: each one's learned rank, once, so a rank the shaman is
+// below the level of stands for the rank it knows.
+func (shaman *Shaman) learnedRanks(ladder spelldata.Ladder, named []int32) []*spelldata.Spell {
+	var ranks []*spelldata.Spell
+	for _, id := range named {
+		rank := spelldata.LearnedRank(&shaman.Unit, ladder, ladder.ByID(id))
+		if rank != spelldata.Nil && !slices.Contains(ranks, rank) {
+			ranks = append(ranks, rank)
+		}
+	}
+	return ranks
+}
 
 // A totem's cast: the row's cost, GCD and cooldown, and nothing it hits.
 func (shaman *Shaman) newTotemSpellConfig(rank *spelldata.Spell) core.SpellConfig {
@@ -83,6 +91,10 @@ func (shaman *Shaman) registerWeaponTotem(rank *spelldata.Spell, slot int, categ
 // The rows already carry Improved Weapon Totems: Windfury's attack power and Flametongue's damage are
 // its 30% and 12% over their untalented values, so nothing applies the talent.
 func (shaman *Shaman) registerWindfuryTotemSpell() {
+	windfuryTotemRank := spelldata.LearnedRank(&shaman.Unit, spellData.WindfuryTotem, spellData.WindfuryTotem.Highest())
+	if windfuryTotemRank == spelldata.Nil {
+		return
+	}
 	shaman.WindfuryTotem = shaman.registerWeaponTotem(windfuryTotemRank, AirTotem, buffs.WindfuryTotemCategory,
 		buffs.WindfuryTotemValue(0), buffs.NewWindfuryTotemProcTrigger(&shaman.Character))
 	buffs.HoldOverWindfuryTotemRivals(shaman.WindfuryTotem.RelatedSelfBuff)
@@ -90,6 +102,10 @@ func (shaman *Shaman) registerWindfuryTotemSpell() {
 
 // Under a standing Windfury Totem, Flametongue Totem's proc does nothing.
 func (shaman *Shaman) registerFlametongueTotemSpell() {
+	flametongueTotemRank := spelldata.LearnedRank(&shaman.Unit, spellData.FlametongueTotem, spellData.FlametongueTotem.Highest())
+	if flametongueTotemRank == spelldata.Nil {
+		return
+	}
 	shaman.FlametongueTotem = shaman.registerWeaponTotem(flametongueTotemRank, FireTotem, buffs.FlametongueTotemCategory,
 		buffs.FlametongueTotemPriority(), buffs.NewFlametongueTotemProcTrigger(&shaman.Character))
 }
@@ -97,14 +113,14 @@ func (shaman *Shaman) registerFlametongueTotemSpell() {
 func (shaman *Shaman) registerStrengthOfEarthTotemSpell() {
 	// The rows already carry Enhancing Totems: Strength of Earth's and Grace of Air's amounts are its 15%
 	// over their untalented values, so nothing applies the talent.
-	for _, rank := range strengthOfEarthTotemRanks {
+	for _, rank := range shaman.learnedRanks(spellData.StrengthOfEarthTotem, strengthOfEarthTotemRanks) {
 		shaman.registerBuffTotem(rank, EarthTotem,
 			buffs.NewSpellDataStrengthOfEarthTotemRankAura(&shaman.Unit, spellData.StrengthOfEarthTotemTriggered.Rank(rank.RankNumber())))
 	}
 }
 
 func (shaman *Shaman) registerGraceOfAirTotemSpell() {
-	for _, rank := range graceOfAirTotemRanks {
+	for _, rank := range shaman.learnedRanks(spellData.GraceOfAirTotem, graceOfAirTotemRanks) {
 		shaman.registerBuffTotem(rank, AirTotem,
 			buffs.NewSpellDataGraceOfAirTotemRankAura(&shaman.Unit, spellData.GraceOfAirTotemTriggered.Rank(rank.RankNumber())))
 	}
@@ -112,12 +128,20 @@ func (shaman *Shaman) registerGraceOfAirTotemSpell() {
 
 // The aura reads Restorative Totems' first effect, the Mana Spring share, from the talent points.
 func (shaman *Shaman) registerManaSpringTotemSpell() {
+	manaSpringTotemRank := spelldata.LearnedRank(&shaman.Unit, spellData.ManaSpringTotem, spellData.ManaSpringTotem.Highest())
+	if manaSpringTotemRank == spelldata.Nil {
+		return
+	}
 	shaman.registerBuffTotem(manaSpringTotemRank, WaterTotem,
 		buffs.NewSpellDataManaSpringTotemAura(&shaman.Unit, true, shaman.Talents.RestorativeTotems))
 }
 
 // A fire totem, so it stands in the slot Fire Nova radiates from.
 func (shaman *Shaman) registerFrostResistanceTotemSpell() {
+	frostResistanceTotemRank := spelldata.LearnedRank(&shaman.Unit, spellData.FrostResistanceTotem, spellData.FrostResistanceTotem.Highest())
+	if frostResistanceTotemRank == spelldata.Nil {
+		return
+	}
 	shaman.registerBuffTotem(frostResistanceTotemRank, FireTotem,
 		buffs.NewSpellDataFrostResistanceTotemAura(&shaman.Unit, true, 0))
 }

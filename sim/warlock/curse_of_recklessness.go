@@ -10,7 +10,10 @@ import (
 // armor. Its category keeps it from stacking with another warlock's copy or a raid one. The row's dummy
 // +90 attack power for the target and its fear immunity are left out, as the raid debuff leaves them out.
 func (warlock *Warlock) registerCurseOfRecklessness() {
-	rankedSpell := spellData.CurseOfRecklessness.ByID(11717)
+	rankedSpell := warlock.learnedRank(spellData.CurseOfRecklessness, 11717)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 
 	warlock.CurseOfRecklessnessAuras = warlock.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		return buffs.NewSpellDataCurseOfRecklessnessAuraFor(target, &warlock.Unit)

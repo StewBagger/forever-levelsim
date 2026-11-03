@@ -10,7 +10,10 @@ import (
 // all resistances and 10% more damage taken. Its category keeps it from stacking with another warlock's
 // copy or a raid one.
 func (warlock *Warlock) registerCurseOfElements() {
-	rankedSpell := spellData.CurseOfTheElements.ByID(1311680)
+	rankedSpell := warlock.learnedRank(spellData.CurseOfTheElements, 1311680)
+	if rankedSpell == spelldata.Nil {
+		return
+	}
 
 	warlock.CurseOfElementsAuras = warlock.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		return buffs.NewSpellDataCurseOfElementsAuraFor(target, &warlock.Unit)

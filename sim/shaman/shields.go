@@ -93,21 +93,23 @@ func (shaman *Shaman) registerWaterShieldSpell() func(sim *core.Simulation) {
 	return spendGlobe
 }
 
-var lightningShieldRank = spellData.LightningShield.Highest()
-
-// The shield's effect 1 fires 26545, a dummy, and the orb its tooltip names deals the damage.
-var lightningShieldOrb = lightningShieldRank.Refs()[0]
-
 // 10432 holds three charges for 10 minutes, and a hit taken spends one, at most once every 3.5 s, to
-// strike the attacker with the orb.
+// strike the attacker with the orb. The shield's effect 1 fires 26545, a dummy, and the orb its tooltip
+// names, the rank's ref, deals the damage.
 func (shaman *Shaman) registerLightningShieldSpell() func(sim *core.Simulation, attacker *core.Unit) {
+	lightningShieldRank := spelldata.LearnedRank(&shaman.Unit, spellData.LightningShield, spellData.LightningShield.Highest())
+	if lightningShieldRank == spelldata.Nil {
+		return func(*core.Simulation, *core.Unit) {}
+	}
+	lightningShieldOrb := lightningShieldRank.Refs()[0]
+
 	orbConfig := spelldata.SpellConfig(&shaman.Unit, lightningShieldOrb,
 		spelldata.Magic(core.ProcMaskSpellDamageProc), spelldata.Proc(), spelldata.Flags(core.SpellFlagProc|SpellFlagShamanSpell))
 	orbConfig.ClassSpellMask = SpellMaskLightningShield
 	damage := lightningShieldOrb.DamageEffect()
 	orbConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		// The row cannot crit.
-		spell.CalcAndDealDamage(sim, target, damage.Average(), spell.OutcomeMagicHit)
+		spell.CalcAndDealDamage(sim, target, damage.AverageAt(spell.Unit.Level), spell.OutcomeMagicHit)
 	}
 	orb := shaman.RegisterSpell(orbConfig)
 

@@ -5,10 +5,17 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-// Rank 6 is the last rank the trainer teaches; rank 7 comes from the Grimoire of Corruption VII book.
+// Rank 6 is the last rank the trainer teaches; rank 7 comes from the Grimoire of Corruption VII book. Below
+// the book's level both name the same learned rank, which registers once.
 func (warlock *Warlock) registerCorruption() {
-	warlock.Corruption = warlock.registerCorruptionRank(spellData.Corruption.ByID(11672))
-	warlock.registerCorruptionRank(spellData.Corruption.ByID(25311))
+	trained := warlock.learnedRank(spellData.Corruption, 11672)
+	if trained == spelldata.Nil {
+		return
+	}
+	warlock.Corruption = warlock.registerCorruptionRank(trained)
+	if book := warlock.learnedRank(spellData.Corruption, 25311); book != trained {
+		warlock.registerCorruptionRank(book)
+	}
 }
 
 func (warlock *Warlock) registerCorruptionRank(rankedSpell *spelldata.Spell) *core.Spell {
@@ -20,7 +27,7 @@ func (warlock *Warlock) registerCorruptionRank(rankedSpell *spelldata.Spell) *co
 	// Tick the row's average, rolling only the crit: the hit was rolled when the dot landed
 	config.Dot = spelldata.DotConfig(rankedSpell, corruptionTick)
 	config.Dot.Aura.Tag = "Affliction"
-	config.Dot.OnTick = spelldata.PeriodicDamageTick(corruptionTick, rankedSpell.TickOutcome)
+	config.Dot.OnTick = periodicDamageTick(corruptionTick, rankedSpell.TickOutcome)
 
 	// Roll to hit and apply as dot
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -33,7 +40,7 @@ func (warlock *Warlock) registerCorruptionRank(rankedSpell *spelldata.Spell) *co
 
 	// Calculate expected damage from the row's average tick
 	config.ExpectedTickDamage = func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-		return spell.CalcPeriodicDamage(sim, target, corruptionTick.Average(), spell.OutcomeExpectedMagicAlwaysHit)
+		return spell.CalcPeriodicDamage(sim, target, corruptionTick.AverageAt(spell.Unit.Level), spell.OutcomeExpectedMagicAlwaysHit)
 	}
 
 	return warlock.RegisterSpell(config)

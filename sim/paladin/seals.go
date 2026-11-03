@@ -65,12 +65,12 @@ var (
 )
 
 func (paladin *Paladin) registerSeals() {
-	SealOfRighteousnessRankMap.Each(paladin.registerSealOfRighteousness)
-	SealOfLightRankMap.Each(paladin.registerSealOfLight)
-	SealOfWisdomRankMap.Each(paladin.registerSealOfWisdom)
+	paladin.eachLearnedRank(SealOfRighteousnessRankMap, paladin.registerSealOfRighteousness)
+	paladin.eachLearnedRank(SealOfLightRankMap, paladin.registerSealOfLight)
+	paladin.eachLearnedRank(SealOfWisdomRankMap, paladin.registerSealOfWisdom)
 	paladin.registerSealOfJustice()
-	SealOfTheCrusaderRankMap.Each(paladin.registerSealOfTheCrusader)
-	SealOfFuryRankMap.Each(paladin.registerSealOfFury)
+	paladin.eachLearnedRank(SealOfTheCrusaderRankMap, paladin.registerSealOfTheCrusader)
+	paladin.eachLearnedRank(SealOfFuryRankMap, paladin.registerSealOfFury)
 }
 
 // Every seal aura joins the seal category, so casting one seal drops the other.

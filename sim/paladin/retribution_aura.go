@@ -16,10 +16,10 @@ var RetributionAuraRankMap = spellData.RetributionAura
 // TODO: In game the aura scales with the target's spell power (a known issue); the sim uses the
 // paladin's, as the tooltip intends. Recheck after the next build.
 func (paladin *Paladin) registerRetributionAura() {
-	RetributionAuraRankMap.Each(func(_ int32, rank *spelldata.Spell) {
+	paladin.eachLearnedRank(RetributionAuraRankMap, func(_ int32, rank *spelldata.Spell) {
 		// The damage shield's number is the rank's first effect.
 		r := auraRank(rank)
-		r.Value = rank.EffectN(1).Average()
+		r.Value = rank.EffectN(1).AverageAt(paladin.Level)
 		aura := buffs.NewSpellDataRetributionAuraRank(&paladin.Character, true, r, 0)
 		paladin.registerAuraSpell(rank, aura, SpellMaskRetributionAura)
 	})

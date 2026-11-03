@@ -5,6 +5,7 @@ import (
 
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/proto"
+	"github.com/wowsims/forever/sim/core/spelldata"
 	"github.com/wowsims/forever/sim/core/stats"
 )
 
@@ -152,6 +153,12 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	}
 	warrior.FillTalentsProto(warrior.Talents.ProtoReflect(), talents, TalentTreeSizes)
 
+	// A warrior below the level that teaches the chosen stance starts in Battle Stance, the one known
+	// from level 1.
+	if stance := defaultStanceRank(inputs.DefaultStance); stance != nil && spelldata.TaughtAt(stance) > warrior.Level {
+		warrior.DefaultStance = proto.WarriorStance_WarriorStanceBattle
+	}
+
 	warrior.EnableRageBar(core.RageBarOptions{
 		MaxRage:            100,
 		BaseRageMultiplier: 1,
@@ -169,7 +176,7 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	warrior.PseudoStats.CanParry = true
 
 	warrior.AddStatDependency(stats.Strength, stats.AttackPower, 2)
-	warrior.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
+	warrior.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiAtLevel(character.Class, character.Level))
 	warrior.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
 
 	// Without a delay the sim re-queues Heroic Strike faster than a player can, which lands
@@ -180,6 +187,12 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	}
 
 	return warrior
+}
+
+// The rank of the ladder the warrior knows at its level, at or below the one named; spelldata.Nil
+// before the first rank is taught.
+func (warrior *Warrior) learnedRank(ladder spelldata.Ladder, named *spelldata.Spell) *spelldata.Spell {
+	return spelldata.LearnedRank(&warrior.Unit, ladder, named)
 }
 
 // Drops the queued Heroic Strike or Cleave, and a press still waiting out the Queue Delay.

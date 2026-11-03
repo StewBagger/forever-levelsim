@@ -5,8 +5,6 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-var presenceOfMindRank = spellData.PresenceOfMind.Highest()
-
 // Presence of Mind
 // https://www.wowhead.com/forever/spell=12043
 //
@@ -14,6 +12,11 @@ var presenceOfMindRank = spellData.PresenceOfMind.Highest()
 // cast spell." The row's -100% cast time names the spells it reaches, and the one charge is
 // spent by the first of them cast.
 func (mage *Mage) registerPresenceOfMindSpell() {
+	_, presenceOfMindRank := mage.learnedRank(spellData.PresenceOfMind, spellData.PresenceOfMind.Highest())
+	if presenceOfMindRank == spelldata.Nil {
+		return
+	}
+
 	castTimeEffect := presenceOfMindRank.EffectN(1)
 
 	var pomSpell *core.Spell
