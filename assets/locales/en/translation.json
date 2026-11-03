@@ -3077,8 +3077,7 @@
 			}
 		},
 		"download_native_sim": "Download simulator for faster simulating",
-		"native_sim_outdated": "Newer version of simulator available for download",
-		"forever_notice": "Forever sims are still changing rapidly and may have issues. If your results look wrong or your sim won't run, try restoring the default settings."
+		"native_sim_outdated": "Newer version of simulator available for download"
 	},
 		"onboarding": {
 			"label": "Tour",
