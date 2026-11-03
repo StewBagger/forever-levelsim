@@ -93,6 +93,9 @@ export interface IndividualSimUIConfig<SpecType extends Spec> extends PlayerConf
 	className: string;
 	// Used to generate schemed components. E.g. 'shaman', 'druid', 'raid'
 	cssScheme: string;
+	// The lowest level the Level input takes, for a spec the sim cannot build below it: the level its class learns
+	// the form or ability the spec stands on. 1 when unset.
+	minLevel?: number;
 
 	knownIssues?: Array<ReactNode>;
 	warnings?: Array<(simUI: IndividualSimHost<SpecType>) => SimWarning>;

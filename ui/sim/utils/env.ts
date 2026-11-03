@@ -9,13 +9,9 @@ export const environmentOf = (hostname: string): Environments => (hostname.inclu
 export const isDevMode = () => {
 	return import.meta.env.DEV;
 };
-// The dev server, a page served from upstream's Cloudflare Pages host, where the pull request
-// previews live, or Null Sims on nossuary.com, which shows upstream's unfinished level 60 gear
-// sets rather than starting those specs with none. Keyed on the hostname so wowsims.com, a page
-// embedding it and a copy hosted anywhere else never show what is not ready yet.
-export const isPreviewOrDevMode = (hostname: string) =>
-	isDevMode() ||
-	hostname === 'wowsims-forever.pages.dev' ||
-	hostname.endsWith('.wowsims-forever.pages.dev') ||
-	hostname === 'nossuary.com' ||
-	hostname === 'www.nossuary.com';
+// Everywhere but upstream's own site. Null Sims shows upstream's unfinished level 60 gear sets on every host it runs
+// on (the dev server, the local Go server, its Cloudflare Pages previews and nossuary.com) rather than starting those
+// specs with none; only wowsims.com, keyed on the hostname, keeps them hidden until upstream releases them.
+const UPSTREAM_HOSTS = ['wowsims.com', 'www.wowsims.com'];
+
+export const isPreviewOrDevMode = (hostname: string) => isDevMode() || !UPSTREAM_HOSTS.includes(hostname);

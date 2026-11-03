@@ -30,11 +30,12 @@ export const professionInput = (which: 1 | 2): ChoiceFieldConfig<Player<any>> =>
 	setValue: (modObject, newValue) => (which === 1 ? modObject.setProfession1(newValue) : modObject.setProfession2(newValue)),
 });
 
-// A user edit runs the level's defaults; loading settings or a link sets the level through the player alone.
+// A user edit runs the level's defaults, kept at or above the spec's `minLevel`; loading settings or a link sets the
+// level through the player alone.
 export const levelInput = (host: IndividualSimHost<any>): NumberFieldConfig<Player<any>> => ({
 	id: 'simui-level',
 	label: i18n.t('settings_tab.player.level.label'),
-	labelTooltip: i18n.t('settings_tab.player.level.tooltip'),
+	labelTooltip: i18n.t('settings_tab.player.level.tooltip', { min: host.individualConfig.minLevel ?? 1 }),
 	positive: true,
 	storeField: 'level' as const,
 	getValue: modObject => modObject.getLevel(),

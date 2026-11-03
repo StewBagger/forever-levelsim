@@ -16,6 +16,8 @@ export default defineSpec<Spec.SpecFeralCatDruid>({
 
 	className: 'feral-druid-sim-ui',
 	cssScheme: PlayerClasses.getCssScheme(PlayerClasses.Druid),
+	// A druid learns Cat Form at level 20 (druid.FormLevel in sim/druid/forms.go), and the sim builds no cat without it.
+	minLevel: 20,
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
 	warnings: [],

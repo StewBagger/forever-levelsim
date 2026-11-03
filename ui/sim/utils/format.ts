@@ -4,6 +4,9 @@ import i18n from '@i18n/config';
 
 export const sanitizeId = (id: string) => id.split(' ').join('').toLocaleLowerCase();
 
+// An error's first line, for a toast. The sim's errors carry their stack trace on the lines after the message.
+export const errorHeadline = (error: unknown): string => (error instanceof Error ? error.message : String(error)).split('\n', 1)[0].trim();
+
 export interface FormatDurationSecondsOptions {
 	showMilliseconds?: boolean;
 	millisecondDigits?: 1 | 2 | 3;

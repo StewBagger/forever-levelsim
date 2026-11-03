@@ -16,17 +16,17 @@ describe('isPreviewOrDevMode', () => {
 			return isPreviewOrDevMode(hostname);
 		};
 
-		it('holds on the Cloudflare Pages host and its previews', () => {
+		it("holds on every host but upstream's", () => {
+			expect(onHost('localhost')).toBe(true);
+			expect(onHost('192.168.1.30')).toBe(true);
+			expect(onHost('nossuary.com')).toBe(true);
 			expect(onHost('wowsims-forever.pages.dev')).toBe(true);
 			expect(onHost('0123456789abcdef.wowsims-forever.pages.dev')).toBe(true);
 		});
 
-		it('does not hold anywhere else', () => {
+		it('does not hold on wowsims.com', () => {
 			expect(onHost('www.wowsims.com')).toBe(false);
 			expect(onHost('wowsims.com')).toBe(false);
-			expect(onHost('other-project.pages.dev')).toBe(false);
-			expect(onHost('wowsims-forever.pages.dev.example.com')).toBe(false);
-			expect(onHost('notwowsims-forever.pages.dev')).toBe(false);
 		});
 	});
 });

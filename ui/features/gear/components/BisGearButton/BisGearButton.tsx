@@ -1,6 +1,7 @@
 import i18n from '@i18n/config';
 import { useSimHost } from '@sim/context/SimHostContext';
 import { usePlayerStore } from '@sim/hooks/usePlayerStore';
+import { errorHeadline } from '@sim/utils/format';
 import { Button } from '@ui-kit/Button';
 import { toastManager } from '@ui-kit/Toast';
 import { Tooltip, tooltipAnchorProps } from '@ui-kit/Tooltip';
@@ -43,7 +44,7 @@ export const BisGearButton = () => {
 			const equipment = await sim.bisGear(player, level, player.getEpWeights());
 			player.setGear(sim.db.lookupEquipmentSpec(equipment));
 		} catch (error) {
-			toastManager.add({ variant: 'error', body: error instanceof Error ? error.message : String(error) });
+			toastManager.add({ variant: 'error', body: errorHeadline(error) });
 		} finally {
 			setBusy(false);
 		}

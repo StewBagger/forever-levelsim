@@ -71,7 +71,8 @@ share live in `ui/specs/<class>/shared/`; only the classes that need it have one
 
 **Every new gearset passes `devOnly: true`** to `makePresetGear`, and a `makePresetBuildFromJSON` build takes that
 gearset as its `gear`, until the gearset is released. Without the flag it shows on wowsims.com: `spec_entry.tsx` drops
-dev-only gear outside the dev server and the Cloudflare Pages previews (`isPreviewOrDevMode` in `ui/sim/utils/env.ts`).
+dev-only gear on upstream's wowsims.com and nowhere else, so Null Sims shows it on the local Go server, the Cloudflare
+Pages previews and nossuary.com (`isPreviewOrDevMode` in `ui/sim/utils/env.ts`).
 Removing the flag is the release, so a change does it only when asked to release that gearset.
 
 Two traps:

@@ -310,7 +310,9 @@ export class Database {
 		return Array.from(this.presetTargets.values());
 	}
 
+	// Id 0 is no item or spell: Wowhead has no tooltip for it, so it is never asked for one.
 	static async getItemIconData(itemId: number): Promise<IconData> {
+		if (itemId <= 0) return IconData.create();
 		const db = await Database.get();
 		const data = db.itemIcons[itemId];
 		if (!data?.icon) {
@@ -323,6 +325,7 @@ export class Database {
 	// A talent's rank and trait definition steer the wowhead LINK, not the icon: every rank of a
 	// talent is one spell with one icon, so they are no part of the lookup.
 	static async getSpellIconData(spellId: number): Promise<IconData> {
+		if (spellId <= 0) return IconData.create();
 		const db = await Database.get();
 		const data = db.spellIcons[spellId];
 		if (!data?.icon) {

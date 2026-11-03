@@ -659,7 +659,16 @@ export class Sim {
 			raid: this.getModifiedRaidProto(),
 			encounter: this.encounter.toProto(),
 		});
-		const result = await this.workerPool.computeStats(req);
+		// Every caller fires this and moves on, so a request that fails outright (the Go server drops the connection when
+		// the sim panics) is handled here rather than surfacing as an unhandled rejection. The stats stay as they were
+		// until the next change recomputes them.
+		let result: ComputeStatsResult;
+		try {
+			result = await this.workerPool.computeStats(req);
+		} catch (error) {
+			if (version === this.characterStatsVersion) console.warn('Character stats were not recomputed:', error);
+			return;
+		}
 		// Two recomputes can be in flight at once and they settle in any order, so a reply that has
 		// already been superseded must not write: it would overwrite newer stats with older ones.
 		if (version !== this.characterStatsVersion) return;

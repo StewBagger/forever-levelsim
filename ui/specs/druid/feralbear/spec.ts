@@ -17,6 +17,8 @@ export default defineSpec<Spec.SpecFeralBearDruid>({
 
 	className: 'feral-bear-druid-sim-ui',
 	cssScheme: PlayerClasses.getCssScheme(PlayerClasses.Druid),
+	// A druid learns Bear Form at level 10 (druid.FormLevel in sim/druid/forms.go), and the sim builds no bear without it.
+	minLevel: 10,
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
 	warnings: [],
