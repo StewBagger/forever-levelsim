@@ -5,15 +5,13 @@
 // so a build can be tested with a point taken out. A point is only added where the talent would not
 // itself be broken.
 
-import { CHARACTER_LEVEL } from '@sim/constants/mechanics';
 import { findBrokenTalents } from '@sim/talents/broken_talents';
 import type { TalentsConfig } from '@sim/talents/config';
 import type { TalentPoints } from '@sim/talents/talents_string';
 import { totalPointsSpent, withTalentPoints } from '@sim/talents/talents_string';
 
-// A character earns one talent point per level from 10 onwards, so the cap follows
-// CHARACTER_LEVEL: 51 at level 60.
-export const MAX_POINTS_PLAYER = CHARACTER_LEVEL - 9;
+// A character earns one talent point per level from 10 onwards: 51 at level 60, none below 10.
+export const maxTalentPoints = (level: number): number => Math.max(level - 9, 0);
 
 export const canSetPoints = <TalentsProto>(
 	config: TalentsConfig<TalentsProto>,
@@ -21,10 +19,11 @@ export const canSetPoints = <TalentsProto>(
 	treeIdx: number,
 	talentIdx: number,
 	newPoints: number,
+	maxPoints: number,
 ): boolean => {
 	const oldPoints = points[treeIdx][talentIdx];
 	if (newPoints <= oldPoints) return true;
-	if (totalPointsSpent(points) + (newPoints - oldPoints) > MAX_POINTS_PLAYER) return false;
+	if (totalPointsSpent(points) + (newPoints - oldPoints) > maxPoints) return false;
 
 	return !findBrokenTalents(config, withTalentPoints(points, treeIdx, talentIdx, newPoints))[treeIdx][talentIdx];
 };

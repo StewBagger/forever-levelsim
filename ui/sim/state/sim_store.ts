@@ -113,6 +113,7 @@ export interface PlayerSlice {
 	channelClipDelay: number;
 	inFrontOfTarget: boolean;
 	distanceFromTarget: number;
+	level: number;
 	// Only the skills not at the maximum for the level; a missing skill is at the maximum.
 	weaponSkills: Array<WeaponSkillValue>;
 	healingModel: HealingModel;
@@ -147,6 +148,7 @@ export const PLAYER_FIELDS = [
 	'channelClipDelay',
 	'inFrontOfTarget',
 	'distanceFromTarget',
+	'level',
 	'weaponSkills',
 	'healingModel',
 	'epWeights',

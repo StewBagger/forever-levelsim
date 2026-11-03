@@ -3,7 +3,7 @@ import { newTalentsConfig } from '@sim/talents/config';
 import { parseTalentsString } from '@sim/talents/talents_string';
 import { describe, expect, it } from 'vitest';
 
-import { canSetPoints } from './can_set_points';
+import { canSetPoints, maxTalentPoints } from './can_set_points';
 
 type Fake = Record<string, never>;
 
@@ -32,8 +32,8 @@ const GATED_TALENT = { idx: 8, location: { rowIdx: 2, colIdx: 0 } };
 const config: TalentsConfig<Fake> = newTalentsConfig<Fake>([tree('A', { [GATED_TALENT.idx]: ROOT_TALENT.location }), tree('B'), tree('C')]);
 
 const at = (talentsString: string) => parseTalentsString(config, talentsString);
-const can = (talentsString: string, treeIdx: number, talentIdx: number, newPoints: number) =>
-	canSetPoints(config, at(talentsString), treeIdx, talentIdx, newPoints);
+const can = (talentsString: string, treeIdx: number, talentIdx: number, newPoints: number, level = 60) =>
+	canSetPoints(config, at(talentsString), treeIdx, talentIdx, newPoints, maxTalentPoints(level));
 
 describe('canSetPoints — adding', () => {
 	it('allows a first point in row 0', () => {
@@ -64,9 +64,19 @@ describe('canSetPoints — adding', () => {
 		expect(can('5555555555-1', 0, 10, 1)).toBe(false);
 		expect(can('5555555555', 0, 10, 1)).toBe(true);
 	});
+
+	it('caps the points at the level less 9', () => {
+		expect(can('5', 0, 1, 1, 15)).toBe(true);
+		expect(can('51', 0, 1, 2, 15)).toBe(false);
+		expect(can('', 0, 0, 1, 9)).toBe(false);
+	});
 });
 
 describe('canSetPoints — removing', () => {
+	it('allows a decrement while more points are spent than the level gives', () => {
+		expect(can('5555', 0, 0, 4, 20)).toBe(true);
+	});
+
 	it('allows a plain decrement', () => {
 		expect(can('5', 0, 0, 4)).toBe(true);
 	});

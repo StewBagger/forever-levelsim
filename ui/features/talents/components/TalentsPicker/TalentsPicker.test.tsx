@@ -5,6 +5,7 @@ import type { TalentsConfig } from '@sim/talents/config';
 import { newTalentsConfig } from '@sim/talents/config';
 import { mageTalentsConfig } from '@sim/talents/mage';
 import { warriorTalentsConfig } from '@sim/talents/warrior';
+import { makeStubHost } from '@testing/storybook/fixtures/models';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -38,9 +39,8 @@ const setValue = vi.fn((_player: Player<any>, next: string) => {
 	talentsString = next;
 });
 
-const mount = (pickerTrees: TalentsConfig<any> = trees) => {
-	const player = { getTalentsString: () => talentsString } as unknown as Player<any>;
-	const host = { player } as never;
+const mount = (pickerTrees: TalentsConfig<any> = trees, level = 60) => {
+	const host = makeStubHost({ player: { getTalentsString: () => talentsString }, playerSlice: { level } });
 	const config = {
 		id: 'talents-picker',
 		trees: pickerTrees,
@@ -56,7 +56,7 @@ const mount = (pickerTrees: TalentsConfig<any> = trees) => {
 
 const talents = () => Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-testid="talent-picker-root"]'));
 const copyButton = () => document.querySelector<HTMLButtonElement>('[data-testid="talents-picker-actions"] button')!;
-const remaining = () => document.querySelector('label')!.textContent!.match(/\d+$/)?.[0];
+const remaining = () => document.querySelector('label')!.textContent!.match(/-?\d+$/)?.[0];
 
 beforeEach(() => {
 	vi.useFakeTimers();
@@ -106,6 +106,22 @@ describe('TalentsPicker container', () => {
 		const secondTree = talents().slice(5 * COLS);
 		fireEvent.mouseDown(secondTree[2], { button: 0 });
 		expect(setValue).toHaveBeenLastCalledWith(expect.anything(), '5555555555-1');
+	});
+
+	it("caps the points at the character's level less 9", () => {
+		talentsString = '551';
+		mount(trees, 20);
+		expect(remaining()).toBe('0');
+
+		fireEvent.mouseDown(talents()[3], { button: 0 });
+		expect(setValue).toHaveBeenLastCalledWith(expect.anything(), '551');
+	});
+
+	it('shows a spend past the level below zero, and keeps the points', () => {
+		talentsString = '5555';
+		mount(trees, 15);
+		expect(remaining()).toBe('-14');
+		expect(document.querySelector('label')!.hasAttribute('data-overspent')).toBe(true);
 	});
 });
 
@@ -174,5 +190,12 @@ describe('TalentsHeaderView', () => {
 	it('shows the points left to spend', () => {
 		render(<TalentsHeaderView pointsRemaining={36} getTalentsString={() => ''} />);
 		expect(document.querySelector('label')!.textContent!.match(/\d+$/)?.[0]).toBe('36');
+		expect(document.querySelector('label')!.hasAttribute('data-overspent')).toBe(false);
+	});
+
+	it('marks a spend past the level as over', () => {
+		render(<TalentsHeaderView pointsRemaining={-6} getTalentsString={() => ''} />);
+		expect(document.querySelector('label')!.textContent!.match(/-?\d+$/)?.[0]).toBe('-6');
+		expect(document.querySelector('label')!.hasAttribute('data-overspent')).toBe(true);
 	});
 });

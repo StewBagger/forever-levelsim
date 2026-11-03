@@ -1129,7 +1129,11 @@
 			"title": "Player",
 			"race": "Race",
 			"profession_1": "Profession 1",
-			"profession_2": "Profession 2"
+			"profession_2": "Profession 2",
+			"level": {
+				"label": "Level",
+				"tooltip": "The character's level, 1 to 60. Spell ranks, base stats, talent points and the gear on offer follow it. A target at the boss level, or at or 3 above the old level, moves with it."
+			}
 		},
 		"saved_encounters": {
 			"title": "Saved Encounters",

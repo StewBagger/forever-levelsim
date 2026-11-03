@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { StoryBoolean, StoryEnum, storyIcon, StoryIconToggle } from '@testing/storybook/fixtures/settings_reforge_bulk';
+import { StoryBoolean, StoryEnum, storyIcon, StoryIconToggle, StoryNumber } from '@testing/storybook/fixtures/settings_reforge_bulk';
 
 import { PlayerSettingsView } from './PlayerSettings';
 
@@ -25,13 +25,20 @@ const meta = {
 			<StoryIconToggle key="stance" icon={storyIcon('ability_racial_avatar', 'Berserker Stance', 'spell', 2458)} />,
 		],
 		race: <StoryEnum id="story-race" label="Race" values={RACES} />,
+		level: <StoryNumber id="story-level" label="Level" positive initial={60} />,
 		inputs: [<StoryBoolean key="start" id="story-start-in-combat" label="Start in combat" layout="inline" />],
 		professions: [
 			<StoryEnum key="p1" id="story-profession-1" label="Profession 1" values={PROFESSIONS} initial={2} />,
 			<StoryEnum key="p2" id="story-profession-2" label="Profession 2" values={PROFESSIONS} initial={4} />,
 		],
 	},
-	argTypes: { iconPickers: { control: false }, race: { control: false }, inputs: { control: false }, professions: { control: false } },
+	argTypes: {
+		iconPickers: { control: false },
+		race: { control: false },
+		level: { control: false },
+		inputs: { control: false },
+		professions: { control: false },
+	},
 } satisfies Meta<typeof PlayerSettingsView>;
 
 export default meta;

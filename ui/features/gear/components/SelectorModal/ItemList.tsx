@@ -148,6 +148,7 @@ export const ItemList = ({ tab, slot, equippedItem }: ItemListProps) => {
 	const filters = useStoreSubscribe(subscribeSimField(sim, 'filters'), () => sim.getFilters());
 	const phase = useSimStore('phase');
 	const race = usePlayerStore('race');
+	const level = usePlayerStore('level');
 	const faction = player.getFaction();
 	const showEPValues = useUiStore('showEPValues');
 
@@ -178,9 +179,10 @@ export const ItemList = ({ tab, slot, equippedItem }: ItemListProps) => {
 		// `player.filterEnchantData` reach `sim.getFilters()` internally, so a filter change has to
 		// rebuild this. The lint calls it unnecessary; deleting it leaves correctness resting on
 		// `isFavourited` happening to close over `filters` too. `race` is named for the same reason:
-		// the faction filter follows the race unless the user picked a faction.
+		// the faction filter follows the race unless the user picked a faction, and `level` because the character's level
+		// caps the required level filter.
 		// oxlint-disable-next-line react-hooks/exhaustive-deps
-	}, [itemData, player, sim, slot, label, phase, search, sortBy, sortDirection, computeEP, isFavourited, filters, race]);
+	}, [itemData, player, sim, slot, label, phase, search, sortBy, sortDirection, computeEP, isFavourited, filters, race, level]);
 
 	const showEPOptions = slotSortsByEP(slot);
 	const equipped = equippedToItem(equippedItem);

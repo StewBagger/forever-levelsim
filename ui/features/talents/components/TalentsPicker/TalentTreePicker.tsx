@@ -9,7 +9,7 @@ import { Icon } from '@ui-kit/Icon';
 import { Tooltip, tooltipAnchorProps } from '@ui-kit/Tooltip';
 import { useId, useMemo } from 'react';
 
-import { canSetPoints, MAX_POINTS_PLAYER } from '../../model/can_set_points';
+import { canSetPoints } from '../../model/can_set_points';
 import type { TalentGraph } from '../../model/tree_graph';
 import { TalentPicker } from './TalentPicker';
 import { TalentReqArrow } from './TalentReqArrow';
@@ -19,22 +19,24 @@ export interface TalentTreePickerProps<TalentsProto> {
 	graph: TalentGraph;
 	points: TalentPoints;
 	treeIdx: number;
+	// The points the character's level gives.
+	maxPoints: number;
 	onChange: (next: TalentPoints) => void;
 }
 
 const CELL = 'var(--talent-cell-size, 3.5rem)';
 
-export const TalentTreePicker = <TalentsProto,>({ config, graph, points, treeIdx, onChange }: TalentTreePickerProps<TalentsProto>) => {
+export const TalentTreePicker = <TalentsProto,>({ config, graph, points, treeIdx, maxPoints, onChange }: TalentTreePickerProps<TalentsProto>) => {
 	const resetTooltipId = useId();
 	const treeConfig = config[treeIdx];
 	const treeGraph = graph.trees[treeIdx];
 	const treePoints = points[treeIdx];
 	const spentInTree = treePointTotal(points, treeIdx);
-	const allPointsSpent = totalPointsSpent(points) >= MAX_POINTS_PLAYER;
+	const allPointsSpent = totalPointsSpent(points) >= maxPoints;
 
 	const canAdd = useMemo(
-		() => treeConfig.talents.map((_, idx) => canSetPoints(config, points, treeIdx, idx, treePoints[idx] + 1)),
-		[config, points, treeIdx, treeConfig, treePoints],
+		() => treeConfig.talents.map((_, idx) => canSetPoints(config, points, treeIdx, idx, treePoints[idx] + 1, maxPoints)),
+		[config, points, treeIdx, treeConfig, treePoints, maxPoints],
 	);
 	const broken = useMemo(() => findBrokenTalents(config, points)[treeIdx], [config, points, treeIdx]);
 
@@ -42,7 +44,7 @@ export const TalentTreePicker = <TalentsProto,>({ config, graph, points, treeIdx
 		const clamped = Math.min(treeConfig.talents[talentIdx].maxPoints, Math.max(0, newPoints));
 		// The change event fires even when the write was rejected; the facade's equality guard
 		// turns the unchanged points into a no-op write.
-		const accepted = canSetPoints(config, points, treeIdx, talentIdx, clamped);
+		const accepted = canSetPoints(config, points, treeIdx, talentIdx, clamped, maxPoints);
 		onChange(accepted ? withTalentPoints(points, treeIdx, talentIdx, clamped) : points);
 	};
 

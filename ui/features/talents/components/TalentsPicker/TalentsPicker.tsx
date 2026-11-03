@@ -2,6 +2,7 @@ import { useInput } from '@features/inputs/hooks/useInput';
 import type { InputConfig } from '@features/inputs/input';
 import i18n from '@i18n/config';
 import { usePlayer } from '@sim/context/SimHostContext';
+import { usePlayerStore } from '@sim/hooks/usePlayerStore';
 import type { Player } from '@sim/player/player';
 import type { TalentsConfig } from '@sim/talents/config';
 import type { TalentPoints } from '@sim/talents/talents_string';
@@ -11,7 +12,7 @@ import { Field } from '@ui-kit/Field';
 import { useWowheadTooltipRefresh } from '@ui-kit/hooks/useWowheadTooltipRefresh';
 import { useCallback, useEffect, useId, useMemo, useRef } from 'react';
 
-import { MAX_POINTS_PLAYER } from '../../model/can_set_points';
+import { maxTalentPoints } from '../../model/can_set_points';
 import { buildTalentGraph } from '../../model/tree_graph';
 import { TalentTreePicker } from './TalentTreePicker';
 
@@ -28,9 +29,10 @@ export interface TalentsHeaderViewProps {
 	getTalentsString: () => string;
 }
 
+// Below 0 when the talents spend more points than the level gives, which the sim refuses to run.
 export const TalentsHeaderView = ({ pointsRemaining, getTalentsString }: TalentsHeaderViewProps) => (
 	<div className="mb-1 flex w-full items-center">
-		<label>
+		<label className="data-overspent:font-bold data-overspent:text-danger" data-overspent={pointsRemaining < 0 || undefined}>
 			{i18n.t('talents_tab.points_remaining')}: {pointsRemaining}
 		</label>
 		<div className="ml-auto" data-testid="talents-picker-actions">
@@ -54,6 +56,7 @@ export const TalentsPicker = <TalentsProto,>({ config }: TalentsPickerProps<Tale
 	const player = usePlayer();
 	const fallbackId = useId();
 	const { value, setValue, hidden, disabled } = useInput(player, config);
+	const maxPoints = maxTalentPoints(usePlayerStore('level'));
 
 	const treesRef = useRef<HTMLDivElement>(null);
 
@@ -82,11 +85,19 @@ export const TalentsPicker = <TalentsProto,>({ config }: TalentsPickerProps<Tale
 			className={['col-span-full flex w-fit flex-row gap-section max-fhd:flex-col max-xl:m-auto max-md:w-full', config.extraClassNames]}
 			disabled={disabled}>
 			<div className="flex flex-col max-lg:w-full">
-				<TalentsHeaderView pointsRemaining={MAX_POINTS_PLAYER - totalPointsSpent(points)} getTalentsString={() => player.getTalentsString()} />
+				<TalentsHeaderView pointsRemaining={maxPoints - totalPointsSpent(points)} getTalentsString={() => player.getTalentsString()} />
 				<div className="flex-1 max-lg:-mx-page">
 					<div className="ui-talents-picker-trees" data-testid="talents-picker-trees" ref={treesRef}>
 						{config.trees.map((_, treeIdx) => (
-							<TalentTreePicker key={treeIdx} config={config.trees} graph={graph} points={points} treeIdx={treeIdx} onChange={onChange} />
+							<TalentTreePicker
+								key={treeIdx}
+								config={config.trees}
+								graph={graph}
+								points={points}
+								treeIdx={treeIdx}
+								maxPoints={maxPoints}
+								onChange={onChange}
+							/>
 						))}
 					</div>
 				</div>

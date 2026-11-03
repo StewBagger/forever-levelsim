@@ -1,4 +1,4 @@
-package cmd
+package levelsim
 
 import (
 	"fmt"
@@ -44,7 +44,7 @@ type gearCandidate struct {
 	item *core.Item
 }
 
-type gearPicker struct {
+type GearPicker struct {
 	level      int32
 	class      proto.Class
 	spec       proto.Spec
@@ -55,11 +55,11 @@ type gearPicker struct {
 
 var uiDatabase *proto.UIDatabase
 
-func newGearPicker(player *proto.Player, level int32) *gearPicker {
+func NewGearPicker(player *proto.Player, level int32) *GearPicker {
 	if uiDatabase == nil {
 		uiDatabase = database.Load()
 	}
-	p := &gearPicker{
+	p := &GearPicker{
 		level: level,
 		class: player.Class,
 		spec:  core.PlayerProtoToSpec(player),
@@ -94,7 +94,7 @@ func newGearPicker(player *proto.Player, level int32) *gearPicker {
 	return p
 }
 
-func (p *gearPicker) allowed(ui *proto.UIItem, raidZones map[int32]bool) bool {
+func (p *GearPicker) allowed(ui *proto.UIItem, raidZones map[int32]bool) bool {
 	if ui.Quality >= proto.ItemQuality_ItemQualityLegendary {
 		return false
 	}
@@ -152,7 +152,7 @@ func (p *gearPicker) allowed(ui *proto.UIItem, raidZones map[int32]bool) bool {
 }
 
 // The player's side, or Unknown for a race this table does not place.
-func (p *gearPicker) faction() proto.Faction {
+func (p *GearPicker) faction() proto.Faction {
 	switch {
 	case slices.Contains(hordeRaces, p.race):
 		return proto.Faction_Horde
@@ -169,7 +169,7 @@ func itemLevel(ui *proto.UIItem) int32 {
 	return 0
 }
 
-func (p *gearPicker) canEquip(item *core.Item) bool {
+func (p *GearPicker) canEquip(item *core.Item) bool {
 	switch item.Type {
 	case proto.ItemType_ItemTypeFinger, proto.ItemType_ItemTypeTrinket, proto.ItemType_ItemTypeNeck, proto.ItemType_ItemTypeBack:
 		return true
@@ -189,7 +189,7 @@ func (p *gearPicker) canEquip(item *core.Item) bool {
 	return len(armorTypes) > 0 && item.ArmorType <= armorTypes[0]
 }
 
-func (p *gearPicker) canDualWield() bool {
+func (p *GearPicker) canDualWield() bool {
 	if !core.SpecCanDualWieldCapabilities[p.spec] {
 		return false
 	}
@@ -198,22 +198,22 @@ func (p *gearPicker) canDualWield() bool {
 }
 
 // The value of an item to the run, by its EP.
-func itemEP(item *core.Item, ep map[string]float64, slot proto.ItemSlot) float64 {
+func itemEP(item *core.Item, ep *proto.UnitStats, slot proto.ItemSlot) float64 {
 	value := 0.0
 	for s := 0; s < int(stats.ProtoStatsLen); s++ {
 		if v := item.Stats[s]; v != 0 {
-			value += v * ep[proto.Stat(s).String()]
+			value += v * at(ep.GetStats(), s)
 		}
 	}
 	if item.WeaponDamageMax > 0 && item.SwingSpeed > 0 {
 		dps := (item.WeaponDamageMin + item.WeaponDamageMax) / 2 / item.SwingSpeed
 		switch {
 		case item.Type == proto.ItemType_ItemTypeRanged:
-			value += dps * ep[proto.PseudoStat_PseudoStatRangedDps.String()]
+			value += dps * at(ep.GetPseudoStats(), int(proto.PseudoStat_PseudoStatRangedDps))
 		case slot == proto.ItemSlot_ItemSlotOffHand:
-			value += dps * ep[proto.PseudoStat_PseudoStatOffHandDps.String()]
+			value += dps * at(ep.GetPseudoStats(), int(proto.PseudoStat_PseudoStatOffHandDps))
 		default:
-			value += dps * ep[proto.PseudoStat_PseudoStatMainHandDps.String()]
+			value += dps * at(ep.GetPseudoStats(), int(proto.PseudoStat_PseudoStatMainHandDps))
 		}
 	}
 	return value
@@ -221,7 +221,7 @@ func itemEP(item *core.Item, ep map[string]float64, slot proto.ItemSlot) float64
 
 // The best set for the EP: per slot the highest-valued item, two different ones in the paired slots
 // where an item is unique, and whichever of a two-hander or a main and off hand is worth more.
-func (p *gearPicker) pick(ep map[string]float64) *proto.EquipmentSpec {
+func (p *GearPicker) Pick(ep *proto.UnitStats) *proto.EquipmentSpec {
 	bySlot := map[proto.ItemSlot][]gearCandidate{}
 	for _, c := range p.candidates {
 		for _, slot := range core.EligibleSlotsForItem(c.item) {
@@ -296,7 +296,14 @@ func (p *gearPicker) pick(ep map[string]float64) *proto.EquipmentSpec {
 	return &proto.EquipmentSpec{Items: items}
 }
 
-func sameGear(a, b *proto.EquipmentSpec) bool {
+func at(values []float64, i int) float64 {
+	if i < len(values) {
+		return values[i]
+	}
+	return 0
+}
+
+func SameGear(a, b *proto.EquipmentSpec) bool {
 	if a == nil || b == nil || len(a.Items) != len(b.Items) {
 		return false
 	}
@@ -308,7 +315,7 @@ func sameGear(a, b *proto.EquipmentSpec) bool {
 	return true
 }
 
-func gearNames(e *proto.EquipmentSpec) []string {
+func GearNames(e *proto.EquipmentSpec) []string {
 	var names []string
 	for slot, spec := range e.Items {
 		if spec.GetId() == 0 {

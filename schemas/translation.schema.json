@@ -4054,10 +4054,23 @@
 						},
 						"profession_2": {
 							"type": "string"
+						},
+						"level": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"tooltip": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["label", "tooltip"]
 						}
 					},
 					"additionalProperties": false,
-					"required": ["title", "race", "profession_1", "profession_2"]
+					"required": ["title", "race", "profession_1", "profession_2", "level"]
 				},
 				"saved_encounters": {
 					"type": "object",

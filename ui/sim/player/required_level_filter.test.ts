@@ -20,7 +20,7 @@ describe('Player.filterItemData required level filter', () => {
 		const listed = () =>
 			player.filterItemData([LEVEL_40, LEVEL_60, QUEST_ILVL_60, QUEST_ILVL_34], item => item, ItemSlot.ItemSlotTrinket1).map(item => item.id);
 		const pick = (maxRequiredLevel: number) => sim.setFilters({ ...sim.getFilters(), maxRequiredLevel });
-		return { listed, pick };
+		return { listed, pick, player };
 	};
 
 	it('keeps every item until a level is set', async () => {
@@ -49,5 +49,17 @@ describe('Player.filterItemData required level filter', () => {
 		expect(listed()).toContain(5);
 		pick(28);
 		expect(listed()).not.toContain(5);
+	});
+
+	it("hides items above the character's level, or the filter's when that is lower", async () => {
+		const { listed, pick, player } = await setup();
+		player.setLevel(40);
+		expect(listed()).toEqual([2, 5]);
+
+		pick(29);
+		expect(listed()).toEqual([5]);
+
+		pick(50);
+		expect(listed()).toEqual([2, 5]);
 	});
 });

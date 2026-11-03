@@ -9,6 +9,7 @@ import {
 	translateTargetInputLabel,
 	translateTargetInputTooltip,
 } from '@i18n/localization';
+import { BOSS_LEVEL } from '@sim/constants/mechanics';
 import type { Encounter } from '@sim/raid/encounter';
 import { subscribeEncounterField } from '@sim/state/subscriptions';
 import { distinct } from '@sim/utils/collections';
@@ -122,7 +123,8 @@ export const aiConfig = ({ encounter, targetIndex, getTarget }: TargetFieldConte
 export const levelConfig = ({ encounter, targetIndex, getTarget }: TargetFieldContext): ChoiceFieldConfig<null> => ({
 	id: targetId(targetIndex, 'level'),
 	label: i18n.t('settings_tab.encounter.level'),
-	values: [63, 62, 61, 60].map(value => ({ name: String(value), value })),
+	// Every level from the boss level down, so a character below 60 can fight a target of its own level.
+	values: Array.from({ length: BOSS_LEVEL }, (_, i) => BOSS_LEVEL - i).map(value => ({ name: String(value), value })),
 	storeSubscribe: onTargets(encounter),
 	getValue: () => getTarget().level,
 	setValue: (_: null, newValue: number) => {

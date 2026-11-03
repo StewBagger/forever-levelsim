@@ -849,6 +849,34 @@ message StatWeightsResult {
 	UnitStats step_below = 9; // How far each stat's run below the baseline moved it, as a negative; 0 without such a run.
 	UnitStats step_above = 10; // How far each stat's run above the baseline moved it, in the stat's own unit; 0 for a stat without runs.
 }
+// The defaults a character of a level starts from: its spec's talents spent up to the level's
+// points, the best gear in slot for the level without raid gear, and the EP that gear was picked by.
+message LevelDefaultsRequest {
+	// The spec's setup as the site sims it; its talents are the full build the level's are taken from.
+	StatWeightsRequest stat_weights = 1;
+	int32 level = 2;
+}
+message LevelDefaultsResult {
+	string talents_string = 1;
+	EquipmentSpec equipment = 2;
+	StatWeightValues dps = 3;
+	// ExpectedStat's creature armor at the level, for a same-level target.
+	double target_armor = 4;
+	int32 rounds = 5;
+	ErrorOutcome error = 6;
+}
+
+// The best gear in slot for a level without raid gear, by the EP given.
+message BisGearRequest {
+	Player player = 1;
+	int32 level = 2;
+	UnitStats ep = 3;
+}
+message BisGearResult {
+	EquipmentSpec equipment = 1;
+	ErrorOutcome error = 2;
+}
+
 message StatWeightValues {
 	UnitStats weights = 1;
 	UnitStats weights_stdev = 2;

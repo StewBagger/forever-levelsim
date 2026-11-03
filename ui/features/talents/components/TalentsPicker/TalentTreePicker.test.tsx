@@ -64,7 +64,16 @@ const graph = buildTalentGraph(config);
 
 const tree = (talentsString: string, treeIdx = 0) => {
 	const onChange = vi.fn();
-	render(<TalentTreePicker config={config} graph={graph} points={parseTalentsString(config, talentsString)} treeIdx={treeIdx} onChange={onChange} />);
+	render(
+		<TalentTreePicker
+			config={config}
+			graph={graph}
+			points={parseTalentsString(config, talentsString)}
+			treeIdx={treeIdx}
+			maxPoints={51}
+			onChange={onChange}
+		/>,
+	);
 	return { onChange, written: () => serializeTalentsString(onChange.mock.calls.at(-1)![0]) };
 };
 
@@ -287,7 +296,7 @@ describe('TalentTreePicker touch', () => {
 describe('TalentTreePicker reset', () => {
 	it('zeroes its own tree and leaves the others alone', () => {
 		const onChange = vi.fn();
-		render(<TalentTreePicker config={config} graph={graph} points={parseTalentsString(config, '51-5-5')} treeIdx={0} onChange={onChange} />);
+		render(<TalentTreePicker config={config} graph={graph} points={parseTalentsString(config, '51-5-5')} treeIdx={0} maxPoints={51} onChange={onChange} />);
 		fireEvent.click(screen.getByTestId('talent-tree-reset'));
 		expect(serializeTalentsString(onChange.mock.calls.at(-1)![0])).toBe('-5-5');
 	});

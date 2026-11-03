@@ -1,4 +1,4 @@
-package cmd
+package levelsim
 
 import (
 	"testing"
@@ -16,8 +16,11 @@ func TestBisGearKeepsToTheLevel(t *testing.T) {
 	for _, ui := range database.Load().Items {
 		byID[ui.Id] = ui
 	}
-	p := newGearPicker(&proto.Player{Class: proto.Class_ClassHunter, Race: proto.Race_RaceOrc, Spec: &proto.Player_Hunter{Hunter: &proto.Hunter{}}}, level)
-	set := p.pick(map[string]float64{"StatAgility": 1, "StatStamina": 1, "PseudoStatRangedDps": 10, "PseudoStatMainHandDps": 1})
+	p := NewGearPicker(&proto.Player{Class: proto.Class_ClassHunter, Race: proto.Race_RaceOrc, Spec: &proto.Player_Hunter{Hunter: &proto.Hunter{}}}, level)
+	ep := &proto.UnitStats{Stats: make([]float64, len(proto.Stat_name)), PseudoStats: make([]float64, len(proto.PseudoStat_name))}
+	ep.Stats[proto.Stat_StatAgility], ep.Stats[proto.Stat_StatStamina] = 1, 1
+	ep.PseudoStats[proto.PseudoStat_PseudoStatRangedDps], ep.PseudoStats[proto.PseudoStat_PseudoStatMainHandDps] = 10, 1
+	set := p.Pick(ep)
 
 	worn := 0
 	for slot, spec := range set.Items {
@@ -42,9 +45,9 @@ func TestBisGearKeepsToTheLevel(t *testing.T) {
 		}
 	}
 	if worn < 14 {
-		t.Errorf("only %d slots filled: %v", worn, gearNames(set))
+		t.Errorf("only %d slots filled: %v", worn, GearNames(set))
 	}
 	if set.Items[proto.ItemSlot_ItemSlotTrinket1].GetId() == set.Items[proto.ItemSlot_ItemSlotTrinket2].GetId() {
-		t.Errorf("the same trinket twice: %v", gearNames(set))
+		t.Errorf("the same trinket twice: %v", GearNames(set))
 	}
 }

@@ -32,6 +32,7 @@ const defaultPlayerSlice = (): PlayerSlice => ({
 	channelClipDelay: 0,
 	inFrontOfTarget: false,
 	distanceFromTarget: 0,
+	level: 60,
 	weaponSkills: [],
 	healingModel: HealingModel.create(),
 	epWeights: new Stats(),

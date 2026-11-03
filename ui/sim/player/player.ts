@@ -405,6 +405,7 @@ export class Player<SpecType extends Spec> {
 			channelClipDelay: 0,
 			inFrontOfTarget: false,
 			distanceFromTarget: 0,
+			level: Mechanics.CHARACTER_LEVEL,
 			weaponSkills: [],
 			healingModel: HealingModel.create(),
 			epWeights: new Stats(),
@@ -1122,6 +1123,16 @@ export class Player<SpecType extends Spec> {
 		this.patch('distanceFromTarget', newDistanceFromTarget);
 	}
 
+	getLevel(): number {
+		return this.slice().level;
+	}
+
+	setLevel(newLevel: number) {
+		if (newLevel == this.getLevel()) return;
+
+		this.patch('level', newLevel);
+	}
+
 	getWeaponSkills(): Array<WeaponSkillValue> {
 		return this.slice().weaponSkills.map(entry => WeaponSkillValue.clone(entry));
 	}
@@ -1301,8 +1312,10 @@ export class Player<SpecType extends Spec> {
 			return itemData.filter(itemElem => filterFunc(getItemFunc(itemElem)));
 		};
 
-		if (filters.maxRequiredLevel != 0) {
-			itemData = filterItems(itemData, item => Player.requiredLevelOf(item) <= filters.maxRequiredLevel);
+		// The filter's level, or the character's when that is lower.
+		const maxRequiredLevel = Math.min(filters.maxRequiredLevel || Mechanics.CHARACTER_LEVEL, this.getLevel());
+		if (filters.maxRequiredLevel != 0 || maxRequiredLevel < Mechanics.CHARACTER_LEVEL) {
+			itemData = filterItems(itemData, item => Player.requiredLevelOf(item) <= maxRequiredLevel);
 		}
 		if (filters.minIlvl != 0) {
 			itemData = filterItems(itemData, item => (item.scalingOptions?.[0].ilvl || item.ilvl) >= filters.minIlvl);
@@ -1470,6 +1483,8 @@ export class Player<SpecType extends Spec> {
 				channelClipDelayMs: this.getChannelClipDelay(),
 				inFrontOfTarget: this.getInFrontOfTarget(),
 				distanceFromTarget: this.getDistanceFromTarget(),
+				// 0 is level 60, so a level 60 character's settings and links stay as they are.
+				level: this.getLevel() == Mechanics.CHARACTER_LEVEL ? 0 : this.getLevel(),
 				weaponSkills: this.getWeaponSkills(),
 				healingModel: this.getHealingModel(),
 			});
@@ -1522,6 +1537,7 @@ export class Player<SpecType extends Spec> {
 				this.setChannelClipDelay(proto.channelClipDelayMs);
 				this.setInFrontOfTarget(proto.inFrontOfTarget);
 				this.setDistanceFromTarget(proto.distanceFromTarget);
+				this.setLevel(proto.level || Mechanics.CHARACTER_LEVEL);
 				this.setWeaponSkills(proto.weaponSkills);
 				this.setHealingModel(proto.healingModel || HealingModel.create());
 			}
@@ -1553,6 +1569,7 @@ export class Player<SpecType extends Spec> {
 			);
 			this.setBonusStats(new Stats());
 			this.setWeaponSkills([]);
+			this.setLevel(Mechanics.CHARACTER_LEVEL);
 		});
 	}
 

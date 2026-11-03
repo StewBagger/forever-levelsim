@@ -30,3 +30,5 @@ export const Unspent: Story = {
 export const PartlySpent: Story = { args: { pointsRemaining: 15 } };
 
 export const AllSpent: Story = { args: { pointsRemaining: 0 } };
+
+export const OverSpent: Story = { args: { pointsRemaining: -6 } };

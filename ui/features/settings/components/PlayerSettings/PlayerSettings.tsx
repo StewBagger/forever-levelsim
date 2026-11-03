@@ -1,6 +1,7 @@
 import { ConnectedChoiceField } from '@features/inputs/components/ConnectedChoiceField';
 import { ConnectedIconInput } from '@features/inputs/components/ConnectedIconInput';
 import { ConnectedInput } from '@features/inputs/components/ConnectedInput';
+import { ConnectedNumberField } from '@features/inputs/components/ConnectedTextField';
 import type { IconInputConfig } from '@features/inputs/icon_inputs';
 import { usePlayer } from '@sim/context/SimHostContext';
 import type { Player } from '@sim/player/player';
@@ -9,16 +10,17 @@ import { FieldGrid } from '@ui-kit/FieldGrid';
 import { IconRow } from '@ui-kit/IconRow';
 import { type ReactNode, useMemo } from 'react';
 
-import { professionInput, raceInput } from './utils';
+import { levelInput, professionInput, raceInput } from './utils';
 
 export interface PlayerSettingsViewProps {
 	iconPickers: ReadonlyArray<ReactNode>;
 	race: ReactNode;
+	level: ReactNode;
 	inputs: ReadonlyArray<ReactNode>;
 	professions: ReadonlyArray<ReactNode>;
 }
 
-export const PlayerSettingsView = ({ iconPickers, race, inputs, professions }: PlayerSettingsViewProps) => (
+export const PlayerSettingsView = ({ iconPickers, race, level, inputs, professions }: PlayerSettingsViewProps) => (
 	<>
 		{iconPickers.length > 0 && (
 			<IconRow className="ui-player-icon-group" data-testid="player-icon-group">
@@ -26,6 +28,7 @@ export const PlayerSettingsView = ({ iconPickers, race, inputs, professions }: P
 			</IconRow>
 		)}
 		{race}
+		{level}
 		{inputs}
 		<FieldGrid>{professions}</FieldGrid>
 	</>
@@ -47,6 +50,7 @@ export const PlayerSettings = ({ iconInputs, inputs }: PlayerSettingsProps) => {
 				<ConnectedIconInput key={index} modObject={player} config={config} />
 			))}
 			race={<ConnectedChoiceField modObject={player} config={race} />}
+			level={<ConnectedNumberField modObject={player} config={levelInput} />}
 			inputs={inputs.map(config => (
 				<ConnectedInput key={config.id} config={config} />
 			))}

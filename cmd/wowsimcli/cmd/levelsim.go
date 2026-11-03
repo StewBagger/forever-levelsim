@@ -13,6 +13,7 @@ import (
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/proto"
 	"github.com/wowsims/forever/sim/core/stats"
+	"github.com/wowsims/forever/sim/levelsim"
 	"google.golang.org/protobuf/encoding/protojson"
 	googleProto "google.golang.org/protobuf/proto"
 )
@@ -219,29 +220,25 @@ func levelsimOne(run levelsimRun, iterations int32) (levelsimResult, error) {
 	switch run.Gear {
 	case "", "setup":
 	case "bis":
-		// Start from every weighed stat at 1 EP and weapon damage at 10, then alternate the set and
-		// the EP it is worn with until the set stops changing.
-		picker := newGearPicker(player, run.Level)
-		ep := map[string]float64{}
-		for _, s := range statsToWeigh {
-			ep[s.String()] = 1
+		res := levelsim.Defaults(&proto.LevelDefaultsRequest{Level: run.Level, StatWeights: &proto.StatWeightsRequest{
+			Player:             player,
+			RaidBuffs:          raidBuffs,
+			PartyBuffs:         partyBuffs,
+			Debuffs:            debuffs,
+			Encounter:          encounter,
+			SimOptions:         googleProto.Clone(simOptions).(*proto.SimOptions),
+			Tanks:              request.Raid.Tanks,
+			StatsToWeigh:       statsToWeigh,
+			PseudoStatsToWeigh: pseudoStatsToWeigh,
+			EpReferenceStat:    proto.Stat(ref),
+			HpsReferenceStat:   proto.Stat(ref),
+		}})
+		if res.Error != nil {
+			return levelsimResult{}, fmt.Errorf("%s", res.Error.Message)
 		}
-		for _, s := range pseudoStatsToWeigh {
-			ep[s.String()] = 10
-		}
-		var last *proto.EquipmentSpec
-		for gearRounds = 1; gearRounds <= 6; gearRounds++ {
-			set := picker.pick(ep)
-			if sameGear(set, last) {
-				break
-			}
-			player.Equipment, last = set, set
-			if dps, err = weigh(); err != nil {
-				return levelsimResult{}, err
-			}
-			ep = epOf(dps)
-		}
-		gear = gearNames(player.Equipment)
+		player.Equipment, player.TalentsString, dps = res.Equipment, res.TalentsString, res.Dps
+		gearRounds = int(res.Rounds)
+		gear = levelsim.GearNames(player.Equipment)
 	default:
 		return levelsimResult{}, fmt.Errorf("gear %q is neither setup nor bis", run.Gear)
 	}
@@ -264,7 +261,7 @@ func levelsimOne(run levelsimRun, iterations int32) (levelsimResult, error) {
 		Level:       run.Level,
 		TargetLevel: targetLevel,
 		TargetArmor: encounter.Targets[0].Stats[stats.Armor],
-		Talents:     run.Talents,
+		Talents:     player.TalentsString,
 		Setup:       run.Setup,
 		Solo:        !run.KeepBuffs,
 		Gear:        gear,
