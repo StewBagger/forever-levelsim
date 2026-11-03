@@ -19,7 +19,8 @@ const maxRoundIterations = 4000
 // Defaults gives a level's starting talents, BIS gear and EP for a spec's setup. The talents are the
 // setup's spent up to the level's points (TrimTalents); the target is a creature of the level, with
 // its ExpectedStat armor. The gear starts from every weighed stat at 1 EP and weapon damage at 10,
-// then the set and the EP it is worn with alternate until the set stops changing.
+// then the set and the EP it is worn with alternate until the set stops changing. Where the set could
+// dual wield or wear a two-hander, a sim of each settles it.
 func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResult) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -61,20 +62,48 @@ func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResul
 	var last *proto.EquipmentSpec
 	var dps *proto.StatWeightValues
 	rounds := int32(0)
+	weigh := func(set *proto.EquipmentSpec) *proto.ErrorOutcome {
+		rounds++
+		player.Equipment, last = set, set
+		sw := core.StatWeights(googleProto.Clone(swr).(*proto.StatWeightsRequest))
+		if sw.Error != nil {
+			return sw.Error
+		}
+		dps = sw.Dps
+		ep = dps.EpValues
+		return nil
+	}
 	for rounds < maxRounds {
 		set := picker.Pick(ep)
 		if SameGear(set, last) {
 			break
 		}
-		rounds++
-		player.Equipment, last = set, set
-		round := googleProto.Clone(swr).(*proto.StatWeightsRequest)
-		sw := core.StatWeights(round)
-		if sw.Error != nil {
-			return &proto.LevelDefaultsResult{Error: sw.Error}
+		if err := weigh(set); err != nil {
+			return &proto.LevelDefaultsResult{Error: err}
 		}
-		dps = sw.Dps
-		ep = dps.EpValues
+	}
+
+	// Dual wielding adds to every white swing's miss chance, which no EP sees, so a two-hander and a
+	// main and off hand pair are each simmed with the rest of the set, and the run keeps the higher
+	// DPS, with its own EP.
+	other := handsTwo
+	if handsWorn(last) == handsTwo {
+		other = handsOne
+	}
+	if alt := picker.pick(ep, other); !SameGear(alt, last) && handsWorn(alt) != handsWorn(last) && (dualWields(alt) || dualWields(last)) {
+		lastDps, err := simDps(swr, last)
+		if err != nil {
+			return &proto.LevelDefaultsResult{Error: err}
+		}
+		altDps, err := simDps(swr, alt)
+		if err != nil {
+			return &proto.LevelDefaultsResult{Error: err}
+		}
+		if altDps > lastDps {
+			if err := weigh(alt); err != nil {
+				return &proto.LevelDefaultsResult{Error: err}
+			}
+		}
 	}
 	return &proto.LevelDefaultsResult{
 		TalentsString: player.TalentsString,
@@ -85,12 +114,39 @@ func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResul
 	}
 }
 
-// BisGear is the best gear in slot for a level without raid gear by the EP given; it sims nothing.
+// The DPS of the stat weights request's player in a set, from a plain sim of the same request at its
+// iterations. Both sides of a comparison run on one seed, so they meet the same rolls.
+func simDps(swr *proto.StatWeightsRequest, set *proto.EquipmentSpec) (float64, *proto.ErrorOutcome) {
+	player := googleProto.Clone(swr.Player).(*proto.Player)
+	player.Equipment = set
+	raid := core.SinglePlayerRaidProto(player, swr.PartyBuffs, swr.RaidBuffs, swr.Debuffs)
+	raid.Tanks = swr.Tanks
+	options := googleProto.Clone(swr.SimOptions).(*proto.SimOptions)
+	if options.RandomSeed == 0 {
+		options.RandomSeed = 1
+	}
+	options.UseLabeledRands = true
+	result := core.RunRaidSim(&proto.RaidSimRequest{
+		Raid:       raid,
+		Encounter:  googleProto.Clone(swr.Encounter).(*proto.Encounter),
+		SimOptions: options,
+		Type:       proto.SimType_SimTypeIndividual,
+	})
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return result.RaidMetrics.Dps.Avg, nil
+}
+
+// BisGear is the best gear in slot for a level without raid gear by the EP given; it sims nothing, so
+// it keeps the weapons the player wears, a two-hander or a main and off hand, which Defaults chose by
+// sim, and weighs the two by EP only for a player with no weapon.
 func BisGear(req *proto.BisGearRequest) (result *proto.BisGearResult) {
 	defer func() {
 		if r := recover(); r != nil {
 			result = &proto.BisGearResult{Error: &proto.ErrorOutcome{Message: fmt.Sprint(r)}}
 		}
 	}()
-	return &proto.BisGearResult{Equipment: NewGearPicker(req.Player, core.PlayerLevel(&proto.Player{Level: req.Level})).Pick(req.Ep)}
+	picker := NewGearPicker(req.Player, core.PlayerLevel(&proto.Player{Level: req.Level}))
+	return &proto.BisGearResult{Equipment: picker.pick(req.Ep, handsWorn(req.Player.Equipment))}
 }

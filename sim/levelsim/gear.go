@@ -2,6 +2,7 @@ package levelsim
 
 import (
 	"fmt"
+	"regexp"
 	"slices"
 	"sort"
 	"sync"
@@ -37,6 +38,22 @@ var dualWieldLevels = map[proto.Class]int32{
 // How far an item's level may sit above the character's: a dungeon blue for its level is 5-10 above.
 const maxItemLevelAboveLevel = 10
 
+// The specs that tank. Their EP is the run's DPS EP, which values neither armor nor a shield, so their
+// set keeps to what a tank wears: the best armor type the class has learned, and a one-handed weapon
+// and a shield for a class that has shields.
+var tankSpecs = map[proto.Spec]bool{
+	proto.Spec_SpecProtectionWarrior: true,
+	proto.Spec_SpecProtectionPaladin: true,
+	proto.Spec_SpecFeralBearDruid:    true,
+}
+
+// Names the database carries for items that are not in the game: "DNT HEAD", "Template Item".
+var placeholderName = regexp.MustCompile(`\b(DNT|PH|Test|TEST|Deprecated|DEPRECATED|Template)\b`)
+
+// The lowest required level of an epic with a source: the level 40 bracers the database sells for
+// reputation. A source-less epic below it is a placeholder copy of a raid item.
+const minEpicRequiredLevel = 40
+
 var hordeRaces = []proto.Race{proto.Race_RaceOrc, proto.Race_RaceTauren, proto.Race_RaceTroll, proto.Race_RaceUndead, proto.Race_RaceBloodElf}
 var allianceRaces = []proto.Race{proto.Race_RaceHuman, proto.Race_RaceDwarf, proto.Race_RaceGnome, proto.Race_RaceNightElf}
 
@@ -51,8 +68,18 @@ type GearPicker struct {
 	spec       proto.Spec
 	race       proto.Race
 	profs      []proto.Profession
+	tank       bool
 	candidates []gearCandidate
 }
+
+// The weapons a set is picked with.
+type hands int
+
+const (
+	handsByEP hands = iota // whichever of a two-hander or a main and off hand the EP values more
+	handsTwo               // a two-hander
+	handsOne               // a one-handed main hand and an off hand
+)
 
 var (
 	uiDatabase     *proto.UIDatabase
@@ -77,6 +104,7 @@ func NewGearPicker(player *proto.Player, level int32) *GearPicker {
 		race:  player.Race,
 		profs: []proto.Profession{player.Profession1, player.Profession2},
 	}
+	p.tank = tankSpecs[p.spec]
 
 	// A raid is any zone a raid-difficulty drop comes from.
 	raidZones := map[int32]bool{}
@@ -106,12 +134,18 @@ func NewGearPicker(player *proto.Player, level int32) *GearPicker {
 }
 
 func (p *GearPicker) allowed(ui *proto.UIItem, raidZones map[int32]bool) bool {
-	if ui.Quality >= proto.ItemQuality_ItemQualityLegendary {
+	if ui.Quality >= proto.ItemQuality_ItemQualityLegendary || placeholderName.MatchString(ui.Name) {
+		return false
+	}
+	if len(ui.Sources) == 0 && !plausibleWithoutSource(ui) {
 		return false
 	}
 	// An item with no required level is judged by its item level, so an unrestricted item made for
-	// level 60 does not reach a level 20 set.
-	if ui.ReqLvl > p.level || (ui.ReqLvl == 0 && itemLevel(ui) > p.level) {
+	// level 60 does not reach a level 20 set. So is a source-less item whose item level sits more than
+	// maxItemLevelAboveLevel above its required level: the row's required level is not the one the
+	// item is had at (Elderwild Construction Hammer: required level 1, item level 60).
+	judgedByItemLevel := ui.ReqLvl == 0 || (len(ui.Sources) == 0 && itemLevel(ui) > ui.ReqLvl+maxItemLevelAboveLevel)
+	if ui.ReqLvl > p.level || (judgedByItemLevel && itemLevel(ui) > p.level) {
 		return false
 	}
 	// An item far above the level it can be equipped at is one whose stats the database holds at a
@@ -162,6 +196,25 @@ func (p *GearPicker) allowed(ui *proto.UIItem, raidZones map[int32]bool) bool {
 	return false
 }
 
+// Whether an item the database holds no source for can be a real item. Of the 892 equippable
+// source-less rows, most are world drops and quest rewards the database lost the source of (Ogremind
+// Ring, Hammer of the Northern Wind), at an item level 5 above their required level like any other.
+// The rest are not items a character gets:
+//   - 76 at item level 1 or none: the "Restored" scaling set, the "Hidden" transmog slots, the "Gilded
+//     Blademaster's" set and costumes, whose stats are a placeholder's (Restored Mail Shoulderguards: 29
+//     armor and nothing else).
+//   - 7 epics at required level 1, item level 10 with Molten Core names (Earthshaker, Band of Sulfuras):
+//     no epic with a source requires less than minEpicRequiredLevel.
+//
+// A source-less item with a required level far below its item level is kept, but judged by its item
+// level (allowed).
+func plausibleWithoutSource(ui *proto.UIItem) bool {
+	if itemLevel(ui) <= 1 {
+		return false
+	}
+	return ui.Quality < proto.ItemQuality_ItemQualityEpic || ui.ReqLvl >= minEpicRequiredLevel
+}
+
 // The player's side, or Unknown for a race this table does not place.
 func (p *GearPicker) faction() proto.Faction {
 	switch {
@@ -200,6 +253,22 @@ func (p *GearPicker) canEquip(item *core.Item) bool {
 	return len(armorTypes) > 0 && item.ArmorType <= armorTypes[0]
 }
 
+// The best armor type the class has learned at the level: plate for a warrior from 40, mail before.
+func (p *GearPicker) bestArmorType() proto.ArmorType {
+	for _, armorType := range core.ClassArmorTypeCapabilities[p.class] {
+		if learnedAt, ok := armorTypeLevels[p.class][armorType]; !ok || p.level >= learnedAt {
+			return armorType
+		}
+	}
+	return proto.ArmorType_ArmorTypeUnknown
+}
+
+// Whether the run tanks with a shield: a tank of a class that has shields.
+func (p *GearPicker) shieldTank() bool {
+	_, hasShields := core.ClassWeaponTypeCapabilities[p.class][proto.WeaponType_WeaponTypeShield]
+	return p.tank && hasShields
+}
+
 func (p *GearPicker) canDualWield() bool {
 	if !core.SpecCanDualWieldCapabilities[p.spec] {
 		return false
@@ -230,9 +299,16 @@ func itemEP(item *core.Item, ep *proto.UnitStats, slot proto.ItemSlot) float64 {
 	return value
 }
 
-// The best set for the EP: per slot the highest-valued item, two different ones in the paired slots
-// where an item is unique, and whichever of a two-hander or a main and off hand is worth more.
+// The best set for the EP: per slot the highest-valued item, and whichever of a two-hander or a main
+// and off hand is worth more.
 func (p *GearPicker) Pick(ep *proto.UnitStats) *proto.EquipmentSpec {
+	return p.pick(ep, handsByEP)
+}
+
+// The best set for the EP with the weapons given. A tank wears the best armor type it has learned
+// in every armor slot that has one, and a shield tank a one-handed weapon and a shield whatever the
+// weapons asked.
+func (p *GearPicker) pick(ep *proto.UnitStats, weapons hands) *proto.EquipmentSpec {
 	bySlot := map[proto.ItemSlot][]gearCandidate{}
 	for _, c := range p.candidates {
 		for _, slot := range core.EligibleSlotsForItem(c.item) {
@@ -243,20 +319,35 @@ func (p *GearPicker) Pick(ep *proto.UnitStats) *proto.EquipmentSpec {
 			bySlot[slot] = append(bySlot[slot], c)
 		}
 	}
-	best := func(slot proto.ItemSlot, exclude int32, filter func(*core.Item) bool) (gearCandidate, float64) {
+	for _, cands := range bySlot {
+		sort.Slice(cands, func(i, j int) bool { return cands[i].ui.Id < cands[j].ui.Id })
+	}
+	// The highest-valued item the filter keeps, of positive value. Filling, the slot takes the best
+	// there is even at no value, the higher item level first: an empty paired slot is not a set the
+	// batch sim can group.
+	best := func(slot proto.ItemSlot, filter func(*core.Item) bool, fill bool) (gearCandidate, float64) {
 		var pick gearCandidate
 		top := 0.0
-		cands := bySlot[slot]
-		sort.Slice(cands, func(i, j int) bool { return cands[i].ui.Id < cands[j].ui.Id })
-		for _, c := range cands {
-			if c.ui.Id == exclude || (filter != nil && !filter(c.item)) {
+		for _, c := range bySlot[slot] {
+			if filter != nil && !filter(c.item) {
 				continue
 			}
-			if v := itemEP(c.item, ep, slot); v > top {
-				pick, top = c, v
+			v := itemEP(c.item, ep, slot)
+			switch {
+			case pick.ui == nil:
+				if v <= 0 && !fill {
+					continue
+				}
+			case v < top, v == top && (!fill || itemLevel(c.ui) <= itemLevel(pick.ui)):
+				continue
 			}
+			pick, top = c, v
 		}
 		return pick, top
+	}
+	armorType := p.bestArmorType()
+	wearable := func(item *core.Item) bool {
+		return !p.tank || item.ArmorType == proto.ArmorType_ArmorTypeUnknown || item.Type == proto.ItemType_ItemTypeBack || item.ArmorType == armorType
 	}
 
 	items := make([]*proto.ItemSpec, len(proto.ItemSlot_name))
@@ -269,30 +360,52 @@ func (p *GearPicker) Pick(ep *proto.UnitStats) *proto.EquipmentSpec {
 		switch slot {
 		case proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand:
 			continue
+		case proto.ItemSlot_ItemSlotFinger1, proto.ItemSlot_ItemSlotTrinket1:
+			c, _ := best(slot, nil, true)
+			set(slot, c)
 		case proto.ItemSlot_ItemSlotFinger2, proto.ItemSlot_ItemSlotTrinket2:
-			// A second copy is taken only of a ring the database does not mark unique; a trinket
-			// is never doubled, since nearly every one is unique-equipped in game whatever the row says.
-			first := items[slot-1]
-			exclude := int32(0)
-			if first != nil && (slot == proto.ItemSlot_ItemSlotTrinket2 || core.GetItemByID(first.Id).Unique) {
-				exclude = first.Id
-			}
-			c, _ := best(slot, exclude, nil)
+			// A trinket is never doubled, since nearly every one is unique-equipped in game whatever
+			// the row says.
+			c, _ := best(slot, pairedWith(items[slot-1], slot == proto.ItemSlot_ItemSlotTrinket2), true)
 			set(slot, c)
 		default:
-			c, _ := best(slot, 0, nil)
+			c, _ := best(slot, wearable, false)
+			if c.ui == nil && p.tank {
+				// An item of the armor type the EP gives no value still beats one of another type;
+				// with none for the slot, the slot takes the best of any.
+				if c, _ = best(slot, wearable, true); c.ui == nil {
+					c, _ = best(slot, nil, false)
+				}
+			}
 			set(slot, c)
 		}
 	}
 
-	twoHander, twoHandValue := best(proto.ItemSlot_ItemSlotMainHand, 0, func(i *core.Item) bool { return i.HandType == proto.HandType_HandTypeTwoHand })
-	mainHand, mainValue := best(proto.ItemSlot_ItemSlotMainHand, 0, func(i *core.Item) bool { return i.HandType != proto.HandType_HandTypeTwoHand })
-	exclude := int32(0)
-	if mainHand.item != nil && mainHand.item.Unique {
-		exclude = mainHand.ui.Id
+	shield := p.shieldTank()
+	if shield {
+		weapons = handsOne
 	}
-	offHand, offValue := best(proto.ItemSlot_ItemSlotOffHand, exclude, nil)
-	if twoHandValue > mainValue+offValue {
+	twoHander, twoHandValue := best(proto.ItemSlot_ItemSlotMainHand, func(i *core.Item) bool { return i.HandType == proto.HandType_HandTypeTwoHand }, false)
+	mainHand, mainValue := best(proto.ItemSlot_ItemSlotMainHand, func(i *core.Item) bool { return i.HandType != proto.HandType_HandTypeTwoHand }, false)
+	var mainSpec *proto.ItemSpec
+	if mainHand.ui != nil {
+		mainSpec = &proto.ItemSpec{Id: mainHand.ui.Id}
+	}
+	offFilter := pairedWith(mainSpec, false)
+	if shield {
+		offFilter = func(i *core.Item) bool {
+			return i.WeaponType == proto.WeaponType_WeaponTypeShield && pairedWith(mainSpec, false)(i)
+		}
+	}
+	offHand, offValue := best(proto.ItemSlot_ItemSlotOffHand, offFilter, shield)
+	useTwoHander := twoHandValue > mainValue+offValue
+	switch weapons {
+	case handsTwo:
+		useTwoHander = twoHander.ui != nil
+	case handsOne:
+		useTwoHander = mainHand.ui == nil
+	}
+	if useTwoHander {
 		set(proto.ItemSlot_ItemSlotMainHand, twoHander)
 	} else {
 		set(proto.ItemSlot_ItemSlotMainHand, mainHand)
@@ -305,6 +418,47 @@ func (p *GearPicker) Pick(ep *proto.UnitStats) *proto.EquipmentSpec {
 		}
 	}
 	return &proto.EquipmentSpec{Items: items}
+}
+
+// What the other slot of a pair may hold beside the item worn in one: not a second copy of a unique
+// item, nor another item of its limit category (the two Runes of Perfection share one, and the game
+// equips one at a time).
+func pairedWith(worn *proto.ItemSpec, unique bool) func(*core.Item) bool {
+	if worn.GetId() == 0 {
+		return nil
+	}
+	first := core.GetItemByID(worn.Id)
+	return func(item *core.Item) bool {
+		if item.ID == first.ID && (unique || first.Unique) {
+			return false
+		}
+		return first.LimitCategory == 0 || item.LimitCategory != first.LimitCategory
+	}
+}
+
+// The weapons a set wears: a two-hander, a main hand with or without an off hand, or none.
+func handsWorn(e *proto.EquipmentSpec) hands {
+	if e == nil || len(e.Items) <= int(proto.ItemSlot_ItemSlotMainHand) {
+		return handsByEP
+	}
+	mainHand := core.GetItemByID(e.Items[proto.ItemSlot_ItemSlotMainHand].GetId())
+	switch {
+	case mainHand == nil:
+		return handsByEP
+	case mainHand.HandType == proto.HandType_HandTypeTwoHand:
+		return handsTwo
+	}
+	return handsOne
+}
+
+// Whether a set holds a weapon in each hand.
+func dualWields(e *proto.EquipmentSpec) bool {
+	if e == nil || len(e.Items) <= int(proto.ItemSlot_ItemSlotOffHand) {
+		return false
+	}
+	offHand := core.GetItemByID(e.Items[proto.ItemSlot_ItemSlotOffHand].GetId())
+	return offHand != nil && offHand.Type == proto.ItemType_ItemTypeWeapon &&
+		offHand.WeaponType != proto.WeaponType_WeaponTypeShield && offHand.WeaponType != proto.WeaponType_WeaponTypeOffHand
 }
 
 func at(values []float64, i int) float64 {
