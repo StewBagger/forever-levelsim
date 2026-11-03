@@ -17,7 +17,7 @@ describe('LandingHero', () => {
 		render(<LandingHero />);
 		expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Forever Simulations');
 		const blurb = document.getElementById('description');
-		expect(blurb?.textContent).toMatch(/^WoWSims is a fan-made open-source project/);
+		expect(blurb?.textContent).toMatch(/^Null Sims is a fan-made fork of WoWSims \(MIT\)/);
 		expect(blurb?.textContent).not.toMatch(/<\w+>/);
 	});
 });

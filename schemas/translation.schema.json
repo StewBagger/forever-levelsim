@@ -1607,6 +1607,9 @@
 						"details": {
 							"type": "string"
 						},
+						"based_on": {
+							"type": "string"
+						},
 						"presets": {
 							"type": "string"
 						},
@@ -1615,7 +1618,7 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["game_version", "built", "commit_link", "sim_build", "changed", "details", "presets", "engine"]
+					"required": ["game_version", "built", "commit_link", "sim_build", "changed", "details", "based_on", "presets", "engine"]
 				}
 			},
 			"additionalProperties": false,

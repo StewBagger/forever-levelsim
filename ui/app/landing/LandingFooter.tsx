@@ -1,5 +1,5 @@
 import i18n from '@i18n/config';
-import { ADDON_URL, DISCORD_URL, GITHUB_ORG_URL, PATREON_URL } from '@sim/constants/other';
+import { ADDON_URL, NULL_SIMS_REPO_URL } from '@sim/constants/other';
 import { Button } from '@ui-kit/Button';
 import { useEffect, useState } from 'react';
 
@@ -7,10 +7,8 @@ import { fetchFooterContent, type FooterContent } from './footer_content';
 import { LandingBrand } from './LandingBrand';
 
 const SOCIAL_LINKS = [
-	{ href: DISCORD_URL, label: 'landing.header.discord' },
-	{ href: GITHUB_ORG_URL, label: 'landing.header.github' },
+	{ href: NULL_SIMS_REPO_URL, label: 'landing.header.github' },
 	{ href: ADDON_URL, label: 'landing.footer.addon' },
-	{ href: PATREON_URL, label: 'landing.footer.patreon' },
 ] as const;
 
 const FooterGroup = ({ id, title, split, children }: { id: string; title: string; split?: boolean; children: React.ReactNode }) => (

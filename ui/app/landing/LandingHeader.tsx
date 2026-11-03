@@ -1,5 +1,5 @@
 import i18n from '@i18n/config';
-import { ADDON_URL, DISCORD_URL, GITHUB_ORG_URL, PATREON_URL } from '@sim/constants/other';
+import { ADDON_URL, NULL_SIMS_REPO_URL } from '@sim/constants/other';
 import { Button } from '@ui-kit/Button';
 import { Icon } from '@ui-kit/Icon';
 import clsx from 'clsx';
@@ -44,16 +44,7 @@ export const LandingHeader = () => {
 						<div className="flex flex-col max-md:relative max-md:items-start md:flex-row md:items-center md:gap-6" data-testid="navbar-nav">
 							{toggler('xmark')}
 							<Button
-								href={DISCORD_URL}
-								target="_blank"
-								variant="unstyled"
-								title={i18n.t('landing.actions.discord')}
-								className="ui-landing-nav-link">
-								<Icon name="discord" style="brands" size="lg" className="mr-2" />
-								<strong>{i18n.t('landing.header.discord')}</strong>
-							</Button>
-							<Button
-								href={GITHUB_ORG_URL}
+								href={NULL_SIMS_REPO_URL}
 								target="_blank"
 								variant="unstyled"
 								title={i18n.t('landing.actions.github')}
@@ -63,9 +54,6 @@ export const LandingHeader = () => {
 							</Button>
 							<Button href={ADDON_URL} target="_blank" variant="unstyled" title={i18n.t('landing.header.addon')} className="ui-landing-nav-badge">
 								<img className="h-landing-badge" src="/forever/assets/img/curseforge_install.png" alt={i18n.t('landing.header.addon')} />
-							</Button>
-							<Button href={PATREON_URL} target="_blank" variant="unstyled" className="ui-landing-nav-badge">
-								<img className="h-landing-badge" src="/forever/assets/img/patreon_become_a_patron.png" alt={i18n.t('landing.header.patreon')} />
 							</Button>
 							<LandingLanguageMenu triggerClassName="px-0 max-md:py-2" />
 						</div>

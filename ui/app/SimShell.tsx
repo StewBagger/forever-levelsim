@@ -1,12 +1,16 @@
 import { CharacterStats } from '@features/character-stats';
 import { SimWarnings } from '@features/results/components/SimResultsPanel';
+import i18n from '@i18n/config';
+import { REPO_URL } from '@sim/constants/other';
 import { useSimStatus } from '@sim/hooks/useSimStatus';
 import type { PlayerSpec } from '@sim/player/player_spec';
 import type { Sim } from '@sim/sim';
+import { Button } from '@ui-kit/Button';
 import { StickyHeaderContext } from '@ui-kit/hooks/useStickyToolbar';
 import { ToastArea, toastManager } from '@ui-kit/Toast';
 import clsx from 'clsx';
 import { type ReactNode, type RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Trans } from 'react-i18next';
 
 import { ForeverNotice } from './ForeverNotice';
 import { SimTitleDropdown } from './header/SimTitleDropdown';
@@ -86,7 +90,18 @@ export const SimShell = ({ domRef, host, sim, className, spec, noticeText, known
 									{host && <SimWarnings warnings={host.warnings} ready={simReady} className="my-auto" />}
 									{host && <CharacterStats className="mt-auto" />}
 								</div>
-								{host && <SpecReleaseInfo spec={spec} className="border-t border-border px-sidebar py-2 text-xs text-muted" />}
+								{host && (
+									<div className="border-t border-border px-sidebar py-2 text-xs text-muted">
+										<SpecReleaseInfo spec={spec} />
+										<p className="m-0 mt-1" data-testid="upstream-credit">
+											<Trans
+												i18n={i18n}
+												i18nKey="common.release_info.based_on"
+												components={{ upstream: <Button href={REPO_URL} target="_blank" variant="link" size="none" /> }}
+											/>
+										</p>
+									</div>
+								)}
 							</aside>
 							<div
 								className="z-1 mx-auto flex w-full min-w-[calc(275px+1vw)] flex-4 flex-col pt-0 pr-page pb-page pl-page max-lg:min-h-auto"

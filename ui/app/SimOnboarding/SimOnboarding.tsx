@@ -2,7 +2,7 @@ import { useActivateTab } from '@features/hooks/useActivateTab';
 import { applicableSteps, OnboardingOutlet, OnboardingTour, type SimulationState, type TourEnd, type TourRun, type TourStep } from '@features/onboarding';
 import { ResultsPanelStage } from '@features/results/components/SimResultsPanel/results_panel_store';
 import i18n from '@i18n/config';
-import { ADDON_URL, DISCORD_URL } from '@sim/constants/other';
+import { ADDON_URL, NULL_SIMS_ISSUES_URL } from '@sim/constants/other';
 import { isDevMode } from '@sim/utils/env';
 import { Button } from '@ui-kit/Button';
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
@@ -29,12 +29,12 @@ export const SimOnboarding = ({ host, simReady }: SimOnboardingProps) => {
 	return <OnboardingOutlet ready={simReady && !!host} autoOpen={!isDevMode()} renderTour={renderTour} />;
 };
 
-const LOGO = '/forever/assets/img/WoW-Simulator-Icon.png';
+const LOGO = '/forever/assets/img/null-sims-emblem.webp';
 
-// The links a card's words can carry, as `<addon>…</addon>` and `<discord>…</discord>`.
+// The links a card's words can carry, as `<addon>…</addon>` and `<issues>…</issues>`.
 const LINKS = {
 	addon: <Button href={ADDON_URL} target="_blank" variant="link" size="none" />,
-	discord: <Button href={DISCORD_URL} target="_blank" variant="link" size="none" />,
+	issues: <Button href={NULL_SIMS_ISSUES_URL} target="_blank" variant="link" size="none" />,
 };
 
 const text = (step: TourStep<SimTourContext>) => ({

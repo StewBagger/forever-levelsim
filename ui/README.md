@@ -308,10 +308,9 @@ A spec has no `sim.ts` or `index.ts` of its own. Adding a spec takes three steps
    the single source of launch status, which the sim dropdown and the landing page read.
    `ui/app/landing/` renders the landing page's sim links from `PlayerSpecs` with no hand-written
    list, and a class row's badge rolls up its specs' badges (`landing_classes.ts`).
-3. A theme block in `ui/styles/theme/specs.css`. A spec's `--theme-color` is shared across its class,
-   but its background image is its own (`dps-warrior` and `protection-warrior` use different files).
-   The file therefore has two parts: `--theme-color`/`--theme-color-foreground` in selector lists
-   grouped by class, then one `--theme-background-image` rule per spec. A new spec needs both.
+3. A `--theme-background-image` rule in `ui/styles/theme/specs.css`. Every spec shares the one Null
+   Sims accent that the file's `.sim-ui` block sets, but its background image is its own
+   (`dps-warrior` and `protection-warrior` use different files).
 
 The page itself is not one of the steps: there is no per-spec `index.html`, in the source tree or
 anywhere else. `ui/index_template.html` is the one spec page, and `tools/vite/spec_pages.mts`

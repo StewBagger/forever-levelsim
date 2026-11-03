@@ -51,8 +51,8 @@ Adding a spec is three edits:
    `ui/sim/player/specs/index.ts`. That field is the only record of launch status: the spec page's
    `ui/app/header/SimTitleDropdown/` and the landing page's class menu (`ui/app/landing/landing_classes.ts`) both read
    it from `PlayerSpecs`.
-3. A theme block in `ui/styles/theme/specs.css`, in both halves: the class-grouped `--theme-color` lists and the
-   per-spec `--theme-background-image` rule (`ui/STYLING.md` §1).
+3. A `--theme-background-image` rule in `ui/styles/theme/specs.css`; the accent is the one Null Sims palette for
+   every spec (`ui/STYLING.md` §1).
 
 `tools/vite/spec_pages.mts` globs `ui/specs/*/*/spec.ts(x)`, so the page appears at `/forever/<class>/<spec>/` with no
 build-config edit and no HTML file.

@@ -1,74 +1,13 @@
 .sim-ui {
-	--color-primary: var(--theme-color, var(--color-blue));
-	--color-primary-foreground: var(--theme-color-foreground, var(--color-white));
+	--color-primary: var(--color-null-phosphor);
+	--color-primary-foreground: var(--color-null-phosphor-ink);
 	--color-primary-disabled-foreground: var(--color-primary-foreground);
-	--theme-background-color: color-mix(in srgb, var(--color-primary) 10%, var(--color-black));
+	--theme-background-color: var(--color-background);
 	--theme-background-opacity: 0.95;
 	--theme-background-image: linear-gradient(var(--color-black), var(--color-black));
 	--color-sim-backdrop: color-mix(in srgb, var(--theme-background-color) calc(var(--theme-background-opacity) * 100%), transparent);
 	--form-check-box-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
 	--form-check-radio-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23000'/%3e%3c/svg%3e");
-}
-
-.balance-druid-sim-ui,
-.feral-bear-druid-sim-ui,
-.feral-druid-sim-ui,
-.restoration-druid-sim-ui {
-	--theme-color: var(--color-class-druid);
-	--theme-color-foreground: var(--color-class-druid-foreground);
-}
-
-.hunter-sim-ui {
-	--theme-color: var(--color-class-hunter);
-	--theme-color-foreground: var(--color-class-hunter-foreground);
-}
-
-.mage-sim-ui {
-	--theme-color: var(--color-class-mage);
-	--theme-color-foreground: var(--color-class-mage-foreground);
-}
-
-.holy-paladin-sim-ui,
-.protection-paladin-sim-ui,
-.retribution-paladin-sim-ui {
-	--theme-color: var(--color-class-paladin);
-	--theme-color-foreground: var(--color-class-paladin-foreground);
-}
-
-.healer-priest-sim-ui,
-.priest-sim-ui {
-	--theme-color: var(--color-class-priest);
-	--theme-color-foreground: var(--color-class-priest-foreground);
-}
-
-.rogue-sim-ui {
-	--theme-color: var(--color-class-rogue);
-	--theme-color-foreground: var(--color-class-rogue-foreground);
-}
-
-.elemental-shaman-sim-ui,
-.enhancement-shaman-sim-ui,
-.restoration-shaman-sim-ui {
-	--theme-color: var(--color-class-shaman);
-	--theme-color-foreground: var(--color-class-shaman-foreground);
-}
-
-.warlock-sim-ui {
-	--theme-color: var(--color-class-warlock);
-	--theme-color-foreground: var(--color-class-warlock-foreground);
-}
-
-.dps-warrior-sim-ui,
-.protection-warrior-sim-ui {
-	--theme-color: var(--color-class-warrior);
-	--theme-color-foreground: var(--color-class-warrior-foreground);
-}
-
-.elemental-shaman-sim-ui,
-.enhancement-shaman-sim-ui,
-.restoration-shaman-sim-ui {
-	--form-check-box-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
-	--form-check-radio-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e");
 }
 
 .balance-druid-sim-ui {

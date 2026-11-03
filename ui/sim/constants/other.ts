@@ -35,25 +35,25 @@ export const REPO_CHOOSE_NEW_ISSUE_URL = `${REPO_NEW_ISSUE_URL}/choose`;
 export const WOWSIMS_URL = 'https://www.wowsims.com/';
 // The site list and footer content every WoWSims site shares, published by wowsims/wowsims.github.io
 export const VERSIONS_MANIFEST_URL = `${WOWSIMS_URL}versions.json`;
-export const DISCORD_URL = 'https://discord.gg/p3DgvmnDCS';
-export const GITHUB_ORG_URL = 'https://github.com/wowsims/';
 export const ADDON_URL = 'https://www.curseforge.com/wow/addons/wowsimsexporter';
-export const PATREON_URL = 'https://www.patreon.com/wowsims';
+// Null Sims is a fork of WoWSims Forever that adds levelling sims; its own links point at the fork, and
+// REPO_URL above stays the upstream project it credits.
+export const NULL_SIMS_REPO_URL = 'https://github.com/StewBagger/forever-levelsim';
+export const NULL_SIMS_ISSUES_URL = `${NULL_SIMS_REPO_URL}/issues`;
+export const SITE_HOME_PATH = `/${REPO_NAME}/`;
 
-export const SOCIALS = [
-	{ key: 'discord', href: DISCORD_URL, className: 'ui-social-link', icon: 'discord', tooltip: 'info.discord' },
-	{ key: 'github', href: REPO_URL, className: 'ui-social-link', icon: 'github', tooltip: 'info.github' },
-	{
-		key: 'patreon',
-		href: PATREON_URL,
-		className: 'ui-social-link',
-		icon: 'patreon',
-		tooltip: 'info.patreon',
-		label: ' Patreon',
-	},
-] as const;
+export interface Social {
+	key: string;
+	href: string;
+	className: string;
+	icon: 'discord' | 'github' | 'patreon';
+	tooltip: 'info.discord' | 'info.github' | 'info.patreon';
+	label?: string;
+}
 
-export type Social = (typeof SOCIALS)[number];
+export const SOCIALS: ReadonlyArray<Social> = [
+	{ key: 'github', href: NULL_SIMS_REPO_URL, className: 'ui-social-link', icon: 'github', tooltip: 'info.github' },
+];
 
 // Root-relative path of the individual sim page for the given spec. Resolve it
 // against the page origin at the point of use (see SimTitleDropdown) — this

@@ -7,14 +7,14 @@
 			"toggle": "Toggle navigation"
 		},
 		"home": {
-			"title": "WoWSims - Forever DPS & Gear Simulators",
+			"title": "Null Sims - Forever DPS & Gear Simulators",
 			"description": "Free, open-source World of Warcraft® Forever simulators. Sim your DPS, compare gear and optimize your character.",
 			"heading": "<expansion>Forever</expansion> Simulations",
 			"allSpecs": "All Specializations",
-			"welcomeDescription": "<brand>WoWSims</brand> is a fan-made open-source project started in 2021 with the goal of providing user-friendly tools for players to simulate their gameplay in <bold>World of Warcraft® Classic</bold>. Since then we've supported every Classic release, and now we're carrying that forward into <expansion>World of Warcraft®: Forever</expansion>. It's thanks to dozens of developers, hundreds of players, and thousands of hours of time that we've been able to keep the project going so that our users can continue to make the most out of their gameplay."
+			"welcomeDescription": "<brand>Null Sims</brand> is a fan-made fork of WoWSims (MIT) that sims <expansion>World of Warcraft®: Forever</expansion> below level 60 as well as at it: set a level and the sim loads that level's ranks, talents and best-in-slot gear. The simulator itself is the work of the WoWSims contributors, who started the project in 2021 and have carried it through every Classic release."
 		},
 		"header": {
-			"wowsims": "WoWSims",
+			"wowsims": "Null Sims",
 			"subtitle": "World of Warcraft Simulations",
 			"discord": "Discord",
 			"github": "GitHub",
@@ -23,7 +23,7 @@
 		},
 		"actions": {
 			"discord": "Join our Discord",
-			"github": "Contribute on GitHub",
+			"github": "Null Sims on GitHub",
 			"addon": "Get the Exporter addon"
 		},
 		"footer": {
@@ -449,14 +449,15 @@
 			"sim_build": "Sim build",
 			"changed": "Changed {{date}}",
 			"details": "Release details",
+			"based_on": "Based on <upstream>WoWSims</upstream> (MIT)",
 			"presets": "{{spec}} presets",
 			"engine": "{{spec}} engine"
 		}
 	},
 	"sim": {
-		"title": "Forever {{spec}} {{class}} simulator",
+		"title": "Null Sims · Forever {{spec}} {{class}} simulator",
 		"description": "{{spec}} {{class}} simulations for World of Warcraft® Forever.",
-		"title_class": "Forever {{class}} simulator",
+		"title_class": "Null Sims · Forever {{class}} simulator",
 		"description_class": "{{class}} simulations for World of Warcraft® Forever.",
 		"basic_bis_disclaimer": "<p>Preset gear lists are intended as rough approximations of BIS, and will often not be the absolute highest-DPS setup for you. Your optimal gear setup will depend on many factors; that's why we have a sim!</p><p>Items may also be omitted from the presets if they are highly contested and clearly better utilized on other classes, to encourage equitable gearing for the raid as a whole.</p>",
 		"healing_sim_disclaimer": "*** WARNING - USE AT YOUR OWN RISK ***\n\nThe entire concept of a healing sim is EXPERIMENTAL. All results should be taken with an EXTREMELY large grain of salt.\n\nThis tool is currently more similar to a spreadsheet than a true sim. Options for specifying incoming damage profiles in order to have proper reactive rotations have not yet been added.",
@@ -3033,7 +3034,7 @@
 		"sim_options": "Sim Options",
 		"discord": "Join us on Discord",
 		"patreon": "Support us on Patreon",
-		"github": "Contribute on GitHub",
+		"github": "Null Sims on GitHub",
 		"status": {
 			"unlaunched": "This sim is a WORK IN PROGRESS. It is not fully developed and should not be used for general purposes.",
 			"gear_planner": "This sim is a GEAR PLANNER only. Gear, enchants, talents and the enchants optimizer work. There's no simulation planned for this spec.",
@@ -3090,7 +3091,7 @@
 			"finish": "Done",
 			"steps": {
 				"welcome": {
-					"title": "Welcome to WoWSims",
+					"title": "Welcome to Null Sims",
 					"body": "A short look around the page, from your gear to a finished sim. Move through it with the left and right arrow keys, or skip it any time; Sim Options can start it again."
 				},
 				"gear_tab": {
@@ -3227,7 +3228,7 @@
 				},
 				"finish": {
 					"title": "You're set",
-					"body": "There is more to find on the page as you go. If you have a question or something looks wrong, ask us on <discord>Discord</discord>."
+					"body": "There is more to find on the page as you go. If you have a question or something looks wrong, open an issue on <issues>GitHub</issues>."
 				}
 			}
 		},
@@ -3445,7 +3446,7 @@
 			}
 		},
 		"header": {
-			"title": "WoWSims - Forever",
+			"title": "Null Sims · Forever",
 			"phase": "{{phase}} - {{status}}"
 		},
 		"results": {

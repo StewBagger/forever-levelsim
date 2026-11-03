@@ -1,5 +1,5 @@
 import i18n from '@i18n/config';
-import { ADDON_URL, DISCORD_URL, GITHUB_ORG_URL, PATREON_URL } from '@sim/constants/other';
+import { ADDON_URL, NULL_SIMS_REPO_URL } from '@sim/constants/other';
 import { VERSIONS_MANIFEST, withVersionsManifest } from '@testing/versions_manifest';
 import { render, screen } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
@@ -54,15 +54,13 @@ describe('LandingFooter', () => {
 		expect(screen.getByText('Next Expansion').closest('a')).toBeNull();
 	});
 
-	it('links Discord, GitHub, the addon and Patreon in new tabs', async () => {
+	it('links the Null Sims GitHub and the addon in new tabs', async () => {
 		restoreFetch = withVersionsManifest(VERSIONS_MANIFEST);
 		render(<LandingFooter />);
 		await screen.findByRole('contentinfo');
 		const links: [string, string][] = [
-			['landing.header.discord', DISCORD_URL],
-			['landing.header.github', GITHUB_ORG_URL],
+			['landing.header.github', NULL_SIMS_REPO_URL],
 			['landing.footer.addon', ADDON_URL],
-			['landing.footer.patreon', PATREON_URL],
 		];
 		links.forEach(([label, url]) => {
 			const link = screen.getByRole('link', { name: i18n.t(label) });

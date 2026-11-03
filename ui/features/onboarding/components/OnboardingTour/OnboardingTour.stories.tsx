@@ -12,7 +12,7 @@ const STEPS: ReadonlyArray<TourStep> = [
 ];
 
 const WORDS: Record<string, { title: string; body: string }> = {
-	welcome: { title: 'Welcome to WoWSims', body: 'A short look around the page.' },
+	welcome: { title: 'Welcome to Null Sims', body: 'A short look around the page.' },
 	gear: { title: 'Your equipment', body: 'Click a slot to pick its item, enchant and gems.' },
 	simulate: { title: 'Run the sim', body: 'Press Simulate to run it.' },
 	finish: { title: 'You’re set', body: 'That is the whole page.' },

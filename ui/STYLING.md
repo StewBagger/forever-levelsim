@@ -91,15 +91,14 @@ Breakpoints are named tokens in `ui/styles/theme/breakpoints.css`: `sm md lg xl 
 the root font-size from 14px to 16px). All breakpoints are px, so they never depend on
 the root.
 
-**Spec themes are CSS variables, not per-spec CSS.** `ui/styles/theme/specs.css`'s `.sim-ui` block
-declares `--color-primary`/`--color-primary-foreground` from `--theme-color`/`--theme-color-foreground`, and
-one block per spec (e.g. `.dps-warrior-sim-ui { --theme-color: var(--color-class-warrior); … }` and
-`.protection-warrior-sim-ui { --theme-color: var(--color-class-warrior); … }`, each with its own
-background-image variable — every spec has its own background even where two specs of a class
-share `--theme-color`) set those variables. A component never needs a
-spec-aware variant —
-`bg-primary`/`text-primary`/`border-primary` already re-theme per spec because the sim root carries
-the spec's class. Derived shades (`--color-primary-hover/-active/-dampened/-disabled`) are
+**Spec themes are CSS variables, not per-spec CSS.** Null Sims gives every spec one accent: `ui/styles/theme/specs.css`'s
+`.sim-ui` block declares `--color-primary`/`--color-primary-foreground` from the Null Sims palette
+(`--color-null-*` in `colors.css`, the Nossuary site's phosphor green on near-black stone), and one
+block per spec sets only its `--theme-background-image` (e.g.
+`.dps-warrior-sim-ui { --theme-background-image: url(…); }`). The class colours
+(`--color-class-*`) still name a class in text and menus; they no longer re-theme the page. A
+component never needs a spec-aware variant: `bg-primary`/`text-primary`/`border-primary` read the
+one accent. Derived shades (`--color-primary-hover/-active/-dampened/-disabled`) are
 `color-mix(in srgb, var(--color-primary) …)` in `@theme static inline` — `inline` because they read a
 var that's re-declared lower in the tree (see `ui/styles/theme/colors.css`'s comment-free but
 documented block; the `inline` flag matters here specifically because plain `@theme` would resolve

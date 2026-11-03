@@ -26,7 +26,7 @@
 	/* Tooltip */
 	--tooltip-bg: color-mix(in srgb, var(--color-background), var(--color-white) 5%);
 	--tooltip-border: var(--color-surface-border);
-	--tooltip-body-color: var(--color-white);
+	--tooltip-body-color: var(--color-foreground);
 	--tooltip-body-padding-x: --spacing(2);
 	--tooltip-body-padding-y: --spacing(2);
 
