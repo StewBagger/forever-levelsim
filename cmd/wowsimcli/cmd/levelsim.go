@@ -60,6 +60,8 @@ type levelsimRun struct {
 	TargetLevelOffset int32 `json:"targetLevelOffset"`
 	// Keep the setup's target stats (a raid boss's armor) instead of a creature of the target's level.
 	KeepTarget bool `json:"keepTarget"`
+	// "setup" (or unset) wears the setup's gear; "bis" the best in slot for the level with no raid gear.
+	Gear string `json:"gear"`
 }
 
 type levelsimResult struct {
@@ -70,6 +72,8 @@ type levelsimResult struct {
 	Talents     string             `json:"talents"`
 	Setup       string             `json:"setup"`
 	Solo        bool               `json:"solo"`
+	Gear        []string           `json:"gear,omitempty"`
+	GearRounds  int                `json:"gearRounds,omitempty"`
 	Dps         float64            `json:"dps"`
 	DpsStdev    float64            `json:"dpsStdev"`
 	Reference   string             `json:"reference"`
@@ -149,51 +153,108 @@ func levelsimOne(run levelsimRun, iterations int32) (levelsimResult, error) {
 		}
 	}
 
-	swr := &proto.StatWeightsRequest{
-		Player:     player,
-		RaidBuffs:  raidBuffs,
-		PartyBuffs: partyBuffs,
-		Debuffs:    debuffs,
-		Encounter:  encounter,
-		SimOptions: request.SimOptions,
-		Tanks:      request.Raid.Tanks,
-	}
-	if iterations > 0 {
-		swr.SimOptions.Iterations = iterations
-	}
+	var statsToWeigh []proto.Stat
+	var pseudoStatsToWeigh []proto.PseudoStat
 	for _, name := range run.Stats {
 		v, ok := proto.Stat_value[name]
 		if !ok {
 			return levelsimResult{}, fmt.Errorf("unknown stat %q", name)
 		}
-		swr.StatsToWeigh = append(swr.StatsToWeigh, proto.Stat(v))
+		statsToWeigh = append(statsToWeigh, proto.Stat(v))
 	}
 	for _, name := range run.PseudoStats {
 		v, ok := proto.PseudoStat_value[name]
 		if !ok {
 			return levelsimResult{}, fmt.Errorf("unknown pseudo stat %q", name)
 		}
-		swr.PseudoStatsToWeigh = append(swr.PseudoStatsToWeigh, proto.PseudoStat(v))
+		pseudoStatsToWeigh = append(pseudoStatsToWeigh, proto.PseudoStat(v))
 	}
 	ref, ok := proto.Stat_value[run.Reference]
 	if !ok {
 		return levelsimResult{}, fmt.Errorf("unknown reference stat %q", run.Reference)
 	}
-	swr.EpReferenceStat = proto.Stat(ref)
-	swr.HpsReferenceStat = proto.Stat(ref)
-
-	sw := core.StatWeights(swr)
-	if os.Getenv("LEVELSIM_DEBUG") != "" {
-		fmt.Fprintln(os.Stderr, protojson.Format(sw))
+	simOptions := googleProto.Clone(request.SimOptions).(*proto.SimOptions)
+	if iterations > 0 {
+		simOptions.Iterations = iterations
 	}
-	if sw.Error != nil {
-		return levelsimResult{}, fmt.Errorf("%s", sw.Error.Message)
+
+	// The stat weights of the player as it stands. Each call gets its own options, which the stat
+	// weights request rewrites.
+	weigh := func() (*proto.StatWeightValues, error) {
+		sw := core.StatWeights(&proto.StatWeightsRequest{
+			Player:             player,
+			RaidBuffs:          raidBuffs,
+			PartyBuffs:         partyBuffs,
+			Debuffs:            debuffs,
+			Encounter:          encounter,
+			SimOptions:         googleProto.Clone(simOptions).(*proto.SimOptions),
+			Tanks:              request.Raid.Tanks,
+			StatsToWeigh:       statsToWeigh,
+			PseudoStatsToWeigh: pseudoStatsToWeigh,
+			EpReferenceStat:    proto.Stat(ref),
+			HpsReferenceStat:   proto.Stat(ref),
+		})
+		if os.Getenv("LEVELSIM_DEBUG") != "" {
+			fmt.Fprintln(os.Stderr, protojson.Format(sw))
+		}
+		if sw.Error != nil {
+			return nil, fmt.Errorf("%s", sw.Error.Message)
+		}
+		return sw.Dps, nil
+	}
+	epOf := func(dps *proto.StatWeightValues) map[string]float64 {
+		ep := map[string]float64{}
+		for _, s := range statsToWeigh {
+			ep[s.String()] = dps.EpValues.Stats[s]
+		}
+		for _, s := range pseudoStatsToWeigh {
+			ep[s.String()] = dps.EpValues.PseudoStats[s]
+		}
+		return ep
+	}
+
+	var gear []string
+	var gearRounds int
+	var dps *proto.StatWeightValues
+	switch run.Gear {
+	case "", "setup":
+	case "bis":
+		// Start from every weighed stat at 1 EP and weapon damage at 10, then alternate the set and
+		// the EP it is worn with until the set stops changing.
+		picker := newGearPicker(player, run.Level)
+		ep := map[string]float64{}
+		for _, s := range statsToWeigh {
+			ep[s.String()] = 1
+		}
+		for _, s := range pseudoStatsToWeigh {
+			ep[s.String()] = 10
+		}
+		var last *proto.EquipmentSpec
+		for gearRounds = 1; gearRounds <= 6; gearRounds++ {
+			set := picker.pick(ep)
+			if sameGear(set, last) {
+				break
+			}
+			player.Equipment, last = set, set
+			if dps, err = weigh(); err != nil {
+				return levelsimResult{}, err
+			}
+			ep = epOf(dps)
+		}
+		gear = gearNames(player.Equipment)
+	default:
+		return levelsimResult{}, fmt.Errorf("gear %q is neither setup nor bis", run.Gear)
+	}
+	if dps == nil {
+		if dps, err = weigh(); err != nil {
+			return levelsimResult{}, err
+		}
 	}
 
 	// The DPS at the baseline, from a plain sim of the same request.
 	raid := core.SinglePlayerRaidProto(player, partyBuffs, raidBuffs, debuffs)
 	raid.Tanks = request.Raid.Tanks
-	baseline := core.RunRaidSimConcurrent(&proto.RaidSimRequest{Raid: raid, Encounter: encounter, SimOptions: swr.SimOptions, Type: proto.SimType_SimTypeIndividual})
+	baseline := core.RunRaidSimConcurrent(&proto.RaidSimRequest{Raid: raid, Encounter: encounter, SimOptions: googleProto.Clone(simOptions).(*proto.SimOptions), Type: proto.SimType_SimTypeIndividual})
 	if baseline.Error != nil {
 		return levelsimResult{}, fmt.Errorf("%s", baseline.Error.Message)
 	}
@@ -206,26 +267,23 @@ func levelsimOne(run levelsimRun, iterations int32) (levelsimResult, error) {
 		Talents:     run.Talents,
 		Setup:       run.Setup,
 		Solo:        !run.KeepBuffs,
+		Gear:        gear,
+		GearRounds:  gearRounds,
 		Dps:         baseline.RaidMetrics.Dps.Avg,
 		DpsStdev:    baseline.RaidMetrics.Dps.Stdev,
 		Reference:   run.Reference,
 		Weights:     map[string]float64{},
-		EP:          map[string]float64{},
+		EP:          epOf(dps),
 		EPStdev:     map[string]float64{},
 		Warnings:    warnings,
 	}
-	dps := sw.Dps
-	for _, s := range swr.StatsToWeigh {
-		name := s.String()
-		result.Weights[name] = dps.Weights.Stats[s]
-		result.EP[name] = dps.EpValues.Stats[s]
-		result.EPStdev[name] = dps.EpValuesStdev.Stats[s]
+	for _, s := range statsToWeigh {
+		result.Weights[s.String()] = dps.Weights.Stats[s]
+		result.EPStdev[s.String()] = dps.EpValuesStdev.Stats[s]
 	}
-	for _, s := range swr.PseudoStatsToWeigh {
-		name := s.String()
-		result.Weights[name] = dps.Weights.PseudoStats[s]
-		result.EP[name] = dps.EpValues.PseudoStats[s]
-		result.EPStdev[name] = dps.EpValuesStdev.PseudoStats[s]
+	for _, s := range pseudoStatsToWeigh {
+		result.Weights[s.String()] = dps.Weights.PseudoStats[s]
+		result.EPStdev[s.String()] = dps.EpValuesStdev.PseudoStats[s]
 	}
 	return result, nil
 }
