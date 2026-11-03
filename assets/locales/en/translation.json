@@ -16,12 +16,10 @@
 		"header": {
 			"wowsims": "Null Sims",
 			"subtitle": "World of Warcraft Simulations",
-			"github": "GitHub",
-			"addon": "Download the WoWSims Exporter addon"
+			"github": "GitHub"
 		},
 		"actions": {
-			"github": "Null Sims on GitHub",
-			"addon": "Get the WoWSims Exporter addon"
+			"github": "Null Sims on GitHub"
 		},
 		"footer": {
 			"about": "A fork of <wowsims>WoWSims</wowsims>, the open-source simulator by the WoWSims contributors, used under the MIT License.",
@@ -33,8 +31,7 @@
 			"issues": "Report an issue",
 			"credits": "Built on WoWSims",
 			"wowsims": "WoWSims",
-			"wowsims_source": "WoWSims Forever on GitHub",
-			"addon": "WoWSims Exporter addon"
+			"wowsims_source": "WoWSims Forever on GitHub"
 		}
 	},
 	"common": {
@@ -1413,7 +1410,7 @@
 		},
 		"import_modal": {
 			"title": "Bag Item Import",
-			"description_line1": "Import bag items from a JSON file, which can be created by the WoWSimsExporter in-game AddOn.",
+			"description_line1": "Import bag items from a JSON file exported by the in-game addon.",
 			"description_line2": "To import, upload the file or paste the text below, then click, 'Import'."
 		}
 	},
@@ -2882,8 +2879,8 @@
 		},
 		"addon": {
 			"title": "Addon Import",
-			"description": "Import settings from the",
-			"addon_link": "WoWSims Exporter In-Game Addon",
+			"description": "Paste an export from the in-game addon. It currently reads the format of",
+			"addon_link": "this exporter addon",
 			"feature_description": "This feature imports gear, race, professions and rotation. The class is required, and anything missing from the pasted text keeps its current value. It does NOT import buffs, debuffs, consumes, or custom stats.",
 			"instructions": "To import, paste the output from the addon below and click, 'Import'.",
 			"upload_button": "Upload File",
@@ -3089,7 +3086,7 @@
 				},
 				"import": {
 					"title": "Import",
-					"body": "Bring in your character with the <addon>WoWSims Exporter addon</addon>, or a build from a link someone shared."
+					"body": "Bring in a character from an in-game addon export, or a build from a link someone shared."
 				},
 				"gear_list": {
 					"title": "Your equipment",

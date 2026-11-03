@@ -56,26 +56,20 @@
 						},
 						"github": {
 							"type": "string"
-						},
-						"addon": {
-							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["wowsims", "subtitle", "github", "addon"]
+					"required": ["wowsims", "subtitle", "github"]
 				},
 				"actions": {
 					"type": "object",
 					"properties": {
 						"github": {
 							"type": "string"
-						},
-						"addon": {
-							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["github", "addon"]
+					"required": ["github"]
 				},
 				"footer": {
 					"type": "object",
@@ -109,13 +103,10 @@
 						},
 						"wowsims_source": {
 							"type": "string"
-						},
-						"addon": {
-							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["about", "copyright", "disclaimer", "sims", "nossuary", "source", "issues", "credits", "wowsims", "wowsims_source", "addon"]
+					"required": ["about", "copyright", "disclaimer", "sims", "nossuary", "source", "issues", "credits", "wowsims", "wowsims_source"]
 				}
 			},
 			"additionalProperties": false,

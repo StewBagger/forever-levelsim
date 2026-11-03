@@ -23,7 +23,7 @@ describe('LandingHeader', () => {
 
 	it('opens every external nav link in a new tab with no opener', () => {
 		render(<LandingHeader />);
-		const names = [i18n.t('landing.header.github'), i18n.t('landing.header.addon')];
+		const names = [i18n.t('landing.header.github')];
 
 		names.forEach(name => {
 			const link = screen.getByRole('link', { name });

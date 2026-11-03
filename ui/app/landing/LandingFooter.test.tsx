@@ -1,5 +1,5 @@
 import i18n from '@i18n/config';
-import { ADDON_URL, NOSSUARY_URL, NULL_SIMS_ISSUES_URL, NULL_SIMS_REPO_URL, WOWSIMS_REPO_URL, WOWSIMS_URL } from '@sim/constants/other';
+import { NOSSUARY_URL, NULL_SIMS_ISSUES_URL, NULL_SIMS_REPO_URL, WOWSIMS_REPO_URL, WOWSIMS_URL } from '@sim/constants/other';
 import { render, screen, within } from '@testing-library/react';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
@@ -35,7 +35,7 @@ describe('LandingFooter', () => {
 	it('credits WoWSims, its source and its exporter addon', () => {
 		render(<LandingFooter />);
 		const group = screen.getByRole('navigation', { name: i18n.t('landing.footer.credits') });
-		expect(hrefs(group)).toEqual([WOWSIMS_URL, WOWSIMS_REPO_URL, ADDON_URL]);
+		expect(hrefs(group)).toEqual([WOWSIMS_URL, WOWSIMS_REPO_URL]);
 	});
 
 	it('opens every link in a new tab', () => {

@@ -60,10 +60,6 @@
 		}
 	}
 
-	.ui-landing-action-addon {
-		@apply border-brand/60 text-brand hover:border-brand hover:bg-brand/12 hover:text-brand focus-visible:border-brand focus-visible:bg-brand/12 focus-visible:text-brand;
-	}
-
 	.ui-landing-class-card {
 		@apply relative isolate flex min-h-50 w-full overflow-hidden rounded-landing-card border border-solid border-white/8 p-0 text-left text-white no-underline transition-[translate,box-shadow,border-color] duration-200 motion-safe:animate-landing-rise-in;
 		--ui-landing-card-accent: var(--color-white);

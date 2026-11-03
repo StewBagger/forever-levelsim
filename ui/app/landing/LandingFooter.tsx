@@ -1,5 +1,5 @@
 import i18n from '@i18n/config';
-import { ADDON_URL, NOSSUARY_URL, NULL_SIMS_ISSUES_URL, NULL_SIMS_REPO_URL, WOWSIMS_REPO_URL, WOWSIMS_URL } from '@sim/constants/other';
+import { NOSSUARY_URL, NULL_SIMS_ISSUES_URL, NULL_SIMS_REPO_URL, WOWSIMS_REPO_URL, WOWSIMS_URL } from '@sim/constants/other';
 import { Button } from '@ui-kit/Button';
 import { Trans } from 'react-i18next';
 
@@ -19,7 +19,6 @@ const NULL_SIMS_LINKS: ReadonlyArray<FooterLink> = [
 const CREDIT_LINKS: ReadonlyArray<FooterLink> = [
 	{ href: WOWSIMS_URL, label: 'landing.footer.wowsims' },
 	{ href: WOWSIMS_REPO_URL, label: 'landing.footer.wowsims_source' },
-	{ href: ADDON_URL, label: 'landing.footer.addon' },
 ];
 
 const FooterGroup = ({ id, title, links }: { id: string; title: string; links: ReadonlyArray<FooterLink> }) => (
