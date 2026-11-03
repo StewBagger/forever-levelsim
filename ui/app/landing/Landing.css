@@ -182,4 +182,36 @@
 	.ui-landing-language-caret::after {
 		@apply ml-[0.255em] inline-block align-[0.255em] content-[''] [border-bottom:0] [border-left:0.3em_solid_transparent] [border-right:0.3em_solid_transparent] [border-top:0.3em_solid];
 	}
+
+	.ui-landing-footer {
+		@apply mt-auto border-t border-solid border-white/8 bg-background/90 py-10 text-sm text-white/65;
+	}
+
+	.ui-landing-footer-columns {
+		@apply grid gap-8 md:grid-cols-[2fr_1fr_1fr];
+	}
+
+	.ui-landing-footer-brand {
+		@apply flex flex-col items-start gap-4;
+	}
+
+	.ui-landing-footer-about {
+		@apply m-0 max-w-96 leading-[1.6];
+	}
+
+	.ui-landing-footer-heading {
+		@apply m-0 mb-2 text-xs font-bold tracking-wider text-white uppercase;
+	}
+
+	.ui-landing-footer-links {
+		@apply m-0 flex list-none flex-col gap-2 p-0;
+	}
+
+	.ui-landing-footer-link {
+		@apply text-white/65 underline-offset-2 hover:text-brand hover:underline focus-visible:text-brand focus-visible:underline;
+	}
+
+	.ui-landing-footer-legal {
+		@apply mt-8 flex flex-wrap gap-2 border-t border-solid border-white/8 pt-6 text-xs;
+	}
 }

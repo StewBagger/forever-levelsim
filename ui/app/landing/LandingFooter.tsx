@@ -1,103 +1,72 @@
 import i18n from '@i18n/config';
-import { ADDON_URL, NULL_SIMS_REPO_URL } from '@sim/constants/other';
+import { ADDON_URL, NOSSUARY_URL, NULL_SIMS_ISSUES_URL, NULL_SIMS_REPO_URL, WOWSIMS_REPO_URL, WOWSIMS_URL } from '@sim/constants/other';
 import { Button } from '@ui-kit/Button';
-import { useEffect, useState } from 'react';
+import { Trans } from 'react-i18next';
 
-import { fetchFooterContent, type FooterContent } from './footer_content';
 import { LandingBrand } from './LandingBrand';
 
-const SOCIAL_LINKS = [
-	{ href: NULL_SIMS_REPO_URL, label: 'landing.header.github' },
-	{ href: ADDON_URL, label: 'landing.footer.addon' },
-] as const;
+// The year the WoWSims licence names (LICENSE), the first year of the simulator's copyright line.
+const WOWSIMS_COPYRIGHT_START_YEAR = 2022;
 
-const FooterGroup = ({ id, title, split, children }: { id: string; title: string; split?: boolean; children: React.ReactNode }) => (
-	<nav aria-labelledby={id} className={split ? 'wowsims-footer-group wowsims-footer-group-split' : 'wowsims-footer-group'}>
-		<h2 id={id} className="wowsims-footer-heading">
+type FooterLink = { href: string; label: string };
+
+const NULL_SIMS_LINKS: ReadonlyArray<FooterLink> = [
+	{ href: NOSSUARY_URL, label: 'landing.footer.nossuary' },
+	{ href: NULL_SIMS_REPO_URL, label: 'landing.footer.source' },
+	{ href: NULL_SIMS_ISSUES_URL, label: 'landing.footer.issues' },
+];
+
+const CREDIT_LINKS: ReadonlyArray<FooterLink> = [
+	{ href: WOWSIMS_URL, label: 'landing.footer.wowsims' },
+	{ href: WOWSIMS_REPO_URL, label: 'landing.footer.wowsims_source' },
+	{ href: ADDON_URL, label: 'landing.footer.addon' },
+];
+
+const FooterGroup = ({ id, title, links }: { id: string; title: string; links: ReadonlyArray<FooterLink> }) => (
+	<nav aria-labelledby={id} className="ui-landing-footer-group">
+		<h2 id={id} className="ui-landing-footer-heading">
 			{title}
 		</h2>
-		<ul className="wowsims-footer-links">{children}</ul>
+		<ul className="ui-landing-footer-links">
+			{links.map(({ href, label }) => (
+				<li key={href}>
+					<Button href={href} target="_blank" variant="unstyled" className="ui-landing-footer-link">
+						{i18n.t(label)}
+					</Button>
+				</li>
+			))}
+		</ul>
 	</nav>
 );
 
-/**
- * The footer every WoWSims site shares: its content comes from wowsims.com/versions.json and its styles from
- * wowsims.com/footer.css. Nothing renders until the manifest loads, or when it cannot be read.
- */
-export const LandingFooter = () => {
-	const [content, setContent] = useState<FooterContent | null>(null);
-
-	useEffect(() => {
-		const controller = new AbortController();
-		fetchFooterContent(controller.signal).then(fetched => {
-			if (fetched && !controller.signal.aborted) setContent(fetched);
-		});
-		return () => controller.abort();
-	}, []);
-
-	if (!content) return null;
-	const { legal } = content;
-
-	return (
-		<footer className="wowsims-footer">
-			<div className="ui-landing-container">
-				<div className="wowsims-footer-columns">
-					<div className="wowsims-footer-brand">
-						<LandingBrand />
-						<ul className="wowsims-footer-socials">
-							{SOCIAL_LINKS.map(({ href, label }, index) => (
-								<li key={href}>
-									{index > 0 && (
-										<span className="wowsims-footer-dot" aria-hidden="true">
-											·
-										</span>
-									)}
-									<Button href={href} target="_blank" variant="unstyled">
-										{i18n.t(label)}
-									</Button>
-								</li>
-							))}
-						</ul>
-					</div>
-					<FooterGroup id="landing-footer-sims" title={i18n.t('landing.footer.sims')}>
-						{content.versions.map(version => (
-							<li key={version.url}>
-								{version.status === 'wip' ? (
-									<span className="wowsims-footer-wip">{version.title}</span>
-								) : (
-									<Button href={version.url} variant="unstyled">
-										{version.title}
-									</Button>
-								)}
-							</li>
-						))}
-					</FooterGroup>
-					{content.communities.map((group, index) => (
-						<FooterGroup key={group.title} id={`landing-footer-community-${index}`} title={group.title} split={group.columns === 2}>
-							{group.links.map(link => (
-								<li key={link.url}>
-									<Button href={link.url} target="_blank" variant="unstyled">
-										{link.name}
-									</Button>
-								</li>
-							))}
-						</FooterGroup>
-					))}
+/** The landing page's footer: Null Sims' own links, the credit to WoWSims it is built on, and the legal line. */
+export const LandingFooter = () => (
+	<footer className="ui-landing-footer">
+		<div className="ui-landing-container">
+			<div className="ui-landing-footer-columns">
+				<div className="ui-landing-footer-brand">
+					<LandingBrand />
+					<p className="ui-landing-footer-about">
+						<Trans
+							i18n={i18n}
+							i18nKey="landing.footer.about"
+							components={{ wowsims: <Button href={WOWSIMS_URL} target="_blank" variant="unstyled" className="ui-landing-footer-link" /> }}
+						/>
+					</p>
 				</div>
-				<div className="wowsims-footer-legal">
-					<span>
-						{i18n.t('landing.footer.copyright', {
-							startYear: legal.copyrightStartYear,
-							year: new Date().getFullYear(),
-							holder: legal.copyrightHolder,
-						})}
-					</span>
-					<span className="wowsims-footer-dot" aria-hidden="true">
-						·
-					</span>
-					<span>{i18n.t('landing.footer.disclaimer')}</span>
-				</div>
+				<FooterGroup id="landing-footer-sims" title={i18n.t('landing.footer.sims')} links={NULL_SIMS_LINKS} />
+				<FooterGroup id="landing-footer-credits" title={i18n.t('landing.footer.credits')} links={CREDIT_LINKS} />
 			</div>
-		</footer>
-	);
-};
+			<div className="ui-landing-footer-legal">
+				<span>
+					{i18n.t('landing.footer.copyright', {
+						startYear: WOWSIMS_COPYRIGHT_START_YEAR,
+						year: new Date().getFullYear(),
+					})}
+				</span>
+				<span aria-hidden="true">·</span>
+				<span>{i18n.t('landing.footer.disclaimer')}</span>
+			</div>
+		</div>
+	</footer>
+);

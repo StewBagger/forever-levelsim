@@ -1,5 +1,7 @@
 import { ActionId } from '@sim/proto/action_id';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+
+import { useWowheadLevel } from './useWowheadLevel';
 
 export interface ActionIdState {
 	iconUrl: string;
@@ -17,8 +19,8 @@ export interface ActionIdState {
 export const actionIdKey = (actionId: ActionId | undefined) =>
 	actionId ? `${actionId.equalityKey()}|${actionId.rank}|${actionId.definitionId}` + (actionId.anyId() ? '' : `|${actionId.name}|${actionId.iconUrl}`) : '';
 
-export const actionIdHref = (actionId: ActionId) => {
-	if (actionId.itemId) return ActionId.makeItemUrl(actionId.itemId, actionId.randomSuffixId);
+export const actionIdHref = (actionId: ActionId, level?: number) => {
+	if (actionId.itemId) return ActionId.makeItemUrl(actionId.itemId, actionId.randomSuffixId, level);
 	if (actionId.spellId) return ActionId.makeSpellUrl(actionId.spellIdTooltipOverride || actionId.spellId, actionId.rank, actionId.definitionId);
 	return '';
 };
@@ -26,40 +28,43 @@ export const actionIdHref = (actionId: ActionId) => {
 /** Already carries its name or icon, or has no id to fill from. */
 export const isFilled = (actionId: ActionId) => !!(actionId.name || actionId.iconUrl) || !actionId.anyId();
 
-const EMPTY: ActionIdState = { iconUrl: '', name: '', href: '', ready: true };
+// What the hook holds: the fields of the id as last filled. The href is built from it at render, so a change of the
+// Wowhead level (`useWowheadLevel`) moves the link without fetching the icon and name again.
+interface HeldActionId {
+	iconUrl: string;
+	name: string;
+	ready: boolean;
+	source?: ActionId;
+}
 
-const stateOf = (actionId: ActionId | undefined): ActionIdState =>
-	actionId
-		? {
-				iconUrl: actionId.iconUrl,
-				name: actionId.name,
-				href: actionIdHref(actionId),
-				ready: isFilled(actionId),
-			}
-		: EMPTY;
+const EMPTY: HeldActionId = { iconUrl: '', name: '', ready: true };
+
+const heldOf = (actionId: ActionId | undefined): HeldActionId =>
+	actionId ? { iconUrl: actionId.iconUrl, name: actionId.name, ready: isFilled(actionId), source: actionId } : EMPTY;
 
 /** Resolves an `ActionId` to the fields a component renders: icon, name and wowhead href. */
 export const useActionId = (actionId: ActionId | undefined): ActionIdState => {
 	const key = actionIdKey(actionId);
 	const idRef = useRef(actionId);
 	idRef.current = actionId;
+	const level = useWowheadLevel();
 
-	const [state, setState] = useState(() => stateOf(actionId));
+	const [held, setHeld] = useState(() => heldOf(actionId));
 	// Re-seeding during the render that changed the id, rather than in an effect, keeps the previous id's icon from being painted under the new one's.
 	const [seenKey, setSeenKey] = useState(key);
 	if (seenKey !== key) {
 		setSeenKey(key);
-		setState(stateOf(actionId));
+		setHeld(heldOf(actionId));
 	}
 
 	useEffect(() => {
 		const id = idRef.current;
-		if (!id || stateOf(id).ready) return;
+		if (!id || heldOf(id).ready) return;
 
 		const controller = new AbortController();
 		id.fill()
 			.then(filled => {
-				if (!controller.signal.aborted) setState({ iconUrl: filled.iconUrl, name: filled.name, href: actionIdHref(filled), ready: true });
+				if (!controller.signal.aborted) setHeld({ iconUrl: filled.iconUrl, name: filled.name, ready: true, source: filled });
 			})
 			.catch((error: unknown) => {
 				if (!controller.signal.aborted) throw error;
@@ -67,5 +72,8 @@ export const useActionId = (actionId: ActionId | undefined): ActionIdState => {
 		return () => controller.abort();
 	}, [key]);
 
-	return state;
+	return useMemo(
+		() => ({ iconUrl: held.iconUrl, name: held.name, href: held.source ? actionIdHref(held.source, level) : '', ready: held.ready }),
+		[held, level],
+	);
 };

@@ -1,3 +1,4 @@
+import { SITE_BASE } from '@sim/constants/other';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
@@ -41,7 +42,7 @@ export const Step: Story = {
 export const Welcome: Story = {
 	args: {
 		kind: 'welcome',
-		media: <img className="size-16 self-center" src="/forever/assets/img/null-sims-emblem.webp" alt="" />,
+		media: <img className="size-16 self-center" src={`${SITE_BASE}assets/img/null-sims-emblem.webp`} alt="" />,
 		title: 'Welcome to Null Sims',
 		body: 'A short look around the page, from your gear to a finished sim. Move through it with the left and right arrow keys, or skip it any time; Sim Options can start it again.',
 		onPrevious: undefined,
@@ -55,6 +56,6 @@ export const Finish: Story = {
 	args: {
 		kind: 'finish',
 		title: 'You’re set',
-		body: 'There is more to find on the page as you go. If you have a question or something looks wrong, ask us on Discord.',
+		body: 'There is more to find on the page as you go. If you have a question or something looks wrong, open an issue on GitHub.',
 	},
 };

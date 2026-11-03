@@ -5,9 +5,8 @@ import { IconData, UIItem as Item } from '@generated/proto/ui';
 import { WarlockOptions_Summon as Summon } from '@generated/proto/warlock';
 import i18n from '@i18n/config';
 
-import { CHARACTER_LEVEL } from '../../constants/mechanics';
 import { Database } from '../database';
-import { buildWowheadTooltipDataset, wowheadEntityUrl, wowheadIconUrl, WowheadTooltipItemParams, WowheadTooltipSpellParams } from '../wowhead';
+import { buildWowheadTooltipDataset, getWowheadLevel, wowheadEntityUrl, wowheadIconUrl, WowheadTooltipItemParams, WowheadTooltipSpellParams } from '../wowhead';
 
 // Shieldsworn's talent id, the tag on the Holy Shield damage and Shield Specialization mana its Holy Strike causes.
 const SHIELDSWORN_TAG = 1328544;
@@ -222,9 +221,10 @@ export class ActionId {
 		return this.itemId == other.itemId && this.randomSuffixId == other.randomSuffixId && this.spellId == other.spellId && this.otherId == other.otherId;
 	}
 
-	static makeItemUrl(id: number, randomSuffixId?: number): string {
+	// The page shows the item at the character's level, the current Wowhead level unless one is given.
+	static makeItemUrl(id: number, randomSuffixId?: number, level = getWowheadLevel()): string {
 		const url = new URL(wowheadEntityUrl('item', id));
-		url.searchParams.set('level', String(CHARACTER_LEVEL));
+		url.searchParams.set('level', String(level));
 		if (randomSuffixId) url.searchParams.set('bonus', String(randomSuffixId));
 		return url.toString();
 	}

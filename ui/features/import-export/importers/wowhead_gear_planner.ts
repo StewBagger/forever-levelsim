@@ -1,6 +1,5 @@
 import { Class, EquipmentSpec, ItemSlot, ItemSpec, Profession, Race } from '@generated/proto/common';
 import i18n from '@i18n/config';
-import { CHARACTER_LEVEL } from '@sim/constants/mechanics';
 import { nameToClass, nameToRace } from '@sim/proto/names';
 import { WOWHEAD_DOMAIN, WOWHEAD_GEAR_PLANNER_URL } from '@sim/proto/wowhead';
 
@@ -42,7 +41,8 @@ function readHash(hash: string): WowheadGearPlannerImportJSON {
 	t.classId = l[1];
 	t.raceId = l[2];
 
-	t.level = CHARACTER_LEVEL;
+	// 0 is a link that names no level, which leaves the character's level as it is.
+	t.level = 0;
 
 	if (!l[3]) return t;
 
@@ -202,6 +202,7 @@ export const WOWHEAD_GEAR_PLANNER_IMPORTER: ImporterDefinition = {
 
 		await finishIndividualImport(host, {
 			charClass,
+			level: parsed.level || undefined,
 			race,
 			equipmentSpec,
 			talentsStr: parsed.talentString ?? '',

@@ -79,13 +79,14 @@ const loadLevelDefaults = async (host: IndividualSimHost<any>, level: number, ta
 	}
 };
 
-// A user's level edit: the level and the target change at once, then the level's talents, gear and EP follow.
-export const applyLevelEdit = (host: IndividualSimHost<any>, newValue: number) => {
+// A user's level edit: the level and the target change at once, then the level's talents, gear and EP follow. Resolves
+// once they have landed, or once loading them has failed and said so; it never rejects.
+export const applyLevelEdit = (host: IndividualSimHost<any>, newValue: number): Promise<void> => {
 	const change = changeLevel(host.player, newValue);
-	if (!change) return;
+	if (!change) return Promise.resolve();
 	if (change.level == CHARACTER_LEVEL) {
 		applySpecDefaults(host, change.targetFollows);
-	} else {
-		void loadLevelDefaults(host, change.level, change.targetFollows);
+		return Promise.resolve();
 	}
+	return loadLevelDefaults(host, change.level, change.targetFollows);
 };

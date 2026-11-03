@@ -24,6 +24,7 @@ import { SimSettingCategories } from '@sim/constants/sim_settings';
 import { Player } from '@sim/player/player';
 import { Gear } from '@sim/proto/gear';
 import { SimResult } from '@sim/proto/sim_result';
+import { setWowheadLevel } from '@sim/proto/wowhead';
 import { StatSweepSettings } from '@sim/settings/stat_sweep_settings';
 import { StatWeightActionSettings } from '@sim/settings/stat_weight_settings';
 import { RunSimOptions, Sim, SimError } from '@sim/sim';
@@ -44,7 +45,7 @@ import {
 	STAT_SWEEP_SETTINGS_STORAGE_KEY,
 	STAT_WEIGHT_SETTINGS_STORAGE_KEY,
 } from '@sim/state/storage_keys';
-import { subscribeAll, subscribeReforgeChange, subscribeSimChange } from '@sim/state/subscriptions';
+import { subscribeAll, subscribePlayerField, subscribeReforgeChange, subscribeSimChange } from '@sim/state/subscriptions';
 import { getEnumValues } from '@sim/utils/collections';
 import { isDevMode } from '@sim/utils/env';
 import { WorkerProgressCallback } from '@sim/workers/worker_pool';
@@ -180,6 +181,9 @@ export class SimHostObject<SpecType extends Spec> implements IndividualSimHost<S
 			derived.apply(this.player, this.sim);
 			derived.subscribe(this.player, this.sim)(() => derived.apply(this.player, this.sim));
 		}
+		// Wowhead links and tooltips show items and spells at the character's level.
+		setWowheadLevel(this.player.getLevel());
+		subscribePlayerField(this.player, 'level')(() => setWowheadLevel(this.player.getLevel()));
 	}
 
 	get resultsViewer(): ResultsPanelHandle {

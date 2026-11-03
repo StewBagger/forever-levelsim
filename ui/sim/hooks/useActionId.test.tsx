@@ -1,4 +1,5 @@
 import { ActionId } from '@sim/proto/action_id';
+import { setWowheadLevel } from '@sim/proto/wowhead';
 import { deferFill, filled } from '@testing/sim/hooks';
 import { act, render } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -12,7 +13,10 @@ const Probe = ({ actionId }: { actionId?: ActionId }) => {
 
 const anchor = (container: HTMLElement) => container.querySelector('a')!;
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => {
+	vi.restoreAllMocks();
+	setWowheadLevel(60);
+});
 
 describe('useActionId', () => {
 	it('renders an already-filled id on the first pass', () => {
@@ -27,6 +31,18 @@ describe('useActionId', () => {
 		render(<Recorder actionId={filled(ActionId.fromSpellId(1), 'Fireball', 'fireball.jpg')} />);
 
 		expect(seen[0]).toBe('fireball.jpg');
+		expect(spy).not.toHaveBeenCalled();
+	});
+
+	it("moves an item's link to the character's level when it changes, without filling again", () => {
+		const { spy } = deferFill();
+		const { container } = render(<Probe actionId={filled(ActionId.fromItemId(19019), 'Thunderfury', 'thunderfury.jpg')} />);
+		expect(new URL(anchor(container).href).searchParams.get('level')).toBe('60');
+
+		act(() => setWowheadLevel(24));
+
+		expect(new URL(anchor(container).href).searchParams.get('level')).toBe('24');
+		expect(anchor(container).dataset.icon).toBe('thunderfury.jpg');
 		expect(spy).not.toHaveBeenCalled();
 	});
 

@@ -57,15 +57,8 @@ export const ADDON_IMPORTER: ImporterDefinition = {
 			});
 		}
 
-		// The import leaves the player's level as it is, so a character below max level is told to set it.
-		const level = importJson['level'];
-		if (level < CHARACTER_LEVEL) {
-			toastManager.add({
-				variant: 'warning',
-				body: i18n.t('import.addon.below_max_level', { level }),
-				delay: 5000,
-			});
-		}
+		// The exporter writes the character's level; an export without one leaves the sim's level as it is.
+		const level = typeof importJson['level'] == 'number' && importJson['level'] >= 1 ? Math.min(importJson['level'], CHARACTER_LEVEL) : undefined;
 
 		const charClass = nameToClass((importJson['class'] as string) || '');
 		if (charClass == Class.ClassUnknown) {
@@ -113,6 +106,7 @@ export const ADDON_IMPORTER: ImporterDefinition = {
 
 		await finishIndividualImport(host, {
 			charClass,
+			level,
 			race,
 			equipmentSpec,
 			talentsStr,

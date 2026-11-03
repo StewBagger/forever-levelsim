@@ -22,11 +22,16 @@ export enum LaunchStatus {
 
 export const CURRENT_API_VERSION: number = readMessageOption(ProtoVersion, 'proto.current_version_number')! as number;
 
-// Github pages serves our site under the /forever directory
-export const REPO_NAME = 'forever';
-export const REPO_URL = `https://github.com/wowsims/${REPO_NAME}`;
-// Null Sims is a fork of WoWSims Forever that adds levelling sims; its own links point at the fork, and
-// REPO_URL above stays the upstream project it credits.
+// The path the site is served under, with a leading and a trailing slash: '/forever/' by default, which the Go server
+// serves its copy at, and whatever SIM_BASE names for a static build (tools/vite/site_base.mts). Every root-absolute
+// url the UI builds starts with it.
+export const SITE_BASE: string = import.meta.env.VITE_SITE_BASE;
+// The public home of Null Sims, and the site of the Null Ossuary project it belongs to.
+export const NULL_SIMS_URL = 'https://nossuary.com/sims/';
+export const NOSSUARY_URL = 'https://nossuary.com/';
+
+// Null Sims is a fork of WoWSims Forever that adds levelling sims; its own links point at the fork, and the
+// WOWSIMS_* links credit the upstream project.
 const NULL_SIMS_REPO = 'StewBagger/forever-levelsim';
 export const NULL_SIMS_REPO_URL = `https://github.com/${NULL_SIMS_REPO}`;
 export const NULL_SIMS_ISSUES_URL = `${NULL_SIMS_REPO_URL}/issues`;
@@ -36,18 +41,19 @@ export const ISSUES_REPO: string = import.meta.env.VITE_GITHUB_REPOSITORY || NUL
 export const REPO_NEW_ISSUE_URL = `https://github.com/${ISSUES_REPO}/issues/new`;
 export const REPO_CHOOSE_NEW_ISSUE_URL = `${REPO_NEW_ISSUE_URL}/choose`;
 
+// WoWSims, the MIT-licensed project Null Sims is built on.
 export const WOWSIMS_URL = 'https://www.wowsims.com/';
-// The site list and footer content every WoWSims site shares, published by wowsims/wowsims.github.io
-export const VERSIONS_MANIFEST_URL = `${WOWSIMS_URL}versions.json`;
+export const WOWSIMS_REPO_URL = 'https://github.com/wowsims/forever';
+// The WoWSims Exporter, the WoWSims in-game addon the addon importer reads.
 export const ADDON_URL = 'https://www.curseforge.com/wow/addons/wowsimsexporter';
-export const SITE_HOME_PATH = `/${REPO_NAME}/`;
+export const SITE_HOME_PATH = SITE_BASE;
 
 export interface Social {
 	key: string;
 	href: string;
 	className: string;
-	icon: 'discord' | 'github' | 'patreon';
-	tooltip: 'info.discord' | 'info.github' | 'info.patreon';
+	icon: 'github';
+	tooltip: 'info.github';
 	label?: string;
 }
 
@@ -62,7 +68,7 @@ export const SOCIALS: ReadonlyArray<Social> = [
 // proto <-> player/specs cycle; the evaluation order of that cycle decides
 // whether PlayerSpecs' lookup table is populated.
 export function getSpecSitePath(classString: string, specString: string): string {
-	return `/${REPO_NAME}/${classString}/${specString}/`;
+	return `${SITE_BASE}${classString}/${specString}/`;
 }
 
 export const LOCAL_STORAGE_PREFIX = '__forever';

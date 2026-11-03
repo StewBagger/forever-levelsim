@@ -2,7 +2,12 @@
 # not be treated as up to date on the next run.
 .DELETE_ON_ERROR:
 
-OUT_DIR := dist/forever
+# The path the site is served under. The default is where the Go server (./wowsimforever) serves its embedded copy;
+# `make site SIM_BASE=/sims/` builds a static site to serve at /sims/ instead, into dist/sims
+# (tools/vite/site_base.mts reads the same variable).
+SIM_BASE ?= /forever/
+export SIM_BASE
+OUT_DIR := dist/$(patsubst /%,%,$(patsubst %/,%,$(SIM_BASE)))
 # Windows won't launch an extensionless binary -- air just pops a file-association prompt.
 BIN_EXT := $(shell go env GOEXE)
 ASSETS_INPUT := $(shell find assets/ -type f)
@@ -34,6 +39,7 @@ $(OUT_DIR)/bundle/.dirstamp: \
   tools/vite/spec_pages.mts \
   tools/vite/siml.mts \
   tools/vite/build_info.mts \
+  tools/vite/site_base.mts \
   assets/db_inputs/spell_store_inputs.json \
   $(if $(GIT_DIR),$(GIT_DIR)/HEAD $(GIT_DIR)/index) \
   node_modules \
@@ -162,7 +168,13 @@ binary_dist/dist.go: sim/web/dist.go.tmpl
 	touch binary_dist/forever/embedded
 	cp sim/web/dist.go.tmpl binary_dist/dist.go
 
+# The static site: everything a web server needs to serve the sims at $(SIM_BASE), in $(OUT_DIR).
+.PHONY: site
+site: $(OUT_DIR)/.dirstamp
+
+# The Go server embeds the site and serves it at /forever/, so it is built from the default base only.
 binary_dist: $(OUT_DIR)/.dirstamp
+	@if [ "$(SIM_BASE)" != "/forever/" ]; then echo "binary_dist embeds the site at /forever/; build it without SIM_BASE." >&2; exit 1; fi
 	rm -rf binary_dist
 	mkdir -p binary_dist
 	cp -r $(OUT_DIR) binary_dist/

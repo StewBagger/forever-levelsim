@@ -1,8 +1,8 @@
 // The 18 spec pages are one page served at 18 URLs.
 //
 // `ui/index_template.html` carries nothing per-spec. Its title, description and link tags hold the
-// Forever-wide text, and every asset reference is root-absolute (`/forever/...` once vite rewrites
-// it), so the build processes it ONCE as an ordinary html input and this plugin copies the processed
+// Forever-wide text, and every asset reference is root-absolute under the site's base (`%BASE_URL%`,
+// tools/vite/site_base.mts), so the build processes it ONCE as an ordinary html input and this plugin copies the processed
 // result to `<class>/<spec>/index.html` for every spec, with that spec's title, description and URL
 // written into the head. Link previews read only the html, so these cannot wait for the page's
 // script. Nothing per-spec is written into the source tree; in dev the same file is served through
@@ -14,11 +14,10 @@ import path from 'node:path';
 import { glob } from 'glob';
 import type { Plugin } from 'vite';
 
+import { SITE_URL } from './site_base.mjs';
+
 /** The one spec page, relative to vite's root (`ui/`). Also its build output path. */
 export const SPEC_PAGE_TEMPLATE = 'index_template.html';
-
-/** The production origin; canonical and `og:url` links must be absolute. */
-const SITE_ORIGIN = 'https://www.wowsims.com';
 
 interface SpecPageMetadata {
 	title: string;
@@ -29,9 +28,10 @@ interface SpecPageMetadata {
 /**
  * A spec page's title, description and URL, from the same English locale strings the page sets at
  * runtime (`updateSimPageMetadata`). A class with one spec has no spec name and uses the
- * `_class` strings.
+ * `_class` strings. The URL is the page's public home under `SITE_URL`, whatever base this build
+ * is served from, since canonical and `og:url` links must be absolute and name one address.
  */
-function specPageMetadata(localesRoot: string, base: string, spec: string): SpecPageMetadata {
+function specPageMetadata(localesRoot: string, spec: string): SpecPageMetadata {
 	const read = (namespace: string) => JSON.parse(readFileSync(path.join(localesRoot, 'en', `${namespace}.json`), 'utf-8'));
 	const character = read('character');
 	const sim = read('translation').sim;
@@ -43,7 +43,7 @@ function specPageMetadata(localesRoot: string, base: string, spec: string): Spec
 	return {
 		title: interpolate(sim[`title${suffix}`]),
 		description: interpolate(sim[`description${suffix}`]),
-		url: `${SITE_ORIGIN}${base}${spec}/`,
+		url: `${SITE_URL}${spec}/`,
 	};
 }
 
@@ -111,7 +111,7 @@ export function specPages(uiRoot: string): Plugin {
 				this.emitFile({
 					type: 'asset',
 					fileName: `${spec}/index.html`,
-					source: withSpecMetadata(String(processed.source), specPageMetadata(localesRoot, base, spec)),
+					source: withSpecMetadata(String(processed.source), specPageMetadata(localesRoot, spec)),
 				});
 			}
 		},
@@ -136,13 +136,13 @@ export function specPages(uiRoot: string): Plugin {
 					return;
 				}
 				// This middleware runs before vite's `base` middleware, so the path still carries
-				// `/forever/`; `transformIndexHtml` wants it stripped (that is what vite's own
+				// the base; `transformIndexHtml` wants it stripped (that is what vite's own
 				// `indexHtmlMiddleware` passes, and the html-proxy ids for the page's inline
 				// module scripts are keyed on it).
 				const url = pathname.slice(base.length - 1).replace(/\/$/, '/index.html');
 				fs.readFile(templatePath, 'utf-8')
 					.then(html => server.transformIndexHtml(url, html, req.originalUrl))
-					.then(html => withSpecMetadata(html, specPageMetadata(localesRoot, base, spec)))
+					.then(html => withSpecMetadata(html, specPageMetadata(localesRoot, spec)))
 					.then(html => {
 						res.writeHead(200, { 'Content-Type': 'text/html' });
 						res.end(html);

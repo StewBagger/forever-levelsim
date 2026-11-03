@@ -1,5 +1,5 @@
 import i18n from '@i18n/config';
-import { ADDON_URL, NULL_SIMS_REPO_URL } from '@sim/constants/other';
+import { ADDON_URL, NULL_SIMS_REPO_URL, SITE_BASE } from '@sim/constants/other';
 import { Button } from '@ui-kit/Button';
 import { Icon } from '@ui-kit/Icon';
 import clsx from 'clsx';
@@ -53,7 +53,7 @@ export const LandingHeader = () => {
 								<strong>{i18n.t('landing.header.github')}</strong>
 							</Button>
 							<Button href={ADDON_URL} target="_blank" variant="unstyled" title={i18n.t('landing.header.addon')} className="ui-landing-nav-badge">
-								<img className="h-landing-badge" src="/forever/assets/img/curseforge_install.png" alt={i18n.t('landing.header.addon')} />
+								<img className="h-landing-badge" src={`${SITE_BASE}assets/img/curseforge_install.png`} alt={i18n.t('landing.header.addon')} />
 							</Button>
 							<LandingLanguageMenu triggerClassName="px-0 max-md:py-2" />
 						</div>

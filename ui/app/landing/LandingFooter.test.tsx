@@ -1,8 +1,7 @@
 import i18n from '@i18n/config';
-import { ADDON_URL, NULL_SIMS_REPO_URL } from '@sim/constants/other';
-import { VERSIONS_MANIFEST, withVersionsManifest } from '@testing/versions_manifest';
-import { render, screen } from '@testing-library/react';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { ADDON_URL, NOSSUARY_URL, NULL_SIMS_ISSUES_URL, NULL_SIMS_REPO_URL, WOWSIMS_REPO_URL, WOWSIMS_URL } from '@sim/constants/other';
+import { render, screen, within } from '@testing-library/react';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import english from '../../../assets/locales/en/translation.json';
 import { LandingFooter } from './LandingFooter';
@@ -14,58 +13,40 @@ afterAll(() => {
 	i18n.removeResourceBundle('en', 'translation');
 });
 
-let restoreFetch = () => {};
-afterEach(() => restoreFetch());
-
 const year = new Date().getFullYear();
 
+const hrefs = (group: HTMLElement) =>
+	within(group)
+		.getAllByRole('link')
+		.map(link => link.getAttribute('href'));
+
 describe('LandingFooter', () => {
-	it('renders nothing when the manifest cannot be fetched', async () => {
-		restoreFetch = withVersionsManifest(new Error('offline'));
-		const { container } = render(<LandingFooter />);
-		await new Promise(resolve => setTimeout(resolve, 0));
-		expect(container.childElementCount).toBe(0);
-	});
-
-	it('renders nothing for a manifest schema it does not know', async () => {
-		restoreFetch = withVersionsManifest({ ...VERSIONS_MANIFEST, schemaVersion: 2 });
-		const { container } = render(<LandingFooter />);
-		await new Promise(resolve => setTimeout(resolve, 0));
-		expect(container.childElementCount).toBe(0);
-	});
-
-	it('shows the versions, communities and legal line from the manifest', async () => {
-		restoreFetch = withVersionsManifest(VERSIONS_MANIFEST);
+	it('renders without fetching anything', () => {
 		render(<LandingFooter />);
-		const realm = await screen.findByRole('link', { name: 'Example Realm' });
-		expect(realm.getAttribute('href')).toBe('https://discord.gg/example');
-		expect(realm.getAttribute('target')).toBe('_blank');
-		expect(screen.getByRole('navigation', { name: 'Partner Servers' })).toBeTruthy();
-		expect(screen.getByRole('contentinfo').textContent).toContain(`© 2020-${year} WoWSims contributors`);
+		expect(screen.getByRole('contentinfo')).toBeTruthy();
 	});
 
-	it('links live versions in the same tab and leaves a wip version unlinked', async () => {
-		restoreFetch = withVersionsManifest(VERSIONS_MANIFEST);
+	it('links Null Ossuary, the Null Sims source and its issues', () => {
 		render(<LandingFooter />);
-		await screen.findByRole('link', { name: 'Example Realm' });
-		const mop = screen.getByRole('link', { name: 'Mists of Pandaria' });
-		expect(mop.getAttribute('href')).toBe('https://www.wowsims.com/mop/');
-		expect(mop.getAttribute('target')).toBeNull();
-		expect(screen.getByText('Next Expansion').closest('a')).toBeNull();
+		const group = screen.getByRole('navigation', { name: i18n.t('landing.footer.sims') });
+		expect(hrefs(group)).toEqual([NOSSUARY_URL, NULL_SIMS_REPO_URL, NULL_SIMS_ISSUES_URL]);
 	});
 
-	it('links the Null Sims GitHub and the addon in new tabs', async () => {
-		restoreFetch = withVersionsManifest(VERSIONS_MANIFEST);
+	it('credits WoWSims, its source and its exporter addon', () => {
 		render(<LandingFooter />);
-		await screen.findByRole('contentinfo');
-		const links: [string, string][] = [
-			['landing.header.github', NULL_SIMS_REPO_URL],
-			['landing.footer.addon', ADDON_URL],
-		];
-		links.forEach(([label, url]) => {
-			const link = screen.getByRole('link', { name: i18n.t(label) });
-			expect(link.getAttribute('href')).toBe(url);
-			expect(link.getAttribute('target')).toBe('_blank');
-		});
+		const group = screen.getByRole('navigation', { name: i18n.t('landing.footer.credits') });
+		expect(hrefs(group)).toEqual([WOWSIMS_URL, WOWSIMS_REPO_URL, ADDON_URL]);
+	});
+
+	it('opens every link in a new tab', () => {
+		render(<LandingFooter />);
+		const external = screen.getAllByRole('link').filter(link => link.getAttribute('href')?.startsWith('https://'));
+		expect(external.length).toBeGreaterThan(0);
+		external.forEach(link => expect(link.getAttribute('target')).toBe('_blank'));
+	});
+
+	it('gives the simulator copyright to the WoWSims contributors', () => {
+		render(<LandingFooter />);
+		expect(screen.getByRole('contentinfo').textContent).toContain(`© 2022-${year} WoWSims contributors`);
 	});
 });

@@ -16,22 +16,25 @@
 		"header": {
 			"wowsims": "Null Sims",
 			"subtitle": "World of Warcraft Simulations",
-			"discord": "Discord",
 			"github": "GitHub",
-			"addon": "Download the WoWSims Exporter addon",
-			"patreon": "Become a Patron!"
+			"addon": "Download the WoWSims Exporter addon"
 		},
 		"actions": {
-			"discord": "Join our Discord",
 			"github": "Null Sims on GitHub",
-			"addon": "Get the Exporter addon"
+			"addon": "Get the WoWSims Exporter addon"
 		},
 		"footer": {
-			"copyright": "© {{startYear}}-{{year}} {{holder}}",
+			"about": "A fork of <wowsims>WoWSims</wowsims>, the open-source simulator by the WoWSims contributors, used under the MIT License.",
+			"copyright": "Simulator © {{startYear}}-{{year}} WoWSims contributors",
 			"disclaimer": "A fan-made project, not affiliated with Blizzard Entertainment.",
-			"sims": "Sims",
-			"addon": "Addon",
-			"patreon": "Patreon"
+			"sims": "Null Sims",
+			"nossuary": "Null Ossuary",
+			"source": "Source on GitHub",
+			"issues": "Report an issue",
+			"credits": "Built on WoWSims",
+			"wowsims": "WoWSims",
+			"wowsims_source": "WoWSims Forever on GitHub",
+			"addon": "WoWSims Exporter addon"
 		}
 	},
 	"common": {
@@ -449,7 +452,7 @@
 			"sim_build": "Sim build",
 			"changed": "Changed {{date}}",
 			"details": "Release details",
-			"based_on": "Based on <upstream>WoWSims</upstream> (MIT)",
+			"based_on": "Based on <upstream>WoWSims</upstream> (<license>MIT</license>)",
 			"presets": "{{spec}} presets",
 			"engine": "{{spec}} engine"
 		}
@@ -1108,7 +1111,7 @@
 			},
 			"can_crush": {
 				"label": "Can Crush",
-				"tooltip": "Whether this enemy can land Crushing Blows (150% damage) against players below its level. Enabled by default for level 73 targets."
+				"tooltip": "Whether this enemy can land Crushing Blows (150% damage) against players below its level. Enabled by default for level 63 targets."
 			},
 			"spell_school": {
 				"label": "Spell School",
@@ -2888,8 +2891,7 @@
 			"error_invalid_export": "Please use a valid Addon export.",
 			"error_nothing_to_import": "The pasted text has no gear, race, professions or rotation to import.",
 			"error_invalid_rotation": "The rotation in the pasted text is not a valid rotation.",
-			"outdated": "Addon is not up to date. Addon version : '{{version}}', Latest version : '{{latest}}'",
-			"below_max_level": "The character you imported is level {{level}}. The import leaves the sim's level as it was: set Level under Player to sim it at {{level}}."
+			"outdated": "Addon is not up to date. Addon version : '{{version}}', Latest version : '{{latest}}'"
 		},
 		"siml": {
 			"title": "SIML Import",
@@ -3023,8 +3025,6 @@
 		"known_issues": "Known Issues",
 		"bug_report": "Report a bug or Request a feature",
 		"sim_options": "Sim Options",
-		"discord": "Join us on Discord",
-		"patreon": "Support us on Patreon",
 		"github": "Null Sims on GitHub",
 		"status": {
 			"unlaunched": "This sim is a WORK IN PROGRESS. It is not fully developed and should not be used for general purposes.",

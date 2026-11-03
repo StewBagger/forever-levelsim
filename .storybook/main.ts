@@ -3,6 +3,8 @@ import { fileURLToPath } from 'node:url';
 
 import type { StorybookConfig } from '@storybook/react-vite';
 
+import { SITE_BASE } from '../tools/vite/site_base.mjs';
+
 const here = path.dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
@@ -14,8 +16,8 @@ const config: StorybookConfig = {
 	},
 	stories: ['../ui/**/*.mdx', '../ui/**/*.stories.tsx'],
 	addons: ['@storybook/addon-docs'],
-	// Fonts and spec backgrounds are root-absolute under /forever/assets.
-	staticDirs: [{ from: '../assets', to: '/forever/assets' }],
+	// Fonts and spec backgrounds are root-absolute under the site's base (tools/vite/site_base.mts).
+	staticDirs: [{ from: '../assets', to: `${SITE_BASE}assets` }],
 	docs: { defaultName: 'Docs' },
 	typescript: { reactDocgen: 'react-docgen' },
 	core: { disableTelemetry: true },

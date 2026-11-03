@@ -54,28 +54,19 @@
 						"subtitle": {
 							"type": "string"
 						},
-						"discord": {
-							"type": "string"
-						},
 						"github": {
 							"type": "string"
 						},
 						"addon": {
 							"type": "string"
-						},
-						"patreon": {
-							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["wowsims", "subtitle", "discord", "github", "addon", "patreon"]
+					"required": ["wowsims", "subtitle", "github", "addon"]
 				},
 				"actions": {
 					"type": "object",
 					"properties": {
-						"discord": {
-							"type": "string"
-						},
 						"github": {
 							"type": "string"
 						},
@@ -84,11 +75,14 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["discord", "github", "addon"]
+					"required": ["github", "addon"]
 				},
 				"footer": {
 					"type": "object",
 					"properties": {
+						"about": {
+							"type": "string"
+						},
 						"copyright": {
 							"type": "string"
 						},
@@ -98,15 +92,30 @@
 						"sims": {
 							"type": "string"
 						},
-						"addon": {
+						"nossuary": {
 							"type": "string"
 						},
-						"patreon": {
+						"source": {
+							"type": "string"
+						},
+						"issues": {
+							"type": "string"
+						},
+						"credits": {
+							"type": "string"
+						},
+						"wowsims": {
+							"type": "string"
+						},
+						"wowsims_source": {
+							"type": "string"
+						},
+						"addon": {
 							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["copyright", "disclaimer", "sims", "addon", "patreon"]
+					"required": ["about", "copyright", "disclaimer", "sims", "nossuary", "source", "issues", "credits", "wowsims", "wowsims_source", "addon"]
 				}
 			},
 			"additionalProperties": false,
@@ -10287,9 +10296,6 @@
 						},
 						"outdated": {
 							"type": "string"
-						},
-						"below_max_level": {
-							"type": "string"
 						}
 					},
 					"additionalProperties": false,
@@ -10304,8 +10310,7 @@
 						"error_invalid_export",
 						"error_nothing_to_import",
 						"error_invalid_rotation",
-						"outdated",
-						"below_max_level"
+						"outdated"
 					]
 				},
 				"error": {
@@ -10761,12 +10766,6 @@
 				"sim_options": {
 					"type": "string"
 				},
-				"discord": {
-					"type": "string"
-				},
-				"patreon": {
-					"type": "string"
-				},
 				"github": {
 					"type": "string"
 				},
@@ -10911,7 +10910,7 @@
 				}
 			},
 			"additionalProperties": false,
-			"required": ["known_issues", "bug_report", "sim_options", "discord", "patreon", "github", "status", "options"]
+			"required": ["known_issues", "bug_report", "sim_options", "github", "status", "options"]
 		},
 		"onboarding": {
 			"type": "object",

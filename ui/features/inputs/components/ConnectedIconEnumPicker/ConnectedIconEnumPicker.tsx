@@ -1,6 +1,7 @@
 import { actionIdHref } from '@sim/hooks/useActionId';
 import { useActionIds, useResolvedActionIds } from '@sim/hooks/useActionIds';
 import { useResolvedIcon } from '@sim/hooks/useResolvedIcon';
+import { useWowheadLevel } from '@sim/hooks/useWowheadLevel';
 import type { ActionId } from '@sim/proto/action_id';
 import { actionIdWowheadTooltipData } from '@sim/proto/action_id/tooltip_data';
 import { IconEnumPicker } from '@ui-kit/IconEnumPicker';
@@ -18,8 +19,8 @@ export interface ConnectedIconEnumPickerProps<ModObject, T> {
 	testId?: string;
 }
 
-const buffDataset = (actionId: ActionId) =>
-	actionIdWowheadTooltipData(actionId, { useBuffAura: true }).then(url => (url ? { 'data-wowhead': url } : undefined));
+const buffDataset = (actionId: ActionId, level: number) =>
+	actionIdWowheadTooltipData(actionId, { useBuffAura: true, level }).then(url => (url ? { 'data-wowhead': url } : undefined));
 
 export const ConnectedIconEnumPicker = <ModObject, T>({ modObject, config, testId }: ConnectedIconEnumPickerProps<ModObject, T>) => {
 	const { value, setValue, disabled, revision, frameProps } = useConnectedField(modObject, config);
@@ -42,13 +43,15 @@ export const ConnectedIconEnumPicker = <ModObject, T>({ modObject, config, testI
 	// options fill. Each opening renders again, so values given as a function are read afresh. Every shown
 	// option's buff tooltip resolves from the start, so the first opening does not blank the selection's.
 	const [openings, setOpenings] = useState(0);
+	const level = useWowheadLevel();
 	const selected = values.find(valueConfig => config.equals(valueConfig.value, value));
 	const [selectedIcon] = useActionIds([selected && shows(selected) ? selected.actionId : undefined]);
 	const icons = useActionIds(values.map(valueConfig => (openings > 0 && shows(valueConfig) ? valueConfig.actionId : undefined)));
 	const buffDatasets = useResolvedActionIds(
 		values.map(valueConfig => (!hidden && shows(valueConfig) ? valueConfig.buffActionId : undefined)),
 		() => undefined,
-		buffDataset,
+		actionId => buffDataset(actionId, level),
+		level,
 	);
 	const backupIcon = useResolvedIcon(selected ? undefined : config.backupIconUrl?.(value));
 

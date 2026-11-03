@@ -16,14 +16,16 @@ const fillIcon = (actionId: ActionId) => (isFilled(actionId) ? undefined : actio
  * render that brings it, and `resolve` fetches the rest, answering `undefined` for an id with nothing to fetch, which
  * keeps its seed. A fetch that fails resolves its slot to `undefined` without holding back the others, and its
  * rejection surfaces once they settle. The ids are compared by content, so a fresh array of the same ids per render
- * neither refetches nor changes the returned array.
+ * neither refetches nor changes the returned array. A `revision` that changes fetches every id again, for a `resolve`
+ * whose answer depends on more than the id.
  */
 export const useResolvedActionIds = <R>(
 	actionIds: ReadonlyArray<ActionId | undefined>,
 	seed: (actionId: ActionId | undefined) => R | undefined,
 	resolve: (actionId: ActionId) => Promise<R | undefined> | undefined,
+	revision?: string | number,
 ): Resolved<R> => {
-	const key = actionIds.map(actionIdKey).join(',');
+	const key = actionIds.map(actionIdKey).join(',') + (revision === undefined ? '' : `#${revision}`);
 	const latest = useRef({ actionIds, seed, resolve });
 	latest.current = { actionIds, seed, resolve };
 

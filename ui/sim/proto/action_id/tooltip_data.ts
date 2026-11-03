@@ -12,9 +12,10 @@ export function actionIdWowheadTooltipData(
 		: ActionId.makeSpellTooltipData(actionId.spellIdTooltipOverride || actionId.spellId, params);
 }
 
-export function equippedItemWowheadTooltipData(gear: Gear, equippedItem: EquippedItem): Promise<string> {
+export function equippedItemWowheadTooltipData(gear: Gear, equippedItem: EquippedItem, level?: number): Promise<string> {
 	const enchantIds = [equippedItem.enchant?.effectId].filter((id): id is number => id !== undefined);
 	return actionIdWowheadTooltipData(equippedItem.asActionId(), {
+		level,
 		itemLevel: Number(equippedItem.ilvl),
 		enchantIds: enchantIds,
 		randomEnchantmentId: equippedItem.randomSuffix?.id,

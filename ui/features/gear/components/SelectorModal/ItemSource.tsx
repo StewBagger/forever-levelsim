@@ -1,6 +1,7 @@
 import { Faction } from '@generated/proto/common';
 import { type DropSource, DungeonDifficulty, UIItem as Item, UIItem_FactionRestriction, UIItemSource as ItemSourceEntry } from '@generated/proto/ui';
 import i18n from '@i18n/config';
+import { SITE_BASE } from '@sim/constants/other';
 import { ActionId } from '@sim/proto/action_id';
 import { difficultyNames, professionNames, REP_LEVEL_NAMES } from '@sim/proto/names';
 import type { Sim } from '@sim/sim';
@@ -25,8 +26,9 @@ const KIND_ORDER = ['crafted', 'drop', 'quest', 'rep', 'pvp', 'soldBy'] as const
 
 const FactionIcon = ({ restriction }: { restriction?: UIItem_FactionRestriction }) => {
 	if (restriction === UIItem_FactionRestriction.ALLIANCE_ONLY)
-		return <img src="/forever/assets/img/alliance.png" className="ml-1" width="15" height="15" alt="" />;
-	if (restriction === UIItem_FactionRestriction.HORDE_ONLY) return <img src="/forever/assets/img/horde.png" className="ml-1" width="15" height="15" alt="" />;
+		return <img src={`${SITE_BASE}assets/img/alliance.png`} className="ml-1" width="15" height="15" alt="" />;
+	if (restriction === UIItem_FactionRestriction.HORDE_ONLY)
+		return <img src={`${SITE_BASE}assets/img/horde.png`} className="ml-1" width="15" height="15" alt="" />;
 	return null;
 };
 

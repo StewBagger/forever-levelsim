@@ -1,5 +1,6 @@
 import { EnchantType, EquipmentSpec, ItemSpec, ItemType } from '@generated/proto/common';
 import { SimDatabase, SimEnchant } from '@generated/proto/db';
+import { SITE_BASE } from '@sim/constants/other';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Database } from './database';
@@ -67,8 +68,8 @@ describe('Database.get', () => {
 
 	it('keeps the consumables of db.json when it merges the leftovers', async () => {
 		const bodies: Record<string, object> = {
-			'/forever/assets/database/db.json': { consumables: [{ id: 5, name: 'Potion' }], itemIcons: [{ id: 5, name: 'Potion', icon: 'inv_potion' }] },
-			'/forever/assets/database/leftover_db.json': { items: [{ id: 7, name: 'Grey Sword', scalingOptions: { 0: { ilvl: 5 } } }] },
+			[`${SITE_BASE}assets/database/db.json`]: { consumables: [{ id: 5, name: 'Potion' }], itemIcons: [{ id: 5, name: 'Potion', icon: 'inv_potion' }] },
+			[`${SITE_BASE}assets/database/leftover_db.json`]: { items: [{ id: 7, name: 'Grey Sword', scalingOptions: { 0: { ilvl: 5 } } }] },
 		};
 		const fetchMock = vi.fn((url: string) => Promise.resolve({ json: () => Promise.resolve(bodies[url]) }));
 		vi.stubGlobal('fetch', fetchMock);
@@ -76,7 +77,7 @@ describe('Database.get', () => {
 		const Database = await freshDatabase();
 		const db = await Database.loadLeftoversIfNecessary(EquipmentSpec.create({ items: [ItemSpec.create({ id: 7 })] }));
 
-		expect(fetchMock).toHaveBeenCalledWith('/forever/assets/database/leftover_db.json');
+		expect(fetchMock).toHaveBeenCalledWith(`${SITE_BASE}assets/database/leftover_db.json`);
 		expect(db.getItemById(7)?.name).toBe('Grey Sword');
 		expect(db.getConsumable(5)?.name).toBe('Potion');
 	}, 30000);

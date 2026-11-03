@@ -315,7 +315,7 @@ A spec has no `sim.ts` or `index.ts` of its own. Adding a spec takes three steps
 The page itself is not one of the steps: there is no per-spec `index.html`, in the source tree or
 anywhere else. `ui/index_template.html` is the one spec page, and `tools/vite/spec_pages.mts`
 (the `spec-pages` vite plugin) puts it at all 18 URLs. In dev, `configureServer` answers
-`/forever/<class>/<spec>/` and `.../index.html` with it through `transformIndexHtml`. In the build,
+`<base><class>/<spec>/` and `.../index.html` with it through `transformIndexHtml`. In the build,
 a `post` `generateBundle` takes the page vite already processed, drops its own output path from the
 bundle, and re-emits it as `<class>/<spec>/index.html` for every spec. Both halves discover the
 spec list from `ui/specs/*/*/spec.ts(x)` (`discoverSpecPages`), and the `import.meta.glob` in
@@ -325,7 +325,15 @@ build-config edit.
 Copying one page 18× works because the page is constant. `ui/index_template.html` carries
 no `@@CLASS@@`/`@@SPEC@@` placeholders, and every asset reference is root-absolute
 (`/styles/style.css`, `/app/spec_entry.tsx`, `/i18n/localization.ts`), so vite rewrites them all to
-`/forever/...` and nothing in the built page depends on where it is served from. For the same reason
+the base (`/forever/...` by default) and nothing else in the built page depends on where it is served from.
+
+The base is one setting, `SIM_BASE`, read by `tools/vite/site_base.mts`: vite's `base`, the output
+folder (`dist/<base>`), the dev server's worker and asset routes, Storybook's static assets and the
+UI's own root-absolute urls (`SITE_BASE` in `ui/sim/constants/other.ts`: the database, workers,
+`lib.wasm.gz`, images and spec links) all follow it. Html names it as `%BASE_URL%`. Stylesheets keep
+writing `url(/forever/assets/...)`, and the `site-base-css` plugin moves that prefix to the base.
+`make site SIM_BASE=/sims/` builds the public site (`docs/commands.md`). Canonical and `og:url`
+links name the public home, `https://nossuary.com/sims/`, whatever the base. For the same reason
 the 18 pages share one entry chunk (`bundle/spec_entry-<hash>.entry.js`, from the `spec_entry` key
 in `rollupOptions.input`) instead of one near-identical chunk per page.
 `extractClassAndSpecFromDataAttributes` in `ui/i18n/localization.ts` derives class and spec from

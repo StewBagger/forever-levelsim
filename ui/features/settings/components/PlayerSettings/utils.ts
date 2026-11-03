@@ -38,5 +38,5 @@ export const levelInput = (host: IndividualSimHost<any>): NumberFieldConfig<Play
 	positive: true,
 	storeField: 'level' as const,
 	getValue: modObject => modObject.getLevel(),
-	setValue: (_, newValue) => applyLevelEdit(host, newValue),
+	setValue: (_, newValue) => void applyLevelEdit(host, newValue),
 });

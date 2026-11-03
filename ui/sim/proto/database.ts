@@ -4,18 +4,18 @@ import { SpellEffect } from '@generated/proto/spell';
 import { IconData, UIDatabase, UIEnchant as Enchant, UIFaction, UIItem as Item, UINPC as Npc, UIZone as Zone } from '@generated/proto/ui';
 
 import { CacheHandler } from '../cache/cache_handler';
-import { CHARACTER_LEVEL } from '../constants/mechanics';
+import { SITE_BASE } from '../constants/other';
 import { arrayEquals, distinct } from '../utils/collections';
 import { EquippedItem } from './equipped_item';
 import { Gear, ItemSwapGear } from './gear';
 import { enchantAppliesToItem, getEligibleEnchantSlots, getEligibleItemSlots } from './items';
 import { Stats } from './stats';
-import { WOWHEAD_DOMAIN, WOWHEAD_EXPANSION_ENV } from './wowhead';
+import { getWowheadLevel, WOWHEAD_DOMAIN, WOWHEAD_EXPANSION_ENV } from './wowhead';
 
-const dbUrlJson = '/forever/assets/database/db.json';
-const dbUrlBin = '/forever/assets/database/db.bin';
-const leftoversUrlJson = '/forever/assets/database/leftover_db.json';
-const leftoversUrlBin = '/forever/assets/database/leftover_db.bin';
+const dbUrlJson = `${SITE_BASE}assets/database/db.json`;
+const dbUrlBin = `${SITE_BASE}assets/database/db.bin`;
+const leftoversUrlJson = `${SITE_BASE}assets/database/leftover_db.json`;
+const leftoversUrlBin = `${SITE_BASE}assets/database/leftover_db.bin`;
 // When changing this value, don't forget to change the html <link> for preloading!
 const READ_JSON = true;
 const RANK_REGEX = /Rank ([0-9]+)/g;
@@ -353,7 +353,8 @@ export class Database {
 		return Database.getWowheadTooltipData(id, 'spell');
 	}
 	private static async getWowheadTooltipData(id: number, tooltipPostfix: string): Promise<IconData> {
-		const params = new URLSearchParams({ lvl: String(CHARACTER_LEVEL), dataEnv: String(WOWHEAD_EXPANSION_ENV) });
+		// The name and icon do not change with the level, so the cache that keeps them is keyed on the id alone.
+		const params = new URLSearchParams({ lvl: String(getWowheadLevel()), dataEnv: String(WOWHEAD_EXPANSION_ENV) });
 		const url = `https://nether.wowhead.com/${WOWHEAD_DOMAIN}/tooltip/${tooltipPostfix}/${id}?${params}`;
 		try {
 			const response = await fetch(url);

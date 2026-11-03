@@ -8,6 +8,7 @@ import {
 	UIItem as Item,
 	UIItem_FactionRestriction,
 } from '@generated/proto/ui';
+import { SITE_BASE } from '@sim/constants/other';
 import { SimHostProvider } from '@sim/context/SimHostContext';
 import { ActionId } from '@sim/proto/action_id';
 import { professionNames, REP_LEVEL_NAMES } from '@sim/proto/names';
@@ -314,7 +315,7 @@ describe('ItemSource', () => {
 		const { getByRole, getByAltText } = mount(item);
 
 		expect(getByRole('link').getAttribute('href')).toBe(ActionId.makeQuestUrl(1));
-		expect(getByAltText('').getAttribute('src')).toBe(`/forever/assets/img/${icon}.png`);
+		expect(getByAltText('').getAttribute('src')).toBe(`${SITE_BASE}assets/img/${icon}.png`);
 	});
 
 	it('shows no faction icon for a quest with no faction restriction', () => {

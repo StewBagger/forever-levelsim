@@ -57,6 +57,6 @@ describe('ActionLink', () => {
 		render(<ActionLink actionId={actionId()} isAura />);
 		await act(async () => {});
 
-		expect(tooltipData).toHaveBeenCalledWith(expect.anything(), { useBuffAura: true });
+		expect(tooltipData).toHaveBeenCalledWith(expect.anything(), { useBuffAura: true, level: 60 });
 	});
 });

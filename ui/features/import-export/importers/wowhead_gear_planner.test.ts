@@ -29,16 +29,18 @@ interface Exported {
 	className?: string;
 	race?: Race;
 	talents?: string;
+	level?: number;
 	gear?: Partial<Record<ItemSlot, Equipped>>;
 }
 
-const exportLink = ({ className = 'Warrior', race = Race.RaceHuman, talents = '', gear = {} }: Exported) =>
+const exportLink = ({ className = 'Warrior', race = Race.RaceHuman, talents = '', level = 60, gear = {} }: Exported) =>
 	WOWHEAD_GEAR_PLANNER_EXPORTER.getData(
 		fakeHost({
 			player: {
 				getPlayerClass: () => ({ friendlyName: className }),
 				getRace: () => race,
 				getTalentsString: () => talents,
+				getLevel: () => level,
 				getGear: () => ({
 					getItemSlots: () => Object.keys(gear).map(Number) as Array<ItemSlot>,
 					getEquippedItem: (slot: ItemSlot) => {
@@ -78,6 +80,18 @@ describe('the Wowhead gear planner link', () => {
 
 	it.each([Race.RaceHighOrderSkyborne, Race.RaceWindshaperSkyborne])('round-trips the multi-word race %s', async race => {
 		expect((await roundTrip({ race })).race).toBe(race);
+	});
+
+	it('carries the character level', async () => {
+		expect((await roundTrip({ level: 24 })).level).toBe(24);
+		expect((await roundTrip({ level: 60 })).level).toBe(60);
+	});
+
+	// Format version 0 writes nothing after the version byte, the level included.
+	it('names no level for a link that carries none', async () => {
+		const hash = btoa(String.fromCharCode(0)).replace(/=+$/, '');
+		const parsed = await importLink(`https://www.wowhead.com/${WOWHEAD_DOMAIN}/gear-planner/warrior/human/${hash}`);
+		expect(parsed.level).toBeUndefined();
 	});
 
 	it('round-trips the three-tree talent string', async () => {

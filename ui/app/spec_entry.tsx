@@ -1,4 +1,4 @@
-// Generic page entry for every spec site. A spec page is `/forever/<class>/<spec>/`, which mirrors the folder tree (vite's root is `ui/`), so the module to load is derivable from the URL — no per-spec `index.ts`.
+// Generic page entry for every spec site. A spec page is `<base>/<class>/<spec>/` (`/forever/` by default, tools/vite/site_base.mts), which mirrors the folder tree (vite's root is `ui/`), so the module to load is derivable from the URL — no per-spec `index.ts`.
 import '../shared/page_boot';
 
 import { browserEnv } from '@app/browser_env';
@@ -16,7 +16,7 @@ import { SimApp } from './SimApp';
 
 const modules = import.meta.glob<{ default: SpecDefinition<any> }>('../specs/*/*/spec.{ts,tsx}');
 
-// '/forever/warrior/dps/' -> '../specs/warrior/dps/spec' (then tried as .ts and .tsx — no spec
+// '<base>warrior/dps/' -> '../specs/warrior/dps/spec' (then tried as .ts and .tsx — no spec
 // carries real JSX today, but the glob accepts one that starts to).
 const specModuleKey = (pathname: string): string => {
 	const base = import.meta.env.BASE_URL || '/';

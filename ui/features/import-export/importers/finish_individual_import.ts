@@ -1,3 +1,4 @@
+import { applyLevelEdit } from '@features/settings/model/level_defaults';
 import type { APLRotation } from '@generated/proto/apl';
 import type { Class, EquipmentSpec, Profession, Race } from '@generated/proto/common';
 import { IndividualSimSettings } from '@generated/proto/ui';
@@ -12,6 +13,9 @@ import { toastManager } from '@ui-kit/Toast';
 // Only the class is required. Anything left out stays as it is in the sim.
 export interface IndividualImport {
 	charClass: Class;
+	// The character's level. It is set the way a user's level edit sets it, so the level's talents, gear and EP load,
+	// and the rest of the import is applied over them.
+	level?: number;
 	race?: Race;
 	equipmentSpec?: EquipmentSpec;
 	talentsStr?: string;
@@ -27,6 +31,7 @@ export const finishIndividualImport = async (
 	host: IndividualSimHost<any>,
 	{
 		charClass,
+		level,
 		race,
 		equipmentSpec,
 		talentsStr = '',
@@ -45,6 +50,10 @@ export const finishIndividualImport = async (
 		await Database.loadLeftoversIfNecessary(equipmentSpec);
 	}
 	const gear = equipmentSpec && host.sim.db.lookupEquipmentSpec(equipmentSpec);
+
+	if (level !== undefined) {
+		await applyLevelEdit(host, level);
+	}
 
 	// A talent string is positional: digit i of tree t is talents[i] of whatever tree the exporter
 	// was built against. Forever's trees are a different set, so applying a string built for other

@@ -13,13 +13,15 @@ import i18nextLoader from 'vite-plugin-i18next-loader';
 
 import { readBuildInfo } from './tools/vite/build_info.mjs';
 import { simlPlugin } from './tools/vite/siml.mjs';
+import { SITE_BASE, siteBaseCss, siteBaseDefine } from './tools/vite/site_base.mjs';
 import { SPEC_PAGE_TEMPLATE, specPages } from './tools/vite/spec_pages.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export const BASE_PATH = path.resolve(__dirname, 'ui');
-export const OUT_DIR = path.join(__dirname, 'dist', 'forever');
+// dist/forever for the default base, dist/sims for SIM_BASE=/sims/: the makefile's OUT_DIR names the same folder.
+export const OUT_DIR = path.join(__dirname, 'dist', SITE_BASE);
 
 // The ui/ path aliases. Mirrored by `compilerOptions.paths` in tsconfig.json and by the
 // layering rules in .oxlintrc.json; shared with vitest.config.mts from here so the site build and
@@ -37,14 +39,16 @@ export const UI_ALIASES: Record<string, string> = {
 };
 
 function serveExternalAssets() {
-	const simWorker = process.env.WASM_WORKER ? '/forever/sim_worker.js' : '/forever/local_worker.js';
-	const workerMappings = {
-		'/forever/sim_worker.js': simWorker,
-		'/forever/net_worker.js': '/forever/net_worker.js',
-		'/forever/lib.wasm.gz': '/forever/lib.wasm.gz',
-		'/forever/highs.wasm': '/forever/highs.wasm',
-		'/forever/siml_names.json': '/forever/siml_names.json',
+	const simWorker = process.env.WASM_WORKER ? 'sim_worker.js' : 'local_worker.js';
+	// Requested path under the base -> the file in OUT_DIR that answers it.
+	const workerMappings: Record<string, string> = {
+		[`${SITE_BASE}sim_worker.js`]: simWorker,
+		[`${SITE_BASE}net_worker.js`]: 'net_worker.js',
+		[`${SITE_BASE}lib.wasm.gz`]: 'lib.wasm.gz',
+		[`${SITE_BASE}highs.wasm`]: 'highs.wasm',
+		[`${SITE_BASE}siml_names.json`]: 'siml_names.json',
 	};
+	const assetsPrefix = `${SITE_BASE}assets`;
 
 	return {
 		name: 'serve-external-assets',
@@ -53,18 +57,15 @@ function serveExternalAssets() {
 				const url = req.url!;
 				const pathname = new URL(url, 'http://localhost').pathname;
 
-				if (Object.keys(workerMappings).includes(pathname)) {
-					const targetPath = workerMappings[pathname as keyof typeof workerMappings];
-					const assetsPath = path.resolve(__dirname, './dist/forever');
-					const requestedPath = path.join(assetsPath, targetPath.replace('/forever/', ''));
-
-					serveFile(res, requestedPath);
+				const workerFile = workerMappings[pathname];
+				if (workerFile) {
+					serveFile(res, path.join(OUT_DIR, workerFile));
 					return;
 				}
 
-				if (pathname.includes('/forever/assets')) {
+				if (pathname.includes(assetsPrefix)) {
 					const assetsPath = path.resolve(__dirname, './assets');
-					const assetRelativePath = pathname.split('/forever/assets')[1];
+					const assetRelativePath = pathname.split(assetsPrefix)[1];
 					const requestedPath = path.join(assetsPath, assetRelativePath);
 
 					serveFile(res, requestedPath);
@@ -118,7 +119,7 @@ function determineContentType(filePath: string) {
 
 export const getBaseConfig = ({ command, mode }: ConfigEnv) =>
 	({
-		base: '/forever/',
+		base: SITE_BASE,
 		root: BASE_PATH,
 		resolve: {
 			alias: { ...UI_ALIASES },
@@ -164,6 +165,7 @@ export default defineConfig(({ command, mode }) => {
 				},
 			]),
 			serveExternalAssets(),
+			siteBaseCss(),
 			specPages(BASE_PATH),
 			simlPlugin(),
 			checker({
@@ -177,6 +179,7 @@ export default defineConfig(({ command, mode }) => {
 		// repository built this page. A fork's build files its issues on the fork. VITE_BUILD_INFO is the
 		// release the landing page and the spec pages' sidebar show (tools/vite/build_info.mts).
 		define: {
+			...siteBaseDefine,
 			'import.meta.env.VITE_GITHUB_REPOSITORY': JSON.stringify(process.env.GITHUB_REPOSITORY ?? ''),
 			'import.meta.env.VITE_BUILD_INFO': JSON.stringify(buildInfo),
 		},

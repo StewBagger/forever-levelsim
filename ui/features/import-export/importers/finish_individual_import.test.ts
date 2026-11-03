@@ -27,6 +27,13 @@ vi.mock('@ui-kit/Toast', async importOriginal => ({
 	},
 }));
 
+const levelEdits = vi.hoisted(() => [] as Array<number>);
+vi.mock('@features/settings/model/level_defaults', () => ({
+	applyLevelEdit: async (_host: unknown, level: number) => {
+		levelEdits.push(level);
+	},
+}));
+
 const fromProto = vi.fn();
 
 const player = {
@@ -51,6 +58,7 @@ const parsed = (overrides: Partial<Parameters<typeof finishIndividualImport>[1]>
 describe('finishIndividualImport', () => {
 	beforeEach(() => {
 		toasts.length = 0;
+		levelEdits.length = 0;
 		for (const setter of [player.setRace, player.setGear, player.setTalentsString, player.setProfessions, fromProto, loadLeftovers]) setter.mockClear();
 	});
 
@@ -58,6 +66,21 @@ describe('finishIndividualImport', () => {
 		await expect(finishIndividualImport(host, parsed({ charClass: Class.ClassMage }))).rejects.toThrow('import.errors.wrong_class');
 		expect(player.setRace).not.toHaveBeenCalled();
 		expect(loadLeftovers).not.toHaveBeenCalled();
+	});
+
+	// The level's own talents, gear and EP load first, so the export's gear lands over them.
+	it("sets the export's level the way a user's edit does, before the gear", async () => {
+		player.setGear.mockImplementation(() => expect(levelEdits).toEqual([24]));
+		await finishIndividualImport(host, parsed({ level: 24, talentsStr: '' }));
+
+		expect(levelEdits).toEqual([24]);
+		expect(player.setGear).toHaveBeenCalledWith('the gear');
+		player.setGear.mockReset();
+	});
+
+	it('leaves the level alone for an export that names none', async () => {
+		await finishIndividualImport(host, parsed({ talentsStr: '' }));
+		expect(levelEdits).toEqual([]);
 	});
 
 	it('applies race, gear and professions, and reports success', async () => {

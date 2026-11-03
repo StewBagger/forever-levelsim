@@ -87,6 +87,25 @@ const WOWHEAD_EXPANSIONS = {
 export const WOWHEAD_EXPANSION_ENV: keyof typeof WOWHEAD_EXPANSIONS = 16;
 export const WOWHEAD_DOMAIN = WOWHEAD_EXPANSIONS[WOWHEAD_EXPANSION_ENV];
 
+// The level Wowhead shows items and spells at: the character's on a sim page, where SimHostObject keeps it in step
+// with the player's level, and 60 anywhere else. Wowhead scales a spell's numbers and an item's random suffix to it.
+let wowheadLevel = CHARACTER_LEVEL;
+const wowheadLevelListeners = new Set<() => void>();
+
+export const getWowheadLevel = (): number => wowheadLevel;
+
+export const setWowheadLevel = (level: number) => {
+	if (level === wowheadLevel) return;
+	wowheadLevel = level;
+	wowheadLevelListeners.forEach(listener => listener());
+};
+
+/** Calls `listener` when the Wowhead level changes; returns the unsubscribe. Shaped for `useSyncExternalStore`. */
+export const subscribeWowheadLevel = (listener: () => void): (() => void) => {
+	wowheadLevelListeners.add(listener);
+	return () => wowheadLevelListeners.delete(listener);
+};
+
 export const buildWowheadTooltipDataset = async (options: WowheadTooltipItemParams | WowheadTooltipSpellParams) => {
 	const lang = getLang();
 	const params = new URLSearchParams();
@@ -94,7 +113,7 @@ export const buildWowheadTooltipDataset = async (options: WowheadTooltipItemPara
 	params.set('domain', `${langPrefix}${WOWHEAD_DOMAIN}`);
 	params.set('dataEnv', String(WOWHEAD_EXPANSION_ENV));
 
-	params.set('lvl', String(options.level || CHARACTER_LEVEL));
+	params.set('lvl', String(options.level || wowheadLevel));
 
 	if ('spellId' in options) {
 		if (options.spellId) {

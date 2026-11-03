@@ -1,5 +1,4 @@
 import i18n from '@i18n/config';
-import { CHARACTER_LEVEL } from '@sim/constants/mechanics';
 import { raceNames } from '@sim/proto/names';
 import { WOWHEAD_GEAR_PLANNER_URL } from '@sim/proto/wowhead';
 
@@ -106,7 +105,7 @@ export const WOWHEAD_GEAR_PLANNER_EXPORTER: ExporterDefinition = {
 		const url = `${WOWHEAD_GEAR_PLANNER_URL}/${classStr}/${raceStr}/`;
 
 		const data: WowheadGearPlannerData = {
-			level: CHARACTER_LEVEL,
+			level: player.getLevel(),
 			talents: player.getTalentsString(),
 			items: [],
 		};

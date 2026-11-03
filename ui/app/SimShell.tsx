@@ -1,7 +1,7 @@
 import { CharacterStats } from '@features/character-stats';
 import { SimWarnings } from '@features/results/components/SimResultsPanel';
 import i18n from '@i18n/config';
-import { REPO_URL } from '@sim/constants/other';
+import { WOWSIMS_REPO_URL, WOWSIMS_URL } from '@sim/constants/other';
 import { useSimStatus } from '@sim/hooks/useSimStatus';
 import type { PlayerSpec } from '@sim/player/player_spec';
 import type { Sim } from '@sim/sim';
@@ -95,7 +95,10 @@ export const SimShell = ({ domRef, host, sim, className, spec, noticeText, known
 											<Trans
 												i18n={i18n}
 												i18nKey="common.release_info.based_on"
-												components={{ upstream: <Button href={REPO_URL} target="_blank" variant="link" size="none" /> }}
+												components={{
+													upstream: <Button href={WOWSIMS_URL} target="_blank" variant="link" size="none" />,
+													license: <Button href={WOWSIMS_REPO_URL} target="_blank" variant="link" size="none" />,
+												}}
 											/>
 										</p>
 									</div>

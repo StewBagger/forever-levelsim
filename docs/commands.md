@@ -67,6 +67,12 @@ WATCH=1 make webworkers
 # It does this by first doing make dist/forever and then copying all those files to binary_dist/forever and loading all the files in that directory into its binary on compile.
 make wowsimforever
 
+# Builds the static site for a host that serves it under another path, such as https://nossuary.com/sims/.
+# SIM_BASE names the path; the site lands in dist/<path> (dist/sims here) and is served from there as plain files:
+# its pages, bundle, workers, lib.wasm.gz, highs.wasm and assets all live under that one path, and the sim runs as
+# wasm in the browser. Leave SIM_BASE unset for the Go server, which serves its embedded copy at /forever/.
+make site SIM_BASE=/sims/
+
 # Using the --usefs flag will instead of hosting the client built into the binary, it will host whatever code is found in the /dist directory.
 # Use --wasm to host the client with the wasm simulator.
 # The server also disables all caching so that refreshes should pickup any changed files in dist/. The client will still call to the server to run simulations so you can iterate more quickly on client changes.

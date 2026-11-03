@@ -25,7 +25,7 @@ describe('RotationRowIcon', () => {
 		expect(tooltipData).not.toHaveBeenCalled();
 
 		const icon = mount('buffAura');
-		expect(tooltipData).toHaveBeenCalledWith(expect.anything(), { useBuffAura: true });
+		expect(tooltipData).toHaveBeenCalledWith(expect.anything(), { useBuffAura: true, level: 60 });
 		await waitFor(() => expect(icon.dataset.wowhead).toBe('spell=1'));
 	});
 });
