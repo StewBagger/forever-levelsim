@@ -70,3 +70,8 @@ func CreatureStatsAtLevel(level int32) (health, armor, autoAttackDps float64) {
 	row := creatureStatsByLevel[clampLevel(level)]
 	return row.Health, row.Armor, row.AutoAttackDps
 }
+
+// PlayerHealthAtLevel is ExpectedStat's player health at a level, the health of a typical player of it.
+func PlayerHealthAtLevel(level int32) float64 {
+	return creatureStatsByLevel[clampLevel(level)].PlayerHealth
+}

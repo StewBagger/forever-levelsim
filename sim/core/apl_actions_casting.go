@@ -29,7 +29,12 @@ func (rot *APLRotation) newActionCastSpell(config *proto.APLActionCastSpell) APL
 	}
 }
 func (action *APLActionCastSpell) IsReady(sim *Simulation) bool {
-	return action.spell.CanCastOrQueue(sim, action.target.Get()) &&
+	// A health lookup that finds no living ally leaves nothing to cast on.
+	target := action.target.Get()
+	if target == nil && action.target.isHealthLookup() {
+		return false
+	}
+	return action.spell.CanCastOrQueue(sim, target) &&
 		(!action.spell.Flags.Matches(SpellFlagMCD) ||
 			action.spell.Flags.Matches(SpellFlagReactive) ||
 			action.spell.Unit.GCD.IsReady(sim) ||
@@ -148,7 +153,12 @@ func (rot *APLRotation) newActionCastFriendlySpell(config *proto.APLActionCastFr
 	}
 }
 func (action *APLActionCastFriendlySpell) IsReady(sim *Simulation) bool {
-	return action.spell.CanCastOrQueue(sim, action.target.Get()) && (!action.spell.Flags.Matches(SpellFlagMCD) || action.spell.Flags.Matches(SpellFlagReactive) || action.spell.Unit.GCD.IsReady(sim) || action.spell.Unit.Rotation.inSequence)
+	// A health lookup that finds no living ally leaves nothing to cast on.
+	target := action.target.Get()
+	if target == nil && action.target.isHealthLookup() {
+		return false
+	}
+	return action.spell.CanCastOrQueue(sim, target) && (!action.spell.Flags.Matches(SpellFlagMCD) || action.spell.Flags.Matches(SpellFlagReactive) || action.spell.Unit.GCD.IsReady(sim) || action.spell.Unit.Rotation.inSequence)
 }
 func (action *APLActionCastFriendlySpell) Execute(sim *Simulation) {
 	action.spell.CastOrQueue(sim, action.target.Get())

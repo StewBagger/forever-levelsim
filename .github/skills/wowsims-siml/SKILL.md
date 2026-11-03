@@ -197,6 +197,8 @@ Written from `proto/apl.proto`, but for the accessors below.
 - `current_generic_resource`
 - `current_mana_regen`
 - `max_health`
+- `[unit.]missing_health`
+- `num_allies_below_health_percent(health_percent: number, party_only: bool)`
 - `max_mana`
 - `max_combo_points`
 - `max_energy`

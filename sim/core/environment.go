@@ -113,6 +113,10 @@ func (env *Environment) construct(raidProto *proto.Raid, encounterProto *proto.E
 		}
 	}
 
+	if len(raidProto.Tanks) > 0 {
+		env.Raid.tank = env.GetUnit(raidProto.Tanks[0], nil)
+	}
+
 	// A player in any tank slot is a tank, whether or not a target is assigned to it.
 	for _, ref := range raidProto.Tanks {
 		if agent := env.Raid.GetPlayerFromUnit(env.GetUnit(ref, nil)); agent != nil {
@@ -140,6 +144,7 @@ func (env *Environment) initialize(raidProto *proto.Raid, encounterProto *proto.
 	}
 
 	raidStats := env.Raid.applyCharacterEffects(raidProto)
+	env.applyDamageProfile(encounterProto.GetDamageProfile())
 
 	for _, party := range env.Raid.Parties {
 		for _, playerOrPet := range party.PlayersAndPets {
@@ -402,6 +407,17 @@ func (env *Environment) GetUnit(ref *proto.UnitReference, contextUnit *Unit) *Un
 			return nil
 		}
 		return env.NextActiveTargetUnit(contextUnit.CurrentTarget)
+	case proto.UnitReference_LowestHealthAlly:
+		return env.Raid.GetLowestHealthAllyUnit()
+	case proto.UnitReference_LowestHealthPartyMember:
+		if contextUnit == nil {
+			return nil
+		}
+		if party := env.Raid.partyOf(contextUnit); party != nil {
+			return party.GetLowestHealthMember()
+		}
+	case proto.UnitReference_Tank:
+		return env.Raid.tank
 	}
 
 	return nil

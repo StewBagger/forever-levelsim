@@ -137,6 +137,9 @@ type Raid struct {
 	AllUnits         []*Unit // Cached list of all Units (players and pets) in the raid.
 	NumTargetDummies int     // Number of player units that are dummy targets for heals.
 
+	dummySettings *proto.TargetDummySettings // What the target dummies are; nil keeps them without a health bar.
+	tank          *Unit                      // The unit in Raid.tanks[0], nil without one.
+
 	nextPetIndex int32
 
 	replenishmentUnits         []*Unit   // All units who can receive replenishment.
@@ -164,14 +167,43 @@ func (raid *Raid) GetActiveAllyUnits() []*Unit {
 	return activeAllyUnits
 }
 
+// The living ally with a health bar at the lowest share of its maximum health; on a tie, the first in
+// raid order. Nil when none is left.
 func (raid *Raid) GetLowestHealthAllyUnit() *Unit {
-	var lowestHealthUnit *Unit
-	for _, unit := range raid.AllUnits {
-		if unit.IsActive() && unit.Type != EnemyUnit && unit.HasHealthBar() && (lowestHealthUnit == nil || unit.CurrentHealth() < lowestHealthUnit.CurrentHealth()) {
-			lowestHealthUnit = unit
+	return lowestHealthUnit(raid.AllUnits)
+}
+
+// As GetLowestHealthAllyUnit, within one party.
+func (party *Party) GetLowestHealthMember() *Unit {
+	units := make([]*Unit, 0, len(party.PlayersAndPets))
+	for _, agent := range party.PlayersAndPets {
+		units = append(units, &agent.GetCharacter().Unit)
+	}
+	return lowestHealthUnit(units)
+}
+
+func lowestHealthUnit(units []*Unit) *Unit {
+	var lowest *Unit
+	for _, unit := range units {
+		if unit.isHealableAlly() && (lowest == nil || unit.CurrentHealthPercent() < lowest.CurrentHealthPercent()) {
+			lowest = unit
 		}
 	}
-	return lowestHealthUnit
+	return lowest
+}
+
+// Whether health lookups and group damage count the unit: an ally with a health bar that is up. Before
+// the environment is finalized, while rotations are built, every ally with a health bar counts.
+func (unit *Unit) isHealableAlly() bool {
+	if unit.Type == EnemyUnit || !unit.HasHealthBar() || unit.MaxHealth() <= 0 {
+		return false
+	}
+	return !unit.Env.IsFinalized() || (unit.IsActive() && !unit.Metrics.Died)
+}
+
+// The tank in Raid.tanks[0], nil without one.
+func (raid *Raid) Tank() *Unit {
+	return raid.tank
 }
 
 // Makes a new raid.
@@ -195,9 +227,15 @@ func NewRaid(raidConfig *proto.Raid, areaTypes []proto.AreaType) *Raid {
 	}
 
 	raid.NumTargetDummies = min(24, int(raidConfig.TargetDummies))
+	if raidConfig.TargetDummySettings.GetHealable() {
+		raid.dummySettings = raidConfig.TargetDummySettings
+	}
 	for i := 0; i < raid.NumTargetDummies; i++ {
 		party, partyIndex := raid.GetFirstEmptyRaidIndex()
 		dummy := NewTargetDummy(i, party, partyIndex)
+		if raid.dummySettings != nil {
+			dummy.Level = RaidLevel(raidConfig)
+		}
 		party.Players = append(party.Players, dummy)
 	}
 
@@ -332,6 +370,9 @@ func (raid *Raid) applyCharacterEffects(raidConfig *proto.Raid) *proto.RaidStats
 				// This happens for target dummies.
 				continue
 			}
+			if _, isDummy := player.(*TargetDummy); isDummy && raid.dummySettings != nil {
+				continue
+			}
 			playerConfig := partyConfig.Players[playerIdx]
 			individualBuffs := &proto.IndividualBuffs{}
 			if playerConfig.Buffs != nil {
@@ -345,6 +386,14 @@ func (raid *Raid) applyCharacterEffects(raidConfig *proto.Raid) *proto.RaidStats
 
 			for _, pet := range char.Pets {
 				pet.EnableHealthBar()
+			}
+		}
+
+		if raid.dummySettings != nil {
+			for _, player := range party.Players {
+				if dummy, ok := player.(*TargetDummy); ok {
+					dummy.enableHealth(raid.dummySettings)
+				}
 			}
 		}
 
@@ -379,6 +428,14 @@ func (raid *Raid) GetPlayerFromUnit(unit *Unit) Agent {
 				return agent
 			}
 		}
+	}
+	return nil
+}
+
+// The party a raid member or pet is in, nil for any other unit.
+func (raid *Raid) partyOf(unit *Unit) *Party {
+	if agent := raid.GetPlayerFromUnit(unit); agent != nil {
+		return agent.GetCharacter().Party
 	}
 	return nil
 }
@@ -455,6 +512,22 @@ func SinglePlayerRaidProto(player *proto.Player, partyBuffs *proto.PartyBuffs, r
 		},
 		Buffs:   raidBuffs,
 		Debuffs: debuffs,
+	}
+}
+
+// Adds n target dummies with the settings to a raid, and the empty parties they need past the first.
+func AddTargetDummies(raid *proto.Raid, n int32, settings *proto.TargetDummySettings) {
+	if n <= 0 {
+		return
+	}
+	raid.TargetDummies = n
+	raid.TargetDummySettings = settings
+	slots := int32(0)
+	for _, party := range raid.Parties {
+		slots += 5 - int32(len(party.Players))
+	}
+	for ; slots < n; slots += 5 {
+		raid.Parties = append(raid.Parties, &proto.Party{})
 	}
 }
 

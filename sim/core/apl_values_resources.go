@@ -30,7 +30,12 @@ func (value *APLValueCurrentHealth) Type() proto.APLValueType {
 	return proto.APLValueType_ValueTypeFloat
 }
 func (value *APLValueCurrentHealth) GetFloat(sim *Simulation) float64 {
-	return value.unit.Get().CurrentHealth()
+	// A lookup that finds no living ally reads as no health.
+	unit := value.unit.Get()
+	if unit == nil {
+		return 0
+	}
+	return unit.CurrentHealth()
 }
 func (value *APLValueCurrentHealth) String() string {
 	return "Current Health"
@@ -60,7 +65,12 @@ func (value *APLValueCurrentHealthPercent) Type() proto.APLValueType {
 	return proto.APLValueType_ValueTypeFloat
 }
 func (value *APLValueCurrentHealthPercent) GetFloat(sim *Simulation) float64 {
-	return value.unit.Get().CurrentHealthPercent()
+	// A lookup that finds no living ally reads as full health, so no heal is called for.
+	unit := value.unit.Get()
+	if unit == nil {
+		return 1
+	}
+	return unit.CurrentHealthPercent()
 }
 func (value *APLValueCurrentHealthPercent) String() string {
 	return fmt.Sprintf("Current Health %%")
@@ -89,6 +99,75 @@ func (value *APLValueMaxHealth) GetFloat(sim *Simulation) float64 {
 }
 func (value *APLValueMaxHealth) String() string {
 	return "Max Health"
+}
+
+type APLValueMissingHealth struct {
+	DefaultAPLValueImpl
+	unit UnitReference
+}
+
+func (rot *APLRotation) newValueMissingHealth(config *proto.APLValueMissingHealth, uuid *proto.UUID) APLValue {
+	unit := rot.GetSourceUnit(config.SourceUnit)
+	resolvedUnit := unit.Get()
+	if resolvedUnit == nil {
+		return nil
+	}
+	if !resolvedUnit.HasHealthBar() {
+		rot.ValidationMessageByUUID(uuid, proto.LogLevel_Warning, "%s does not use Health", resolvedUnit.Label)
+		return nil
+	}
+	return &APLValueMissingHealth{
+		unit: unit,
+	}
+}
+func (value *APLValueMissingHealth) Type() proto.APLValueType {
+	return proto.APLValueType_ValueTypeFloat
+}
+func (value *APLValueMissingHealth) GetFloat(sim *Simulation) float64 {
+	unit := value.unit.Get()
+	if unit == nil {
+		return 0
+	}
+	return max(0, unit.MaxHealth()-unit.CurrentHealth())
+}
+func (value *APLValueMissingHealth) String() string {
+	return fmt.Sprintf("Missing Health(%s)", value.unit.Get().Label)
+}
+
+type APLValueNumAlliesBelowHealthPercent struct {
+	DefaultAPLValueImpl
+	units     []*Unit
+	threshold float64
+}
+
+func (rot *APLRotation) newValueNumAlliesBelowHealthPercent(config *proto.APLValueNumAlliesBelowHealthPercent, _ *proto.UUID) APLValue {
+	units := rot.unit.Env.Raid.AllUnits
+	if config.PartyOnly {
+		party := rot.unit.Env.Raid.partyOf(rot.unit)
+		if party == nil {
+			return nil
+		}
+		units = MapSlice(party.PlayersAndPets, func(agent Agent) *Unit { return &agent.GetCharacter().Unit })
+	}
+	return &APLValueNumAlliesBelowHealthPercent{
+		units:     units,
+		threshold: config.HealthPercent / 100,
+	}
+}
+func (value *APLValueNumAlliesBelowHealthPercent) Type() proto.APLValueType {
+	return proto.APLValueType_ValueTypeInt
+}
+func (value *APLValueNumAlliesBelowHealthPercent) GetInt(sim *Simulation) int32 {
+	count := int32(0)
+	for _, unit := range value.units {
+		if unit.isHealableAlly() && unit.CurrentHealthPercent() < value.threshold {
+			count++
+		}
+	}
+	return count
+}
+func (value *APLValueNumAlliesBelowHealthPercent) String() string {
+	return fmt.Sprintf("Num Allies Below Health %%(%.0f)", value.threshold*100)
 }
 
 type APLValueCurrentMana struct {

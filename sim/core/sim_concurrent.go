@@ -115,6 +115,7 @@ func (rsrc *raidSimResultCombiner) newUnitMetrics(baseUnit *proto.UnitMetrics) *
 		Dtps:      rsrc.newDistMetrics(),
 		Tmi:       rsrc.newDistMetrics(),
 		Hps:       rsrc.newDistMetrics(),
+		Ehps:      rsrc.newDistMetrics(),
 		Tto:       rsrc.newDistMetrics(),
 		Actions:   make([]*proto.ActionMetrics, 0, len(baseUnit.Actions)),
 		Auras:     make([]*proto.AuraMetrics, len(baseUnit.Auras)),
@@ -289,6 +290,7 @@ func (rsrc *raidSimResultCombiner) addActionMetrics(unit *proto.UnitMetrics, add
 		baseTgt.Healing += addTgt.Healing
 		baseTgt.CritHealing += addTgt.CritHealing
 		baseTgt.Shielding += addTgt.Shielding
+		baseTgt.Overhealing += addTgt.Overhealing
 		baseTgt.CastTimeMs += addTgt.CastTimeMs
 		combineTargetHitRanges(baseTgt, addTgt)
 	}
@@ -345,7 +347,9 @@ func (rsrc *raidSimResultCombiner) combineUnitMetrics(base *proto.UnitMetrics, a
 	rsrc.combineDistMetrics(base.Dtps, add.Dtps, isLast, weight)
 	rsrc.combineDistMetrics(base.Tmi, add.Tmi, isLast, weight)
 	rsrc.combineDistMetrics(base.Hps, add.Hps, isLast, weight)
+	rsrc.combineDistMetrics(base.Ehps, add.Ehps, isLast, weight)
 	rsrc.combineDistMetrics(base.Tto, add.Tto, isLast, weight)
+	base.OverhealingPercent = overhealingPercent(base.Hps, base.Ehps)
 
 	base.SecondsOomAvg += add.SecondsOomAvg * weight
 	base.ChanceOfDeath += add.ChanceOfDeath * weight

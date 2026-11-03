@@ -808,6 +808,7 @@ func (spell *Spell) dealHealingInternal(sim *Simulation, isPeriodic bool, result
 	if result.Target.HasHealthBar() {
 		healed = max(0, min(healed, result.Target.MaxHealth()-result.Target.CurrentHealth()))
 	}
+	spell.SpellMetrics[result.Target.UnitIndex].TotalOverhealing += result.Damage - healed
 	result.Threat = spell.ThreatFromDamage(sim, result.Outcome, healed*ThreatPerHealingDone, spell.Unit.AttackTables[result.Target.UnitIndex])
 	spell.applySplitThreat(sim, result.Threat)
 	kind := proto.HitKind_HitKindHeal

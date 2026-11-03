@@ -648,6 +648,35 @@ message Encounter {
 
 	// The zone the area set came from, for the UI only; 0 once edited by hand.
 	int32 zone_id = 12;
+
+	// Incoming damage on the raid for a healing sim. Unset adds none.
+	DamageProfile damage_profile = 13;
+}
+
+// Damage the first target deals to the raid beside its own melee, for healing sims. Every amount is
+// what the boss deals before the struck unit's armor or resistance; 0 turns that part off. The
+// rolls come from the sim's random source, so a seed repeats them.
+message DamageProfile {
+	// Damage per second on the unit in Raid.tanks[0], as physical hits on top of the boss's melee.
+	double tank_dtps = 1;
+	// Seconds between the tank hits; 0 means 2.
+	double tank_hit_seconds = 2;
+
+	// The damage of one group pulse on each unit it strikes.
+	double group_damage = 3;
+	// How far each pulse's damage rolls either side of group_damage, as a share of it (0.2 is ±20%).
+	double group_damage_variation = 4;
+	// Seconds between group pulses; 0 means 8.
+	double group_cadence_seconds = 5;
+	// How far each interval rolls either side of group_cadence_seconds, in seconds.
+	double group_cadence_variation = 6;
+	// The units each pulse strikes, picked at random among the living raid members and pets with a health bar;
+	// 0 strikes all of them.
+	int32 group_targets = 7;
+	// The pulse's school.
+	SpellSchool group_school = 8;
+	// Whether a pulse can strike the tank.
+	bool group_hits_tank = 9;
 }
 
 message PresetTarget {
@@ -745,6 +774,9 @@ message UnitReference {
 		AllTargets = 7;
 		PreviousTarget = 8;
 		NextTarget = 9;
+		LowestHealthAlly = 10; // The living raid member or pet with a health bar at the lowest health share, read at each use.
+		LowestHealthPartyMember = 11; // As LowestHealthAlly, within the party of the unit reading it.
+		Tank = 12; // The unit in Raid.tanks[0].
 	}
 
 	// The type of unit being referenced.
@@ -782,6 +814,8 @@ enum OtherAction {
 	OtherActionResourcePotion = 24;
 	OtherActionDefensivePotion = 25;
 	OtherActionOffensivePotion = 26;
+	OtherActionTankDamage = 27; // A hit of the damage profile's tank damage (DamageProfile.tank_dtps).
+	OtherActionGroupDamage = 28; // A hit of the damage profile's group damage pulse.
 }
 
 message ActionID {

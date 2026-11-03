@@ -134,6 +134,25 @@ message Raid {
 
 	// Extra fake players to add. Currently only used by healing sims.
 	int32 target_dummies = 6;
+
+	// What the target dummies are; unset leaves them heal targets with no health bar.
+	TargetDummySettings target_dummy_settings = 8;
+}
+
+// Target dummies as group members a healer keeps alive.
+message TargetDummySettings {
+	// Gives every dummy a health bar at the raid's level, so heals restore health, damage takes it and
+	// the dummy counts as an ally for health lookups.
+	bool healable = 1;
+	// Each dummy's maximum health; 0 is ExpectedStat's player health at the raid's level.
+	double max_health = 2;
+	// The maximum health of a dummy in a tank slot; 0 is max_health.
+	double tank_max_health = 3;
+	// The armor of a dummy in a tank slot.
+	double tank_armor = 4;
+	// Whether a dummy at 0 health dies: it counts in chance_of_death and stops being picked by health
+	// lookups and group damage. Off, it stays up at 0 health.
+	bool track_deaths = 5;
 }
 
 message SimOptions {
@@ -289,6 +308,10 @@ message TargetedActionMetrics {
 	// # of times the rotation or a major cooldown pressed this action on this target, so procs, swings and
 	// spells cast by other spells never count. A cleave counts once, on the target it was pressed on.
 	int32 manual_casts = 40;
+
+	// Healing beyond what the target was missing, the part of healing that restored no health. A heal
+	// on a unit with no health bar counts none.
+	double overhealing = 41;
 }
 
 // The outcome a range in TargetedActionMetrics.ranges covers. The resisted kinds are partial resists.
@@ -371,6 +394,10 @@ message UnitMetrics {
 	DistributionMetrics dtps = 11;
 	DistributionMetrics tmi = 16;
 	DistributionMetrics hps = 14;
+	// Healing that restored health, plus shielding, per second: hps without the overhealing.
+	DistributionMetrics ehps = 17;
+	// The share of hps that was overhealing, 0-1.
+	double overhealing_percent = 18;
 	DistributionMetrics tto = 15; // Time To OOM, in seconds.
 
 	// average seconds spent oom per iteration
@@ -754,6 +781,12 @@ message StatWeightsRequest {
 	// Unset runs the request's iteration count once. Set, the first pass runs a fixed count the sim picks
 	// and the request's count plays no part.
 	StatWeightsTarget target = 12;
+
+	// The raid's target dummies and what they are, as on Raid; a healer weighs its stats against them.
+	int32 target_dummies = 13;
+	TargetDummySettings target_dummy_settings = 14;
+	// Weighs HPS on effective healing (UnitMetrics.ehps) in place of all healing.
+	bool effective_healing = 15;
 }
 
 // The ± each targeted EP runs extra iterations to reach.
@@ -785,6 +818,8 @@ message StatWeightRequestsData {
 	Stat ep_reference_stat = 2;
 	repeated StatWeightsStatRequestData stat_sim_requests = 3;
 	Stat hps_reference_stat = 4;
+	// Whether the HPS side pairs UnitMetrics.ehps rather than hps.
+	bool effective_healing = 5;
 }
 
 // The differences of one metric between a stat run and the baseline at the same iterations, before
@@ -855,11 +890,16 @@ message LevelDefaultsRequest {
 	// The spec's setup as the site sims it; its talents are the full build the level's are taken from.
 	StatWeightsRequest stat_weights = 1;
 	int32 level = 2;
+	// Picks gear by effective HPS EP. A request without target dummies or a damage profile gets the
+	// level's healing group (levelsim.HealingGroup).
+	bool weigh_effective_healing = 3;
 }
 message LevelDefaultsResult {
 	string talents_string = 1;
 	EquipmentSpec equipment = 2;
 	StatWeightValues dps = 3;
+	// The stat weights' HPS side, effective with weigh_effective_healing.
+	StatWeightValues hps = 7;
 	// ExpectedStat's creature armor at the level, for a same-level target.
 	double target_armor = 4;
 	int32 rounds = 5;

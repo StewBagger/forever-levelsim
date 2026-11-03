@@ -45,7 +45,7 @@ func isHitRatingRuns(runs statWeightStatRuns) bool {
 
 // The calc request for stat runs over the baseline's first iterations.
 func pairedStatWeightCalc(requests *proto.StatWeightRequestsData, base *proto.RaidSimResult, runs []statWeightStatRuns) *proto.StatWeightsCalcRequest {
-	baseline := statWeightValuesOf(base)
+	baseline := statWeightValuesOf(base, false)
 	calc := &proto.StatWeightsCalcRequest{
 		EpReferenceStat:    requests.EpReferenceStat,
 		HpsReferenceStat:   requests.HpsReferenceStat,
@@ -54,9 +54,9 @@ func pairedStatWeightCalc(requests *proto.StatWeightRequestsData, base *proto.Ra
 		BaseChanceOfDeath:  base.RaidMetrics.Parties[0].Players[0].ChanceOfDeath,
 	}
 	for _, statRuns := range runs {
-		pairs := &proto.StatWeightsStatPairs{StatData: statRuns.statData, High: pairStatWeightRun(baseline, statRuns.high, 0)}
+		pairs := &proto.StatWeightsStatPairs{StatData: statRuns.statData, High: pairStatWeightRun(baseline, statRuns.high, 0, false)}
 		if statRuns.low != nil {
-			pairs.Low = pairStatWeightRun(baseline, statRuns.low, 0)
+			pairs.Low = pairStatWeightRun(baseline, statRuns.low, 0, false)
 		}
 		calc.StatPairs = append(calc.StatPairs, pairs)
 	}
@@ -67,7 +67,7 @@ func pairedStatWeightCalc(requests *proto.StatWeightRequestsData, base *proto.Ra
 // baseline's values over every pass, and base, when set, is the baseline's run in this pass.
 func addStatWeightPass(calc *proto.StatWeightsCalcRequest, baseline statWeightRunValues, base *proto.RaidSimResult, runs []statWeightStatRuns) {
 	if base != nil {
-		calc.BaselineIterations += int32(len(statWeightValuesOf(base)[0]))
+		calc.BaselineIterations += int32(len(statWeightValuesOf(base, false)[0]))
 	}
 	for _, statRuns := range runs {
 		pairs := calc.StatPairs[slices.IndexFunc(calc.StatPairs, func(pairs *proto.StatWeightsStatPairs) bool {
@@ -75,9 +75,9 @@ func addStatWeightPass(calc *proto.StatWeightsCalcRequest, baseline statWeightRu
 		})]
 		offset := int(pairs.High.Dps.N)
 		if statRuns.low != nil {
-			addStatWeightPairs(pairs.Low, pairStatWeightRun(baseline, statRuns.low, offset))
+			addStatWeightPairs(pairs.Low, pairStatWeightRun(baseline, statRuns.low, offset, false))
 		}
-		addStatWeightPairs(pairs.High, pairStatWeightRun(baseline, statRuns.high, offset))
+		addStatWeightPairs(pairs.High, pairStatWeightRun(baseline, statRuns.high, offset, false))
 	}
 }
 
@@ -366,11 +366,11 @@ func statWeightRunWithHps(dps, hps []float64) *proto.RaidSimResult {
 // A run pairs each of its iterations with the baseline's at the same seed, from the offset it
 // continues at, and keeps its own chance of death.
 func TestStatWeightPairsARunWithTheBaselineFromItsOffset(t *testing.T) {
-	baseline := statWeightValuesOf(statWeightRunWithHps([]float64{1000, 1010, 990, 1005, 1020}, []float64{1, 2, 3, 4, 5}))
+	baseline := statWeightValuesOf(statWeightRunWithHps([]float64{1000, 1010, 990, 1005, 1020}, []float64{1, 2, 3, 4, 5}), false)
 	run := statWeightRunWithHps([]float64{995, 1013}, []float64{6, 3})
 	setChanceOfDeath(run, 0.25)
 
-	got := pairStatWeightRun(baseline, run, 2)
+	got := pairStatWeightRun(baseline, run, 2, false)
 	want := &proto.StatWeightsSidePairs{
 		Dps:           &proto.StatWeightsPairedSums{N: 2, Sum: 5 + 8, SumSq: 5*5 + 8*8},
 		Hps:           &proto.StatWeightsPairedSums{N: 2, Sum: 3 - 1, SumSq: 3*3 + 1*1},
@@ -387,7 +387,7 @@ func TestStatWeightPairsARunWithTheBaselineFromItsOffset(t *testing.T) {
 // The pairs of two passes add up to the pairs of one run over both, and keep the first pass's chance
 // of death.
 func TestStatWeightPairsFromTwoPassesAddUpToOneWindow(t *testing.T) {
-	baseline := statWeightValuesOf(statWeightRunWithHps([]float64{1000, 1010, 990, 1005, 1020, 998}, []float64{1, 2, 3, 4, 5, 6}))
+	baseline := statWeightValuesOf(statWeightRunWithHps([]float64{1000, 1010, 990, 1005, 1020, 998}, []float64{1, 2, 3, 4, 5, 6}), false)
 	dps, hps := []float64{1003, 1004, 991, 1011, 1017, 1002}, []float64{2, 2, 5, 1, 7, 6}
 	long := statWeightRunWithHps(dps, hps)
 	first, second := statWeightRunWithHps(dps[:4], hps[:4]), statWeightRunWithHps(dps[4:], hps[4:])
@@ -395,9 +395,9 @@ func TestStatWeightPairsFromTwoPassesAddUpToOneWindow(t *testing.T) {
 	setChanceOfDeath(first, 0.1)
 	setChanceOfDeath(second, 0.9)
 
-	got := pairStatWeightRun(baseline, first, 0)
-	addStatWeightPairs(got, pairStatWeightRun(baseline, second, 4))
-	if want := pairStatWeightRun(baseline, long, 0); !googleProto.Equal(got, want) {
+	got := pairStatWeightRun(baseline, first, 0, false)
+	addStatWeightPairs(got, pairStatWeightRun(baseline, second, 4, false))
+	if want := pairStatWeightRun(baseline, long, 0, false); !googleProto.Equal(got, want) {
 		t.Errorf("pairs of two passes = %v, want %v", got, want)
 	}
 }
@@ -703,7 +703,7 @@ func TestStatWeightsPairAStatThatStoppedEarlyWithTheBaselinePrefix(t *testing.T)
 	early := computeStatWeights(pairedStatWeightCalc(requests, longBase, longRuns))
 	trimmed := computeStatWeights(pairedStatWeightCalc(requests, firstBase, firstRuns))
 	twoPassCalc := pairedStatWeightCalc(requests, firstBase, firstRuns)
-	addStatWeightPass(twoPassCalc, statWeightValuesOf(longBase), secondBase, slices.DeleteFunc(secondRuns, isHitRatingRuns))
+	addStatWeightPass(twoPassCalc, statWeightValuesOf(longBase, false), secondBase, slices.DeleteFunc(secondRuns, isHitRatingRuns))
 	twoPass := computeStatWeights(twoPassCalc)
 
 	same := func(name string, got, want *proto.StatWeightsResult, stat stats.UnitStat) {
@@ -766,11 +766,11 @@ func TestStatWeightTopUpRepeatsOneLongerRun(t *testing.T) {
 	long := pairedStatWeightCalc(requests, longBase, statRuns(0, probe+topUp))
 
 	probeBase, topUpBase := run(requests.BaseRequest, 0, probe), run(requests.BaseRequest, probe, topUp)
-	baseline := statWeightValuesOf(probeBase)
-	for metric, values := range statWeightValuesOf(topUpBase) {
+	baseline := statWeightValuesOf(probeBase, false)
+	for metric, values := range statWeightValuesOf(topUpBase, false) {
 		baseline[metric] = append(baseline[metric], values...)
 	}
-	for metric, values := range statWeightValuesOf(longBase) {
+	for metric, values := range statWeightValuesOf(longBase, false) {
 		if !slices.Equal(baseline[metric], values) {
 			t.Errorf("baseline metric %d per iteration = %v, want %v", metric, baseline[metric], values)
 		}
@@ -994,7 +994,7 @@ func TestStatWeightsReadTheChanceOfDeathFromTheFirstRuns(t *testing.T) {
 		setChanceOfDeath(statRuns.high, 0.9)
 		setChanceOfDeath(statRuns.low, 0.9)
 	}
-	addStatWeightPass(calc, statWeightValuesOf(longBase), topUpBase, topUpRuns)
+	addStatWeightPass(calc, statWeightValuesOf(longBase, false), topUpBase, topUpRuns)
 
 	toppedUp := computeStatWeights(calc)
 	for _, stat := range []stats.UnitStat{agilityUnitStat, hitRatingUnitStat} {

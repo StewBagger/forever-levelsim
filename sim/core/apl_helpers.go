@@ -26,10 +26,17 @@ func (ur UnitReference) Get() *Unit {
 			return ur.targetLookupSource.CurrentTarget
 		case proto.UnitReference_NextTarget:
 			return ur.targetLookupSource.Env.NextActiveTargetUnit(ur.targetLookupSource.CurrentTarget)
+		case proto.UnitReference_LowestHealthAlly, proto.UnitReference_LowestHealthPartyMember:
+			return ur.targetLookupSource.Env.GetUnit(&proto.UnitReference{Type: ur.Type}, ur.targetLookupSource)
 		}
 	}
 
 	return nil
+}
+
+// Whether the reference picks an ally by health, so it finds nothing once every ally is dead.
+func (ur UnitReference) isHealthLookup() bool {
+	return ur.fixedUnit == nil && (ur.Type == proto.UnitReference_LowestHealthAlly || ur.Type == proto.UnitReference_LowestHealthPartyMember)
 }
 
 func (ur *UnitReference) String() string {
@@ -43,7 +50,9 @@ func NewUnitReference(ref *proto.UnitReference, contextUnit *Unit) UnitReference
 		return UnitReference{}
 	case ref.Type == proto.UnitReference_PreviousTarget,
 		ref.Type == proto.UnitReference_CurrentTarget,
-		ref.Type == proto.UnitReference_NextTarget:
+		ref.Type == proto.UnitReference_NextTarget,
+		ref.Type == proto.UnitReference_LowestHealthAlly,
+		ref.Type == proto.UnitReference_LowestHealthPartyMember:
 		return UnitReference{
 			Type:               ref.Type,
 			targetLookupSource: contextUnit,

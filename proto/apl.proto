@@ -149,6 +149,8 @@ message APLValue {
 		APLValueCurrentGenericResource current_generic_resource = 75;
 		APLValueCurrentManaRegen current_mana_regen = 130;
         APLValueMaxHealth max_health = 98;
+        APLValueMissingHealth missing_health = 147;
+        APLValueNumAlliesBelowHealthPercent num_allies_below_health_percent = 148;
 		APLValueMaxMana max_mana = 128;
 		APLValueMaxComboPoints max_combo_points = 93;
 		APLValueMaxEnergy max_energy = 87;
@@ -556,6 +558,15 @@ message APLValueCurrentComboPoints {}
 message APLValueCurrentGenericResource {}
 message APLValueCurrentManaRegen {}
 message APLValueMaxHealth {}
+// The unit's maximum health less its current health.
+message APLValueMissingHealth {
+    UnitReference source_unit = 1;
+}
+// The living raid members and pets with a health bar below a share of their maximum health.
+message APLValueNumAlliesBelowHealthPercent {
+    double health_percent = 1; // The threshold, 0-100.
+    bool party_only = 2; // Counts only the reading unit's party.
+}
 message APLValueMaxMana {}
 message APLValueMaxComboPoints {}
 message APLValueMaxEnergy {}

@@ -110,61 +110,8 @@ func (hb *healthBar) UpdateMaxHealth(sim *Simulation, bonusHealth float64, metri
 var ChanceOfDeathAuraLabel = "Chance of Death"
 
 func (character *Character) trackChanceOfDeath(healingModel *proto.HealingModel) {
-	character.Unit.Metrics.isTanking = false
-	for _, target := range character.Env.Encounter.AllTargetUnits {
-		if (target.CurrentTarget == &character.Unit) || (target.SecondaryTarget == &character.Unit) {
-			character.Unit.Metrics.isTanking = true
-		}
-	}
-
-	character.RegisterAura(Aura{
-		Label:    ChanceOfDeathAuraLabel,
-		Duration: NeverExpires,
-		OnReset: func(aura *Aura, sim *Simulation) {
-			aura.Activate(sim)
-		},
-		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
-			if result.Damage > 0 {
-				aura.Unit.RemoveHealth(sim, result.Damage)
-				if aura.Unit.Rotation != nil {
-					aura.Unit.ReactToEvent(sim, false, true)
-				}
-
-				if (aura.Unit.CurrentHealth() <= 0) && !aura.Unit.Metrics.Died {
-					// Queue a pending action to let shield effects give health
-					pa := sim.GetConsumedPendingActionFromPool()
-					pa.NextActionAt = sim.CurrentTime
-
-					pa.OnAction = func(sim *Simulation) {
-						if (aura.Unit.CurrentHealth() <= 0) && !aura.Unit.Metrics.Died {
-							character.Died(sim)
-						}
-					}
-
-					sim.AddPendingAction(pa)
-				}
-			}
-		},
-		OnPeriodicDamageTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
-			if result.Damage > 0 {
-				aura.Unit.RemoveHealth(sim, result.Damage)
-
-				if (aura.Unit.CurrentHealth() <= 0) && !aura.Unit.Metrics.Died {
-					// Queue a pending action to let shield effects give health
-					pa := sim.GetConsumedPendingActionFromPool()
-					pa.NextActionAt = sim.CurrentTime
-
-					pa.OnAction = func(sim *Simulation) {
-						if (aura.Unit.CurrentHealth() <= 0) && !aura.Unit.Metrics.Died {
-							character.Died(sim)
-						}
-					}
-
-					sim.AddPendingAction(pa)
-				}
-			}
-		},
-	})
+	character.Unit.Metrics.isTanking = character.isTargetedByEnemy()
+	character.trackHealth(true)
 
 	if !character.Unit.Metrics.isTanking {
 		return
@@ -179,6 +126,58 @@ func (character *Character) trackChanceOfDeath(healingModel *proto.HealingModel)
 	if healingModel.Hps != 0 {
 		character.applyHealingModel(healingModel)
 	}
+}
+
+// Whether an enemy starts the fight on the character, as its first or second target.
+func (character *Character) isTargetedByEnemy() bool {
+	for _, target := range character.Env.Encounter.AllTargetUnits {
+		if (target.CurrentTarget == &character.Unit) || (target.SecondaryTarget == &character.Unit) {
+			return true
+		}
+	}
+	return false
+}
+
+// Takes the damage the character is dealt off its health. With markDeaths, health at 0 once shields
+// have had their turn kills it for the rest of the iteration.
+func (character *Character) trackHealth(markDeaths bool) {
+	onDamage := func(aura *Aura, sim *Simulation, result *SpellResult, react bool) {
+		if result.Damage <= 0 {
+			return
+		}
+		aura.Unit.RemoveHealth(sim, result.Damage)
+		if react && aura.Unit.Rotation != nil {
+			aura.Unit.ReactToEvent(sim, false, true)
+		}
+
+		if markDeaths && (aura.Unit.CurrentHealth() <= 0) && !aura.Unit.Metrics.Died {
+			// Queue a pending action to let shield effects give health
+			pa := sim.GetConsumedPendingActionFromPool()
+			pa.NextActionAt = sim.CurrentTime
+
+			pa.OnAction = func(sim *Simulation) {
+				if (aura.Unit.CurrentHealth() <= 0) && !aura.Unit.Metrics.Died {
+					character.Died(sim)
+				}
+			}
+
+			sim.AddPendingAction(pa)
+		}
+	}
+
+	character.RegisterAura(Aura{
+		Label:    ChanceOfDeathAuraLabel,
+		Duration: NeverExpires,
+		OnReset: func(aura *Aura, sim *Simulation) {
+			aura.Activate(sim)
+		},
+		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
+			onDamage(aura, sim, result, true)
+		},
+		OnPeriodicDamageTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
+			onDamage(aura, sim, result, false)
+		},
+	})
 }
 
 func (character *Character) Died(sim *Simulation) {

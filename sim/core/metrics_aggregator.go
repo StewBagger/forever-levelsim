@@ -89,6 +89,7 @@ type UnitMetrics struct {
 	dtps   DistributionMetrics
 	tmi    DistributionMetrics
 	hps    DistributionMetrics
+	ehps   DistributionMetrics // Healing that restored health, plus shielding.
 	tto    DistributionMetrics
 
 	tmiList   []tmiListItem
@@ -248,6 +249,7 @@ type SpellMetrics struct {
 	TotalHealing                float64 // Healing done by all casts of this spell.
 	TotalCritHealing            float64 // Healing done by all critical casts of this spell.
 	TotalShielding              float64 // Shielding done by all casts of this spell.
+	TotalOverhealing            float64 // The part of TotalHealing beyond the health the target was missing.
 	TotalCastTime               time.Duration
 }
 
@@ -289,6 +291,7 @@ type TargetedActionMetrics struct {
 	Healing                float64
 	CritHealing            float64
 	Shielding              float64
+	Overhealing            float64
 	CastTime               time.Duration
 }
 
@@ -330,6 +333,7 @@ func (tam *TargetedActionMetrics) ToProto() *proto.TargetedActionMetrics {
 		Healing:                tam.Healing,
 		CritHealing:            tam.CritHealing,
 		Shielding:              tam.Shielding,
+		Overhealing:            tam.Overhealing,
 		CastTimeMs:             float64(tam.CastTime.Milliseconds()),
 	}
 }
@@ -341,6 +345,7 @@ func NewUnitMetrics() UnitMetrics {
 		dtps:    NewDistributionMetrics(),
 		tmi:     NewDistributionMetrics(),
 		hps:     NewDistributionMetrics(),
+		ehps:    NewDistributionMetrics(),
 		tto:     NewDistributionMetrics(),
 		actions: make(map[ActionID]*ActionMetrics),
 	}
@@ -489,6 +494,7 @@ func (unitMetrics *UnitMetrics) addSpellMetrics(spell *Spell, actionID ActionID,
 		tam.Healing += spellTargetMetrics.TotalHealing
 		tam.CritHealing += spellTargetMetrics.TotalCritHealing
 		tam.Shielding += spellTargetMetrics.TotalShielding
+		tam.Overhealing += spellTargetMetrics.TotalOverhealing
 		if !spell.Flags.Matches(SpellFlagPassiveSpell) {
 			tam.CastTime += spellTargetMetrics.TotalCastTime
 		}
@@ -501,6 +507,7 @@ func (unitMetrics *UnitMetrics) addSpellMetrics(spell *Spell, actionID ActionID,
 			unitMetrics.threat.Total += spellTargetMetrics.TotalThreat
 		} else {
 			unitMetrics.hps.Total += spellTargetMetrics.TotalHealing + spellTargetMetrics.TotalShielding
+			unitMetrics.ehps.Total += spellTargetMetrics.TotalHealing - spellTargetMetrics.TotalOverhealing + spellTargetMetrics.TotalShielding
 		}
 	}
 }
@@ -535,6 +542,7 @@ func (unitMetrics *UnitMetrics) reset() {
 	unitMetrics.tmi.reset()
 	unitMetrics.tmiList = nil
 	unitMetrics.hps.reset()
+	unitMetrics.ehps.reset()
 	unitMetrics.tto.reset()
 	unitMetrics.CharacterIterationMetrics = CharacterIterationMetrics{}
 
@@ -583,6 +591,7 @@ func (unitMetrics *UnitMetrics) doneIteration(unit *Unit, sim *Simulation) {
 	unitMetrics.dtps.doneIteration(sim)
 	unitMetrics.tmi.doneIteration(sim)
 	unitMetrics.hps.doneIteration(sim)
+	unitMetrics.ehps.doneIteration(sim)
 	unitMetrics.tto.doneIteration(sim)
 
 	unitMetrics.oomTimeSum += unitMetrics.OOMTime.Seconds()
@@ -677,10 +686,13 @@ func (unitMetrics *UnitMetrics) ToProto() *proto.UnitMetrics {
 		Dtps:          unitMetrics.dtps.ToProto(),
 		Tmi:           unitMetrics.tmi.ToProto(),
 		Hps:           unitMetrics.hps.ToProto(),
+		Ehps:          unitMetrics.ehps.ToProto(),
 		Tto:           unitMetrics.tto.ToProto(),
 		SecondsOomAvg: unitMetrics.oomTimeSum / n,
 		ChanceOfDeath: float64(unitMetrics.numItersDead) / n,
 	}
+
+	protoMetrics.OverhealingPercent = overhealingPercent(protoMetrics.Hps, protoMetrics.Ehps)
 
 	if len(unitMetrics.deathSeeds) > 0 {
 		slices.Sort(unitMetrics.deathSeeds)
@@ -740,4 +752,13 @@ func (auraMetrics *AuraMetrics) ToProto() *proto.AuraMetrics {
 			SumSq: auraMetrics.sumSq,
 		},
 	}
+}
+
+// The share of all healing and shielding that restored no health. Shielding counts what it absorbed,
+// so only healing adds to the difference.
+func overhealingPercent(hps *proto.DistributionMetrics, ehps *proto.DistributionMetrics) float64 {
+	if hps.GetAvg() <= 0 {
+		return 0
+	}
+	return max(0, hps.Avg-ehps.GetAvg()) / hps.Avg
 }

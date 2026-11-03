@@ -20,7 +20,8 @@ const maxRoundIterations = 4000
 // setup's spent up to the level's points (TrimTalents); the target is a creature of the level, with
 // its ExpectedStat armor. The gear starts from every weighed stat at 1 EP and weapon damage at 10,
 // then the set and the EP it is worn with alternate until the set stops changing. Where the set could
-// dual wield or wear a two-hander, a sim of each settles it.
+// dual wield or wear a two-hander, a sim of each settles it. With weigh_effective_healing the gear is
+// picked by effective HPS EP, against the level's healing group where the request brings none.
 func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResult) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -37,6 +38,12 @@ func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResul
 	}
 	if swr.SimOptions.Iterations == 0 || swr.SimOptions.Iterations > maxRoundIterations {
 		swr.SimOptions.Iterations = maxRoundIterations
+	}
+	if req.WeighEffectiveHealing {
+		WithHealingGroup(swr, level)
+		if swr.HpsReferenceStat == proto.Stat_StatStrength {
+			swr.HpsReferenceStat = proto.Stat_StatHealingPower
+		}
 	}
 	player := swr.Player
 	player.Level = level
@@ -60,7 +67,7 @@ func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResul
 
 	picker := NewGearPicker(player, level)
 	var last *proto.EquipmentSpec
-	var dps *proto.StatWeightValues
+	var dps, hps *proto.StatWeightValues
 	rounds := int32(0)
 	weigh := func(set *proto.EquipmentSpec) *proto.ErrorOutcome {
 		rounds++
@@ -69,8 +76,11 @@ func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResul
 		if sw.Error != nil {
 			return sw.Error
 		}
-		dps = sw.Dps
+		dps, hps = sw.Dps, sw.Hps
 		ep = dps.EpValues
+		if req.WeighEffectiveHealing {
+			ep = hps.EpValues
+		}
 		return nil
 	}
 	for rounds < maxRounds {
@@ -109,6 +119,7 @@ func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResul
 		TalentsString: player.TalentsString,
 		Equipment:     player.Equipment,
 		Dps:           dps,
+		Hps:           hps,
 		TargetArmor:   armor,
 		Rounds:        rounds,
 	}

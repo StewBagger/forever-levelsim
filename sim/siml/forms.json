@@ -45,6 +45,9 @@
 			"next_target": { "type": "NextTarget" },
 			"all_targets": { "type": "AllTargets" },
 			"all_players": { "type": "AllPlayers" },
+			"lowest_health_ally": { "type": "LowestHealthAlly" },
+			"lowest_health_party_member": { "type": "LowestHealthPartyMember" },
+			"tank": { "type": "Tank" },
 			"unknown_unit": { "type": "Unknown" }
 		},
 		"indexed": { "target": "Target", "player": "Player", "pet": "Pet" }

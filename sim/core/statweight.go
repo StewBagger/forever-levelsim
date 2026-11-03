@@ -164,6 +164,7 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 
 	raidProto := SinglePlayerRaidProto(swr.Player, swr.PartyBuffs, swr.RaidBuffs, swr.Debuffs)
 	raidProto.Tanks = swr.Tanks
+	AddTargetDummies(raidProto, swr.TargetDummies, swr.TargetDummySettings)
 
 	swr.SimOptions.SaveAllValues = true
 
@@ -197,6 +198,7 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 		EpReferenceStat:  swr.EpReferenceStat,
 		HpsReferenceStat: hpsReferenceStat,
 		StatSimRequests:  []*proto.StatWeightsStatRequestData{},
+		EffectiveHealing: swr.EffectiveHealing,
 	}
 
 	// Do half the iterations with a positive, and half with a negative value for better accuracy.
@@ -280,12 +282,17 @@ const (
 	StatWeightTargetProbeIterations = 1000  // The probe's iterations with a target, both sides together; the request's own count plays no part.
 )
 
-// The first player's per-iteration DPS, HPS, threat, DTPS and TMI of a run.
+// The first player's per-iteration DPS, HPS, threat, DTPS and TMI of a run. With effectiveHealing the
+// HPS is effective HPS.
 type statWeightRunValues [5][]float64
 
-func statWeightValuesOf(run *proto.RaidSimResult) statWeightRunValues {
+func statWeightValuesOf(run *proto.RaidSimResult, effectiveHealing bool) statWeightRunValues {
 	player := run.RaidMetrics.Parties[0].Players[0]
-	return statWeightRunValues{player.Dps.AllValues, player.Hps.AllValues, player.Threat.AllValues, player.Dtps.AllValues, player.Tmi.AllValues}
+	hps := player.Hps
+	if effectiveHealing {
+		hps = player.Ehps
+	}
+	return statWeightRunValues{player.Dps.AllValues, hps.AllValues, player.Threat.AllValues, player.Dtps.AllValues, player.Tmi.AllValues}
 }
 
 // The side's sums in statWeightRunValues order.
@@ -298,9 +305,9 @@ func statWeightPairedSums(aggr *aggregator) *proto.StatWeightsPairedSums {
 }
 
 // Pairs each iteration of a stat run with the baseline's iteration offset+i, which ran at the same seed.
-func pairStatWeightRun(baseline statWeightRunValues, run *proto.RaidSimResult, offset int) *proto.StatWeightsSidePairs {
+func pairStatWeightRun(baseline statWeightRunValues, run *proto.RaidSimResult, offset int, effectiveHealing bool) *proto.StatWeightsSidePairs {
 	side := &proto.StatWeightsSidePairs{ChanceOfDeath: run.RaidMetrics.Parties[0].Players[0].ChanceOfDeath}
-	values := statWeightValuesOf(run)
+	values := statWeightValuesOf(run, effectiveHealing)
 	for metric, sums := range statWeightSideSums(side) {
 		var aggr aggregator
 		for i, value := range values[metric] {
@@ -588,7 +595,7 @@ func runStatWeights(request *proto.StatWeightsRequest, progress chan *proto.Prog
 	}
 
 	// Only the baseline keeps its per-iteration values, for the stat runs of later passes to pair with.
-	baselineValues := statWeightValuesOf(baselineResult)
+	baselineValues := statWeightValuesOf(baselineResult, requestData.EffectiveHealing)
 	calc := &proto.StatWeightsCalcRequest{
 		EpReferenceStat:    requestData.EpReferenceStat,
 		HpsReferenceStat:   requestData.HpsReferenceStat,
@@ -629,7 +636,7 @@ func runStatWeights(request *proto.StatWeightsRequest, progress chan *proto.Prog
 		if result.Error != nil {
 			return result.Error
 		}
-		pass := pairStatWeightRun(baselineValues, result, int(done))
+		pass := pairStatWeightRun(baselineValues, result, int(done), requestData.EffectiveHealing)
 		if *side == nil {
 			*side = pass
 		} else {
@@ -682,7 +689,7 @@ func runStatWeights(request *proto.StatWeightsRequest, progress chan *proto.Prog
 			if baseRes.Error != nil {
 				return &proto.StatWeightsResult{Error: baseRes.Error}
 			}
-			for metric, values := range statWeightValuesOf(baseRes) {
+			for metric, values := range statWeightValuesOf(baseRes, requestData.EffectiveHealing) {
 				baselineValues[metric] = append(baselineValues[metric], values...)
 			}
 			calc.BaselineIterations = int32(len(baselineValues[0]))

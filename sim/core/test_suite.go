@@ -65,7 +65,12 @@ func (testSuite *IndividualTestSuite) TestStatWeights(testName string, swr *prot
 	testSuite.testNames = append(testSuite.testNames, testName)
 
 	result := StatWeights(swr)
-	weights := stats.WeightsFromUnitStatsProto(result.Dps.EpValues)
+	// A healer's request weighs effective healing, and its HPS EP is the one it records.
+	ep := result.Dps.EpValues
+	if swr.EffectiveHealing {
+		ep = result.Hps.EpValues
+	}
+	weights := stats.WeightsFromUnitStatsProto(ep)
 
 	testSuite.testResults.StatWeightsResults[testName] = &proto.StatWeightsTestResult{
 		Weights: toFixedStats(weights[:], storagePrecision),

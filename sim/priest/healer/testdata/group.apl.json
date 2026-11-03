@@ -1,0 +1,282 @@
+{
+  "type": "TypeAPL",
+  "priorityList": [
+    {
+      "action": {
+        "castFriendlySpell": {
+          "spellId": {
+            "spellId": 10901
+          },
+          "target": {
+            "type": "Tank"
+          }
+        },
+        "condition": {
+          "cmp": {
+            "op": "OpLt",
+            "lhs": {
+              "currentHealthPercent": {
+                "sourceUnit": {
+                  "type": "Tank"
+                }
+              }
+            },
+            "rhs": {
+              "const": {
+                "val": "90%"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "action": {
+        "castFriendlySpell": {
+          "spellId": {
+            "spellId": 25316
+          },
+          "target": {
+            "type": "Self"
+          }
+        },
+        "condition": {
+          "cmp": {
+            "op": "OpGe",
+            "lhs": {
+              "numAlliesBelowHealthPercent": {
+                "healthPercent": 70,
+                "partyOnly": true
+              }
+            },
+            "rhs": {
+              "const": {
+                "val": "3"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "action": {
+        "castFriendlySpell": {
+          "spellId": {
+            "spellId": 10917
+          },
+          "target": {
+            "type": "LowestHealthAlly"
+          }
+        },
+        "condition": {
+          "cmp": {
+            "op": "OpLt",
+            "lhs": {
+              "currentHealthPercent": {
+                "sourceUnit": {
+                  "type": "LowestHealthAlly"
+                }
+              }
+            },
+            "rhs": {
+              "const": {
+                "val": "40%"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "action": {
+        "castFriendlySpell": {
+          "spellId": {
+            "spellId": 25314
+          },
+          "target": {
+            "type": "LowestHealthAlly"
+          }
+        },
+        "condition": {
+          "and": {
+            "vals": [
+              {
+                "cmp": {
+                  "op": "OpLt",
+                  "lhs": {
+                    "currentHealthPercent": {
+                      "sourceUnit": {
+                        "type": "LowestHealthAlly"
+                      }
+                    }
+                  },
+                  "rhs": {
+                    "const": {
+                      "val": "60%"
+                    }
+                  }
+                }
+              },
+              {
+                "or": {
+                  "vals": [
+                    {
+                      "cmp": {
+                        "op": "OpGt",
+                        "lhs": {
+                          "currentManaPercent": {}
+                        },
+                        "rhs": {
+                          "const": {
+                            "val": "25%"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "cmp": {
+                        "op": "OpLt",
+                        "lhs": {
+                          "currentHealthPercent": {
+                            "sourceUnit": {
+                              "type": "LowestHealthAlly"
+                            }
+                          }
+                        },
+                        "rhs": {
+                          "const": {
+                            "val": "50%"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "action": {
+        "castFriendlySpell": {
+          "spellId": {
+            "spellId": 6064
+          },
+          "target": {
+            "type": "LowestHealthAlly"
+          }
+        },
+        "condition": {
+          "and": {
+            "vals": [
+              {
+                "cmp": {
+                  "op": "OpLt",
+                  "lhs": {
+                    "currentHealthPercent": {
+                      "sourceUnit": {
+                        "type": "LowestHealthAlly"
+                      }
+                    }
+                  },
+                  "rhs": {
+                    "const": {
+                      "val": "75%"
+                    }
+                  }
+                }
+              },
+              {
+                "or": {
+                  "vals": [
+                    {
+                      "cmp": {
+                        "op": "OpGt",
+                        "lhs": {
+                          "currentManaPercent": {}
+                        },
+                        "rhs": {
+                          "const": {
+                            "val": "25%"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "cmp": {
+                        "op": "OpLt",
+                        "lhs": {
+                          "currentHealthPercent": {
+                            "sourceUnit": {
+                              "type": "LowestHealthAlly"
+                            }
+                          }
+                        },
+                        "rhs": {
+                          "const": {
+                            "val": "50%"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "action": {
+        "castFriendlySpell": {
+          "spellId": {
+            "spellId": 25315
+          },
+          "target": {
+            "type": "Tank"
+          }
+        },
+        "condition": {
+          "and": {
+            "vals": [
+              {
+                "not": {
+                  "val": {
+                    "dotIsActive": {
+                      "spellId": {
+                        "spellId": 25315
+                      },
+                      "targetUnit": {
+                        "type": "Tank"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "cmp": {
+                  "op": "OpLt",
+                  "lhs": {
+                    "currentHealthPercent": {
+                      "sourceUnit": {
+                        "type": "Tank"
+                      }
+                    }
+                  },
+                  "rhs": {
+                    "const": {
+                      "val": "95%"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

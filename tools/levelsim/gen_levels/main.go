@@ -1,7 +1,8 @@
 // Command gen_levels writes the per-level tables a character below level 60 sims with:
 //
 //   - sim/core/level_stats_auto_gen.go: base attributes, base mana, crit per Agility and Intellect per
-//     class and level, and the creature health, armor and auto attack dps per level.
+//     class and level, the creature health, armor and auto attack dps per level, and the player health
+//     per level.
 //   - sim/core/spelldata/unlevelled_auto_gen.go: the store spells with no SpellLevels row, which the
 //     store writes as taught at 60 and which spelldata.LearnedRank reads as taught at 1.
 //
@@ -143,9 +144,10 @@ func writeLevelStats(db *sql.DB) {
 	writeClassTable("critPerIntByLevel", "Spell crit percent per point of Intellect, by class and level (PlayerExpectedStat.SpellCritPerIntellect).",
 		func(e expectedRow) float64 { return e.spellCritPerInt })
 
-	b.WriteString("// ExpectedStat's creature health, armor and auto attack dps by level, the base a pet's stats scale from.\n")
-	b.WriteString("var creatureStatsByLevel = [61]struct{ Health, Armor, AutoAttackDps float64 }{\n")
-	cr, err := db.Query(`SELECT Lvl, CreatureHealth, CreatureArmor, CreatureAutoAttackDps
+	b.WriteString("// ExpectedStat's creature health, armor and auto attack dps by level, the base a pet's stats scale from,\n")
+	b.WriteString("// and its player health, a player of the level's.\n")
+	b.WriteString("var creatureStatsByLevel = [61]struct{ Health, Armor, AutoAttackDps, PlayerHealth float64 }{\n")
+	cr, err := db.Query(`SELECT Lvl, CreatureHealth, CreatureArmor, CreatureAutoAttackDps, PlayerHealth
 		FROM ExpectedStat WHERE ContentSetID = 0 AND Lvl BETWEEN 1 AND ? ORDER BY Lvl`, maxLevel)
 	if err != nil {
 		log.Fatal(err)
@@ -153,11 +155,11 @@ func writeLevelStats(db *sql.DB) {
 	seen := 0
 	for cr.Next() {
 		var l int
-		var h, a, d float64
-		if err := cr.Scan(&l, &h, &a, &d); err != nil {
+		var h, a, d, p float64
+		if err := cr.Scan(&l, &h, &a, &d, &p); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Fprintf(&b, "\t%d: {%v, %v, %v},\n", l, h, a, d)
+		fmt.Fprintf(&b, "\t%d: {%v, %v, %v, %v},\n", l, h, a, d, p)
 		seen++
 	}
 	cr.Close()

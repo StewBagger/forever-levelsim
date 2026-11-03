@@ -1,0 +1,126 @@
+stat_weights_results: {
+ key: "TestHealerPriestGroup-Level30-StatWeights"
+ value: {
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 1.65654
+  weights: 1
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0.99782
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0.14008
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 2.49069
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+ }
+}
+stat_weights_results: {
+ key: "TestHealerPriestGroup-Level60-StatWeights"
+ value: {
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 2.01252
+  weights: 1
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0.64895
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0.05675
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 2.83475
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+ }
+}
+dps_results: {
+ key: "TestHealerPriestGroup-Level30"
+ value: {
+  tps: 16.34528
+  dtps: 5.40105
+  hps: 63.29819
+ }
+}
+dps_results: {
+ key: "TestHealerPriestGroup-Level60"
+ value: {
+  tps: 45.7652
+  dtps: 15.50117
+  hps: 275.35446
+ }
+}

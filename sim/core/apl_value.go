@@ -132,6 +132,10 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueCurrentComboPoints(config.GetCurrentComboPoints(), config.Uuid)
 	case *proto.APLValue_MaxHealth:
 		value = rot.newValueMaxHealth(config.GetMaxHealth(), config.Uuid)
+	case *proto.APLValue_MissingHealth:
+		value = rot.newValueMissingHealth(config.GetMissingHealth(), config.Uuid)
+	case *proto.APLValue_NumAlliesBelowHealthPercent:
+		value = rot.newValueNumAlliesBelowHealthPercent(config.GetNumAlliesBelowHealthPercent(), config.Uuid)
 	case *proto.APLValue_MaxMana:
 		value = rot.newValueMaxMana(config.GetMaxMana(), config.Uuid)
 	case *proto.APLValue_CurrentManaRegen:

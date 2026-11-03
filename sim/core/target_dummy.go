@@ -42,6 +42,25 @@ func NewTargetDummy(dummyIndex int, party *Party, partyIndex int) *TargetDummy {
 	return td
 }
 
+// Gives the dummy the health bar, health and tank armor the settings ask for, and takes the damage it
+// is dealt off its health like a player's.
+func (td *TargetDummy) enableHealth(settings *proto.TargetDummySettings) {
+	health := settings.MaxHealth
+	if health <= 0 {
+		health = PlayerHealthAtLevel(td.Level)
+	}
+	if td.isTank {
+		if settings.TankMaxHealth > 0 {
+			health = settings.TankMaxHealth
+		}
+		td.AddStat(stats.Armor, settings.TankArmor)
+	}
+	td.AddStat(stats.Health, health)
+	td.EnableHealthBar()
+	td.Metrics.isTanking = td.isTargetedByEnemy()
+	td.trackHealth(settings.TrackDeaths)
+}
+
 func (td *TargetDummy) GetCharacter() *Character {
 	return &td.Character
 }
