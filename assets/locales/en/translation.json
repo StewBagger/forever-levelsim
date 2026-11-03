@@ -3032,6 +3032,7 @@
 			"alpha": "This sim is in ALPHA. Bugs are expected; please let us know if you find one!",
 			"beta": "This sim is in BETA. There may still be a few bugs; please let us know if you find one!"
 		},
+		"levelling_unverified": "Results below level 60 are not yet checked against real combat logs. Treat them as estimates.",
 		"spell_resistance": "Spell resistance uses a formula based on findings from the WoW Forever beta: partial resists in 10% steps around an average of R / (R + 5 × level + 80), and Spell Piercing beyond the target's resistance as bonus damage. It may change as more data comes in.",
 		"options": {
 			"title": "Options",

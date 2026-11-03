@@ -10788,6 +10788,9 @@
 					"additionalProperties": false,
 					"required": ["unlaunched", "alpha", "beta"]
 				},
+				"levelling_unverified": {
+					"type": "string"
+				},
 				"spell_resistance": {
 					"type": "string"
 				},

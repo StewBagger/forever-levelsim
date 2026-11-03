@@ -26,5 +26,5 @@ const SPELL_CASTER_SPECS: ReadonlySet<Spec> = new Set([Spec.SpecBalanceDruid, Sp
 export const knownIssuesFor = (simStatus: SimStatus, spec: Spec, knownIssues?: ReadonlyArray<ReactNode>): ReactNode[] => {
 	const notice = statusNotice(simStatus.status);
 	const casterNotices = SPELL_CASTER_SPECS.has(spec) ? [i18n.t('info.spell_resistance')] : [];
-	return [...(notice ? [notice] : []), ...casterNotices, ...(knownIssues ?? []), ...globalKnownIssues];
+	return [i18n.t('info.levelling_unverified'), ...(notice ? [notice] : []), ...casterNotices, ...(knownIssues ?? []), ...globalKnownIssues];
 };
