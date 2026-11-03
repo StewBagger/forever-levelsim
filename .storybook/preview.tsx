@@ -10,7 +10,6 @@ import { SPEC_THEMES } from '../ui/design-system/tokens/spec_themes';
 import { withSimUi } from '../ui/testing/storybook/decorators';
 import { DEFINITIONS } from '../ui/ui-kit/Icon/definitions';
 
-(globalThis as unknown as { gtag: () => void }).gtag = () => {};
 // The Actions panel logs an fn() call as its whole argument list, so a React event arrives unrecognised
 // and its `view` (the window) reaches the channel serialiser, which throws on the window's cycles.
 // Depth 3 stops the serialiser short of them; 5 and deeper throws.

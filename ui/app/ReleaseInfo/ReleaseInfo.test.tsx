@@ -22,7 +22,7 @@ describe('ReleaseInfo', () => {
 		render(<ReleaseInfo />);
 		expect(screen.getByRole('paragraph').textContent).toBe('Game 1.60.1.70450 · Built 2026-10-18 · 2fe052c');
 		const link = screen.getByRole('link', { name: '2fe052c' });
-		expect(link.getAttribute('href')).toBe(`https://github.com/wowsims/forever/commit/${RELEASE.commit}`);
+		expect(link.getAttribute('href')).toBe(`https://github.com/StewBagger/forever-levelsim/commit/${RELEASE.commit}`);
 		expect(link.getAttribute('rel')).toBe('noopener noreferrer');
 	});
 

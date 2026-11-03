@@ -81,7 +81,7 @@ export const SIXTY_UPGRADES_EP_EXPORTER: ExporterDefinition = {
 		});
 
 		return (
-			`https://sixtyupgrades.com/forever/ep/import?name=${encodeURIComponent(`${player.getPlayerSpec().friendlyName} WoWSims Weights`)}` +
+			`https://sixtyupgrades.com/forever/ep/import?name=${encodeURIComponent(`${player.getPlayerSpec().friendlyName} Null Sims Weights`)}` +
 			Object.keys(namesToWeights)
 				.map(statName => `&${statName}=${namesToWeights[statName].toFixed(3)}`)
 				.join('')

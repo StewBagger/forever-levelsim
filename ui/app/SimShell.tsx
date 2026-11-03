@@ -114,7 +114,7 @@ export const SimShell = ({ domRef, host, sim, className, spec, noticeText, known
 										data-testid="sim-header-container">
 										<SimTabsStrip />
 										{host && <SimImportExport />}
-										<SimToolbar sim={sim} knownIssues={knownIssues} onOpenSettings={onOpenSettings} />
+										<SimToolbar knownIssues={knownIssues} onOpenSettings={onOpenSettings} />
 									</div>
 								</header>
 								<main className="flex h-4/5 grow" data-testid="sim-main">

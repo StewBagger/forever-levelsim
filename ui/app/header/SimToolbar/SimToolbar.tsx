@@ -1,20 +1,16 @@
 import i18n from '@i18n/config';
-import { ISSUES_REPO, REPO_CHOOSE_NEW_ISSUE_URL, REPO_RELEASES_URL, SOCIALS } from '@sim/constants/other';
-import { useOutdatedNativeSim } from '@sim/hooks/useOutdatedNativeSim';
-import type { Sim } from '@sim/sim';
+import { ISSUES_REPO, REPO_CHOOSE_NEW_ISSUE_URL, SOCIALS } from '@sim/constants/other';
 import { SocialLink } from '@ui-kit/SocialLink';
-import { isNative } from '@ui-kit/utils/dom';
 import type { ReactNode } from 'react';
 
 import { ToolbarItem } from './ToolbarItem';
 
 export interface SimToolbarViewProps {
 	knownIssues: ReadonlyArray<ReactNode>;
-	outdatedNativeSim: boolean;
 	onOpenSettings: () => void;
 }
 
-export const SimToolbarView = ({ knownIssues, outdatedNativeSim, onOpenSettings }: SimToolbarViewProps) => (
+export const SimToolbarView = ({ knownIssues, onOpenSettings }: SimToolbarViewProps) => (
 	<>
 		<ToolbarItem
 			className="text-link-danger"
@@ -32,8 +28,6 @@ export const SimToolbarView = ({ knownIssues, outdatedNativeSim, onOpenSettings 
 
 		{ISSUES_REPO && <ToolbarItem href={REPO_CHOOSE_NEW_ISSUE_URL} icon="bug" tooltip={i18n.t('info.bug_report')} />}
 
-		{!isNative() && <ToolbarItem href={REPO_RELEASES_URL} icon="gauge-high" tooltip={i18n.t('info.download_native_sim')} />}
-
 		<ToolbarItem testId="sim-options" icon="gear" tooltip={i18n.t('info.sim_options')} onClick={onOpenSettings} />
 
 		<div className="mt-2 mb-2 ml-4 flex border-l border-l-border [&_a]:my-2 [&_button]:my-2" data-testid="sim-toolbar-socials">
@@ -43,26 +37,16 @@ export const SimToolbarView = ({ knownIssues, outdatedNativeSim, onOpenSettings 
 				</div>
 			))}
 		</div>
-
-		{outdatedNativeSim && (
-			<ToolbarItem href={REPO_RELEASES_URL} icon="gauge-high" className="text-link-danger" tooltip={i18n.t('info.native_sim_outdated')} />
-		)}
 	</>
 );
 
 export interface SimToolbarProps {
-	// The toolbar renders inside the shell, which is built before `SimHostObject` adopts it, so
-	// there is no `SimHostProvider` above it to read the sim from.
-	sim: Sim;
 	knownIssues: ReadonlyArray<ReactNode>;
 	onOpenSettings: () => void;
 }
 
-export const SimToolbar = ({ sim, knownIssues, onOpenSettings }: SimToolbarProps) => {
-	const outdatedNativeSim = useOutdatedNativeSim(sim);
-	return (
-		<div className="ml-auto flex flex-nowrap items-end text-(length:--text-ui) font-bold" data-testid="sim-toolbar">
-			<SimToolbarView knownIssues={knownIssues} outdatedNativeSim={outdatedNativeSim} onOpenSettings={onOpenSettings} />
-		</div>
-	);
-};
+export const SimToolbar = ({ knownIssues, onOpenSettings }: SimToolbarProps) => (
+	<div className="ml-auto flex flex-nowrap items-end text-(length:--text-ui) font-bold" data-testid="sim-toolbar">
+		<SimToolbarView knownIssues={knownIssues} onOpenSettings={onOpenSettings} />
+	</div>
+);

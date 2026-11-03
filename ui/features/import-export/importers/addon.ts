@@ -57,7 +57,7 @@ export const ADDON_IMPORTER: ImporterDefinition = {
 			});
 		}
 
-		// The sim only models max level, so anything below it is missing gear it cannot show.
+		// The import leaves the player's level as it is, so a character below max level is told to set it.
 		const level = importJson['level'];
 		if (level < CHARACTER_LEVEL) {
 			toastManager.add({

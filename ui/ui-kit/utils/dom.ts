@@ -28,7 +28,6 @@ export const downloadString = (data: string, fileName: string, mimeType = 'text/
 const hostname = window.location.hostname;
 export const getEnvironment = (): Environments => environmentOf(hostname);
 
-export const isNative = () => getEnvironment() === 'local';
 export const isExternal = () => getEnvironment() === 'external';
 
 export function isRightClick(event: MouseEvent): boolean {

@@ -10,7 +10,6 @@ import { RunCard } from '@ui-kit/RunCard';
 import { SidebarDisabledContext } from '@ui-kit/SidebarActionButton';
 
 import type { SimHostObject } from './individual_sim_ui';
-import { NoticeNativeSim } from './NoticeNativeSim';
 import { SidebarActions } from './SidebarActions';
 
 export interface SimRunCardProps {
@@ -50,7 +49,6 @@ export const SimRunCard = ({ host, sim }: SimRunCardProps) => {
 							results={host.raidSimResultsManager}
 							onOpenBreakdown={runs ? () => activateTab(RESULTS_TAB_ID) : undefined}
 						/>
-						<NoticeNativeSim />
 					</>
 				)}
 			</RunCard>

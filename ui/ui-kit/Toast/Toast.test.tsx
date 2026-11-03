@@ -36,9 +36,9 @@ describe('Toast', () => {
 		expect(within(toast).getByTestId('sim-toast-title').textContent).toBe('Native sim');
 	});
 
-	// `body` is block content at several sites — `NoticeNativeSim` passes a `<div>` wrapping a `<p>`
-	// and an `<a class="btn">`. Base UI's `Toast.Description` is a `<p>`, and a real parser reparents
-	// block content out of one; happy-dom does not, so this asserts the tag rather than the nesting.
+	// `body` is block content at several sites — a `<div>` wrapping a `<p>` and an `<a class="btn">`.
+	// Base UI's `Toast.Description` is a `<p>`, and a real parser reparents block content out of one;
+	// happy-dom does not, so this asserts the tag rather than the nesting.
 	it('renders the body in a div so block content is valid inside it', () => {
 		render(<ToastArea manager={toastManager} />);
 		act(() => {

@@ -8,7 +8,6 @@ const meta = {
 	component: BulkTabActionsView,
 	tags: ['autodocs'],
 	args: {
-		showNativeDownload: true,
 		onImportBags: fn(),
 		onImportFavorites: fn(),
 		onClear: fn(),

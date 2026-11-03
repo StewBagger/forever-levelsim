@@ -27,7 +27,9 @@ export const IconButton: Story = {
 	},
 };
 
-export const Link: Story = { args: { icon: 'bug', tooltip: 'Report a bug', href: 'https://github.com/wowsims/forever/issues/new/choose', onClick: undefined } };
+export const Link: Story = {
+	args: { icon: 'bug', tooltip: 'Report a bug', href: 'https://github.com/StewBagger/forever-levelsim/issues/new/choose', onClick: undefined },
+};
 
 export const TextEntry: Story = {
 	args: { icon: undefined, className: 'text-link-danger', tooltip: 'Rage decay is off', children: 'Known Issues' },

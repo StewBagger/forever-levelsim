@@ -1,5 +1,4 @@
 import type { BulkEncounterResults, BulkRankedResult, TopGearResult } from '@sim/bulk/types';
-import { REPO_RELEASES_URL } from '@sim/constants/other';
 import { SimHostProvider } from '@sim/context/SimHostContext';
 import type { Player } from '@sim/player/player';
 import { patchBulkState, seedBulkSettings } from '@sim/settings/bulk_settings';
@@ -28,7 +27,6 @@ const downloadString = vi.hoisted(() => vi.fn());
 vi.mock('@ui-kit/utils/dom', async importOriginal => ({ ...(await importOriginal<typeof import('@ui-kit/utils/dom')>()), downloadString }));
 
 const props = (overrides: Partial<BulkTabActionsViewProps> = {}): BulkTabActionsViewProps => ({
-	showNativeDownload: false,
 	onImportBags: vi.fn(),
 	onImportFavorites: vi.fn(),
 	onClear: vi.fn(),
@@ -36,14 +34,6 @@ const props = (overrides: Partial<BulkTabActionsViewProps> = {}): BulkTabActions
 });
 
 describe('BulkTabActionsView', () => {
-	it('links the native download only when asked to', () => {
-		const { rerender } = render(<BulkTabActionsView {...props()} />);
-		expect(screen.queryByRole('link')).toBeNull();
-
-		rerender(<BulkTabActionsView {...props({ showNativeDownload: true })} />);
-		expect(screen.getByRole('link', { name: 'bulk_tab.download_native' }).getAttribute('href')).toBe(REPO_RELEASES_URL);
-	});
-
 	it('reports each action', () => {
 		const handlers = props();
 		render(<BulkTabActionsView {...handlers} />);

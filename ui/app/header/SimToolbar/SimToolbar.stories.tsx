@@ -9,7 +9,6 @@ const meta = {
 	tags: ['autodocs'],
 	args: {
 		knownIssues: [],
-		outdatedNativeSim: false,
 		onOpenSettings: fn(),
 	},
 	argTypes: { knownIssues: { control: false } },
@@ -35,5 +34,3 @@ export const Default: Story = {
 export const KnownIssues: Story = {
 	args: { knownIssues: ['Bloodrage costs no health.', 'Deep Wounds ticks on its own schedule.'] },
 };
-
-export const OutdatedNativeSim: Story = { args: { outdatedNativeSim: true } };

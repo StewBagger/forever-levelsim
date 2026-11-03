@@ -1685,22 +1685,6 @@
 				"healing_sim_disclaimer": {
 					"type": "string"
 				},
-				"notice_native_download": {
-					"type": "object",
-					"properties": {
-						"title": {
-							"type": "string"
-						},
-						"message": {
-							"type": "string"
-						},
-						"download_button": {
-							"type": "string"
-						}
-					},
-					"additionalProperties": false,
-					"required": ["title", "message", "download_button"]
-				},
 				"crash_modal": {
 					"type": "object",
 					"properties": {
@@ -1732,19 +1716,10 @@
 					"properties": {
 						"title": {
 							"type": "string"
-						},
-						"contribute_message": {
-							"type": "string"
-						},
-						"discord_message": {
-							"type": "string"
-						},
-						"old_sim_message": {
-							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["title", "contribute_message", "discord_message", "old_sim_message"]
+					"required": ["title"]
 				},
 				"notifications": {
 					"type": "object",
@@ -1823,7 +1798,6 @@
 				"description_class",
 				"basic_bis_disclaimer",
 				"healing_sim_disclaimer",
-				"notice_native_download",
 				"crash_modal",
 				"unlaunched",
 				"notifications",
@@ -4240,9 +4214,6 @@
 				"title": {
 					"type": "string"
 				},
-				"download_native": {
-					"type": "string"
-				},
 				"tabs": {
 					"type": "object",
 					"properties": {
@@ -5072,7 +5043,6 @@
 			"additionalProperties": false,
 			"required": [
 				"title",
-				"download_native",
 				"tabs",
 				"modes",
 				"builds",
@@ -10938,27 +10908,10 @@
 					},
 					"additionalProperties": false,
 					"required": ["title", "fixed_rng_seed", "language", "feature_toggles", "use_multiple_cpu_cores", "restart_tour", "restore_defaults"]
-				},
-				"download_native_sim": {
-					"type": "string"
-				},
-				"native_sim_outdated": {
-					"type": "string"
 				}
 			},
 			"additionalProperties": false,
-			"required": [
-				"known_issues",
-				"bug_report",
-				"sim_options",
-				"discord",
-				"patreon",
-				"github",
-				"status",
-				"options",
-				"download_native_sim",
-				"native_sim_outdated"
-			]
+			"required": ["known_issues", "bug_report", "sim_options", "discord", "patreon", "github", "status", "options"]
 		},
 		"onboarding": {
 			"type": "object",

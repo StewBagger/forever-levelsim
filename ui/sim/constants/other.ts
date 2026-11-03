@@ -25,10 +25,14 @@ export const CURRENT_API_VERSION: number = readMessageOption(ProtoVersion, 'prot
 // Github pages serves our site under the /forever directory
 export const REPO_NAME = 'forever';
 export const REPO_URL = `https://github.com/wowsims/${REPO_NAME}`;
-export const REPO_RELEASES_URL = `${REPO_URL}/releases`;
-// The repository whose CI built this page (see vite.config.mts). Empty for a build made outside
-// GitHub Actions, which then offers no issue links at all.
-export const ISSUES_REPO: string = import.meta.env.VITE_GITHUB_REPOSITORY;
+// Null Sims is a fork of WoWSims Forever that adds levelling sims; its own links point at the fork, and
+// REPO_URL above stays the upstream project it credits.
+const NULL_SIMS_REPO = 'StewBagger/forever-levelsim';
+export const NULL_SIMS_REPO_URL = `https://github.com/${NULL_SIMS_REPO}`;
+export const NULL_SIMS_ISSUES_URL = `${NULL_SIMS_REPO_URL}/issues`;
+// The repository whose CI built this page (see vite.config.mts), so a fork's build files its issues on
+// the fork. A build made outside GitHub Actions, the server's included, files them on Null Sims.
+export const ISSUES_REPO: string = import.meta.env.VITE_GITHUB_REPOSITORY || NULL_SIMS_REPO;
 export const REPO_NEW_ISSUE_URL = `https://github.com/${ISSUES_REPO}/issues/new`;
 export const REPO_CHOOSE_NEW_ISSUE_URL = `${REPO_NEW_ISSUE_URL}/choose`;
 
@@ -36,10 +40,6 @@ export const WOWSIMS_URL = 'https://www.wowsims.com/';
 // The site list and footer content every WoWSims site shares, published by wowsims/wowsims.github.io
 export const VERSIONS_MANIFEST_URL = `${WOWSIMS_URL}versions.json`;
 export const ADDON_URL = 'https://www.curseforge.com/wow/addons/wowsimsexporter';
-// Null Sims is a fork of WoWSims Forever that adds levelling sims; its own links point at the fork, and
-// REPO_URL above stays the upstream project it credits.
-export const NULL_SIMS_REPO_URL = 'https://github.com/StewBagger/forever-levelsim';
-export const NULL_SIMS_ISSUES_URL = `${NULL_SIMS_REPO_URL}/issues`;
 export const SITE_HOME_PATH = `/${REPO_NAME}/`;
 
 export interface Social {

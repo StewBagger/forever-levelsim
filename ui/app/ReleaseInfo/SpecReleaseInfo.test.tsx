@@ -47,7 +47,7 @@ describe('SpecReleaseInfo', () => {
 		expect(labels).toEqual(['Sim build', `${spec} presets`, `${spec} engine`]);
 		expect(values).toEqual(['Built 2026-10-18 · 2fe052c', 'Changed 2026-10-17 · 8109a4c', 'Changed 2026-10-16 · 474c498']);
 		const engine = RELEASE.specs['druid/feralcat'].engine!.commit;
-		expect(screen.getByRole('link', { name: '474c498' }).getAttribute('href')).toBe(`https://github.com/wowsims/forever/commit/${engine}`);
+		expect(screen.getByRole('link', { name: '474c498' }).getAttribute('href')).toBe(`https://github.com/StewBagger/forever-levelsim/commit/${engine}`);
 	});
 
 	it('names the rows of a spec without a name of its own after its class', () => {

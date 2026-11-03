@@ -461,11 +461,6 @@
 		"description_class": "{{class}} simulations for World of Warcraft® Forever.",
 		"basic_bis_disclaimer": "<p>Preset gear lists are intended as rough approximations of BIS, and will often not be the absolute highest-DPS setup for you. Your optimal gear setup will depend on many factors; that's why we have a sim!</p><p>Items may also be omitted from the presets if they are highly contested and clearly better utilized on other classes, to encourage equitable gearing for the raid as a whole.</p>",
 		"healing_sim_disclaimer": "*** WARNING - USE AT YOUR OWN RISK ***\n\nThe entire concept of a healing sim is EXPERIMENTAL. All results should be taken with an EXTREMELY large grain of salt.\n\nThis tool is currently more similar to a spreadsheet than a true sim. Options for specifying incoming damage profiles in order to have proper reactive rotations have not yet been added.",
-		"notice_native_download": {
-			"title": "Did you know?",
-			"message": "You can download our local sim to speed up your simulations significantly?",
-			"download_button": "Download"
-		},
 		"crash_modal": {
 			"title": "Extra Crash Information",
 			"header": "Please append the following complete link to the issue you just created. This will simplify debugging the issue."
@@ -475,10 +470,7 @@
 			"message": "Gear, enchants, talents and the enchants optimizer work for this spec. There's no simulation planned."
 		},
 		"unlaunched": {
-			"title": "This sim is currently not supported.",
-			"contribute_message": "Want to contribute?",
-			"discord_message": "Make sure to join our Discord!",
-			"old_sim_message": "You can find the old Sim for this spec here:"
+			"title": "This sim is currently not supported."
 		},
 		"notifications": {
 			"sim_cancelled": "Sim cancelled.",
@@ -602,7 +594,7 @@
 			"reset_upgrades": "Reset Upgrades"
 		},
 		"item_notices": {
-			"want_to_help": "Want to help out by providing additional information? Contact us on our Discord!",
+			"want_to_help": "Want to help out by providing additional information? Open an issue on GitHub!",
 			"missing_random_suffix": "Please select a random suffix",
 			"missing_effect": {
 				"item": "This item effect (on-use or proc) is not implemented!",
@@ -1183,7 +1175,6 @@
 	},
 	"bulk_tab": {
 		"title": "Batch",
-		"download_native": "Download the local sim for faster results.",
 		"tabs": {
 			"setup": "Setup",
 			"results": "Results"
@@ -1361,7 +1352,7 @@
 			"combinations_failed": "Failed to calculate bulk combinations"
 		},
 		"warning": {
-			"iterations_limit": "Simming over {{limit}} iterations in the sim will take a long time or may not run at all. For larger batch sims we recommend downloading the executable and running on your machine.",
+			"iterations_limit": "Simming over {{limit}} iterations in the sim will take a long time or may not run at all.",
 			"lower_top_results": "Lower Top results to sim fewer iterations."
 		},
 		"picker": {
@@ -2898,7 +2889,7 @@
 			"error_nothing_to_import": "The pasted text has no gear, race, professions or rotation to import.",
 			"error_invalid_rotation": "The rotation in the pasted text is not a valid rotation.",
 			"outdated": "Addon is not up to date. Addon version : '{{version}}', Latest version : '{{latest}}'",
-			"below_max_level": "The character you imported is level {{level}}. The Sim is intended to be used for max level only, so you might be missing certain items."
+			"below_max_level": "The character you imported is level {{level}}. The import leaves the sim's level as it was: set Level under Player to sim it at {{level}}."
 		},
 		"siml": {
 			"title": "SIML Import",
@@ -3075,9 +3066,7 @@
 				"tooltip": "Restores all default settings (gear, consumes, buffs, talents, EP weights, etc). Saved settings are preserved.",
 				"success_message": "Restored to default settings."
 			}
-		},
-		"download_native_sim": "Download simulator for faster simulating",
-		"native_sim_outdated": "Newer version of simulator available for download"
+		}
 	},
 		"onboarding": {
 			"label": "Tour",

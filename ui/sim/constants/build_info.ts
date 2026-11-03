@@ -1,5 +1,5 @@
 import type { BuildInfo, SpecRelease } from '../../../tools/vite/build_info.mjs';
-import { ISSUES_REPO, REPO_URL } from './other';
+import { ISSUES_REPO } from './other';
 
 export type { Change } from '../../../tools/vite/build_info.mjs';
 
@@ -10,5 +10,5 @@ export const BUILD_INFO: BuildInfo = import.meta.env.VITE_BUILD_INFO ?? { date: 
 /** The release of the spec whose page is at `simLink`, which ends in `/<class>/<spec>/`. */
 export const specRelease = (simLink: string): SpecRelease => Object.entries(BUILD_INFO.specs).find(([key]) => simLink.endsWith(`/${key}/`))?.[1] ?? {};
 
-// The repository whose CI built the page, as for the issue links, so a fork's build links its own commit.
-export const commitUrl = (commit: string): string => `${ISSUES_REPO ? `https://github.com/${ISSUES_REPO}` : REPO_URL}/commit/${commit}`;
+// The repository the issue links name, so a fork's build links its own commit.
+export const commitUrl = (commit: string): string => `https://github.com/${ISSUES_REPO}/commit/${commit}`;

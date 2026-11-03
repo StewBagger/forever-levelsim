@@ -9,7 +9,6 @@ vi.mock('@features/results/components/IterationsPicker', () => ({ IterationsPick
 vi.mock('@features/results/components/SimulateAction', () => ({ SimulateAction: () => <button data-testid="dps-action" /> }));
 vi.mock('@features/stat-weights/components/StatWeightsAction', () => ({ StatWeightsAction: () => <button data-testid="ep-weights-action" /> }));
 vi.mock('./SidebarActions', () => ({ SidebarActions: () => <div data-testid="registry-actions" /> }));
-vi.mock('./NoticeNativeSim', () => ({ NoticeNativeSim: () => null }));
 const simStatus = vi.hoisted(() => ({ current: 'ready' as 'loading' | 'ready' | 'error' }));
 vi.mock('@sim/hooks/useSimStatus', () => ({ useSimStatus: () => ({ status: simStatus.current, error: null }) }));
 vi.mock('@features/results/components/SimResultsPanel', () => ({

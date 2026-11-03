@@ -169,9 +169,8 @@ describe('SimResultsPanel', () => {
 		const { view } = await mount(new ResultsPanelStore(), true);
 		const viewer = zone(view, '[data-testid="results-viewer"]');
 		expect(viewer.lastElementChild!.getAttribute('data-testid')).toBe('sim-ui-unlaunched-container');
-		// One paragraph: there is no external healing sim to point at.
-		expect(viewer.querySelectorAll('[data-testid="sim-ui-unlaunched-container"] p').length).toBe(1);
-		expect(viewer.querySelector('a[href*="questionablyepic"]')).toBeNull();
+		// The title alone: no external healing sim and no community to point at.
+		expect(viewer.querySelectorAll('[data-testid="sim-ui-unlaunched-container"] p, [data-testid="sim-ui-unlaunched-container"] a').length).toBe(0);
 	});
 
 	it('renders the gear planner notice for a sim that never runs, and the unlaunched notice instead when the sim is disabled', async () => {

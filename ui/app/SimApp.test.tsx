@@ -18,8 +18,7 @@ vi.mock('./individual_sim_ui', async () => {
 	const { CrashReportOpener } = await import('./crash_report_opener');
 	return {
 		SimHostObject: class {
-			// `NoticeNativeSim` asks the host's sim whether this is a local build; a native one raises no notice.
-			readonly sim = { waitForInit: () => Promise.resolve(), isNative: true };
+			readonly sim = { waitForInit: () => Promise.resolve() };
 			readonly sidebar = new SidebarRegistry();
 			readonly disabled = false;
 			readonly simDisabled = false;

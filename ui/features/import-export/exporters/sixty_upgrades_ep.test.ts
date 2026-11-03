@@ -10,7 +10,7 @@ const exportFor = (weights: Stats) =>
 describe('SIXTY_UPGRADES_EP_EXPORTER', () => {
 	it('links to the Forever EP import', () => {
 		expect(exportFor(new Stats().withStat(Stat.StatStrength, 1))).toMatch(
-			/^https:\/\/sixtyupgrades\.com\/forever\/ep\/import\?name=Arms%20WoWSims%20Weights&strength=1\.000$/,
+			/^https:\/\/sixtyupgrades\.com\/forever\/ep\/import\?name=Arms%20Null%20Sims%20Weights&strength=1\.000$/,
 		);
 	});
 
