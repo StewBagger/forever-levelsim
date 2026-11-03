@@ -15,6 +15,7 @@ import (
 	proto "github.com/wowsims/forever/sim/core/proto"
 	reforgeoptimizer "github.com/wowsims/forever/sim/core/reforge_optimizer"
 	"github.com/wowsims/forever/sim/core/simsignals"
+	"github.com/wowsims/forever/sim/levelsim"
 	"github.com/wowsims/forever/sim/siml"
 	protojson "google.golang.org/protobuf/encoding/protojson"
 	googleProto "google.golang.org/protobuf/proto"
@@ -44,6 +45,8 @@ func main() {
 	js.Global().Set("statWeightRequests", js.FuncOf(statWeightRequests))
 	js.Global().Set("statWeightCompute", js.FuncOf(statWeightCompute))
 	js.Global().Set("statWeightTopUpPlan", js.FuncOf(statWeightTopUpPlan))
+	js.Global().Set("levelDefaults", js.FuncOf(levelDefaults))
+	js.Global().Set("bisGear", js.FuncOf(bisGear))
 	js.Global().Set("abortById", js.FuncOf(abortById))
 	js.Global().Set("simlNames", js.FuncOf(setSimlNames))
 	js.Global().Set("simlParse", js.FuncOf(func(_ js.Value, args []js.Value) interface{} {
@@ -382,6 +385,35 @@ func statWeightTopUpPlan(this js.Value, args []js.Value) interface{} {
 	outArray := js.Global().Get("Uint8Array").New(len(outbytes))
 	js.CopyBytesToJS(outArray, outbytes)
 
+	return outArray
+}
+
+func levelDefaults(this js.Value, args []js.Value) interface{} {
+	req := &proto.LevelDefaultsRequest{}
+	if err := googleProto.Unmarshal(getArgsBinary(args[0]), req); err != nil {
+		log.Printf("Failed to parse request: %s", err)
+		return nil
+	}
+	return marshalToJS(levelsim.Defaults(req))
+}
+
+func bisGear(this js.Value, args []js.Value) interface{} {
+	req := &proto.BisGearRequest{}
+	if err := googleProto.Unmarshal(getArgsBinary(args[0]), req); err != nil {
+		log.Printf("Failed to parse request: %s", err)
+		return nil
+	}
+	return marshalToJS(levelsim.BisGear(req))
+}
+
+func marshalToJS(res googleProto.Message) interface{} {
+	outbytes, err := googleProto.Marshal(res)
+	if err != nil {
+		log.Printf("[ERROR] Failed to marshal result: %s", err.Error())
+		return nil
+	}
+	outArray := js.Global().Get("Uint8Array").New(len(outbytes))
+	js.CopyBytesToJS(outArray, outbytes)
 	return outArray
 }
 

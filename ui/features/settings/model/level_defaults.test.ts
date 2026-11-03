@@ -1,20 +1,20 @@
 import { makeIndividualSim, serveDatabase } from '@testing/sim/individual_sim';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { levelInput } from './utils';
+import { changeLevel } from './level_defaults';
 
 vi.mock('@sim/workers/worker_pool', async () => (await import('@testing/sim/worker_pool')).idleWorkerPool());
 
 beforeAll(() => serveDatabase());
 
-describe('levelInput', () => {
+describe('changeLevel', () => {
 	const setup = async (targetLevel: number) => {
 		const { sim, player } = await makeIndividualSim();
 		sim.applyDefaults(false, false);
 		sim.encounter.modifyTarget(0, target => {
 			target.level = targetLevel;
 		});
-		const set = (level: number) => levelInput.setValue(player, level);
+		const set = (level: number) => changeLevel(player, level);
 		const target = () => sim.encounter.getTarget(0)!.level;
 		return { player, set, target };
 	};

@@ -12,6 +12,10 @@ import (
 // The most rounds of picking gear and re-weighing before the set is taken as it stands.
 const maxRounds = 6
 
+// The iterations each round's stat weights run at most. The weights only choose gear here, and the
+// paired, fixed-seed stat weights hold steady at this count; the Stat Weights action refines them.
+const maxRoundIterations = 4000
+
 // Defaults gives a level's starting talents, BIS gear and EP for a spec's setup. The talents are the
 // setup's spent up to the level's points (TrimTalents); the target is a creature of the level, with
 // its ExpectedStat armor. The gear starts from every weighed stat at 1 EP and weapon damage at 10,
@@ -27,6 +31,12 @@ func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResul
 		return &proto.LevelDefaultsResult{Error: &proto.ErrorOutcome{Message: fmt.Sprintf("level %d is outside 1-%d", level, core.CharacterLevel)}}
 	}
 	swr := googleProto.Clone(req.StatWeights).(*proto.StatWeightsRequest)
+	if swr.SimOptions == nil {
+		swr.SimOptions = &proto.SimOptions{}
+	}
+	if swr.SimOptions.Iterations == 0 || swr.SimOptions.Iterations > maxRoundIterations {
+		swr.SimOptions.Iterations = maxRoundIterations
+	}
 	player := swr.Player
 	player.Level = level
 	player.TalentsString = TrimTalents(player.TalentsString, core.TalentPointsAtLevel(level))

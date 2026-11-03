@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 	"sort"
+	"sync"
 
 	"github.com/wowsims/forever/assets/database"
 	"github.com/wowsims/forever/sim/core"
@@ -53,12 +54,22 @@ type GearPicker struct {
 	candidates []gearCandidate
 }
 
-var uiDatabase *proto.UIDatabase
+var (
+	uiDatabase     *proto.UIDatabase
+	uiDatabaseOnce sync.Once
+)
+
+// The web server and the wasm sim are built without the with_db tag, so their sim database holds only
+// what requests carried; the picker needs every item, so it adds them on first use.
+func loadDatabase() {
+	uiDatabase = database.Load()
+	if !core.WITH_DB {
+		core.AddToDatabase(core.SimDatabaseFromUI(uiDatabase))
+	}
+}
 
 func NewGearPicker(player *proto.Player, level int32) *GearPicker {
-	if uiDatabase == nil {
-		uiDatabase = database.Load()
-	}
+	uiDatabaseOnce.Do(loadDatabase)
 	p := &GearPicker{
 		level: level,
 		class: player.Class,

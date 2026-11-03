@@ -85,6 +85,8 @@ declare global {
 	const bulkCombinationCount: SimRequestSync;
 	const bulkCandidates: SimRequestSync;
 	const raidSimRequestSplit: SimRequestSync;
+	const levelDefaults: SimRequestSync;
+	const bisGear: SimRequestSync;
 	const abortById: SimRequestSync;
 	const simlNames: (table: Uint8Array) => string;
 	const simlParse: SimRequestSync;
@@ -142,6 +144,8 @@ function setupWorkerInterface() {
 		statWeightTopUpPlan: statWeightTopUpPlan,
 		raidSimRequestSplit: raidSimRequestSplit,
 		raidSimResultCombination: raidSimResultCombination,
+		levelDefaults: levelDefaults,
+		bisGear: bisGear,
 		abortById: abortById,
 		simlParse: withSimlNames(simlParse),
 		simlPrint: withSimlNames(simlPrint),

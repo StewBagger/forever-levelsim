@@ -1,6 +1,8 @@
 import {
 	AbortRequest,
 	AbortResponse,
+	BisGearRequest,
+	BisGearResult,
 	BulkCandidatesRequest,
 	BulkCandidatesResult,
 	BulkCombinationCountRequest,
@@ -9,6 +11,8 @@ import {
 	BulkSimResult,
 	ComputeStatsRequest,
 	ComputeStatsResult,
+	LevelDefaultsRequest,
+	LevelDefaultsResult,
 	ProgressMetrics,
 	RaidSimRequest,
 	RaidSimRequestSplitRequest,
@@ -168,6 +172,16 @@ export class WorkerPool {
 	async statWeightTopUpPlan(request: StatWeightsTopUpRequest): Promise<StatWeightsTopUpPlan> {
 		const result = await this.makeApiCall(SimRequest.statWeightTopUpPlan, StatWeightsTopUpRequest.toBinary(request));
 		return StatWeightsTopUpPlan.fromBinary(result);
+	}
+
+	async levelDefaults(request: LevelDefaultsRequest): Promise<LevelDefaultsResult> {
+		const result = await this.makeApiCall(SimRequest.levelDefaults, LevelDefaultsRequest.toBinary(request));
+		return LevelDefaultsResult.fromBinary(result);
+	}
+
+	async bisGear(request: BisGearRequest): Promise<BisGearResult> {
+		const result = await this.makeApiCall(SimRequest.bisGear, BisGearRequest.toBinary(request));
+		return BisGearResult.fromBinary(result);
 	}
 
 	/** Runs on the worker at workerIndex when given and the pool still has it, else on the least busy worker. */

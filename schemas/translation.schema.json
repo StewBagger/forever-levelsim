@@ -1866,6 +1866,19 @@
 					"additionalProperties": false,
 					"required": ["title", "gear_set", "gear_set_name", "save_gear_set"]
 				},
+				"bis_gear": {
+					"type": "object",
+					"properties": {
+						"label": {
+							"type": "string"
+						},
+						"tooltip": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false,
+					"required": ["label", "tooltip"]
+				},
 				"gear_picker": {
 					"type": "object",
 					"properties": {
@@ -2302,7 +2315,7 @@
 				}
 			},
 			"additionalProperties": false,
-			"required": ["title", "reforge_success", "gear_sets", "gear_picker", "preset_configurations", "upgrade_summary", "item_notices"]
+			"required": ["title", "reforge_success", "gear_sets", "bis_gear", "gear_picker", "preset_configurations", "upgrade_summary", "item_notices"]
 		},
 		"settings_tab": {
 			"type": "object",
@@ -4063,10 +4076,16 @@
 								},
 								"tooltip": {
 									"type": "string"
+								},
+								"loading": {
+									"type": "string"
+								},
+								"loaded": {
+									"type": "string"
 								}
 							},
 							"additionalProperties": false,
-							"required": ["label", "tooltip"]
+							"required": ["label", "tooltip", "loading", "loaded"]
 						}
 					},
 					"additionalProperties": false,

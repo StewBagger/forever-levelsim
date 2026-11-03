@@ -27,6 +27,7 @@ import (
 	proto "github.com/wowsims/forever/sim/core/proto"
 	reforgeoptimizer "github.com/wowsims/forever/sim/core/reforge_optimizer"
 	"github.com/wowsims/forever/sim/core/simsignals"
+	"github.com/wowsims/forever/sim/levelsim"
 	"github.com/wowsims/forever/sim/siml"
 
 	googleProto "google.golang.org/protobuf/proto"
@@ -116,6 +117,12 @@ var handlers = map[string]apiHandler{
 	}},
 	"/statWeightTopUpPlan": {msg: func() googleProto.Message { return &proto.StatWeightsTopUpRequest{} }, handle: func(msg googleProto.Message) googleProto.Message {
 		return core.StatWeightTopUpPlan(msg.(*proto.StatWeightsTopUpRequest))
+	}},
+	"/levelDefaults": {msg: func() googleProto.Message { return &proto.LevelDefaultsRequest{} }, handle: func(msg googleProto.Message) googleProto.Message {
+		return levelsim.Defaults(msg.(*proto.LevelDefaultsRequest))
+	}},
+	"/bisGear": {msg: func() googleProto.Message { return &proto.BisGearRequest{} }, handle: func(msg googleProto.Message) googleProto.Message {
+		return levelsim.BisGear(msg.(*proto.BisGearRequest))
 	}},
 	"/computeStats": {msg: func() googleProto.Message { return &proto.ComputeStatsRequest{} }, handle: func(msg googleProto.Message) googleProto.Message {
 		return core.ComputeStats(msg.(*proto.ComputeStatsRequest))

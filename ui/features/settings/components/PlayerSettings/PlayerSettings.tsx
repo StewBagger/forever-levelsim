@@ -3,7 +3,7 @@ import { ConnectedIconInput } from '@features/inputs/components/ConnectedIconInp
 import { ConnectedInput } from '@features/inputs/components/ConnectedInput';
 import { ConnectedNumberField } from '@features/inputs/components/ConnectedTextField';
 import type { IconInputConfig } from '@features/inputs/icon_inputs';
-import { usePlayer } from '@sim/context/SimHostContext';
+import { usePlayer, useSimHost } from '@sim/context/SimHostContext';
 import type { Player } from '@sim/player/player';
 import type { InputConfig } from '@sim/spec_config';
 import { FieldGrid } from '@ui-kit/FieldGrid';
@@ -40,7 +40,9 @@ export interface PlayerSettingsProps {
 }
 
 export const PlayerSettings = ({ iconInputs, inputs }: PlayerSettingsProps) => {
+	const host = useSimHost();
 	const player = usePlayer() as Player<any>;
+	const level = useMemo(() => levelInput(host), [host]);
 	const race = useMemo(() => raceInput(player), [player]);
 	const professions = useMemo(() => [professionInput(1), professionInput(2)] as const, []);
 
@@ -50,7 +52,7 @@ export const PlayerSettings = ({ iconInputs, inputs }: PlayerSettingsProps) => {
 				<ConnectedIconInput key={index} modObject={player} config={config} />
 			))}
 			race={<ConnectedChoiceField modObject={player} config={race} />}
-			level={<ConnectedNumberField modObject={player} config={levelInput} />}
+			level={<ConnectedNumberField modObject={player} config={level} />}
 			inputs={inputs.map(config => (
 				<ConnectedInput key={config.id} config={config} />
 			))}

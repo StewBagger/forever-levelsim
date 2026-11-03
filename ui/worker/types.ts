@@ -18,6 +18,8 @@ export enum SimRequest {
 	statWeightTopUpPlan = 'statWeightTopUpPlan',
 	raidSimRequestSplit = 'raidSimRequestSplit',
 	raidSimResultCombination = 'raidSimResultCombination',
+	levelDefaults = 'levelDefaults',
+	bisGear = 'bisGear',
 	abortById = 'abortById',
 	simlParse = 'simlParse',
 	simlPrint = 'simlPrint',

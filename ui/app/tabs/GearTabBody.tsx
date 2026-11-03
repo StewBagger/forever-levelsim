@@ -1,3 +1,4 @@
+import { BisGearButton } from '@features/gear/components/BisGearButton';
 import { GearPicker } from '@features/gear/components/GearPicker';
 import { SelectorModal } from '@features/gear/components/SelectorModal';
 import { OpenSelectorModalContext, useSelectorModalState } from '@features/gear/hooks/useSelectorModal';
@@ -16,6 +17,7 @@ export const GearTabBody = () => {
 				<GearPicker ready={ready} />
 			</TabPanelColumns.Left>
 			<TabPanelColumns.Right testId="gear-presets">
+				{ready && <BisGearButton />}
 				<GearPresets />
 			</TabPanelColumns.Right>
 			<SelectorModal state={selector} />

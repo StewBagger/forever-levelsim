@@ -1,4 +1,5 @@
 import {
+	BisGearRequest,
 	BulkCandidatesRequest,
 	BulkCandidatesResult,
 	BulkCombinationCountRequest,
@@ -12,6 +13,8 @@ import {
 	type ComputeStatsResult,
 	ErrorOutcome,
 	ErrorOutcomeType,
+	LevelDefaultsRequest,
+	type LevelDefaultsResult,
 	PlayerStats,
 	Raid as RaidProto,
 	RaidSimRequest,
@@ -724,6 +727,56 @@ export class Sim {
 		}
 	}
 
+	// The request the stat weights action sends, or null for a player outside a party.
+	private statWeightsRequest(
+		player: Player<any>,
+		epStats: Array<Stat>,
+		epPseudoStats: Array<PseudoStat>,
+		epReferenceStat: Stat,
+		options: StatWeightsOptions = {},
+	): StatWeightsRequest | null {
+		if (player.getParty() == null) return null;
+		const tanks = this.raid
+			.getTanks()
+			.map(tank => tank.index)
+			.includes(player.getRaidIndex())
+			? [UnitReference.create({ type: UnitType.Player, index: 0 })]
+			: [];
+		// `toDatabase()` fills items and enchants only, so without this the request carries
+		// no consumables or spell effects. lib.wasm is built without the `with_db` tag, so a
+		// worker that has not already handled a full sim request cannot resolve them and computes
+		// the stat's sub-sims with no flask, elixir, food or potion.
+		const playerProto = player.toProto(false, true);
+		extendPlayerProtoWithMissingEffects(playerProto, this.db);
+
+		return StatWeightsRequest.create({
+			player: playerProto,
+			raidBuffs: this.raid.getBuffs(),
+			partyBuffs: player.getParty()!.getBuffs(),
+			debuffs: this.raid.getDebuffs(),
+			encounter: this.encounter.toProto(),
+			simOptions: SimOptions.create({
+				iterations: options.iterations ?? this.getIterations(),
+				randomSeed: BigInt(this.nextRngSeed()),
+				debug: false,
+			}),
+			tanks: tanks,
+
+			statsToWeigh: epStats,
+			pseudoStatsToWeigh: epPseudoStats,
+			epReferenceStat: epReferenceStat,
+			hpsReferenceStat: options.hpsReferenceStat ?? epReferenceStat,
+			target:
+				options.targetEpCi === undefined
+					? undefined
+					: StatWeightsTarget.create({
+							epCi: options.targetEpCi,
+							maxIterationMultiplier: options.maxIterationMultiplier,
+							metrics: options.targetMetrics,
+						}),
+		});
+	}
+
 	async statWeights(
 		player: Player<any>,
 		epStats: Array<Stat>,
@@ -736,72 +789,62 @@ export class Sim {
 
 		await this.waitForInit();
 
-		if (player.getParty() == null) {
+		const request = this.statWeightsRequest(player, epStats, epPseudoStats, epReferenceStat, options);
+		if (!request) {
 			console.warn('Trying to get stat weights without a party!');
 			return StatWeightsResult.create();
-		} else {
-			const tanks = this.raid
-				.getTanks()
-				.map(tank => tank.index)
-				.includes(player.getRaidIndex())
-				? [UnitReference.create({ type: UnitType.Player, index: 0 })]
-				: [];
-			// `toDatabase()` fills items and enchants only, so without this the request carries
-			// no consumables or spell effects. lib.wasm is built without the `with_db` tag, so a
-			// worker that has not already handled a full sim request cannot resolve them and computes
-			// the stat's sub-sims with no flask, elixir, food or potion.
-			const playerProto = player.toProto(false, true);
-			extendPlayerProtoWithMissingEffects(playerProto, this.db);
-
-			const request = StatWeightsRequest.create({
-				player: playerProto,
-				raidBuffs: this.raid.getBuffs(),
-				partyBuffs: player.getParty()!.getBuffs(),
-				debuffs: this.raid.getDebuffs(),
-				encounter: this.encounter.toProto(),
-				simOptions: SimOptions.create({
-					iterations: options.iterations ?? this.getIterations(),
-					randomSeed: BigInt(this.nextRngSeed()),
-					debug: false,
-				}),
-				tanks: tanks,
-
-				statsToWeigh: epStats,
-				pseudoStatsToWeigh: epPseudoStats,
-				epReferenceStat: epReferenceStat,
-				hpsReferenceStat: options.hpsReferenceStat ?? epReferenceStat,
-				target:
-					options.targetEpCi === undefined
-						? undefined
-						: StatWeightsTarget.create({
-								epCi: options.targetEpCi,
-								maxIterationMultiplier: options.maxIterationMultiplier,
-								metrics: options.targetMetrics,
-							}),
-			});
-
-			const signals = this.signalManager.registerRunning(RequestTypes.StatWeights);
-			try {
-				let result: StatWeightsResult;
-				// Only use worker based concurrency when running wasm.
-				if (await this.shouldUseWasmConcurrency()) {
-					result = await runConcurrentStatWeights(request, this.workerPool, onProgress, signals);
-				} else {
-					result = await this.workerPool.statWeightsAsync(request, onProgress, signals);
-				}
-				if (result.error) {
-					if (result.error.type != ErrorOutcomeType.ErrorOutcomeError) return result;
-					throw new SimError(result.error.message);
-				}
-				return result;
-			} catch (error) {
-				if (error instanceof SimError) throw error;
-				console.error(error);
-				throw new Error(i18n.t('sim.run_errors.stat_weights_failed'));
-			} finally {
-				this.signalManager.unregisterRunning(signals);
-			}
 		}
+
+		const signals = this.signalManager.registerRunning(RequestTypes.StatWeights);
+		try {
+			let result: StatWeightsResult;
+			// Only use worker based concurrency when running wasm.
+			if (await this.shouldUseWasmConcurrency()) {
+				result = await runConcurrentStatWeights(request, this.workerPool, onProgress, signals);
+			} else {
+				result = await this.workerPool.statWeightsAsync(request, onProgress, signals);
+			}
+			if (result.error) {
+				if (result.error.type != ErrorOutcomeType.ErrorOutcomeError) return result;
+				throw new SimError(result.error.message);
+			}
+			return result;
+		} catch (error) {
+			if (error instanceof SimError) throw error;
+			console.error(error);
+			throw new Error(i18n.t('sim.run_errors.stat_weights_failed'));
+		} finally {
+			this.signalManager.unregisterRunning(signals);
+		}
+	}
+
+	// A level's starting talents, BIS gear and EP, from the stat weights request with `talentsString` as the full build
+	// the level's talents are taken from. It runs several stat weights sims in one call, with no progress.
+	async levelDefaults(
+		player: Player<any>,
+		level: number,
+		talentsString: string,
+		epStats: Array<Stat>,
+		epPseudoStats: Array<PseudoStat>,
+		epReferenceStat: Stat,
+	): Promise<LevelDefaultsResult> {
+		this.requireRunnableSetup();
+		await this.waitForInit();
+
+		const statWeights = this.statWeightsRequest(player, epStats, epPseudoStats, epReferenceStat);
+		if (!statWeights) throw new SimError(i18n.t('sim.run_errors.stat_weights_failed'));
+		statWeights.player!.talentsString = talentsString;
+		const result = await this.workerPool.levelDefaults(LevelDefaultsRequest.create({ statWeights, level }));
+		if (result.error) throw new SimError(result.error.message);
+		return result;
+	}
+
+	// The best gear in slot for a level without raid gear, by the EP given. It sims nothing.
+	async bisGear(player: Player<any>, level: number, ep: Stats): Promise<EquipmentSpec> {
+		await this.waitForInit();
+		const result = await this.workerPool.bisGear(BisGearRequest.create({ player: player.toProto(false, true), level, ep: ep.toProto() }));
+		if (result.error) throw new SimError(result.error.message);
+		return result.equipment ?? EquipmentSpec.create();
 	}
 
 	getUnitMetadata(ref: UnitReference | undefined, contextPlayer: Player<any> | null, defaultRef: UnitReference): UnitMetadata | undefined {
