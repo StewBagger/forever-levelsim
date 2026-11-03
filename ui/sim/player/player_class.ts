@@ -1,6 +1,6 @@
 import { ArmorType, Class, Race, RangedWeaponType, WeaponType } from '@generated/proto/common';
 
-import { PlayerSpec } from './player_spec';
+import { isSpecShown, PlayerSpec } from './player_spec';
 export type IconSize = 'small' | 'medium' | 'large';
 
 export interface EligibleWeaponType {
@@ -29,3 +29,6 @@ export abstract class PlayerClass<ClassType extends Class> {
 
 	abstract getIcon(size: IconSize): string;
 }
+
+// The class's specs that are offered (isSpecShown), in the class's own order. A class with none is not offered.
+export const shownSpecs = (playerClass: PlayerClass<Class>): Array<PlayerSpec<any>> => Object.values(playerClass.specs).filter(isSpecShown);

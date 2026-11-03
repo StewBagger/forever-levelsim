@@ -1,6 +1,7 @@
 import { Class, Spec } from '@generated/proto/common';
 import { LaunchStatus } from '@sim/constants/other';
-import type { PlayerClass } from '@sim/player/player_class';
+import { PlayerClasses } from '@sim/player/classes/index';
+import { type PlayerClass, shownSpecs } from '@sim/player/player_class';
 
 // The landing page's class order: alphabetical by class name.
 export const LANDING_CLASS_ORDER: Class[] = [
@@ -14,6 +15,10 @@ export const LANDING_CLASS_ORDER: Class[] = [
 	Class.ClassWarlock,
 	Class.ClassWarrior,
 ];
+
+// The classes the landing page shows a card for, in LANDING_CLASS_ORDER: those with at least one shown spec.
+export const landingClasses = (): Array<PlayerClass<Class>> =>
+	LANDING_CLASS_ORDER.map(classId => PlayerClasses.fromProto(classId)).filter(playerClass => shownSpecs(playerClass).length > 0);
 
 // Each spec's theme class, as its spec.ts names it. A class card puts one on its cover to show that spec's
 // background, which theme/specs.css sets as --theme-background-image.

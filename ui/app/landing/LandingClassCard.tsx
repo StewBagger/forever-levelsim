@@ -3,8 +3,7 @@ import i18n from '@i18n/config';
 import { translatePlayerClass, translatePlayerSpec, translateStatus } from '@i18n/localization';
 import { LaunchStatus } from '@sim/constants/other';
 import { PlayerClasses } from '@sim/player/classes/index';
-import type { PlayerClass } from '@sim/player/player_class';
-import type { PlayerSpec } from '@sim/player/player_spec';
+import { type PlayerClass, shownSpecs } from '@sim/player/player_class';
 import { Button } from '@ui-kit/Button';
 import { SimLinkContent } from '@ui-kit/SimLinkContent';
 import clsx from 'clsx';
@@ -45,7 +44,9 @@ const CardContent = ({ coverClassName, iconPath, title, status, children }: Card
 export const LandingClassCard = ({ playerClass, index }: LandingClassCardProps) => {
 	const className = translatePlayerClass(playerClass);
 	const scheme = PlayerClasses.getCssScheme(playerClass);
-	const specs = Object.values(playerClass.specs) as Array<PlayerSpec<any>>;
+	const specs = shownSpecs(playerClass);
+	// One sim for all the class's specs, counted over every spec, so a class with one spec shown of several names it.
+	const singleSim = Object.keys(playerClass.specs).length === 1;
 	// Picked when the card mounts, so a re-render keeps the card's background.
 	const [coverSpec] = useState(() => specs[Math.floor(Math.random() * specs.length)]);
 	// Priest's class-level icon (`getIcon`) is a spell icon (spell_shadow_shadowwordpain), not the
@@ -54,16 +55,15 @@ export const LandingClassCard = ({ playerClass, index }: LandingClassCardProps) 
 		playerClass.classID === Class.ClassPriest ? 'https://wow.zamimg.com/images/wow/icons/large/class_priest.jpg' : playerClass.getIcon('large');
 
 	// A class with one sim for all its specs gets a single "All Specializations" link, under the class icon.
-	const links =
-		specs.length === 1
-			? [{ href: specs[0].simLink, iconPath: classIconPath, label: i18n.t('landing.home.allSpecs') }]
-			: specs.map(spec => ({ href: spec.simLink, iconPath: spec.getIcon('large'), label: translatePlayerSpec(spec) }));
+	const links = singleSim
+		? [{ href: specs[0].simLink, iconPath: classIconPath, label: i18n.t('landing.home.allSpecs') }]
+		: specs.map(spec => ({ href: spec.simLink, iconPath: spec.getIcon('large'), label: translatePlayerSpec(spec) }));
 
 	return (
 		<div
 			className="ui-landing-class-card"
 			data-class={scheme}
-			data-single-sim={specs.length === 1 ? '' : undefined}
+			data-single-sim={singleSim ? '' : undefined}
 			data-testid="class-card"
 			style={{ '--ui-landing-card-index': index } as CSSProperties}>
 			<CardContent

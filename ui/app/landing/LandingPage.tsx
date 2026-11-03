@@ -1,6 +1,4 @@
-import { PlayerClasses } from '@sim/player/classes/index';
-
-import { LANDING_CLASS_ORDER } from './landing_classes';
+import { landingClasses } from './landing_classes';
 import { LandingClassCard } from './LandingClassCard';
 import { LandingFooter } from './LandingFooter';
 import { LandingHeader } from './LandingHeader';
@@ -15,8 +13,8 @@ export const LandingPage = () => (
 				<div className="ui-landing-container flex flex-col pt-12 pb-12">
 					<LandingHero />
 					<div className="grid auto-rows-fr grid-cols-landing-cards gap-6" id="sim-links">
-						{LANDING_CLASS_ORDER.map((classId, index) => (
-							<LandingClassCard key={classId} playerClass={PlayerClasses.fromProto(classId)} index={index} />
+						{landingClasses().map((playerClass, index) => (
+							<LandingClassCard key={playerClass.classID} playerClass={playerClass} index={index} />
 						))}
 					</div>
 				</div>

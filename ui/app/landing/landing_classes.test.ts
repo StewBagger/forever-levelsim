@@ -1,9 +1,11 @@
 import { LaunchStatus } from '@sim/constants/other';
 import { PlayerClasses } from '@sim/player/classes/index';
+import { shownSpecs } from '@sim/player/player_class';
+import { isSpecShown } from '@sim/player/player_spec';
 import { describe, expect, it } from 'vitest';
 
 import specsCss from '../../styles/theme/specs.css?raw';
-import { classLaunchStatus, LANDING_CLASS_ORDER, SPEC_THEME_CLASS } from './landing_classes';
+import { classLaunchStatus, LANDING_CLASS_ORDER, landingClasses, SPEC_THEME_CLASS } from './landing_classes';
 
 const classes = () => LANDING_CLASS_ORDER.map(id => PlayerClasses.fromProto(id));
 
@@ -22,6 +24,11 @@ describe('the landing page class list', () => {
 	// would drop them silently.
 	it('reaches all eighteen specs', () => {
 		expect(classes().flatMap(playerClass => Object.values(playerClass.specs))).toHaveLength(18);
+	});
+
+	it('shows a card for each class with a shown spec, in order, and none for a class whose specs are all hidden', () => {
+		expect(landingClasses()).toEqual(classes().filter(playerClass => Object.values(playerClass.specs).some(isSpecShown)));
+		expect(landingClasses().flatMap(shownSpecs)).toEqual(classes().flatMap(playerClass => Object.values(playerClass.specs).filter(isSpecShown)));
 	});
 });
 

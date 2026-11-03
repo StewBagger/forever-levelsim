@@ -2,7 +2,7 @@ import type { Class } from '@generated/proto/common';
 import i18n from '@i18n/config';
 import { translatePlayerClass, translatePlayerSpec, translateStatus } from '@i18n/localization';
 import { PlayerClasses } from '@sim/player/classes/index';
-import type { PlayerClass } from '@sim/player/player_class';
+import { type PlayerClass, shownSpecs } from '@sim/player/player_class';
 import type { PlayerSpec } from '@sim/player/player_spec';
 import { PlayerSpecs } from '@sim/player/specs/index';
 import { textClassNameForClass, textClassNameForSpec } from '@sim/proto/utils';
@@ -22,9 +22,11 @@ const launchLabel = (launch: { phase: number; status: number }) =>
 	i18n.t('sidebar.header.phase', { phase: i18n.t(`common.phases.${launch.phase}`), status: translateStatus(launch.status) });
 
 const ClassSubmenu = ({ playerClass }: { playerClass: PlayerClass<Class> }) => {
-	const specs = Object.values(playerClass.specs);
-	// A class with one sim for all its specs names it "All Specializations", as the landing page does.
-	const specTitle = (spec: PlayerSpec<any>) => (specs.length === 1 ? i18n.t('landing.home.allSpecs') : translatePlayerSpec(spec));
+	const specs = shownSpecs(playerClass);
+	// A class with one sim for all its specs names it "All Specializations", as the landing page does; that counts every
+	// spec, so a class with one spec shown of several names the spec.
+	const singleSim = Object.keys(playerClass.specs).length === 1;
+	const specTitle = (spec: PlayerSpec<any>) => (singleSim ? i18n.t('landing.home.allSpecs') : translatePlayerSpec(spec));
 	return (
 		<Menu
 			submenu
@@ -86,9 +88,11 @@ export const SimTitleDropdown = ({ currentSpec }: SimTitleDropdownProps) => (
 				positionerClassName="ui-sim-title-positioner"
 				positionerProps={{ 'data-testid': 'sim-title-positioner' }}
 				popupProps={{ 'data-testid': 'sim-title-popup' }}>
-				{PlayerClasses.naturalOrder.map(playerClass => (
-					<ClassSubmenu key={playerClass.friendlyName} playerClass={playerClass} />
-				))}
+				{PlayerClasses.naturalOrder
+					.filter(playerClass => shownSpecs(playerClass).length > 0)
+					.map(playerClass => (
+						<ClassSubmenu key={playerClass.friendlyName} playerClass={playerClass} />
+					))}
 			</Menu>
 		</div>
 	</div>

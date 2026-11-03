@@ -2,7 +2,10 @@
 import '../shared/page_boot';
 
 import { browserEnv } from '@app/browser_env';
+import { SITE_HOME_PATH } from '@sim/constants/other';
 import { Player } from '@sim/player/player';
+import { shownSpecs } from '@sim/player/player_class';
+import { isSpecShown } from '@sim/player/player_spec';
 import { PlayerSpecs } from '@sim/player/specs';
 import { Sim } from '@sim/sim';
 import type { SpecDefinition } from '@sim/spec_config';
@@ -36,6 +39,13 @@ void (async () => {
 	}
 
 	const loaded = (await loadSpec()).default;
+	const playerSpec = PlayerSpecs.fromProto(loaded.spec);
+	// A hidden spec (isSpecShown) still has its page in the build, since the pages come from ui/specs; it sends the
+	// visitor to the class's first shown spec, or to the landing page when the class has none.
+	if (!isSpecShown(playerSpec)) {
+		location.replace(shownSpecs(PlayerSpecs.getPlayerClass(playerSpec))[0]?.simLink ?? SITE_HOME_PATH);
+		return;
+	}
 	const def = isPreviewOrDevMode(location.hostname) ? loaded : withoutDevOnlyGear(loaded);
 
 	// `new Player()` resolves the spec's config out of the registry in its constructor, so the definition has to be registered before the player is built.
@@ -43,7 +53,6 @@ void (async () => {
 
 	const sim = new Sim({ env: browserEnv });
 	sim.runs.setFlush(flushSync);
-	const playerSpec = PlayerSpecs.fromProto(def.spec);
 	const player = new Player(playerSpec, sim);
 	// Opt-in per spec, not inferred from isTankSpec || isHealingSpec: neither restoration
 	// spec enables it, so that heuristic would hand them a computed healing model.

@@ -2,6 +2,8 @@ import i18n from '@i18n/config';
 import { translatePlayerSpec, translateStatus } from '@i18n/localization';
 import { LaunchStatus } from '@sim/constants/other';
 import { PlayerClasses } from '@sim/player/classes/index';
+import { shownSpecs } from '@sim/player/player_class';
+import { isSpecShown } from '@sim/player/player_spec';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
@@ -13,12 +15,25 @@ const multiSpec = PlayerClasses.naturalOrder.find(playerClass => specsOf(playerC
 const singleSpec = PlayerClasses.naturalOrder.find(playerClass => specsOf(playerClass).length === 1)!;
 
 describe('LandingClassCard', () => {
-	it('links every spec of a multi-spec class from the card', () => {
+	it('links every shown spec of a multi-spec class from the card', () => {
 		render(<LandingClassCard playerClass={multiSpec} index={0} />);
 		const links = screen.getAllByTestId('spec-link');
-		expect(links.map(link => link.getAttribute('href'))).toEqual(specsOf(multiSpec).map(spec => spec.simLink));
-		expect(links.map(link => link.textContent)).toEqual(specsOf(multiSpec).map(spec => translatePlayerSpec(spec)));
+		expect(links.map(link => link.getAttribute('href'))).toEqual(shownSpecs(multiSpec).map(spec => spec.simLink));
+		expect(links.map(link => link.textContent)).toEqual(shownSpecs(multiSpec).map(spec => translatePlayerSpec(spec)));
 		expect(screen.getByTestId('class-card').tagName).not.toBe('A');
+	});
+
+	it('links no hidden spec', () => {
+		PlayerClasses.naturalOrder
+			.filter(playerClass => shownSpecs(playerClass).length > 0)
+			.forEach(playerClass => {
+				const { unmount } = render(<LandingClassCard playerClass={playerClass} index={0} />);
+				const hrefs = screen.getAllByTestId('spec-link').map(link => link.getAttribute('href'));
+				specsOf(playerClass)
+					.filter(spec => !isSpecShown(spec))
+					.forEach(spec => expect(hrefs, spec.simLink).not.toContain(spec.simLink));
+				unmount();
+			});
 	});
 
 	it('gives a one-sim class a single All Specializations link with the class icon, and keeps the card itself a plain element', () => {
@@ -56,6 +71,6 @@ describe('LandingClassCard', () => {
 		const card = screen.getByTestId('class-card');
 		const [crest, ...specIcons] = [...card.querySelectorAll('img')].map(img => img.getAttribute('src'));
 		expect(crest).toContain('class_priest.jpg');
-		expect(specIcons).toEqual(specsOf(PlayerClasses.Priest).map(spec => spec.getIcon('large')));
+		expect(specIcons).toEqual(shownSpecs(PlayerClasses.Priest).map(spec => spec.getIcon('large')));
 	});
 });

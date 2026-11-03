@@ -2,6 +2,7 @@ import { Spec } from '@generated/proto/common';
 import i18n from '@i18n/config';
 import { translatePlayerSpec } from '@i18n/localization';
 import { PlayerClasses } from '@sim/player/classes/index';
+import { shownSpecs } from '@sim/player/player_class';
 import { PlayerSpecs } from '@sim/player/specs/index';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
@@ -12,6 +13,9 @@ const mount = () => render(<SimTitleDropdown currentSpec={PlayerSpecs.fromProto(
 
 const open = (element: HTMLElement) => act(() => void fireEvent.click(element));
 
+// The classes the menu offers: those with a shown spec.
+const offered = PlayerClasses.naturalOrder.filter(playerClass => shownSpecs(playerClass).length > 0);
+
 const classRows = () => within(screen.getAllByTestId('sim-title-popup')[0]).getAllByTestId('sim-link');
 
 const openRoot = () => {
@@ -20,20 +24,20 @@ const openRoot = () => {
 };
 
 describe('SimTitleDropdown', () => {
-	it('lists every class as a submenu menuitem', () => {
+	it('lists every class with a shown spec as a submenu menuitem', () => {
 		openRoot();
 
 		const rows = classRows();
-		expect(rows).toHaveLength(PlayerClasses.naturalOrder.length);
+		expect(rows).toHaveLength(offered.length);
 		expect(rows.map(row => row.getAttribute('role'))).toEqual(rows.map(() => 'menuitem'));
 		expect(rows.map(row => row.getAttribute('aria-haspopup'))).toEqual(rows.map(() => 'menu'));
-		expect(within(screen.getAllByTestId('sim-title-popup')[0]).getAllByRole('menuitem')).toHaveLength(PlayerClasses.naturalOrder.length);
+		expect(within(screen.getAllByTestId('sim-title-popup')[0]).getAllByRole('menuitem')).toHaveLength(offered.length);
 	});
 
 	it('opens a class row onto that class’s spec links', () => {
 		openRoot();
 		const warrior = PlayerClasses.Warrior;
-		const row = classRows()[PlayerClasses.naturalOrder.indexOf(warrior)];
+		const row = classRows()[offered.indexOf(warrior)];
 
 		open(row);
 
@@ -45,7 +49,7 @@ describe('SimTitleDropdown', () => {
 	it('titles a one-sim class’s link All Specializations, and a spec’s link by its spec', () => {
 		openRoot();
 		const specTitles = (playerClass: (typeof PlayerClasses.naturalOrder)[number]) => {
-			open(classRows()[PlayerClasses.naturalOrder.indexOf(playerClass)]);
+			open(classRows()[offered.indexOf(playerClass)]);
 			const popup = screen.getAllByTestId('sim-title-popup').at(-1)!;
 			return within(popup)
 				.getAllByTestId('sim-link-title')
@@ -54,5 +58,19 @@ describe('SimTitleDropdown', () => {
 
 		expect(specTitles(PlayerClasses.Hunter)).toEqual([i18n.t('landing.home.allSpecs')]);
 		expect(specTitles(PlayerClasses.Warrior)).toEqual(Object.values(PlayerClasses.Warrior.specs).map(spec => translatePlayerSpec(spec)));
+	});
+
+	it('links only the shown specs, and names the spec of a class with one shown of several', () => {
+		openRoot();
+		const paladin = PlayerClasses.Paladin;
+		open(classRows()[offered.indexOf(paladin)]);
+		const popup = screen.getAllByTestId('sim-title-popup').at(-1)!;
+		const links = within(popup).getAllByRole('menuitem') as Array<HTMLAnchorElement>;
+		expect(links.map(link => new URL(link.href).pathname)).toEqual(shownSpecs(paladin).map(spec => spec.simLink));
+		expect(
+			within(popup)
+				.getAllByTestId('sim-link-title')
+				.map(title => title.textContent),
+		).toEqual(shownSpecs(paladin).map(spec => translatePlayerSpec(spec)));
 	});
 });

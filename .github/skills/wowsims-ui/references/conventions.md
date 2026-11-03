@@ -50,7 +50,10 @@ Adding a spec is three edits:
 2. A `PlayerSpec` class in `ui/sim/player/specs/<class>.ts` with its `launch: { phase, status }`, exported through
    `ui/sim/player/specs/index.ts`. That field is the only record of launch status: the spec page's
    `ui/app/header/SimTitleDropdown/` and the landing page's class menu (`ui/app/landing/landing_classes.ts`) both read
-   it from `PlayerSpecs`.
+   it from `PlayerSpecs`. A spec at `Unlaunched` or `GearPlanner` is hidden: `isSpecShown` in
+   `ui/sim/player/player_spec.ts` is the one switch, so the landing page and the menu leave it out (and a class with no
+   shown spec), and its page, which the build still emits, sends the visitor to the class's first shown spec
+   (`ui/app/spec_entry.tsx`). Raising the status shows it again with no other edit.
 3. A `--theme-background-image` rule in `ui/styles/theme/specs.css`; the accent is the one Null Sims palette for
    every spec (`ui/STYLING.md` §1).
 

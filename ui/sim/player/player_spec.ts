@@ -44,3 +44,8 @@ export abstract class PlayerSpec<SpecType extends Spec> {
 
 	abstract getIcon(size: IconSize): string;
 }
+
+// Whether a spec is offered at all. A spec that cannot sim (Unlaunched, or a GearPlanner) has no link on the landing
+// page or in the header's sim menu, and its page sends the visitor to the class's first shown spec (spec_entry.tsx).
+// Raising its launch status above GearPlanner shows it everywhere; nothing else lists hidden specs.
+export const isSpecShown = (spec: { readonly launch: SimStatus }): boolean => spec.launch.status > LaunchStatus.GearPlanner;
