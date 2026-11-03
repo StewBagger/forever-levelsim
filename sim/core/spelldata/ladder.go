@@ -179,3 +179,34 @@ func (e LadderEffect) at(rank int32) *Effect {
 	}
 	return e.pick(e.ladder.Rank(rank), rank)
 }
+
+// LearnedRank is the rank of the ladder the unit knows at its level, at or below `named`: the
+// highest one taught (SpellLevel) at or below the unit's level. A rotation names `named`, so a
+// lower rank is aliased to it on the unit. Nil when the unit is below the first rank's level.
+//
+// A rank the trainer does not teach (a book, a quest reward, a talent) is taken as known once its
+// SpellLevel is reached, the same as a trained one. A spell with no SpellLevels row is taken as known
+// at every level; the store writes it as taught at 60, which would read as never known below that.
+func LearnedRank(unit *core.Unit, ladder Ladder, named *Spell) *Spell {
+	learned := Nil
+	for _, rank := range ladder.ranks {
+		if TaughtAt(rank) <= unit.Level {
+			learned = rank
+		}
+		if rank == named || rank.ID == named.ID {
+			break
+		}
+	}
+	if learned != Nil {
+		unit.AliasRank(named.ID, learned.ID)
+	}
+	return learned
+}
+
+// TaughtAt is the level a rank is taught at: its SpellLevel, or 1 for a spell with no SpellLevels row.
+func TaughtAt(rank *Spell) int32 {
+	if unlevelled[rank.ID] {
+		return 1
+	}
+	return int32(rank.SpellLevel)
+}

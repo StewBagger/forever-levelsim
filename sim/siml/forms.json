@@ -63,6 +63,7 @@
 					"path": "player",
 					"fields": [
 						"name",
+						"level",
 						"race",
 						"profession1",
 						"profession2",

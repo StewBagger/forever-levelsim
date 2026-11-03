@@ -136,6 +136,9 @@ type Unit struct {
 
 	// All spells that can be cast by this unit.
 	Spellbook                 []*Spell
+	// The rank a character below max level registers in place of the rank its rotation names, keyed by
+	// the named rank's spell id. See AliasRank.
+	rankAliases map[int32]int32
 	spellRegistrationHandlers []SpellRegisteredHandler
 
 	spellMods []*SpellMod

@@ -6,7 +6,34 @@ import (
 	"github.com/wowsims/forever/sim/core/proto"
 )
 
+// The highest level a character reaches, and the level a Player with no level set sims at.
 const CharacterLevel = 60
+
+// PlayerLevel is the level a Player sims at: its level field, or CharacterLevel when that is unset
+// or out of range.
+func PlayerLevel(player *proto.Player) int32 {
+	if player == nil || player.Level < 1 || player.Level > CharacterLevel {
+		return CharacterLevel
+	}
+	return player.Level
+}
+
+// RaidLevel is the highest level among a raid's players, which sets the default target level and
+// the level gap a target's crit chance is read from.
+func RaidLevel(raid *proto.Raid) int32 {
+	level := int32(0)
+	for _, party := range raid.GetParties() {
+		for _, player := range party.GetPlayers() {
+			if player.GetClass() != proto.Class_ClassUnknown {
+				level = max(level, PlayerLevel(player))
+			}
+		}
+	}
+	if level == 0 {
+		return CharacterLevel
+	}
+	return level
+}
 const MinIlvl = 60
 const MaxIlvl = 600
 

@@ -423,6 +423,7 @@ func (unit *Unit) RegisterSpell(config SpellConfig) *Spell {
 
 // Returns the first registered spell with the given ID, or nil if there are none.
 func (unit *Unit) GetSpell(actionID ActionID) *Spell {
+	actionID = unit.resolveRankAlias(actionID)
 	for _, spell := range unit.Spellbook {
 		if spell.ActionID.SameAction(actionID) {
 			return spell

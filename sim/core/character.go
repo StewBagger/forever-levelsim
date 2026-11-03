@@ -101,7 +101,7 @@ func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character 
 		Unit: Unit{
 			Type:        PlayerUnit,
 			Index:       int32(party.Index*5 + partyIndex),
-			Level:       CharacterLevel,
+			Level:       PlayerLevel(player),
 			auraTracker: newAuraTracker(),
 			PseudoStats: stats.NewPseudoStats(),
 			Metrics:     NewUnitMetrics(),
@@ -147,12 +147,12 @@ func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character 
 	consumables := character.Consumables
 	applyTemporaryEnchants(consumables.MhImbueId, consumables.OhImbueId, consumables.MhWeaponImbueId, consumables.OhWeaponImbueId, &character.Equipment)
 
-	character.baseStats = BaseStats[BaseStatsKey{Race: character.Race, Class: character.Class}]
+	character.baseStats = BaseStatsAtLevel(character.Race, character.Class, character.Level)
 
 	character.AddStats(character.baseStats)
 	character.AddStat(stats.Health, 20-10*20)
 	character.addUniversalStatDependencies()
-	character.AddStatDependency(stats.Agility, stats.DodgePercent, dodgePerAgility(character.Class))
+	character.AddStatDependency(stats.Agility, stats.DodgePercent, dodgePerAgility(character.Class, character.Level))
 	character.PseudoStats.BaseDodgeChance += ClassBaseDodge[character.Class]
 	if _, ok := ClassWeaponTypeCapabilities[character.Class][proto.WeaponType_WeaponTypeShield]; ok {
 		character.PseudoStats.BlockValuePerStrength = 0.05
@@ -800,6 +800,26 @@ func (character *Character) FillTalentsProto(data protoreflect.Message, talentsS
 		}
 		offset += treeSizes[treeIdx]
 	}
+
+	// Checked below the cap only: at 60 the sim takes any string, as upstream does.
+	if spent, allowed := talentPointsSpent(talentsStr), TalentPointsAtLevel(character.Level); character.Level < CharacterLevel && spent > allowed {
+		panic(fmt.Sprintf("Talents %s spend %d points; a level %d character has %d", talentsStr, spent, character.Level, allowed))
+	}
+}
+
+// TalentPointsAtLevel is the talent points a character has: one per level from 10.
+func TalentPointsAtLevel(level int32) int32 {
+	return max(level-9, 0)
+}
+
+func talentPointsSpent(talentsStr string) int32 {
+	spent := int32(0)
+	for _, c := range talentsStr {
+		if c >= '0' && c <= '9' {
+			spent += c - '0'
+		}
+	}
+	return spent
 }
 
 // The points held in the talent whose field carries this talent_spell_id, or 0.

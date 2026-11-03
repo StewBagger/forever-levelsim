@@ -49,6 +49,12 @@ func (encounter *Encounter) InArea(areaType proto.AreaType) bool {
 }
 
 func NewEncounter(options *proto.Encounter) Encounter {
+	return newEncounter(options, CharacterLevel)
+}
+
+// newEncounter builds the encounter against players of playerLevel, which sets each target's
+// default level and the level gap its crit chance is read from.
+func newEncounter(options *proto.Encounter, playerLevel int32) Encounter {
 	options.ExecuteProportion_35 = max(options.ExecuteProportion_35, options.ExecuteProportion_20)
 	totalTargetCount := max(len(options.Targets), 1)
 
@@ -65,7 +71,7 @@ func NewEncounter(options *proto.Encounter) Encounter {
 	}
 
 	for targetIndex, targetOptions := range options.Targets {
-		target := NewTarget(targetOptions, int32(targetIndex))
+		target := newTarget(targetOptions, int32(targetIndex), playerLevel)
 		encounter.AllTargets = append(encounter.AllTargets, target)
 		encounter.AllTargetUnits = append(encounter.AllTargetUnits, &target.Unit)
 
@@ -78,7 +84,7 @@ func NewEncounter(options *proto.Encounter) Encounter {
 	if len(encounter.AllTargets) == 0 {
 		// Add a dummy target. The only case where targets aren't specified is when
 		// computing character stats, and targets won't matter there.
-		target := NewTarget(&proto.Target{}, 0)
+		target := newTarget(&proto.Target{}, 0, playerLevel)
 		encounter.AllTargets = append(encounter.AllTargets, target)
 		encounter.ActiveTargets = append(encounter.ActiveTargets, target)
 		encounter.AllTargetUnits = append(encounter.AllTargetUnits, &target.Unit)
@@ -172,6 +178,10 @@ type Target struct {
 }
 
 func NewTarget(options *proto.Target, targetIndex int32) *Target {
+	return newTarget(options, targetIndex, CharacterLevel)
+}
+
+func newTarget(options *proto.Target, targetIndex int32, playerLevel int32) *Target {
 	unitStats := stats.Stats{}
 	if options.Stats != nil {
 		unitStats = stats.FromProtoArray(options.Stats)
@@ -196,7 +206,7 @@ func NewTarget(options *proto.Target, targetIndex int32) *Target {
 			enabled:               !options.DisabledAtStart,
 		},
 	}
-	defaultRaidBossLevel := int32(CharacterLevel + 3)
+	defaultRaidBossLevel := playerLevel + 3
 	target.GCD = target.NewTimer()
 	target.RotationTimer = target.NewTimer()
 	if target.Level == 0 {
@@ -211,7 +221,7 @@ func NewTarget(options *proto.Target, targetIndex int32) *Target {
 	// accomplished by specifying the extra (or reduced) Crit within the CritRating field of the
 	// proto stats array. Any specified CritRating will be applied as an OFFSET to the default
 	// level-based values, rather than as a replacement.
-	target.stats[stats.PhysicalCritPercent] += UnitLevelFloat64(target.Level-CharacterLevel, 5.0, 5.2, 5.4, 5.6)
+	target.stats[stats.PhysicalCritPercent] += UnitLevelFloat64(target.Level-playerLevel, 5.0, 5.2, 5.4, 5.6)
 	target.addUniversalStatDependencies()
 
 	if target.Level == 63 && options.SuppressDodge {

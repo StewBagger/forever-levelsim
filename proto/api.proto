@@ -79,6 +79,9 @@ message Player {
 	// Skill in profession1 and profession2; 0 means the maximum.
 	int32 prof1_rank = 59;
 	int32 prof2_rank = 60;
+	// The character's level, 1 to 60; 0 means 60. Spell ranks, talent points, base stats and the
+	// level-relative combat tables all follow it.
+	int32 level = 62;
 	Cooldowns cooldowns = 43;
 
 	APLRotation rotation = 44;

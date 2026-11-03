@@ -225,6 +225,7 @@ func (rot *APLRotation) GetAPLSpell(spellId *proto.ActionID) *Spell {
 			}
 		}
 	} else {
+		actionID = rot.unit.resolveRankAlias(actionID)
 		// Prefer spells marked with APL, but fallback to unmarked spells.
 		var aplSpell *Spell
 		for _, s := range rot.unit.Spellbook {

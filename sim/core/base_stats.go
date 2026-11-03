@@ -214,13 +214,13 @@ var ClassBaseDodge = map[proto.Class]float64{
 	proto.Class_ClassDruid:   0.009,
 }
 
-// Dodge percent per point of Agility at level 60: the game files' crit per Agility
+// Dodge percent per point of Agility at a level: the game files' crit per Agility
 // (PlayerExpectedStat), which rogues and hunters get twice over.
-func dodgePerAgility(class proto.Class) float64 {
+func dodgePerAgility(class proto.Class, level int32) float64 {
 	if class == proto.Class_ClassRogue || class == proto.Class_ClassHunter {
-		return 2 * CritPerAgiMaxLevel[class]
+		return 2 * CritPerAgiAtLevel(class, level)
 	}
-	return CritPerAgiMaxLevel[class]
+	return CritPerAgiAtLevel(class, level)
 }
 
 // The LEVEL 60 rows of GameTables/SpellScaling.txt. Only tools/tooltip reads this
