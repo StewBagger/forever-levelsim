@@ -1,0 +1,3358 @@
+{
+	"statWeights": {
+		"player": {
+			"apiVersion": 2,
+			"name": "Player",
+			"race": "RaceHuman",
+			"class": "ClassPaladin",
+			"equipment": {
+				"items": [
+					{
+						"id": 12640,
+						"enchant": 2543
+					},
+					{
+						"id": 22150,
+						"enchant": 904
+					},
+					{
+						"id": 22093
+					},
+					{
+						"id": 279269,
+						"enchant": 849
+					},
+					{
+						"id": 22089,
+						"enchant": 1891
+					},
+					{
+						"id": 22088,
+						"enchant": 2566
+					},
+					{
+						"id": 22090,
+						"enchant": 8206
+					},
+					{
+						"id": 22086
+					},
+					{
+						"id": 22385,
+						"enchant": 2543
+					},
+					{
+						"id": 22087,
+						"enchant": 1887
+					},
+					{
+						"id": 21182
+					},
+					{
+						"id": 19325
+					},
+					{
+						"id": 274759
+					},
+					{
+						"id": 272437
+					},
+					{
+						"id": 12784,
+						"enchant": 1900
+					},
+					{},
+					{
+						"id": 272435
+					}
+				]
+			},
+			"consumables": {
+				"flaskId": 13512,
+				"foodId": 13933,
+				"conjuredId": 12662,
+				"mhImbueId": 3824,
+				"potions": [
+					1072, 2455, 2456, 3087, 3385, 3827, 6048, 6049, 6050, 6051, 6052, 6149, 9144, 9224, 13443, 13444, 13456, 13457, 13458, 13459, 13460, 13461,
+					14894, 17351, 17352, 18253, 18841, 250932, 250933, 250934, 250935, 250936, 250937, 250938, 250939, 250940, 250941, 250942, 250943, 250951,
+					250953, 250954, 250955, 255663, 274935, 282013
+				],
+				"conjuredItems": [11952, 12662, 15723, 17747],
+				"extraIds": [8410, 10646, 12217, 18269],
+				"elixirIds": [21546, 250338, 13452, 250337, 250351, 250329, 13454, 250341, 12460],
+				"resourcePotId": 13444,
+				"offensivePotId": 250937
+			},
+			"bonusStats": {
+				"apiVersion": 2,
+				"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			},
+			"itemSwap": {
+				"items": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+				"prepullBonusStats": {
+					"apiVersion": 2,
+					"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+				}
+			},
+			"buffs": {
+				"greaterBlessingOfKings": true,
+				"greaterBlessingOfMight": 1,
+				"greaterBlessingOfWisdom": 1
+			},
+			"retributionPaladin": {
+				"options": {
+					"classOptions": {}
+				}
+			},
+			"talentsString": "050250002-501-05233011201301351",
+			"profession1": "Engineering",
+			"profession2": "Blacksmithing",
+			"level": 30,
+			"cooldowns": {},
+			"rotation": {
+				"type": "TypeSimple",
+				"simple": {
+					"specRotationJson": "{\"aura\":\"RetributionAura\",\"assignedJudgement\":\"JudgementOfTheCrusader\",\"pullRange\":25}"
+				},
+				"prepullActions": [
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Activate assigned aura"
+							}
+						},
+						"doAtValue": {
+							"const": {
+								"val": "-20s"
+							}
+						}
+					},
+					{
+						"action": {
+							"move": {
+								"rangeFromTarget": {
+									"variableRef": {
+										"name": "Pull range"
+									}
+								}
+							}
+						},
+						"doAtValue": {
+							"const": {
+								"val": "-20s"
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Prep Seal of Command"
+							}
+						},
+						"doAtValue": {
+							"const": {
+								"val": "-3s"
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Prep Seal of Righteousness"
+							}
+						},
+						"doAtValue": {
+							"const": {
+								"val": "-1.5s"
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Cast assigned judgement"
+							}
+						},
+						"doAtValue": {
+							"const": {
+								"val": "-1.5s"
+							}
+						}
+					}
+				],
+				"priorityList": [
+					{
+						"action": {
+							"condition": {
+								"not": {
+									"val": {
+										"spellInRange": {
+											"spellId": {
+												"spellId": 10333,
+												"rank": 8
+											}
+										}
+									}
+								}
+							},
+							"groupReference": {
+								"groupName": "Move to melee"
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"variableRef": {
+									"name": "WF guard"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 20271
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"cmp": {
+									"op": "OpGe",
+									"lhs": {
+										"currentTime": {}
+									},
+									"rhs": {
+										"variableRef": {
+											"name": "Delay Major CDs"
+										}
+									}
+								}
+							},
+							"autocastOtherCooldowns": {}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"or": {
+									"vals": [
+										{
+											"cmp": {
+												"op": "OpEq",
+												"lhs": {
+													"spellCastTime": {
+														"spellId": {
+															"spellId": 24239,
+															"rank": 3
+														}
+													}
+												},
+												"rhs": {
+													"const": {
+														"val": "0s"
+													}
+												}
+											}
+										},
+										{
+											"cmp": {
+												"op": "OpLt",
+												"lhs": {
+													"autoTimeSinceLast": {
+														"autoType": "MainHandAuto"
+													}
+												},
+												"rhs": {
+													"const": {
+														"val": "0.2s"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 24239,
+									"rank": 3
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"variableRef": {
+												"name": "WF guard"
+											}
+										},
+										{
+											"not": {
+												"val": {
+													"spellIsReady": {
+														"spellId": {
+															"spellId": 20271
+														}
+													}
+												}
+											}
+										},
+										{
+											"variableRef": {
+												"name": "Judge realism protection"
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 10333,
+									"rank": 8
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"variableRef": {
+									"name": "Should refresh SoC"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 20920,
+									"rank": 5
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"variableRef": {
+									"name": "Should refresh SoR"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 20293,
+									"rank": 8
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Consecration"
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Exorcism"
+							}
+						}
+					}
+				],
+				"groups": [
+					{
+						"name": "Activate assigned aura",
+						"actions": [
+							{
+								"action": {
+									"castSpell": {
+										"spellId": {
+											"spellId": 10301,
+											"rank": 5
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Cast assigned judgement",
+						"actions": [
+							{
+								"action": {
+									"castSpell": {
+										"spellId": {
+											"spellId": 20308,
+											"rank": 6
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Prep Seal of Command",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"variableRef": {
+																"name": "Has assigned judgement"
+															}
+														}
+													}
+												},
+												{
+													"variableRef": {
+														"name": "Use Seal of Command"
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 20920,
+											"rank": 5
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Prep Seal of Righteousness",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"variableRef": {
+																"name": "Has assigned judgement"
+															}
+														}
+													}
+												},
+												{
+													"variableRef": {
+														"name": "Use Seal of Righteousness"
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"not": {
+																	"val": {
+																		"variableRef": {
+																			"name": "Use Seal of Command"
+																		}
+																	}
+																}
+															},
+															{
+																"not": {
+																	"val": {
+																		"talentIsKnown": {
+																			"talentId": {
+																				"spellId": 20375,
+																				"rank": 1
+																			}
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 20293,
+											"rank": 8
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Move to melee",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"variableRef": {
+														"name": "Has assigned judgement"
+													}
+												},
+												{
+													"talentIsKnown": {
+														"talentId": {
+															"spellId": 20375,
+															"rank": 1
+														}
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"variableRef": {
+																	"name": "Use Seal of Command"
+																}
+															},
+															{
+																"not": {
+																	"val": {
+																		"variableRef": {
+																			"name": "Use Seal of Righteousness"
+																		}
+																	}
+																}
+															},
+															{
+																"talentIsKnown": {
+																	"talentId": {
+																		"spellId": 1310735,
+																		"rank": 1
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"sequenceIsComplete": {
+																"sequenceName": "move1"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"sequence": {
+										"name": "move1",
+										"actions": [
+											{
+												"move": {
+													"rangeFromTarget": {
+														"variableRef": {
+															"name": "Melee range"
+														}
+													}
+												}
+											},
+											{
+												"waitUntil": {
+													"condition": {
+														"spellInRange": {
+															"spellId": {
+																"spellId": 20271
+															}
+														}
+													}
+												}
+											},
+											{
+												"castSpell": {
+													"spellId": {
+														"spellId": 20271
+													}
+												}
+											},
+											{
+												"wait": {
+													"duration": {
+														"inputDelay": {}
+													}
+												}
+											},
+											{
+												"castSpell": {
+													"spellId": {
+														"spellId": 20920,
+														"rank": 5
+													}
+												}
+											},
+											{
+												"waitUntil": {
+													"condition": {
+														"spellInRange": {
+															"spellId": {
+																"spellId": 10333,
+																"rank": 8
+															}
+														}
+													}
+												}
+											}
+										]
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"variableRef": {
+														"name": "Has assigned judgement"
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"not": {
+																	"val": {
+																		"talentIsKnown": {
+																			"talentId": {
+																				"spellId": 1310735,
+																				"rank": 1
+																			}
+																		}
+																	}
+																}
+															},
+															{
+																"not": {
+																	"val": {
+																		"talentIsKnown": {
+																			"talentId": {
+																				"spellId": 20375,
+																				"rank": 1
+																			}
+																		}
+																	}
+																}
+															},
+															{
+																"not": {
+																	"val": {
+																		"variableRef": {
+																			"name": "Use Seal of Command"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"sequenceIsComplete": {
+																"sequenceName": "move2"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"sequence": {
+										"name": "move2",
+										"actions": [
+											{
+												"move": {
+													"rangeFromTarget": {
+														"variableRef": {
+															"name": "Melee range"
+														}
+													}
+												}
+											},
+											{
+												"waitUntil": {
+													"condition": {
+														"spellInRange": {
+															"spellId": {
+																"spellId": 20271
+															}
+														}
+													}
+												}
+											},
+											{
+												"castSpell": {
+													"spellId": {
+														"spellId": 20271
+													}
+												}
+											},
+											{
+												"wait": {
+													"duration": {
+														"inputDelay": {}
+													}
+												}
+											},
+											{
+												"castSpell": {
+													"spellId": {
+														"spellId": 20293,
+														"rank": 8
+													}
+												}
+											},
+											{
+												"waitUntil": {
+													"condition": {
+														"spellInRange": {
+															"spellId": {
+																"spellId": 10333,
+																"rank": 8
+															}
+														}
+													}
+												}
+											}
+										]
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"variableRef": {
+																"name": "Has assigned judgement"
+															}
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"sequenceIsComplete": {
+																"sequenceName": "move3"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"sequence": {
+										"name": "move3",
+										"actions": [
+											{
+												"move": {
+													"rangeFromTarget": {
+														"variableRef": {
+															"name": "Melee range"
+														}
+													}
+												}
+											},
+											{
+												"waitUntil": {
+													"condition": {
+														"spellInRange": {
+															"spellId": {
+																"spellId": 20271
+															}
+														}
+													}
+												}
+											},
+											{
+												"castSpell": {
+													"spellId": {
+														"spellId": 20271
+													}
+												}
+											},
+											{
+												"waitUntil": {
+													"condition": {
+														"spellInRange": {
+															"spellId": {
+																"spellId": 10333,
+																"rank": 8
+															}
+														}
+													}
+												}
+											}
+										]
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Exorcism",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"cmp": {
+														"op": "OpGt",
+														"lhs": {
+															"autoTimeToNext": {
+																"autoType": "MainHandAuto"
+															}
+														},
+														"rhs": {
+															"const": {
+																"val": "1.5s"
+															}
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpGe",
+														"lhs": {
+															"currentManaPercent": {}
+														},
+														"rhs": {
+															"const": {
+																"val": "10%"
+															}
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"spellIsReady": {
+																"spellId": {
+																	"spellId": 20271
+																}
+															}
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"spellIsReady": {
+																"spellId": {
+																	"spellId": 10333,
+																	"rank": 8
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 10314,
+											"rank": 6
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Consecration",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"cmp": {
+														"op": "OpGt",
+														"lhs": {
+															"autoTimeToNext": {
+																"autoType": "MainHandAuto"
+															}
+														},
+														"rhs": {
+															"const": {
+																"val": "1.5s"
+															}
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpGe",
+														"lhs": {
+															"currentManaPercent": {}
+														},
+														"rhs": {
+															"const": {
+																"val": "10%"
+															}
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"spellIsReady": {
+																"spellId": {
+																	"spellId": 20271
+																}
+															}
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"spellIsReady": {
+																"spellId": {
+																	"spellId": 10333,
+																	"rank": 8
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 20924,
+											"rank": 5
+										}
+									}
+								}
+							}
+						]
+					}
+				],
+				"valueVariables": [
+					{
+						"name": "Has assigned judgement",
+						"value": {
+							"const": {
+								"val": "true"
+							}
+						}
+					},
+					{
+						"name": "Use Seal of Command",
+						"value": {
+							"const": {
+								"val": "false"
+							}
+						}
+					},
+					{
+						"name": "Use Seal of Righteousness",
+						"value": {
+							"const": {
+								"val": "true"
+							}
+						}
+					},
+					{
+						"name": "Delay Major CDs",
+						"value": {
+							"const": {
+								"val": "0s"
+							}
+						}
+					},
+					{
+						"name": "Pull range",
+						"value": {
+							"const": {
+								"val": "25"
+							}
+						}
+					},
+					{
+						"name": "Melee range",
+						"value": {
+							"const": {
+								"val": "5"
+							}
+						}
+					},
+					{
+						"name": "WF guard",
+						"value": {
+							"and": {
+								"vals": [
+									{
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"autoTimeSinceLast": {
+													"autoType": "MainHandAuto"
+												}
+											},
+											"rhs": {
+												"const": {
+													"val": "0.1s"
+												}
+											}
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"autoTimeToNext": {
+													"autoType": "MainHandAuto"
+												}
+											},
+											"rhs": {
+												"const": {
+													"val": "0.1s"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Should refresh SoC",
+						"value": {
+							"and": {
+								"vals": [
+									{
+										"or": {
+											"vals": [
+												{
+													"variableRef": {
+														"name": "Use Seal of Command"
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"variableRef": {
+																"name": "Use Seal of Righteousness"
+															}
+														}
+													}
+												},
+												{
+													"talentIsKnown": {
+														"talentId": {
+															"spellId": 1310735,
+															"rank": 1
+														}
+													}
+												}
+											]
+										}
+									},
+									{
+										"or": {
+											"vals": [
+												{
+													"auraIsInactive": {
+														"auraId": {
+															"spellId": 20920,
+															"rank": 5
+														}
+													}
+												},
+												{
+													"and": {
+														"vals": [
+															{
+																"auraIsActive": {
+																	"auraId": {
+																		"spellId": 20920,
+																		"rank": 5
+																	}
+																}
+															},
+															{
+																"cmp": {
+																	"op": "OpLe",
+																	"lhs": {
+																		"auraRemainingTime": {
+																			"auraId": {
+																				"spellId": 20920,
+																				"rank": 5
+																			}
+																		}
+																	},
+																	"rhs": {
+																		"autoTimeToNext": {
+																			"autoType": "MainHandAuto"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
+									{
+										"or": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"talentIsKnown": {
+																"talentId": {
+																	"spellId": 1310735,
+																	"rank": 1
+																}
+															}
+														}
+													}
+												},
+												{
+													"and": {
+														"vals": [
+															{
+																"auraIsInactive": {
+																	"auraId": {
+																		"spellId": 20920,
+																		"rank": 5
+																	},
+																	"includeReactionTime": true
+																}
+															},
+															{
+																"cmp": {
+																	"op": "OpGe",
+																	"lhs": {
+																		"auraNumStacks": {
+																			"auraId": {
+																				"spellId": 1311704
+																			},
+																			"includeReactionTime": true
+																		}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "1"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
+									{
+										"variableRef": {
+											"name": "Judge realism protection"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Should refresh SoR",
+						"value": {
+							"and": {
+								"vals": [
+									{
+										"or": {
+											"vals": [
+												{
+													"variableRef": {
+														"name": "Use Seal of Righteousness"
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"talentIsKnown": {
+																"talentId": {
+																	"spellId": 20375,
+																	"rank": 1
+																}
+															}
+														}
+													}
+												},
+												{
+													"talentIsKnown": {
+														"talentId": {
+															"spellId": 1310735,
+															"rank": 1
+														}
+													}
+												}
+											]
+										}
+									},
+									{
+										"or": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"variableRef": {
+																"name": "Use Seal of Command"
+															}
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"talentIsKnown": {
+																"talentId": {
+																	"spellId": 20375,
+																	"rank": 1
+																}
+															}
+														}
+													}
+												},
+												{
+													"talentIsKnown": {
+														"talentId": {
+															"spellId": 1310735,
+															"rank": 1
+														}
+													}
+												}
+											]
+										}
+									},
+									{
+										"or": {
+											"vals": [
+												{
+													"auraIsInactive": {
+														"auraId": {
+															"spellId": 20293,
+															"rank": 8
+														}
+													}
+												},
+												{
+													"and": {
+														"vals": [
+															{
+																"auraIsActive": {
+																	"auraId": {
+																		"spellId": 20293,
+																		"rank": 8
+																	}
+																}
+															},
+															{
+																"cmp": {
+																	"op": "OpLe",
+																	"lhs": {
+																		"auraRemainingTime": {
+																			"auraId": {
+																				"spellId": 20293,
+																				"rank": 8
+																			}
+																		}
+																	},
+																	"rhs": {
+																		"autoTimeToNext": {
+																			"autoType": "MainHandAuto"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
+									{
+										"or": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"talentIsKnown": {
+																"talentId": {
+																	"spellId": 1310735,
+																	"rank": 1
+																}
+															}
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"talentIsKnown": {
+																"talentId": {
+																	"spellId": 20375,
+																	"rank": 1
+																}
+															}
+														}
+													}
+												},
+												{
+													"and": {
+														"vals": [
+															{
+																"auraIsInactive": {
+																	"auraId": {
+																		"spellId": 20293,
+																		"rank": 8
+																	},
+																	"includeReactionTime": true
+																}
+															},
+															{
+																"cmp": {
+																	"op": "OpEq",
+																	"lhs": {
+																		"auraNumStacks": {
+																			"auraId": {
+																				"spellId": 1311703
+																			},
+																			"includeReactionTime": true
+																		}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "3"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
+									{
+										"variableRef": {
+											"name": "Judge realism protection"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Judge realism protection",
+						"value": {
+							"cmp": {
+								"op": "OpLe",
+								"lhs": {
+									"spellTimeToReady": {
+										"spellId": {
+											"spellId": 20271
+										}
+									}
+								},
+								"rhs": {
+									"math": {
+										"op": "OpSub",
+										"lhs": {
+											"spellFullCooldown": {
+												"spellId": {
+													"spellId": 20271
+												}
+											}
+										},
+										"rhs": {
+											"inputDelay": {}
+										}
+									}
+								}
+							}
+						}
+					}
+				]
+			},
+			"reactionTimeMs": 100,
+			"distanceFromTarget": 25,
+			"healingModel": {},
+			"database": {
+				"items": [
+					{
+						"id": 12640,
+						"name": "Lionheart Helm",
+						"type": "ItemTypeHead",
+						"armorType": "ArmorTypePlate",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 45,
+								"stats": {
+									"0": 18,
+									"17": 20,
+									"18": 28,
+									"27": 565
+								},
+								"ilvl": 61
+							}
+						}
+					},
+					{
+						"id": 22150,
+						"name": "Beads of Ogre Might",
+						"type": "ItemTypeNeck",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 20,
+								"stats": {
+									"2": 7,
+									"14": 24,
+									"17": 10
+								},
+								"ilvl": 63
+							}
+						}
+					},
+					{
+						"id": 22093,
+						"name": "Soulforge Spaulders",
+						"type": "ItemTypeShoulder",
+						"armorType": "ArmorTypePlate",
+						"setName": "Soulforge Armor",
+						"setId": 516,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 28,
+								"stats": {
+									"0": 10,
+									"2": 11,
+									"3": 11,
+									"4": 12,
+									"5": 12,
+									"27": 507,
+									"31": 4
+								},
+								"ilvl": 65
+							}
+						}
+					},
+					{
+						"id": 279269,
+						"name": "Fel Cape",
+						"type": "ItemTypeBack",
+						"armorType": "ArmorTypeCloth",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 27,
+								"stats": {
+									"2": 16,
+									"11": 15,
+									"18": 14,
+									"27": 50
+								},
+								"ilvl": 65
+							}
+						}
+					},
+					{
+						"id": 22089,
+						"name": "Soulforge Breastplate",
+						"type": "ItemTypeChest",
+						"armorType": "ArmorTypePlate",
+						"setName": "Soulforge Armor",
+						"setId": 516,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 44,
+								"stats": {
+									"0": 16,
+									"2": 17,
+									"3": 17,
+									"4": 14,
+									"5": 14,
+									"13": 12,
+									"18": 14,
+									"27": 684
+								},
+								"ilvl": 60
+							}
+						}
+					},
+					{
+						"id": 22088,
+						"name": "Soulforge Bracers",
+						"type": "ItemTypeWrist",
+						"armorType": "ArmorTypePlate",
+						"setName": "Soulforge Armor",
+						"setId": 516,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 21,
+								"stats": {
+									"0": 9,
+									"2": 10,
+									"3": 9,
+									"4": 8,
+									"5": 8,
+									"27": 296
+								},
+								"ilvl": 65
+							}
+						}
+					},
+					{
+						"id": 22090,
+						"name": "Soulforge Gauntlets",
+						"type": "ItemTypeHands",
+						"armorType": "ArmorTypePlate",
+						"setName": "Soulforge Armor",
+						"setId": 516,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 30,
+								"stats": {
+									"0": 9,
+									"2": 10,
+									"3": 10,
+									"4": 11,
+									"5": 11,
+									"18": 14,
+									"27": 393
+								},
+								"ilvl": 55
+							}
+						}
+					},
+					{
+						"id": 22086,
+						"name": "Soulforge Belt",
+						"type": "ItemTypeWaist",
+						"armorType": "ArmorTypePlate",
+						"setName": "Soulforge Armor",
+						"setId": 516,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 28,
+								"stats": {
+									"0": 10,
+									"2": 11,
+									"3": 11,
+									"4": 12,
+									"5": 12,
+									"27": 380,
+									"31": 4
+								},
+								"ilvl": 65
+							}
+						}
+					},
+					{
+						"id": 22385,
+						"name": "Titanic Leggings",
+						"type": "ItemTypeLegs",
+						"armorType": "ArmorTypePlate",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 44,
+								"stats": {
+									"0": 30,
+									"17": 20,
+									"18": 14,
+									"27": 598
+								},
+								"ilvl": 60
+							}
+						}
+					},
+					{
+						"id": 22087,
+						"name": "Soulforge Boots",
+						"type": "ItemTypeFeet",
+						"armorType": "ArmorTypePlate",
+						"setName": "Soulforge Armor",
+						"setId": 516,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 33,
+								"stats": {
+									"0": 12,
+									"2": 13,
+									"3": 12,
+									"4": 12,
+									"5": 12,
+									"13": 10,
+									"27": 470,
+									"31": 4
+								},
+								"ilvl": 60
+							}
+						}
+					},
+					{
+						"id": 21182,
+						"name": "Band of Earthen Might",
+						"type": "ItemTypeFinger",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 21,
+								"stats": {
+									"0": 6,
+									"17": 10,
+									"18": 14
+								},
+								"ilvl": 66
+							}
+						},
+						"unique": true
+					},
+					{
+						"id": 19325,
+						"name": "Don Julio's Band",
+						"type": "ItemTypeFinger",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 25,
+								"stats": {
+									"2": 10,
+									"14": 14,
+									"17": 10,
+									"18": 14
+								},
+								"ilvl": 60
+							}
+						},
+						"unique": true
+					},
+					{
+						"id": 274759,
+						"name": "Everlook Pathcarver",
+						"type": "ItemTypeTrinket",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 24,
+								"stats": {
+									"35": 20
+								},
+								"ilvl": 55
+							}
+						},
+						"itemEffects": [
+							{
+								"buffId": 1295270,
+								"buffName": "Prototype Pathcarver (1295270)",
+								"onUse": {
+									"cooldownMs": 300000,
+									"categoryId": 1141,
+									"categoryCooldownMs": 15000
+								}
+							}
+						],
+						"limitCategory": 709
+					},
+					{
+						"id": 272437,
+						"name": "Adaptive Combat Assistant",
+						"type": "ItemTypeTrinket",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 28,
+								"stats": {
+									"21": 20
+								},
+								"ilvl": 65
+							}
+						},
+						"itemEffects": [
+							{
+								"buffId": 1291097,
+								"buffName": "Damage Sigmoid (1291097)",
+								"effectDurationMs": 15000,
+								"onUse": {
+									"cooldownMs": 90000,
+									"categoryId": 1141,
+									"categoryCooldownMs": 15000
+								}
+							}
+						],
+						"limitCategory": 707
+					},
+					{
+						"id": 12784,
+						"name": "Arcanite Reaper",
+						"type": "ItemTypeWeapon",
+						"weaponType": "WeaponTypeAxe",
+						"handType": "HandTypeTwoHand",
+						"weaponSpeed": 3.8,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 36,
+								"weaponDamageMin": 153,
+								"weaponDamageMax": 256,
+								"unroundedDps": 53.945168,
+								"stats": {
+									"2": 13,
+									"14": 62
+								},
+								"ilvl": 63
+							}
+						}
+					},
+					{
+						"id": 272435,
+						"name": "Libram of Law",
+						"type": "ItemTypeRanged",
+						"rangedWeaponType": "RangedWeaponTypeLibram",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 21,
+								"ilvl": 65
+							}
+						},
+						"itemEffects": [
+							{
+								"buffId": 1291086,
+								"buffName": "Judgement Increased Damage (1291086)"
+							}
+						]
+					}
+				],
+				"enchants": [
+					{
+						"effectId": 2543,
+						"name": "Arcanum of Rapidity",
+						"type": "ItemTypeHead",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"extraTypes": ["ItemTypeLegs"],
+						"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 904,
+						"name": "Enchant Necklace - Agility",
+						"type": "ItemTypeNeck",
+						"stats": [0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 849,
+						"name": "Enchant Cloak - Lesser Agility",
+						"type": "ItemTypeBack",
+						"stats": [0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 1891,
+						"name": "Enchant Chest - Greater Stats",
+						"type": "ItemTypeChest",
+						"stats": [4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 2566,
+						"name": "Enchant Bracer - Healing Power",
+						"type": "ItemTypeWrist",
+						"stats": [0, 0, 0, 0, 24, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 8206,
+						"name": "Enchant Gloves - Greater Agility",
+						"type": "ItemTypeHands",
+						"stats": [0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 1887,
+						"name": "Enchant Boots - Greater Agility",
+						"type": "ItemTypeFeet",
+						"stats": [0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 1900,
+						"name": "Enchant Weapon - Crusader",
+						"type": "ItemTypeWeapon",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"enchantEffects": [
+							{
+								"buffId": 20007,
+								"buffName": "Holy Strength (20007)",
+								"effectDurationMs": 15000,
+								"scalingOptions": {
+									"0": {
+										"stats": {
+											"0": 100
+										}
+									}
+								},
+								"proc": {
+									"ppm": 1
+								}
+							}
+						],
+						"procKind": "EnchantProcKindCombat"
+					}
+				],
+				"itemEffectRandPropPoints": [
+					{
+						"ilvl": 61,
+						"randPropPoints": 45
+					},
+					{
+						"ilvl": 63,
+						"randPropPoints": 46
+					},
+					{
+						"ilvl": 65,
+						"randPropPoints": 47
+					},
+					{
+						"ilvl": 60,
+						"randPropPoints": 44
+					},
+					{
+						"ilvl": 66,
+						"randPropPoints": 47
+					}
+				],
+				"consumables": [
+					{
+						"id": 1072,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Full Moonshine",
+						"lvl": 25,
+						"categoryId": 4,
+						"effectIds": [679186],
+						"itemEffects": [
+							{
+								"buffId": 438,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 2455,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Mana Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"effectIds": [679151],
+						"itemEffects": [
+							{
+								"buffId": 437,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 2456,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Rejuvenation Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"effectIds": [692902, 692903],
+						"itemEffects": [
+							{
+								"buffId": 2370,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 3087,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Mug of Shimmer Stout",
+						"lvl": 15,
+						"categoryId": 4,
+						"effectIds": [705545],
+						"itemEffects": [
+							{
+								"buffId": 29236,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 3385,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Mana Potion",
+						"lvl": 14,
+						"categoryId": 4,
+						"effectIds": [679186],
+						"itemEffects": [
+							{
+								"buffId": 438,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 3827,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Mana Potion",
+						"lvl": 22,
+						"categoryId": 4,
+						"effectIds": [679998],
+						"itemEffects": [
+							{
+								"buffId": 2023,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 6048,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Shadow Protection Potion",
+						"lvl": 17,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7242,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6049,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Fire Protection Potion",
+						"lvl": 23,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7233,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6050,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Frost Protection Potion",
+						"lvl": 28,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7239,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6051,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Holy Protection Potion",
+						"lvl": 10,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7245,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6052,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Nature Protection Potion",
+						"lvl": 28,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7254,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6149,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Mana Potion",
+						"lvl": 31,
+						"categoryId": 4,
+						"effectIds": [689141],
+						"itemEffects": [
+							{
+								"buffId": 11903,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 9144,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Wildvine Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [689469, 689470],
+						"itemEffects": [
+							{
+								"buffId": 11387,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 9224,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Potion of Demon Slaying",
+						"lvl": 40,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 11406,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"],
+						"mobTypeStats": [
+							{
+								"mobTypes": ["MobTypeDemon"],
+								"stats": {
+									"14": 180
+								}
+							}
+						]
+					},
+					{
+						"id": 13443,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Mana Potion",
+						"lvl": 41,
+						"categoryId": 4,
+						"effectIds": [695811],
+						"itemEffects": [
+							{
+								"buffId": 17530,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 13444,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Mana Potion",
+						"lvl": 49,
+						"categoryId": 4,
+						"effectIds": [695996],
+						"itemEffects": [
+							{
+								"buffId": 17531,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 13456,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Frost Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17544,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13457,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Fire Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17543,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13458,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Nature Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17546,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13459,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Shadow Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17548,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13460,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Holy Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17545,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13461,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Arcane Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17549,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 14894,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lily Root",
+						"lvl": 51,
+						"categoryId": 4,
+						"effectIds": [695927, 695928],
+						"itemEffects": [
+							{
+								"buffId": 18832,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 17351,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Mana Draught",
+						"lvl": 45,
+						"categoryId": 4,
+						"effectIds": [698531],
+						"itemEffects": [
+							{
+								"buffId": 21395,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 300000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 17352,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Mana Draught",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [698926],
+						"itemEffects": [
+							{
+								"buffId": 21396,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 300000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 18253,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Rejuvenation Potion",
+						"lvl": 50,
+						"categoryId": 4,
+						"effectIds": [699637, 699638],
+						"itemEffects": [
+							{
+								"buffId": 22729,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 18841,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Combat Mana Potion",
+						"lvl": 41,
+						"categoryId": 4,
+						"effectIds": [695811],
+						"itemEffects": [
+							{
+								"buffId": 17530,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 250932,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Spellblasting Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251919,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250933,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Spellblasting Potion",
+						"lvl": 15,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251922,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250934,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Spellblasting Potion",
+						"lvl": 25,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251923,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250935,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Spellblasting Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251924,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250936,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Spellblasting Potion",
+						"lvl": 45,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251931,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250937,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Spellblasting Potion",
+						"lvl": 55,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251932,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250938,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Frenzy Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251933,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250939,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Frenzy Potion",
+						"lvl": 15,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251935,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250940,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Frenzy Potion",
+						"lvl": 25,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251936,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250941,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Frenzy Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251937,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250942,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Frenzy Potion",
+						"lvl": 45,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251938,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250943,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 80, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Frenzy Potion",
+						"lvl": 55,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251940,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250951,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Caustic Smog Potion",
+						"lvl": 45,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252525,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250953,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Dragonfire Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252554,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250954,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Potion of Elemental Purging",
+						"lvl": 40,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252558,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"],
+						"mobTypeStats": [
+							{
+								"mobTypes": ["MobTypeElemental"],
+								"stats": {
+									"5": 105
+								}
+							}
+						]
+					},
+					{
+						"id": 250955,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Potion of Beast Slaying",
+						"lvl": 40,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252559,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"],
+						"mobTypeStats": [
+							{
+								"mobTypes": ["MobTypeBeast"],
+								"stats": {
+									"14": 180
+								}
+							}
+						]
+					},
+					{
+						"id": 255663,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Windstone",
+						"lvl": 1,
+						"categoryId": 4,
+						"effectIds": [1268232, 1268233],
+						"itemEffects": [
+							{
+								"buffId": 1259231,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 274935,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Tessa's Tonic",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [1317896, 1317897],
+						"itemEffects": [
+							{
+								"buffId": 1295688,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 282013,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Restored Mana Potion",
+						"lvl": 60,
+						"categoryId": 4,
+						"effectIds": [1343657],
+						"itemEffects": [
+							{
+								"buffId": 1312702,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 11952,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Night Dragon's Breath",
+						"lvl": 45,
+						"categoryId": 1153,
+						"effectIds": [692329, 692330],
+						"itemEffects": [
+							{
+								"buffId": 15701,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 12662,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Demonic Rune",
+						"lvl": 50,
+						"categoryId": 1153,
+						"effectIds": [694074],
+						"itemEffects": [
+							{
+								"buffId": 16666,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 15723,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Tea with Sugar",
+						"lvl": 50,
+						"categoryId": 1153,
+						"effectIds": [694971, 694972],
+						"itemEffects": [
+							{
+								"buffId": 19199,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 17747,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Razorlash Root",
+						"lvl": 40,
+						"categoryId": 1153,
+						"effectIds": [699301, 699302],
+						"itemEffects": [
+							{
+								"buffId": 21955,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 8410,
+						"type": "ConsumableTypeOther",
+						"stats": [25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "R.O.I.D.S.",
+						"lvl": 1,
+						"categoryId": 103,
+						"itemEffects": [
+							{
+								"buffId": 10667,
+								"onUse": {
+									"categoryId": 103,
+									"categoryCooldownMs": 3600000
+								}
+							}
+						],
+						"groupKey": "Zanza",
+						"groupName": "Zanza",
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 10646,
+						"type": "ConsumableTypeExplosive",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Goblin Sapper Charge",
+						"lvl": 41,
+						"categoryId": 24,
+						"itemEffects": [
+							{
+								"buffId": 13241,
+								"onUse": {
+									"cooldownMs": 300000,
+									"categoryId": 24,
+									"categoryCooldownMs": 60000
+								}
+							}
+						],
+						"requiredProfession": "Engineering",
+						"reqProfRank": 205
+					},
+					{
+						"id": 12217,
+						"type": "ConsumableTypeFood",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Dragonbreath Chili",
+						"lvl": 25,
+						"itemEffects": [
+							{
+								"buffId": 15852,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						]
+					},
+					{
+						"id": 18269,
+						"type": "ConsumableTypeOther",
+						"stats": [0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Gordok Green Grog",
+						"lvl": 1,
+						"itemEffects": [
+							{
+								"buffId": 22789,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"groupKey": "Rum",
+						"groupName": "Rum",
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 21546,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Elixir of Holy Power",
+						"lvl": 40,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1310077,
+								"onUse": {
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "13/2",
+						"groupName": "Holy Spell Power"
+					},
+					{
+						"id": 250338,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Elixir of Sages",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1250941,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "29/4",
+						"groupName": "Spirit",
+						"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"id": 13452,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Elixir of the Mongoose",
+						"lvl": 46,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 17538,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "29/1",
+						"groupName": "Agility",
+						"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"id": 250337,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Elixir of the Owl",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1250940,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "29/3",
+						"groupName": "Intellect",
+						"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"id": 250351,
+						"type": "ConsumableTypeElixir",
+						"stats": [25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Elixir of the Grizzly",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1250986,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "29/0",
+						"groupName": "Strength",
+						"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"id": 250329,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 400, 0, 0, 0, 0, 0, 0, 0, 0, 500],
+						"name": "Elixir of the Phalanx",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1250920,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "34/0",
+						"groupName": "Health"
+					},
+					{
+						"id": 13454,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Arcane Elixir",
+						"lvl": 47,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 17539,
+								"onUse": {
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "13/126",
+						"groupName": "Spell Power"
+					},
+					{
+						"id": 250341,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Mageblood Elixir",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1250948,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "85/0",
+						"groupName": "Mana Regeneration"
+					},
+					{
+						"id": 12460,
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Juju Might",
+						"lvl": 60,
+						"itemEffects": [
+							{
+								"buffId": 16329,
+								"onUse": {
+									"cooldownMs": 60000,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"groupKey": "99/0",
+						"groupName": "Attack Power",
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 13512,
+						"type": "ConsumableTypeFlask",
+						"stats": [0, 0, 0, 0, 0, 150, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Flask of Supreme Power",
+						"lvl": 50,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 17628,
+								"onUse": {
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						]
+					},
+					{
+						"id": 13933,
+						"type": "ConsumableTypeFood",
+						"stats": [0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lobster Stew",
+						"lvl": 45,
+						"categoryId": 11,
+						"itemEffects": [
+							{
+								"buffId": 1249516,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						]
+					},
+					{
+						"id": 3824,
+						"type": "ConsumableTypeImbue",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Shadow Oil",
+						"lvl": 24,
+						"itemEffects": [
+							{
+								"buffId": 3594,
+								"onUse": {
+									"cooldownMs": 1000
+								}
+							}
+						],
+						"weaponSubclassMask": 173555,
+						"temporaryEnchant": {
+							"effectId": 25,
+							"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+							"enchantEffects": [
+								{
+									"buffId": 350026
+								}
+							]
+						}
+					}
+				],
+				"spellEffects": [
+					{
+						"id": 679186,
+						"spellId": 438,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 679151,
+						"spellId": 437,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 692902,
+						"spellId": 2370,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 692903,
+						"spellId": 2370,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 705545,
+						"spellId": 29236,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 679998,
+						"spellId": 2023,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 689141,
+						"spellId": 11903,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 689469,
+						"spellId": 11387,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 689470,
+						"spellId": 11387,
+						"index": 1,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 695811,
+						"spellId": 17530,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 695996,
+						"spellId": 17531,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 695927,
+						"spellId": 18832,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 695928,
+						"spellId": 18832,
+						"index": 1,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 698531,
+						"spellId": 21395,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 698926,
+						"spellId": 21396,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 699637,
+						"spellId": 22729,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 699638,
+						"spellId": 22729,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 1268232,
+						"spellId": 1259231,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 1268233,
+						"spellId": 1259231,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 1317896,
+						"spellId": 1295688,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 1317897,
+						"spellId": 1295688,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 1343657,
+						"spellId": 1312702,
+						"type": 137,
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 692329,
+						"spellId": 15701,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 692330,
+						"spellId": 15701,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 694074,
+						"spellId": 16666,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 694971,
+						"spellId": 19199,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 694972,
+						"spellId": 19199,
+						"index": 1,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 699301,
+						"spellId": 21955,
+						"type": 6,
+						"resourceType": "ResourceTypeHealth",
+						"auraPeriodMs": 1000,
+						"durationMs": 10000
+					},
+					{
+						"id": 699302,
+						"spellId": 21955,
+						"index": 1,
+						"type": 6,
+						"resourceType": "ResourceTypeMana",
+						"auraPeriodMs": 1000,
+						"durationMs": 10000
+					}
+				]
+			}
+		},
+		"raidBuffs": {
+			"arcaneIntellect": true,
+			"prayerOfSpirit": true,
+			"markOfTheWild": true,
+			"powerWordFortitude": true,
+			"strengthOfEarthTotem": 1,
+			"graceOfAirTotem": 1,
+			"windfuryTotem": true,
+			"battleShout": 1,
+			"leaderOfThePack": true
+		},
+		"partyBuffs": {
+			"manaSpringTotem": "TristateEffectRegular"
+		},
+		"debuffs": {
+			"judgementOfLight": true,
+			"judgementOfWisdom": true,
+			"curseOfElements": true,
+			"curseOfRecklessness": true,
+			"faerieFire": true,
+			"exposeArmor": true,
+			"sunderArmor": true
+		},
+		"encounter": {
+			"apiVersion": 2,
+			"duration": 180,
+			"durationVariation": 5,
+			"executeProportion20": 0.2,
+			"executeProportion35": 0.35,
+			"targets": [
+				{
+					"id": 31146,
+					"name": "Raid Target",
+					"level": 30,
+					"mobType": "MobTypeMechanical",
+					"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 3731, 0, 1428900, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					"minBaseDamage": 2601,
+					"damageSpread": 0.5,
+					"swingSpeed": 2,
+					"parryHaste": true,
+					"canCrush": true
+				}
+			]
+		},
+		"simOptions": {
+			"iterations": 25000
+		},
+		"statsToWeigh": [
+			"StatStrength",
+			"StatAgility",
+			"StatIntellect",
+			"StatSpellDamage",
+			"StatSpellPiercing",
+			"StatAttackPower",
+			"StatArmorPenetration",
+			"StatHitRating",
+			"StatHasteRating",
+			"StatCritRating",
+			"StatExpertiseRating",
+			"StatMP5"
+		],
+		"pseudoStatsToWeigh": ["PseudoStatMainHandDps", "PseudoStatSchoolHitPercentHoly"],
+		"epReferenceStat": "StatAttackPower",
+		"hpsReferenceStat": "StatAttackPower"
+	}
+}

@@ -1,0 +1,3001 @@
+{
+	"statWeights": {
+		"player": {
+			"apiVersion": 2,
+			"name": "Player",
+			"race": "RaceOrc",
+			"class": "ClassWarrior",
+			"equipment": {
+				"items": [
+					{
+						"id": 12640,
+						"enchant": 2543
+					},
+					{
+						"id": 19491
+					},
+					{
+						"id": 10263,
+						"randomSuffix": 12727
+					},
+					{
+						"id": 18511,
+						"enchant": 7667
+					},
+					{
+						"id": 252483,
+						"enchant": 1891
+					},
+					{
+						"id": 10147,
+						"randomSuffix": 12727,
+						"enchant": 7656
+					},
+					{
+						"id": 21998,
+						"enchant": 8206
+					},
+					{
+						"id": 20216
+					},
+					{
+						"id": 22385,
+						"enchant": 2543
+					},
+					{
+						"id": 21995,
+						"enchant": 1887
+					},
+					{
+						"id": 272408
+					},
+					{
+						"id": 272409
+					},
+					{
+						"id": 249469
+					},
+					{
+						"id": 272437
+					},
+					{
+						"id": 22384,
+						"enchant": 1900
+					},
+					{
+						"id": 12798,
+						"enchant": 1900
+					},
+					{
+						"id": 22347
+					}
+				]
+			},
+			"consumables": {
+				"foodId": 20452,
+				"explosiveId": 260817,
+				"mhImbueId": 12643,
+				"ohImbueId": 12404,
+				"potions": [
+					5631, 5633, 6048, 6049, 6050, 6051, 6052, 9224, 13442, 13456, 13457, 13458, 13459, 13460, 13461, 250938, 250939, 250940, 250941, 250942,
+					250943, 250951, 250953, 250955
+				],
+				"extraIds": [10646],
+				"elixirIds": [250350, 13452, 12820],
+				"resourcePotId": 13442
+			},
+			"bonusStats": {
+				"apiVersion": 2,
+				"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			},
+			"itemSwap": {
+				"items": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+				"prepullBonusStats": {
+					"apiVersion": 2,
+					"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+				}
+			},
+			"buffs": {
+				"greaterBlessingOfKings": true,
+				"greaterBlessingOfMight": 1
+			},
+			"dpsWarrior": {
+				"options": {
+					"classOptions": {
+						"defaultStance": "WarriorStanceBerserker",
+						"startingRage": 50,
+						"stanceSnapshot": true,
+						"useBattleShout": true,
+						"queueDelay": 250
+					}
+				}
+			},
+			"talentsString": "30305213002-15053105102210501",
+			"profession1": "Engineering",
+			"profession2": "Blacksmithing",
+			"level": 30,
+			"cooldowns": {},
+			"rotation": {
+				"type": "TypeSimple",
+				"simple": {
+					"specRotationJson": "{\"spec\":\"DpsWarriorSpecFury\",\"useOverpower\":true,\"sunderArmor\":\"WarriorSunderHelp\",\"useRend\":true,\"useHamstring\":true}"
+				},
+				"prepullActions": [
+					{
+						"action": {
+							"castSpell": {
+								"spellId": {
+									"spellId": 18499
+								}
+							}
+						},
+						"doAtValue": {
+							"const": {
+								"val": "-4.5s"
+							}
+						}
+					},
+					{
+						"action": {
+							"castSpell": {
+								"spellId": {
+									"spellId": 2687
+								}
+							}
+						},
+						"doAtValue": {
+							"const": {
+								"val": "-3s"
+							}
+						}
+					},
+					{
+						"action": {
+							"castSpell": {
+								"spellId": {
+									"spellId": 11551
+								}
+							}
+						},
+						"doAtValue": {
+							"const": {
+								"val": "-3s"
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Pre-pull: Move"
+							}
+						},
+						"doAtValue": {
+							"const": {
+								"val": "-0.9s"
+							}
+						}
+					}
+				],
+				"priorityList": [
+					{
+						"hide": true,
+						"action": {
+							"groupReference": {
+								"groupName": "Recklessness ON/OFF"
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Rend Weave ON/OFF"
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Hamstring Weave ON/OFF"
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Engineering"
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "CD: Trinkets"
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"cmp": {
+									"op": "OpEq",
+									"lhs": {
+										"numberTargets": {}
+									},
+									"rhs": {
+										"const": {
+											"val": "1"
+										}
+									}
+								}
+							},
+							"groupReference": {
+								"groupName": "Sunder Armor"
+							}
+						}
+					},
+					{
+						"hide": true,
+						"action": {
+							"condition": {
+								"cmp": {
+									"op": "OpEq",
+									"lhs": {
+										"numberTargets": {}
+									},
+									"rhs": {
+										"const": {
+											"val": "1"
+										}
+									}
+								}
+							},
+							"groupReference": {
+								"groupName": "Sunder Armor: Refresh"
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"not": {
+												"val": {
+													"variableRef": {
+														"name": "Offensive Potion: Rage"
+													}
+												}
+											}
+										},
+										{
+											"multipleCdUsages": {
+												"targetSpellId": {
+													"otherId": "OtherActionOffensivePotion"
+												},
+												"offset": {
+													"const": {
+														"val": "0ms"
+													}
+												},
+												"alignCdEnd": true
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"otherId": "OtherActionOffensivePotion"
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "CD: Racials"
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"multipleCdUsages": {
+									"targetSpellId": {
+										"spellId": 12328
+									},
+									"offset": {
+										"const": {
+											"val": "0ms"
+										}
+									},
+									"alignCdEnd": true
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 12328
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"actionGroupUsed": {
+												"name": "Recklessness ON/OFF"
+											}
+										},
+										{
+											"multipleCdUsages": {
+												"targetSpellId": {
+													"spellId": 1719
+												},
+												"offset": {
+													"const": {
+														"val": "0ms"
+													}
+												},
+												"alignCdEnd": true
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 1719
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"cmp": {
+												"op": "OpGt",
+												"lhs": {
+													"numberTargets": {}
+												},
+												"rhs": {
+													"const": {
+														"val": "1"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 12723
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"cmp": {
+									"op": "OpGt",
+									"lhs": {
+										"numberTargets": {}
+									},
+									"rhs": {
+										"const": {
+											"val": "1"
+										}
+									}
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 1680,
+									"tag": 14
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Overpower Weaving"
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"isExecutePhase": {
+									"threshold": "E20"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 20662
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"castSpell": {
+								"spellId": {
+									"spellId": 1680,
+									"tag": 14
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"cmp": {
+												"op": "OpGt",
+												"lhs": {
+													"numberTargets": {}
+												},
+												"rhs": {
+													"const": {
+														"val": "1"
+													}
+												}
+											}
+										},
+										{
+											"cmp": {
+												"op": "OpGe",
+												"lhs": {
+													"currentRage": {}
+												},
+												"rhs": {
+													"const": {
+														"val": "25"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 20569,
+									"tag": 1
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"castSpell": {
+								"spellId": {
+									"spellId": 23894
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"or": {
+									"vals": [
+										{
+											"and": {
+												"vals": [
+													{
+														"cmp": {
+															"op": "OpEq",
+															"lhs": {
+																"numberTargets": {}
+															},
+															"rhs": {
+																"const": {
+																	"val": "1"
+																}
+															}
+														}
+													},
+													{
+														"not": {
+															"val": {
+																"isExecutePhase": {
+																	"threshold": "E20"
+																}
+															}
+														}
+													},
+													{
+														"cmp": {
+															"op": "OpGe",
+															"lhs": {
+																"currentRage": {}
+															},
+															"rhs": {
+																"const": {
+																	"val": "40"
+																}
+															}
+														}
+													}
+												]
+											}
+										},
+										{
+											"and": {
+												"vals": [
+													{
+														"variableRef": {
+															"name": "Delay Check"
+														}
+													},
+													{
+														"cmp": {
+															"op": "OpGt",
+															"lhs": {
+																"currentRage": {}
+															},
+															"rhs": {
+																"const": {
+																	"val": "60"
+																}
+															}
+														}
+													}
+												]
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 11567,
+									"tag": 1
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"variableRef": {
+												"name": "Rend: Can Cast"
+											}
+										},
+										{
+											"variableRef": {
+												"name": "Battle Stance: Swap Ready"
+											}
+										}
+									]
+								}
+							},
+							"strictSequence": {
+								"actions": [
+									{
+										"castSpell": {
+											"spellId": {
+												"spellId": 2457
+											}
+										}
+									},
+									{
+										"castSpell": {
+											"spellId": {
+												"spellId": 11574
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"variableRef": {
+									"name": "Rend: Can Cast"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 11574
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"auraIsActive": {
+												"auraId": {
+													"spellId": 2457
+												}
+											}
+										},
+										{
+											"not": {
+												"val": {
+													"variableRef": {
+														"name": "Battle Stance: Wanted"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 2458
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"actionGroupUsed": {
+												"name": "Hamstring Weave ON/OFF"
+											}
+										},
+										{
+											"auraIsKnown": {
+												"auraId": {
+													"spellId": 10612,
+													"tag": -1
+												}
+											}
+										},
+										{
+											"variableRef": {
+												"name": "Delay Check"
+											}
+										},
+										{
+											"not": {
+												"val": {
+													"isExecutePhase": {
+														"threshold": "E20"
+													}
+												}
+											}
+										},
+										{
+											"cmp": {
+												"op": "OpLt",
+												"lhs": {
+													"numberTargets": {}
+												},
+												"rhs": {
+													"const": {
+														"val": "2"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 7373
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"or": {
+									"vals": [
+										{
+											"not": {
+												"val": {
+													"variableRef": {
+														"name": "Resource Potion: Rage"
+													}
+												}
+											}
+										},
+										{
+											"cmp": {
+												"op": "OpLe",
+												"lhs": {
+													"currentRage": {}
+												},
+												"rhs": {
+													"const": {
+														"val": "30"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"otherId": "OtherActionResourcePotion"
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"variableRef": {
+												"name": "Offensive Potion: Rage"
+											}
+										},
+										{
+											"cmp": {
+												"op": "OpLe",
+												"lhs": {
+													"currentRage": {}
+												},
+												"rhs": {
+													"const": {
+														"val": "30"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"otherId": "OtherActionOffensivePotion"
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"or": {
+									"vals": [
+										{
+											"and": {
+												"vals": [
+													{
+														"cmp": {
+															"op": "OpGt",
+															"lhs": {
+																"remainingTime": {}
+															},
+															"rhs": {
+																"spellFullCooldown": {
+																	"spellId": {
+																		"spellId": 2687
+																	}
+																}
+															}
+														}
+													},
+													{
+														"cmp": {
+															"op": "OpLt",
+															"lhs": {
+																"currentRage": {}
+															},
+															"rhs": {
+																"const": {
+																	"val": "90"
+																}
+															}
+														}
+													}
+												]
+											}
+										},
+										{
+											"cmp": {
+												"op": "OpLt",
+												"lhs": {
+													"remainingTime": {}
+												},
+												"rhs": {
+													"const": {
+														"val": "2s"
+													}
+												}
+											}
+										},
+										{
+											"and": {
+												"vals": [
+													{
+														"isExecutePhase": {
+															"threshold": "E20"
+														}
+													},
+													{
+														"cmp": {
+															"op": "OpGe",
+															"lhs": {
+																"math": {
+																	"op": "OpAdd",
+																	"lhs": {
+																		"currentRage": {}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "10"
+																		}
+																	}
+																}
+															},
+															"rhs": {
+																"spellCurrentCost": {
+																	"spellId": {
+																		"spellId": 20662
+																	}
+																}
+															}
+														}
+													},
+													{
+														"not": {
+															"val": {
+																"spellCanCast": {
+																	"spellId": {
+																		"spellId": 20662
+																	}
+																}
+															}
+														}
+													},
+													{
+														"cmp": {
+															"op": "OpGt",
+															"lhs": {
+																"autoTimeToNext": {
+																	"autoType": "MeleeAuto"
+																}
+															},
+															"rhs": {
+																"const": {
+																	"val": "0.5s"
+																}
+															}
+														}
+													},
+													{
+														"auraIsActive": {
+															"auraId": {
+																"spellId": 2458
+															},
+															"includeReactionTime": true
+														}
+													}
+												]
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 2687
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"variableRef": {
+												"name": "Delay Check"
+											}
+										},
+										{
+											"talentIsKnown": {
+												"talentId": {
+													"spellId": 20500,
+													"rank": 1
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 18499
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"variableRef": {
+												"name": "Delay Check"
+											}
+										},
+										{
+											"variableRef": {
+												"name": "Battle Shout: No Raid Buff"
+											}
+										},
+										{
+											"cmp": {
+												"op": "OpLe",
+												"lhs": {
+													"auraRemainingTime": {
+														"auraId": {
+															"spellId": 11551
+														}
+													}
+												},
+												"rhs": {
+													"const": {
+														"val": "10s"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 11551
+								}
+							}
+						}
+					},
+					{
+						"hide": true,
+						"action": {
+							"condition": {
+								"not": {
+									"val": {
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 2458
+											}
+										}
+									}
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 2458
+								}
+							}
+						}
+					},
+					{
+						"hide": true,
+						"action": {
+							"condition": {
+								"const": {
+									"val": "false"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 1719
+								}
+							}
+						}
+					},
+					{
+						"hide": true,
+						"action": {
+							"condition": {
+								"const": {
+									"val": "false"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 20230
+								}
+							}
+						}
+					},
+					{
+						"hide": true,
+						"action": {
+							"condition": {
+								"const": {
+									"val": "false"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 871
+								}
+							}
+						}
+					}
+				],
+				"groups": [
+					{
+						"name": "Pre-pull: Move",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 2457
+											}
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 11578,
+											"rank": 3
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 2458
+											}
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 20617,
+											"rank": 3
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Recklessness ON/OFF",
+						"actions": [
+							{
+								"action": {}
+							}
+						]
+					},
+					{
+						"name": "Rend Weave ON/OFF",
+						"actions": [
+							{
+								"action": {}
+							}
+						]
+					},
+					{
+						"name": "Hamstring Weave ON/OFF",
+						"actions": [
+							{
+								"action": {}
+							}
+						]
+					},
+					{
+						"name": "Engineering",
+						"actions": [
+							{
+								"action": {
+									"castSpell": {
+										"spellId": {
+											"itemId": 10646
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"castSpell": {
+										"spellId": {
+											"itemId": 11566
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"castSpell": {
+										"spellId": {
+											"itemId": 18588
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "CD: Racials",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"multipleCdUsages": {
+											"targetSpellId": {
+												"spellId": 20572
+											},
+											"offset": {
+												"const": {
+													"val": "0ms"
+												}
+											},
+											"alignCdEnd": true
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 20572
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"multipleCdUsages": {
+											"targetSpellId": {
+												"spellId": 20554
+											},
+											"offset": {
+												"const": {
+													"val": "0ms"
+												}
+											},
+											"alignCdEnd": true
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 20554
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"multipleCdUsages": {
+											"targetSpellId": {
+												"spellId": 1259813
+											},
+											"offset": {
+												"const": {
+													"val": "0ms"
+												}
+											},
+											"alignCdEnd": true
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 1259813
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"actionGroupUsed": {
+																"name": "Recklessness ON/OFF"
+															}
+														}
+													}
+												},
+												{
+													"multipleCdUsages": {
+														"targetSpellId": {
+															"spellId": 1259799
+														},
+														"offset": {
+															"const": {
+																"val": "0ms"
+															}
+														},
+														"alignCdEnd": true
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 1259799
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"actionGroupUsed": {
+														"name": "Recklessness ON/OFF"
+													}
+												},
+												{
+													"auraIsInactive": {
+														"auraId": {
+															"spellId": 1719
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpGt",
+														"lhs": {
+															"remainingTime": {}
+														},
+														"rhs": {
+															"const": {
+																"val": "15s"
+															}
+														}
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"cmp": {
+																	"op": "OpGt",
+																	"lhs": {
+																		"remainingTime": {}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "195s"
+																		}
+																	}
+																}
+															},
+															{
+																"cmp": {
+																	"op": "OpLe",
+																	"lhs": {
+																		"remainingTime": {}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "30s"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 1259799
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Sunder Armor",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"cmp": {
+											"op": "OpLt",
+											"lhs": {
+												"auraNumStacks": {
+													"sourceUnit": {
+														"type": "CurrentTarget"
+													},
+													"auraId": {
+														"spellId": 11597
+													},
+													"includeReactionTime": true
+												}
+											},
+											"rhs": {
+												"const": {
+													"val": "5"
+												}
+											}
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 11597
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Sunder Armor: Refresh",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"variableRef": {
+														"name": "Delay Check"
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpLe",
+														"lhs": {
+															"auraRemainingTime": {
+																"sourceUnit": {
+																	"type": "CurrentTarget"
+																},
+																"auraId": {
+																	"spellId": 11597
+																}
+															}
+														},
+														"rhs": {
+															"const": {
+																"val": "10s"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 11597
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "CD: Trinkets",
+						"actions": [
+							{
+								"action": {
+									"castAllStatBuffCooldowns": {
+										"statType2": 14,
+										"statType3": 19
+									}
+								}
+							},
+							{
+								"action": {
+									"castAllStatBuffCooldowns": {
+										"statType1": 18,
+										"statType2": 20,
+										"statType3": -1
+									}
+								}
+							},
+							{
+								"action": {
+									"castSpell": {
+										"spellId": {
+											"itemId": 21670
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"castSpell": {
+										"spellId": {
+											"itemId": 23041
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"castSpell": {
+										"spellId": {
+											"itemId": 22954
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"castSpell": {
+										"spellId": {
+											"spellId": 29602
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"castSpell": {
+										"spellId": {
+											"itemId": 21891
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"castSpell": {
+										"spellId": {
+											"itemId": 274759
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Overpower Weaving",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"variableRef": {
+														"name": "Overpower: Can Cast"
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpGt",
+														"lhs": {
+															"auraRemainingTime": {
+																"auraId": {
+																	"spellId": 1282733
+																}
+															}
+														},
+														"rhs": {
+															"gcdTimeToReady": {}
+														}
+													}
+												},
+												{
+													"variableRef": {
+														"name": "Battle Stance: Swap Ready"
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpLe",
+														"lhs": {
+															"spellTimeToReady": {
+																"spellId": {
+																	"spellId": 11585
+																}
+															}
+														},
+														"rhs": {
+															"const": {
+																"val": "0s"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"strictSequence": {
+										"actions": [
+											{
+												"castSpell": {
+													"spellId": {
+														"spellId": 2457
+													}
+												}
+											},
+											{
+												"castSpell": {
+													"spellId": {
+														"spellId": 11585
+													}
+												}
+											}
+										]
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"variableRef": {
+											"name": "Overpower: Can Cast"
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 11585
+										}
+									}
+								}
+							}
+						]
+					}
+				],
+				"valueVariables": [
+					{
+						"name": "Battle Shout: No Raid Buff",
+						"value": {
+							"not": {
+								"val": {
+									"or": {
+										"vals": [
+											{
+												"auraIsKnown": {
+													"auraId": {
+														"spellId": 11551,
+														"tag": -1
+													}
+												}
+											},
+											{
+												"auraIsKnown": {
+													"auraId": {
+														"spellId": 25289,
+														"tag": -1
+													}
+												}
+											}
+										]
+									}
+								}
+							}
+						}
+					},
+					{
+						"name": "Delay Check",
+						"value": {
+							"and": {
+								"vals": [
+									{
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"spellTimeToReady": {
+													"spellId": {
+														"spellId": 23894
+													}
+												}
+											},
+											"rhs": {
+												"spellGcdHastedDuration": {
+													"spellId": {
+														"spellId": 23894
+													}
+												}
+											}
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"spellTimeToReady": {
+													"spellId": {
+														"spellId": 1680,
+														"tag": 14
+													}
+												}
+											},
+											"rhs": {
+												"spellGcdHastedDuration": {
+													"spellId": {
+														"spellId": 1680,
+														"tag": 14
+													}
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Overpower: Can Cast",
+						"value": {
+							"and": {
+								"vals": [
+									{
+										"actionGroupUsed": {
+											"name": "Overpower Weaving"
+										}
+									},
+									{
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 1282733
+											},
+											"includeReactionTime": true
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"currentRage": {}
+											},
+											"rhs": {
+												"const": {
+													"val": "5"
+												}
+											}
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpLe",
+											"lhs": {
+												"currentRage": {}
+											},
+											"rhs": {
+												"const": {
+													"val": "73"
+												}
+											}
+										}
+									},
+									{
+										"spellIsReady": {
+											"spellId": {
+												"spellId": 11585
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Rend: Can Cast",
+						"value": {
+							"and": {
+								"vals": [
+									{
+										"actionGroupUsed": {
+											"name": "Rend Weave ON/OFF"
+										}
+									},
+									{
+										"not": {
+											"val": {
+												"isExecutePhase": {
+													"threshold": "E20"
+												}
+											}
+										}
+									},
+									{
+										"not": {
+											"val": {
+												"dotIsActive": {
+													"spellId": {
+														"spellId": 11574
+													}
+												}
+											}
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"currentRage": {}
+											},
+											"rhs": {
+												"const": {
+													"val": "10"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Battle Stance: Swap Ready",
+						"value": {
+							"cmp": {
+								"op": "OpLe",
+								"lhs": {
+									"spellTimeToReady": {
+										"spellId": {
+											"spellId": 2457
+										}
+									}
+								},
+								"rhs": {
+									"const": {
+										"val": "0s"
+									}
+								}
+							}
+						}
+					},
+					{
+						"name": "Battle Stance: Wanted",
+						"value": {
+							"or": {
+								"vals": [
+									{
+										"variableRef": {
+											"name": "Overpower: Can Cast"
+										}
+									},
+									{
+										"variableRef": {
+											"name": "Rend: Can Cast"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Resource Potion: Rage",
+						"value": {
+							"or": {
+								"vals": [
+									{
+										"selectedPotion": {
+											"potionId": {
+												"itemId": 5631
+											},
+											"slot": "OtherActionResourcePotion"
+										}
+									},
+									{
+										"selectedPotion": {
+											"potionId": {
+												"itemId": 5633
+											},
+											"slot": "OtherActionResourcePotion"
+										}
+									},
+									{
+										"selectedPotion": {
+											"potionId": {
+												"itemId": 13442
+											},
+											"slot": "OtherActionResourcePotion"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Offensive Potion: Rage",
+						"value": {
+							"or": {
+								"vals": [
+									{
+										"selectedPotion": {
+											"potionId": {
+												"itemId": 5631
+											},
+											"slot": "OtherActionOffensivePotion"
+										}
+									},
+									{
+										"selectedPotion": {
+											"potionId": {
+												"itemId": 5633
+											},
+											"slot": "OtherActionOffensivePotion"
+										}
+									},
+									{
+										"selectedPotion": {
+											"potionId": {
+												"itemId": 13442
+											},
+											"slot": "OtherActionOffensivePotion"
+										}
+									}
+								]
+							}
+						}
+					}
+				]
+			},
+			"reactionTimeMs": 100,
+			"distanceFromTarget": 25,
+			"healingModel": {},
+			"database": {
+				"items": [
+					{
+						"id": 12640,
+						"name": "Lionheart Helm",
+						"type": "ItemTypeHead",
+						"armorType": "ArmorTypePlate",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 45,
+								"stats": {
+									"0": 18,
+									"17": 20,
+									"18": 28,
+									"27": 565
+								},
+								"ilvl": 61
+							}
+						}
+					},
+					{
+						"id": 19491,
+						"name": "Amulet of the Darkmoon",
+						"type": "ItemTypeNeck",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 27,
+								"stats": {
+									"0": 10,
+									"1": 19,
+									"2": 10
+								},
+								"ilvl": 65
+							}
+						}
+					},
+					{
+						"id": 10263,
+						"name": "Adventurer's Shoulders",
+						"type": "ItemTypeShoulder",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 21,
+								"stats": {
+									"27": 120
+								},
+								"ilvl": 63
+							}
+						}
+					},
+					{
+						"id": 18511,
+						"name": "Shifting Cloak",
+						"type": "ItemTypeBack",
+						"armorType": "ArmorTypeCloth",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 25,
+								"stats": {
+									"1": 17,
+									"2": 8,
+									"25": 12,
+									"27": 48
+								},
+								"ilvl": 62
+							}
+						}
+					},
+					{
+						"id": 252483,
+						"name": "Dawn Armor",
+						"type": "ItemTypeChest",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 45,
+								"stats": {
+									"1": 37,
+									"17": 10,
+									"18": 14,
+									"27": 187
+								},
+								"ilvl": 61
+							}
+						}
+					},
+					{
+						"id": 10147,
+						"name": "Mighty Armsplints",
+						"type": "ItemTypeWrist",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 15,
+								"stats": {
+									"27": 67
+								},
+								"ilvl": 60
+							}
+						}
+					},
+					{
+						"id": 21998,
+						"name": "Gauntlets of Heroism",
+						"type": "ItemTypeHands",
+						"armorType": "ArmorTypePlate",
+						"setName": "Battlegear of Heroism",
+						"setId": 511,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 30,
+								"stats": {
+									"0": 18,
+									"2": 12,
+									"18": 14,
+									"27": 393
+								},
+								"ilvl": 55
+							}
+						}
+					},
+					{
+						"id": 20216,
+						"name": "Belt of Preserved Heads",
+						"type": "ItemTypeWaist",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 29,
+								"stats": {
+									"0": 14,
+									"1": 15,
+									"2": 11,
+									"17": 10,
+									"27": 108
+								},
+								"ilvl": 70
+							}
+						}
+					},
+					{
+						"id": 22385,
+						"name": "Titanic Leggings",
+						"type": "ItemTypeLegs",
+						"armorType": "ArmorTypePlate",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 44,
+								"stats": {
+									"0": 30,
+									"17": 20,
+									"18": 14,
+									"27": 598
+								},
+								"ilvl": 60
+							}
+						}
+					},
+					{
+						"id": 21995,
+						"name": "Boots of Heroism",
+						"type": "ItemTypeFeet",
+						"armorType": "ArmorTypePlate",
+						"setName": "Battlegear of Heroism",
+						"setId": 511,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 33,
+								"stats": {
+									"0": 20,
+									"2": 20,
+									"17": 10,
+									"27": 470
+								},
+								"ilvl": 60
+							}
+						}
+					},
+					{
+						"id": 272408,
+						"name": "Cutthroat's Signet",
+						"type": "ItemTypeFinger",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 21,
+								"stats": {
+									"1": 14,
+									"2": 8,
+									"17": 10
+								},
+								"ilvl": 65
+							}
+						},
+						"unique": true
+					},
+					{
+						"id": 272409,
+						"name": "Ring of Awareness",
+						"type": "ItemTypeFinger",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 21,
+								"stats": {
+									"0": 8,
+									"2": 10,
+									"22": 9
+								},
+								"ilvl": 65
+							}
+						},
+						"unique": true
+					},
+					{
+						"id": 249469,
+						"name": "Frozen Heart of the Mountain",
+						"type": "ItemTypeTrinket",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 24,
+								"stats": {
+									"17": 9,
+									"33": 7,
+									"34": 7,
+									"35": 7,
+									"36": 7
+								},
+								"ilvl": 55
+							}
+						},
+						"itemEffects": [
+							{
+								"buffId": 1249110,
+								"buffName": "Chthonic Power (1249110)",
+								"effectDurationMs": 15000,
+								"scalingOptions": {
+									"0": {
+										"stats": {
+											"8": 29,
+											"11": 29
+										}
+									}
+								},
+								"onUse": {
+									"cooldownMs": 300000,
+									"categoryId": 1141,
+									"categoryCooldownMs": 15000
+								}
+							}
+						],
+						"unique": true
+					},
+					{
+						"id": 272437,
+						"name": "Adaptive Combat Assistant",
+						"type": "ItemTypeTrinket",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 28,
+								"stats": {
+									"21": 20
+								},
+								"ilvl": 65
+							}
+						},
+						"itemEffects": [
+							{
+								"buffId": 1291097,
+								"buffName": "Damage Sigmoid (1291097)",
+								"effectDurationMs": 15000,
+								"onUse": {
+									"cooldownMs": 90000,
+									"categoryId": 1141,
+									"categoryCooldownMs": 15000
+								}
+							}
+						],
+						"limitCategory": 707
+					},
+					{
+						"id": 22384,
+						"name": "Persuader",
+						"type": "ItemTypeWeapon",
+						"weaponType": "WeaponTypeMace",
+						"handType": "HandTypeOneHand",
+						"weaponSpeed": 2.8,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 19,
+								"weaponDamageMin": 89,
+								"weaponDamageMax": 167,
+								"unroundedDps": 45.776108,
+								"stats": {
+									"17": 10,
+									"18": 14
+								},
+								"ilvl": 63
+							}
+						},
+						"unique": true
+					},
+					{
+						"id": 12798,
+						"name": "Annihilator",
+						"type": "ItemTypeWeapon",
+						"weaponType": "WeaponTypeAxe",
+						"handType": "HandTypeOneHand",
+						"weaponSpeed": 2.4,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 15,
+								"weaponDamageMin": 69,
+								"weaponDamageMax": 129,
+								"unroundedDps": 41.49628,
+								"stats": {
+									"14": 14
+								},
+								"ilvl": 63
+							}
+						},
+						"itemEffects": [
+							{
+								"buffId": 16928,
+								"buffName": "Armor Shatter (16928)",
+								"effectDurationMs": 45000,
+								"maxCumulativeStacks": 3,
+								"proc": {
+									"ppm": 1
+								}
+							}
+						],
+						"unique": true
+					},
+					{
+						"id": 22347,
+						"name": "Fahrad's Reloading Repeater",
+						"type": "ItemTypeRanged",
+						"rangedWeaponType": "RangedWeaponTypeCrossbow",
+						"weaponSpeed": 3.2,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 12,
+								"weaponDamageMin": 85,
+								"weaponDamageMax": 128,
+								"unroundedDps": 33.418304,
+								"stats": {
+									"1": 4,
+									"17": 10
+								},
+								"ilvl": 65
+							}
+						}
+					}
+				],
+				"randomSuffixes": [
+					{
+						"id": 12727,
+						"name": "of the Tiger",
+						"stats": [6666, 6666, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					}
+				],
+				"enchants": [
+					{
+						"effectId": 2543,
+						"name": "Arcanum of Rapidity",
+						"type": "ItemTypeHead",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"extraTypes": ["ItemTypeLegs"],
+						"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 7667,
+						"name": "Enchant Cloak - Agility",
+						"type": "ItemTypeBack",
+						"stats": [0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 1891,
+						"name": "Enchant Chest - Greater Stats",
+						"type": "ItemTypeChest",
+						"stats": [4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 7656,
+						"name": "Enchant Bracer - Agility",
+						"type": "ItemTypeWrist",
+						"stats": [0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 8206,
+						"name": "Enchant Gloves - Greater Agility",
+						"type": "ItemTypeHands",
+						"stats": [0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 1887,
+						"name": "Enchant Boots - Greater Agility",
+						"type": "ItemTypeFeet",
+						"stats": [0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 1900,
+						"name": "Enchant Weapon - Crusader",
+						"type": "ItemTypeWeapon",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"enchantEffects": [
+							{
+								"buffId": 20007,
+								"buffName": "Holy Strength (20007)",
+								"effectDurationMs": 15000,
+								"scalingOptions": {
+									"0": {
+										"stats": {
+											"0": 100
+										}
+									}
+								},
+								"proc": {
+									"ppm": 1
+								}
+							}
+						],
+						"procKind": "EnchantProcKindCombat"
+					}
+				],
+				"itemEffectRandPropPoints": [
+					{
+						"ilvl": 61,
+						"randPropPoints": 45
+					},
+					{
+						"ilvl": 65,
+						"randPropPoints": 47
+					},
+					{
+						"ilvl": 63,
+						"randPropPoints": 46
+					},
+					{
+						"ilvl": 62,
+						"randPropPoints": 45
+					},
+					{
+						"ilvl": 60,
+						"randPropPoints": 44
+					},
+					{
+						"ilvl": 70,
+						"randPropPoints": 49
+					}
+				],
+				"consumables": [
+					{
+						"id": 5631,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Rage Potion",
+						"lvl": 4,
+						"categoryId": 4,
+						"effectIds": [684732],
+						"itemEffects": [
+							{
+								"buffId": 6612,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"classAllowlist": ["ClassWarrior", "ClassDruid"],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 5633,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Great Rage Potion",
+						"lvl": 25,
+						"categoryId": 4,
+						"effectIds": [684733],
+						"itemEffects": [
+							{
+								"buffId": 6613,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"classAllowlist": ["ClassWarrior", "ClassDruid"],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 6048,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Shadow Protection Potion",
+						"lvl": 17,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7242,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6049,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Fire Protection Potion",
+						"lvl": 23,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7233,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6050,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Frost Protection Potion",
+						"lvl": 28,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7239,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6051,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Holy Protection Potion",
+						"lvl": 10,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7245,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6052,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Nature Protection Potion",
+						"lvl": 28,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7254,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 9224,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Potion of Demon Slaying",
+						"lvl": 40,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 11406,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"],
+						"mobTypeStats": [
+							{
+								"mobTypes": ["MobTypeDemon"],
+								"stats": {
+									"14": 180
+								}
+							}
+						]
+					},
+					{
+						"id": 13442,
+						"type": "ConsumableTypePotion",
+						"stats": [60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Mighty Rage Potion",
+						"lvl": 46,
+						"categoryId": 4,
+						"effectIds": [696085],
+						"itemEffects": [
+							{
+								"buffId": 17528,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"classAllowlist": ["ClassWarrior", "ClassDruid"],
+						"potionClasses": ["PotionClassResource", "PotionClassOffensive"]
+					},
+					{
+						"id": 13456,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Frost Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17544,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13457,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Fire Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17543,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13458,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Nature Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17546,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13459,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Shadow Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17548,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13460,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Holy Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17545,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13461,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Arcane Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17549,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 250938,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Frenzy Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251933,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250939,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Frenzy Potion",
+						"lvl": 15,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251935,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250940,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Frenzy Potion",
+						"lvl": 25,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251936,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250941,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Frenzy Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251937,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250942,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Frenzy Potion",
+						"lvl": 45,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251938,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250943,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 80, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Frenzy Potion",
+						"lvl": 55,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251940,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250951,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Caustic Smog Potion",
+						"lvl": 45,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252525,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250953,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Dragonfire Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252554,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250955,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Potion of Beast Slaying",
+						"lvl": 40,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252559,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"],
+						"mobTypeStats": [
+							{
+								"mobTypes": ["MobTypeBeast"],
+								"stats": {
+									"14": 180
+								}
+							}
+						]
+					},
+					{
+						"id": 10646,
+						"type": "ConsumableTypeExplosive",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Goblin Sapper Charge",
+						"lvl": 41,
+						"categoryId": 24,
+						"itemEffects": [
+							{
+								"buffId": 13241,
+								"onUse": {
+									"cooldownMs": 300000,
+									"categoryId": 24,
+									"categoryCooldownMs": 60000
+								}
+							}
+						],
+						"requiredProfession": "Engineering",
+						"reqProfRank": 205
+					},
+					{
+						"id": 250350,
+						"type": "ConsumableTypeElixir",
+						"stats": [18, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Elixir of Ferocity",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1250985,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "29/0",
+						"groupName": "Strength"
+					},
+					{
+						"id": 13452,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Elixir of the Mongoose",
+						"lvl": 46,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 17538,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "29/1",
+						"groupName": "Agility",
+						"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"id": 12820,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Winterfall Firewater",
+						"lvl": 45,
+						"itemEffects": [
+							{
+								"buffId": 17038,
+								"onUse": {
+									"cooldownMs": 60000,
+									"categoryCooldownMs": 60000
+								}
+							}
+						],
+						"groupKey": "99/0",
+						"groupName": "Attack Power"
+					},
+					{
+						"id": 20452,
+						"type": "ConsumableTypeFood",
+						"stats": [20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Smoked Desert Dumplings",
+						"lvl": 45,
+						"categoryId": 11,
+						"itemEffects": [
+							{
+								"buffId": 1248401,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						]
+					},
+					{
+						"id": 260817,
+						"type": "ConsumableTypeExplosive",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "EZ-Thro Dark Bomb",
+						"lvl": 60,
+						"categoryId": 24,
+						"itemEffects": [
+							{
+								"buffId": 1269334,
+								"onUse": {
+									"categoryId": 24,
+									"categoryCooldownMs": 60000
+								}
+							}
+						]
+					},
+					{
+						"id": 12643,
+						"type": "ConsumableTypeImbue",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Dense Weightstone",
+						"lvl": 35,
+						"itemEffects": [
+							{
+								"buffId": 16622,
+								"onUse": {
+									"cooldownMs": 1000,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"weaponSubclassMask": 9264,
+						"temporaryEnchant": {
+							"effectId": 1703,
+							"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+							"weaponDamage": 8
+						}
+					},
+					{
+						"id": 12404,
+						"type": "ConsumableTypeImbue",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Dense Sharpening Stone",
+						"lvl": 35,
+						"itemEffects": [
+							{
+								"buffId": 16138,
+								"onUse": {
+									"cooldownMs": 1000,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"weaponSubclassMask": 33219,
+						"temporaryEnchant": {
+							"effectId": 1643,
+							"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+							"weaponDamage": 8
+						}
+					}
+				],
+				"spellEffects": [
+					{
+						"id": 684732,
+						"spellId": 6612,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeRage"
+					},
+					{
+						"id": 684733,
+						"spellId": 6613,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeRage"
+					},
+					{
+						"id": 696085,
+						"spellId": 17528,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeRage",
+						"durationMs": 20000
+					}
+				]
+			}
+		},
+		"raidBuffs": {
+			"markOfTheWild": true,
+			"powerWordFortitude": true,
+			"strengthOfEarthTotem": 1,
+			"graceOfAirTotem": 1,
+			"windfuryTotem": true,
+			"leaderOfThePack": true
+		},
+		"partyBuffs": {},
+		"debuffs": {
+			"curseOfRecklessness": true,
+			"faerieFire": true,
+			"exposeArmor": true,
+			"sunderArmor": true,
+			"giftOfArthas": true
+		},
+		"encounter": {
+			"apiVersion": 2,
+			"duration": 180,
+			"durationVariation": 5,
+			"executeProportion20": 0.2,
+			"executeProportion35": 0.35,
+			"targets": [
+				{
+					"id": 31146,
+					"name": "Raid Target",
+					"level": 30,
+					"mobType": "MobTypeMechanical",
+					"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 3731, 0, 1428900, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					"minBaseDamage": 2601,
+					"damageSpread": 0.5,
+					"swingSpeed": 2,
+					"parryHaste": true,
+					"canCrush": true
+				}
+			]
+		},
+		"simOptions": {
+			"iterations": 12500
+		},
+		"statsToWeigh": [
+			"StatStrength",
+			"StatAgility",
+			"StatAttackPower",
+			"StatArmorPenetration",
+			"StatHitRating",
+			"StatHasteRating",
+			"StatCritRating",
+			"StatExpertiseRating"
+		],
+		"pseudoStatsToWeigh": ["PseudoStatMainHandDps", "PseudoStatOffHandDps"]
+	}
+}

@@ -1,0 +1,3606 @@
+{
+	"statWeights": {
+		"player": {
+			"apiVersion": 2,
+			"name": "Player",
+			"race": "RaceHuman",
+			"class": "ClassWarlock",
+			"equipment": {
+				"items": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+			},
+			"consumables": {
+				"flaskId": 13512,
+				"foodId": 13931,
+				"conjuredId": 12662,
+				"explosiveId": 18588,
+				"mhImbueId": 20749,
+				"potions": [
+					118, 858, 929, 1072, 1710, 2455, 2456, 3087, 3384, 3385, 3827, 3928, 6048, 6049, 6050, 6051, 6052, 6149, 9036, 9144, 13443, 13444, 13446,
+					13456, 13457, 13458, 13459, 13460, 13461, 14894, 17348, 17349, 17351, 17352, 18253, 18839, 18841, 250932, 250933, 250934, 250935, 250936,
+					250937, 250951, 250953, 250954, 255663, 268881, 268882, 268883, 274935, 282011, 282013
+				],
+				"conjuredItems": [1703, 5509, 5510, 5511, 5512, 9421, 11951, 11952, 12662, 15723, 17747],
+				"offensivePotId": 250937
+			},
+			"bonusStats": {
+				"apiVersion": 2,
+				"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			},
+			"itemSwap": {
+				"items": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+				"prepullBonusStats": {
+					"apiVersion": 2,
+					"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+				}
+			},
+			"buffs": {
+				"greaterBlessingOfKings": true,
+				"greaterBlessingOfWisdom": 1
+			},
+			"warlock": {
+				"options": {
+					"classOptions": {
+						"summon": "Imp",
+						"armor": "DemonArmor",
+						"soulShards": 32
+					}
+				}
+			},
+			"talentsString": "011-0305003201220301351-0050055003",
+			"profession1": "Engineering",
+			"profession2": "Tailoring",
+			"level": 30,
+			"cooldowns": {},
+			"rotation": {
+				"type": "TypeAuto",
+				"prepullActions": [
+					{
+						"action": {
+							"castSpell": {
+								"spellId": {
+									"spellId": 17924
+								}
+							}
+						},
+						"doAtValue": {
+							"math": {
+								"op": "OpMul",
+								"lhs": {
+									"math": {
+										"op": "OpAdd",
+										"lhs": {
+											"spellCastTime": {
+												"spellId": {
+													"spellId": 17924
+												}
+											}
+										},
+										"rhs": {
+											"spellTravelTime": {
+												"spellId": {
+													"spellId": 17924
+												}
+											}
+										}
+									}
+								},
+								"rhs": {
+									"const": {
+										"val": "-0.9"
+									}
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"petAttack": {}
+						},
+						"doAtValue": {
+							"const": {
+								"val": "-1s"
+							}
+						}
+					},
+					{
+						"action": {
+							"castSpell": {
+								"spellId": {
+									"spellId": 25309
+								}
+							}
+						},
+						"doAtValue": {
+							"const": {
+								"val": "-0.1s"
+							}
+						}
+					}
+				],
+				"priorityList": [
+					{
+						"action": {
+							"autocastOtherCooldowns": {}
+						}
+					},
+					{
+						"action": {
+							"groupReference": {
+								"groupName": "Single/Multi Target Curse Logic"
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"cmp": {
+												"op": "OpGe",
+												"lhs": {
+													"numberTargets": {}
+												},
+												"rhs": {
+													"const": {
+														"val": "3"
+													}
+												}
+											}
+										},
+										{
+											"cmp": {
+												"op": "OpGt",
+												"lhs": {
+													"unitDistance": {
+														"sourceUnit": {
+															"type": "CurrentTarget"
+														}
+													}
+												},
+												"rhs": {
+													"const": {
+														"val": "5"
+													}
+												}
+											}
+										},
+										{
+											"not": {
+												"val": {
+													"unitIsMoving": {
+														"sourceUnit": {
+															"type": "CurrentTarget"
+														}
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"move": {
+								"rangeFromTarget": {
+									"const": {
+										"val": "5"
+									}
+								},
+								"recheckWhileMoving": true
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"cmp": {
+									"op": "OpGt",
+									"lhs": {
+										"remainingTime": {}
+									},
+									"rhs": {
+										"variableRef": {
+											"name": "Doom tick"
+										}
+									}
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 603
+								},
+								"target": {
+									"type": "Target"
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"variableRef": {
+									"name": "Searing Pain for Brand"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 17923
+								},
+								"target": {
+									"type": "Target"
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"cmp": {
+									"op": "OpEq",
+									"lhs": {
+										"numberTargets": {}
+									},
+									"rhs": {
+										"const": {
+											"val": "1"
+										}
+									}
+								}
+							},
+							"groupReference": {
+								"groupName": "Single Target DoT Logic"
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"cmp": {
+									"op": "OpGt",
+									"lhs": {
+										"numberTargets": {}
+									},
+									"rhs": {
+										"const": {
+											"val": "1"
+										}
+									}
+								}
+							},
+							"groupReference": {
+								"groupName": "Multi Target DoT Logic"
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"or": {
+									"vals": [
+										{
+											"and": {
+												"vals": [
+													{
+														"cmp": {
+															"op": "OpLt",
+															"lhs": {
+																"variableRef": {
+																	"name": "Amount of Dooms left"
+																}
+															},
+															"rhs": {
+																"const": {
+																	"val": "1"
+																}
+															}
+														}
+													},
+													{
+														"not": {
+															"val": {
+																"dotIsActive": {
+																	"targetUnit": {
+																		"type": "Target"
+																	},
+																	"spellId": {
+																		"spellId": 603
+																	}
+																}
+															}
+														}
+													}
+												]
+											}
+										},
+										{
+											"or": {
+												"vals": [
+													{
+														"dotIsActive": {
+															"targetUnit": {
+																"type": "Target"
+															},
+															"spellId": {
+																"spellId": 603
+															}
+														}
+													},
+													{
+														"variableRef": {
+															"name": "in 5y range of 3T"
+														}
+													}
+												]
+											}
+										}
+									]
+								}
+							},
+							"groupReference": {
+								"groupName": "Cooldowns"
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"variableRef": {
+									"name": "in 5y range of 3T"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 11684
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"not": {
+												"val": {
+													"variableRef": {
+														"name": "in 5y range of 3T"
+													}
+												}
+											}
+										},
+										{
+											"auraIsActive": {
+												"auraId": {
+													"spellId": 440873
+												},
+												"includeReactionTime": true
+											}
+										},
+										{
+											"cmp": {
+												"op": "OpGt",
+												"lhs": {
+													"remainingTime": {}
+												},
+												"rhs": {
+													"math": {
+														"op": "OpAdd",
+														"lhs": {
+															"spellCastTime": {
+																"spellId": {
+																	"spellId": 17924
+																}
+															}
+														},
+														"rhs": {
+															"spellTravelTime": {
+																"spellId": {
+																	"spellId": 17924
+																}
+															}
+														}
+													}
+												}
+											}
+										},
+										{
+											"not": {
+												"val": {
+													"spellIsCasting": {
+														"spellId": {
+															"spellId": 17924
+														}
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 17924
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"cmp": {
+									"op": "OpGt",
+									"lhs": {
+										"math": {
+											"op": "OpAdd",
+											"lhs": {
+												"spellCastTime": {
+													"spellId": {
+														"spellId": 17923
+													}
+												}
+											},
+											"rhs": {
+												"spellTravelTime": {
+													"spellId": {
+														"spellId": 17923
+													}
+												}
+											}
+										}
+									},
+									"rhs": {
+										"remainingTime": {}
+									}
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 17926
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"condition": {
+								"and": {
+									"vals": [
+										{
+											"cmp": {
+												"op": "OpLt",
+												"lhs": {
+													"currentManaPercent": {}
+												},
+												"rhs": {
+													"const": {
+														"val": "30%"
+													}
+												}
+											}
+										},
+										{
+											"cmp": {
+												"op": "OpGt",
+												"lhs": {
+													"remainingTime": {}
+												},
+												"rhs": {
+													"const": {
+														"val": "60s"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 11689
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"castSpell": {
+								"spellId": {
+									"spellId": 17923
+								}
+							}
+						}
+					},
+					{
+						"action": {
+							"castSpell": {
+								"spellId": {
+									"spellId": 11689
+								}
+							}
+						}
+					}
+				],
+				"groups": [
+					{
+						"name": "Single/Multi Target Curse Logic",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"not": {
+											"val": {
+												"warlockAssignedCurseIsActive": {}
+											}
+										}
+									},
+									"castWarlockAssignedCurse": {}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"warlockAssignedCurseIsActive": {}
+												},
+												{
+													"not": {
+														"val": {
+															"warlockAssignedCurseIsActiveOnAllTargets": {}
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpGt",
+														"lhs": {
+															"numberTargets": {}
+														},
+														"rhs": {
+															"const": {
+																"val": "1"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"changeTarget": {
+										"newTarget": {
+											"type": "NextTarget"
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Multi Target DoT Logic",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"spellId": {
+																	"spellId": 603
+																}
+															}
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"spellId": {
+																	"spellId": 11713
+																}
+															}
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpLt",
+														"lhs": {
+															"numberTargets": {}
+														},
+														"rhs": {
+															"const": {
+																"val": "5"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 11713
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"or": {
+														"vals": [
+															{
+																"dotIsActive": {
+																	"spellId": {
+																		"spellId": 11713
+																	}
+																}
+															},
+															{
+																"dotIsActive": {
+																	"spellId": {
+																		"spellId": 603
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"warlockBaneIsActiveOnAllTargets": {}
+														}
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"warlockAssignedCurseIsActive": {}
+															},
+															{
+																"warlockIsAssignedCurse": {
+																	"curseType": "NoCurse"
+																}
+															}
+														]
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpLt",
+														"lhs": {
+															"numberTargets": {}
+														},
+														"rhs": {
+															"const": {
+																"val": "5"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"changeTarget": {
+										"newTarget": {
+											"type": "NextTarget"
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"spellId": {
+																	"spellId": 25309
+																}
+															}
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpGt",
+														"lhs": {
+															"remainingTime": {}
+														},
+														"rhs": {
+															"dotBaseDuration": {
+																"spellId": {
+																	"spellId": 25309
+																}
+															}
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"variableRef": {
+																"name": "in 5y range of 3T"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 25309
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"dotIsActive": {
+														"spellId": {
+															"spellId": 25309
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"dotIsActiveOnAllTargets": {
+																"spellId": {
+																	"spellId": 25309
+																}
+															}
+														}
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"warlockAssignedCurseIsActive": {}
+															},
+															{
+																"warlockIsAssignedCurse": {
+																	"curseType": "NoCurse"
+																}
+															}
+														]
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"or": {
+																	"vals": [
+																		{
+																			"dotIsActive": {
+																				"spellId": {
+																					"spellId": 11713
+																				}
+																			}
+																		},
+																		{
+																			"dotIsActive": {
+																				"spellId": {
+																					"spellId": 603
+																				}
+																			}
+																		}
+																	]
+																}
+															},
+															{
+																"not": {
+																	"val": {
+																		"cmp": {
+																			"op": "OpLt",
+																			"lhs": {
+																				"numberTargets": {}
+																			},
+																			"rhs": {
+																				"const": {
+																					"val": "5"
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"and": {
+														"vals": [
+															{
+																"cmp": {
+																	"op": "OpGt",
+																	"lhs": {
+																		"remainingTime": {}
+																	},
+																	"rhs": {
+																		"dotBaseDuration": {
+																			"spellId": {
+																				"spellId": 25309
+																			}
+																		}
+																	}
+																}
+															},
+															{
+																"not": {
+																	"val": {
+																		"variableRef": {
+																			"name": "in 5y range of 3T"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
+									"changeTarget": {
+										"newTarget": {
+											"type": "NextTarget"
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"spellId": {
+																	"spellId": 25311
+																}
+															}
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpGt",
+														"lhs": {
+															"remainingTime": {}
+														},
+														"rhs": {
+															"dotBaseDuration": {
+																"spellId": {
+																	"spellId": 25311
+																}
+															}
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"variableRef": {
+																"name": "in 5y range of 3T"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 25311
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"dotIsActive": {
+														"spellId": {
+															"spellId": 25311
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"dotIsActiveOnAllTargets": {
+																"spellId": {
+																	"spellId": 25311
+																}
+															}
+														}
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"warlockAssignedCurseIsActive": {}
+															},
+															{
+																"warlockIsAssignedCurse": {
+																	"curseType": "NoCurse"
+																}
+															}
+														]
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"or": {
+																	"vals": [
+																		{
+																			"dotIsActive": {
+																				"spellId": {
+																					"spellId": 11713
+																				}
+																			}
+																		},
+																		{
+																			"dotIsActive": {
+																				"spellId": {
+																					"spellId": 603
+																				}
+																			}
+																		}
+																	]
+																}
+															},
+															{
+																"not": {
+																	"val": {
+																		"cmp": {
+																			"op": "OpLt",
+																			"lhs": {
+																				"numberTargets": {}
+																			},
+																			"rhs": {
+																				"const": {
+																					"val": "5"
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"dotIsActive": {
+														"spellId": {
+															"spellId": 25309
+														}
+													}
+												},
+												{
+													"and": {
+														"vals": [
+															{
+																"cmp": {
+																	"op": "OpGt",
+																	"lhs": {
+																		"remainingTime": {}
+																	},
+																	"rhs": {
+																		"dotBaseDuration": {
+																			"spellId": {
+																				"spellId": 25311
+																			}
+																		}
+																	}
+																}
+															},
+															{
+																"not": {
+																	"val": {
+																		"variableRef": {
+																			"name": "in 5y range of 3T"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
+									"changeTarget": {
+										"newTarget": {
+											"type": "NextTarget"
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"or": {
+														"vals": [
+															{
+																"warlockAssignedCurseIsActiveOnAllTargets": {}
+															},
+															{
+																"warlockIsAssignedCurse": {
+																	"curseType": "NoCurse"
+																}
+															}
+														]
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"warlockBaneIsActiveOnAllTargets": {}
+															},
+															{
+																"not": {
+																	"val": {
+																		"cmp": {
+																			"op": "OpLt",
+																			"lhs": {
+																				"numberTargets": {}
+																			},
+																			"rhs": {
+																				"const": {
+																					"val": "5"
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"dotIsActiveOnAllTargets": {
+																	"spellId": {
+																		"spellId": 25309
+																	}
+																}
+															},
+															{
+																"not": {
+																	"val": {
+																		"and": {
+																			"vals": [
+																				{
+																					"cmp": {
+																						"op": "OpGt",
+																						"lhs": {
+																							"remainingTime": {}
+																						},
+																						"rhs": {
+																							"dotBaseDuration": {
+																								"spellId": {
+																									"spellId": 25309
+																								}
+																							}
+																						}
+																					}
+																				},
+																				{
+																					"not": {
+																						"val": {
+																							"variableRef": {
+																								"name": "in 5y range of 3T"
+																							}
+																						}
+																					}
+																				}
+																			]
+																		}
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"or": {
+														"vals": [
+															{
+																"dotIsActiveOnAllTargets": {
+																	"spellId": {
+																		"spellId": 25311
+																	}
+																}
+															},
+															{
+																"not": {
+																	"val": {
+																		"and": {
+																			"vals": [
+																				{
+																					"cmp": {
+																						"op": "OpGt",
+																						"lhs": {
+																							"remainingTime": {}
+																						},
+																						"rhs": {
+																							"dotBaseDuration": {
+																								"spellId": {
+																									"spellId": 25311
+																								}
+																							}
+																						}
+																					}
+																				},
+																				{
+																					"not": {
+																						"val": {
+																							"variableRef": {
+																								"name": "in 5y range of 3T"
+																							}
+																						}
+																					}
+																				}
+																			]
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
+									"changeTarget": {
+										"newTarget": {
+											"type": "Target"
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Single Target DoT Logic",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"spellId": {
+																	"spellId": 603
+																}
+															}
+														}
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"spellId": {
+																	"spellId": 11713
+																}
+															}
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpGt",
+														"lhs": {
+															"remainingTime": {}
+														},
+														"rhs": {
+															"dotBaseDuration": {
+																"spellId": {
+																	"spellId": 11713
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 11713
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"spellId": {
+																	"spellId": 25309
+																}
+															}
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpGt",
+														"lhs": {
+															"remainingTime": {}
+														},
+														"rhs": {
+															"dotBaseDuration": {
+																"spellId": {
+																	"spellId": 25309
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 25309
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"spellId": {
+																	"spellId": 25311
+																}
+															}
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpGt",
+														"lhs": {
+															"remainingTime": {}
+														},
+														"rhs": {
+															"dotBaseDuration": {
+																"spellId": {
+																	"spellId": 25311
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 25311
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Cooldowns",
+						"actions": [
+							{
+								"action": {
+									"condition": {
+										"or": {
+											"vals": [
+												{
+													"and": {
+														"vals": [
+															{
+																"cmp": {
+																	"op": "OpLt",
+																	"lhs": {
+																		"dotRemainingTime": {
+																			"targetUnit": {
+																				"type": "Target"
+																			},
+																			"spellId": {
+																				"spellId": 603
+																			}
+																		}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "15s"
+																		}
+																	}
+																}
+															},
+															{
+																"dotIsActive": {
+																	"targetUnit": {
+																		"type": "Target"
+																	},
+																	"spellId": {
+																		"spellId": 603
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"targetUnit": {
+																	"type": "Target"
+																},
+																"spellId": {
+																	"spellId": 603
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"itemId": 18820
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"or": {
+											"vals": [
+												{
+													"and": {
+														"vals": [
+															{
+																"cmp": {
+																	"op": "OpLt",
+																	"lhs": {
+																		"dotRemainingTime": {
+																			"targetUnit": {
+																				"type": "Target"
+																			},
+																			"spellId": {
+																				"spellId": 603
+																			}
+																		}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "30s"
+																		}
+																	}
+																}
+															},
+															{
+																"dotIsActive": {
+																	"targetUnit": {
+																		"type": "Target"
+																	},
+																	"spellId": {
+																		"spellId": 603
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"targetUnit": {
+																	"type": "Target"
+																},
+																"spellId": {
+																	"spellId": 603
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"itemId": 250937
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"or": {
+											"vals": [
+												{
+													"and": {
+														"vals": [
+															{
+																"cmp": {
+																	"op": "OpLt",
+																	"lhs": {
+																		"dotRemainingTime": {
+																			"targetUnit": {
+																				"type": "Target"
+																			},
+																			"spellId": {
+																				"spellId": 603
+																			}
+																		}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "8s"
+																		}
+																	}
+																}
+															},
+															{
+																"dotIsActive": {
+																	"targetUnit": {
+																		"type": "Target"
+																	},
+																	"spellId": {
+																		"spellId": 603
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"targetUnit": {
+																	"type": "Target"
+																},
+																"spellId": {
+																	"spellId": 603
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 1259821
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"or": {
+											"vals": [
+												{
+													"and": {
+														"vals": [
+															{
+																"cmp": {
+																	"op": "OpLt",
+																	"lhs": {
+																		"dotRemainingTime": {
+																			"targetUnit": {
+																				"type": "Target"
+																			},
+																			"spellId": {
+																				"spellId": 603
+																			}
+																		}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "15s"
+																		}
+																	}
+																}
+															},
+															{
+																"dotIsActive": {
+																	"targetUnit": {
+																		"type": "Target"
+																	},
+																	"spellId": {
+																		"spellId": 603
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"targetUnit": {
+																	"type": "Target"
+																},
+																"spellId": {
+																	"spellId": 603
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 20572
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"or": {
+											"vals": [
+												{
+													"and": {
+														"vals": [
+															{
+																"cmp": {
+																	"op": "OpLt",
+																	"lhs": {
+																		"dotRemainingTime": {
+																			"targetUnit": {
+																				"type": "Target"
+																			},
+																			"spellId": {
+																				"spellId": 603
+																			}
+																		}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "15s"
+																		}
+																	}
+																}
+															},
+															{
+																"dotIsActive": {
+																	"targetUnit": {
+																		"type": "Target"
+																	},
+																	"spellId": {
+																		"spellId": 603
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"not": {
+														"val": {
+															"dotIsActive": {
+																"targetUnit": {
+																	"type": "Target"
+																},
+																"spellId": {
+																	"spellId": 603
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 20554
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"cmp": {
+														"op": "OpLt",
+														"lhs": {
+															"dotRemainingTime": {
+																"targetUnit": {
+																	"type": "Target"
+																},
+																"spellId": {
+																	"spellId": 603
+																}
+															}
+														},
+														"rhs": {
+															"const": {
+																"val": "22s"
+															}
+														}
+													}
+												},
+												{
+													"dotIsActive": {
+														"targetUnit": {
+															"type": "Target"
+														},
+														"spellId": {
+															"spellId": 603
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpEq",
+														"lhs": {
+															"numberTargets": {}
+														},
+														"rhs": {
+															"const": {
+																"val": "1"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 17923
+										}
+									}
+								}
+							},
+							{
+								"action": {
+									"condition": {
+										"and": {
+											"vals": [
+												{
+													"or": {
+														"vals": [
+															{
+																"cmp": {
+																	"op": "OpLt",
+																	"lhs": {
+																		"dotRemainingTime": {
+																			"targetUnit": {
+																				"type": "Target"
+																			},
+																			"spellId": {
+																				"spellId": 603
+																			}
+																		}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "22s"
+																		}
+																	}
+																}
+															},
+															{
+																"not": {
+																	"val": {
+																		"dotIsActive": {
+																			"targetUnit": {
+																				"type": "Target"
+																			},
+																			"spellId": {
+																				"spellId": 603
+																			}
+																		}
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"and": {
+														"vals": [
+															{
+																"cmp": {
+																	"op": "OpLt",
+																	"lhs": {
+																		"currentMana": {}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "2600"
+																		}
+																	}
+																}
+															},
+															{
+																"cmp": {
+																	"op": "OpGt",
+																	"lhs": {
+																		"remainingTime": {}
+																	},
+																	"rhs": {
+																		"const": {
+																			"val": "60s"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
+									"castSpell": {
+										"spellId": {
+											"spellId": 11689
+										}
+									}
+								}
+							}
+						]
+					}
+				],
+				"valueVariables": [
+					{
+						"name": "Doom tick",
+						"value": {
+							"dotBaseDuration": {
+								"spellId": {
+									"spellId": 603
+								}
+							}
+						}
+					},
+					{
+						"name": "Amount of Dooms left",
+						"value": {
+							"math": {
+								"op": "OpDiv",
+								"lhs": {
+									"math": {
+										"op": "OpSub",
+										"lhs": {
+											"remainingTime": {}
+										},
+										"rhs": {
+											"const": {
+												"val": "5s"
+											}
+										}
+									}
+								},
+								"rhs": {
+									"dotBaseDuration": {
+										"spellId": {
+											"spellId": 603
+										}
+									}
+								}
+							}
+						}
+					},
+					{
+						"name": "in 5y range of 3T",
+						"value": {
+							"and": {
+								"vals": [
+									{
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"numberTargets": {}
+											},
+											"rhs": {
+												"const": {
+													"val": "3"
+												}
+											}
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpLe",
+											"lhs": {
+												"unitDistance": {
+													"sourceUnit": {
+														"type": "CurrentTarget"
+													}
+												}
+											},
+											"rhs": {
+												"const": {
+													"val": "5"
+												}
+											}
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpLe",
+											"lhs": {
+												"unitDistance": {
+													"sourceUnit": {
+														"type": "NextTarget"
+													}
+												}
+											},
+											"rhs": {
+												"const": {
+													"val": "5"
+												}
+											}
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpLe",
+											"lhs": {
+												"unitDistance": {
+													"sourceUnit": {
+														"type": "PreviousTarget"
+													}
+												}
+											},
+											"rhs": {
+												"const": {
+													"val": "5"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Searing Pain for Brand",
+						"value": {
+							"and": {
+								"vals": [
+									{
+										"or": {
+											"vals": [
+												{
+													"not": {
+														"val": {
+															"auraIsActive": {
+																"sourceUnit": {
+																	"type": "Target"
+																},
+																"auraId": {
+																	"spellId": 1293696
+																},
+																"includeReactionTime": true
+															}
+														}
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpLt",
+														"lhs": {
+															"auraRemainingTime": {
+																"sourceUnit": {
+																	"type": "Target"
+																},
+																"auraId": {
+																	"spellId": 1293696
+																}
+															}
+														},
+														"rhs": {
+															"const": {
+																"val": "2.5s"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									{
+										"not": {
+											"val": {
+												"spellIsCasting": {
+													"spellId": {
+														"spellId": 17923
+													}
+												}
+											}
+										}
+									},
+									{
+										"not": {
+											"val": {
+												"variableRef": {
+													"name": "in 5y range of 3T"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					}
+				]
+			},
+			"reactionTimeMs": 100,
+			"distanceFromTarget": 20,
+			"healingModel": {},
+			"database": {
+				"consumables": [
+					{
+						"id": 118,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Healing Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"effectIds": [679187],
+						"itemEffects": [
+							{
+								"buffId": 439,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 858,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Healing Potion",
+						"lvl": 3,
+						"categoryId": 4,
+						"effectIds": [679188],
+						"itemEffects": [
+							{
+								"buffId": 440,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 929,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Healing Potion",
+						"lvl": 12,
+						"categoryId": 4,
+						"effectIds": [679189],
+						"itemEffects": [
+							{
+								"buffId": 441,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 1072,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Full Moonshine",
+						"lvl": 25,
+						"categoryId": 4,
+						"effectIds": [679186],
+						"itemEffects": [
+							{
+								"buffId": 438,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 1710,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Healing Potion",
+						"lvl": 21,
+						"categoryId": 4,
+						"effectIds": [679999],
+						"itemEffects": [
+							{
+								"buffId": 2024,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 2455,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Mana Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"effectIds": [679151],
+						"itemEffects": [
+							{
+								"buffId": 437,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 2456,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Rejuvenation Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"effectIds": [692902, 692903],
+						"itemEffects": [
+							{
+								"buffId": 2370,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 3087,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Mug of Shimmer Stout",
+						"lvl": 15,
+						"categoryId": 4,
+						"effectIds": [705545],
+						"itemEffects": [
+							{
+								"buffId": 29236,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 3384,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0],
+						"name": "Minor Magic Resistance Potion",
+						"lvl": 12,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 2380,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 3385,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Mana Potion",
+						"lvl": 14,
+						"categoryId": 4,
+						"effectIds": [679186],
+						"itemEffects": [
+							{
+								"buffId": 438,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 3827,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Mana Potion",
+						"lvl": 22,
+						"categoryId": 4,
+						"effectIds": [679998],
+						"itemEffects": [
+							{
+								"buffId": 2023,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 3928,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Healing Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [682787],
+						"itemEffects": [
+							{
+								"buffId": 4042,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6048,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Shadow Protection Potion",
+						"lvl": 17,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7242,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6049,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Fire Protection Potion",
+						"lvl": 23,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7233,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6050,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Frost Protection Potion",
+						"lvl": 28,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7239,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6051,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Holy Protection Potion",
+						"lvl": 10,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7245,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6052,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Nature Protection Potion",
+						"lvl": 28,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7254,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6149,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Mana Potion",
+						"lvl": 31,
+						"categoryId": 4,
+						"effectIds": [689141],
+						"itemEffects": [
+							{
+								"buffId": 11903,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 9036,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 50, 50, 50, 0, 0],
+						"name": "Magic Resistance Potion",
+						"lvl": 32,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 11364,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 9144,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Wildvine Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [689469, 689470],
+						"itemEffects": [
+							{
+								"buffId": 11387,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 13443,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Mana Potion",
+						"lvl": 41,
+						"categoryId": 4,
+						"effectIds": [695811],
+						"itemEffects": [
+							{
+								"buffId": 17530,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 13444,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Mana Potion",
+						"lvl": 49,
+						"categoryId": 4,
+						"effectIds": [695996],
+						"itemEffects": [
+							{
+								"buffId": 17531,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 13446,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Healing Potion",
+						"lvl": 45,
+						"categoryId": 4,
+						"effectIds": [695962],
+						"itemEffects": [
+							{
+								"buffId": 17534,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13456,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Frost Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17544,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13457,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Fire Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17543,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13458,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Nature Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17546,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13459,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Shadow Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17548,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13460,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Holy Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17545,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13461,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Arcane Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17549,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 14894,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lily Root",
+						"lvl": 51,
+						"categoryId": 4,
+						"effectIds": [695927, 695928],
+						"itemEffects": [
+							{
+								"buffId": 18832,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 17348,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Healing Draught",
+						"lvl": 45,
+						"categoryId": 4,
+						"effectIds": [698910],
+						"itemEffects": [
+							{
+								"buffId": 21393,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 300000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 17349,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Healing Draught",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [698530],
+						"itemEffects": [
+							{
+								"buffId": 21394,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 300000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 17351,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Mana Draught",
+						"lvl": 45,
+						"categoryId": 4,
+						"effectIds": [698531],
+						"itemEffects": [
+							{
+								"buffId": 21395,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 300000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 17352,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Mana Draught",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [698926],
+						"itemEffects": [
+							{
+								"buffId": 21396,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 300000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 18253,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Rejuvenation Potion",
+						"lvl": 50,
+						"categoryId": 4,
+						"effectIds": [699637, 699638],
+						"itemEffects": [
+							{
+								"buffId": 22729,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 18839,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Combat Healing Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [682787],
+						"itemEffects": [
+							{
+								"buffId": 4042,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 18841,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Combat Mana Potion",
+						"lvl": 41,
+						"categoryId": 4,
+						"effectIds": [695811],
+						"itemEffects": [
+							{
+								"buffId": 17530,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 250932,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Spellblasting Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251919,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250933,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Spellblasting Potion",
+						"lvl": 15,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251922,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250934,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Spellblasting Potion",
+						"lvl": 25,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251923,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250935,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Spellblasting Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251924,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250936,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Spellblasting Potion",
+						"lvl": 45,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251931,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250937,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Spellblasting Potion",
+						"lvl": 55,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251932,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250951,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Caustic Smog Potion",
+						"lvl": 45,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252525,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250953,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Dragonfire Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252554,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250954,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Potion of Elemental Purging",
+						"lvl": 40,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252558,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"],
+						"mobTypeStats": [
+							{
+								"mobTypes": ["MobTypeElemental"],
+								"stats": {
+									"5": 105
+								}
+							}
+						]
+					},
+					{
+						"id": 255663,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Windstone",
+						"lvl": 1,
+						"categoryId": 4,
+						"effectIds": [1268232, 1268233],
+						"itemEffects": [
+							{
+								"buffId": 1259231,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 268881,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Perishable Minor Healing Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"effectIds": [679187],
+						"itemEffects": [
+							{
+								"buffId": 439,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 268882,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Perishable Lesser Healing Potion",
+						"lvl": 3,
+						"categoryId": 4,
+						"effectIds": [679188],
+						"itemEffects": [
+							{
+								"buffId": 440,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 268883,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Perishable Healing Potion",
+						"lvl": 12,
+						"categoryId": 4,
+						"effectIds": [679189],
+						"itemEffects": [
+							{
+								"buffId": 441,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 274935,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Tessa's Tonic",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [1317896, 1317897],
+						"itemEffects": [
+							{
+								"buffId": 1295688,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 282011,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Restored Healing Potion",
+						"lvl": 60,
+						"categoryId": 4,
+						"effectIds": [1343653],
+						"itemEffects": [
+							{
+								"buffId": 1312698,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 282013,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Restored Mana Potion",
+						"lvl": 60,
+						"categoryId": 4,
+						"effectIds": [1343657],
+						"itemEffects": [
+							{
+								"buffId": 1312702,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 1703,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 10, 0, 0],
+						"name": "Crystal Basilisk Spine",
+						"lvl": 25,
+						"categoryId": 1153,
+						"itemEffects": [
+							{
+								"buffId": 1138,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 5509,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Healthstone",
+						"lvl": 24,
+						"categoryId": 1153,
+						"effectIds": [684547],
+						"itemEffects": [
+							{
+								"buffId": 5720,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 5510,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Healthstone",
+						"lvl": 36,
+						"categoryId": 1153,
+						"effectIds": [683044],
+						"itemEffects": [
+							{
+								"buffId": 5723,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 5511,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Healthstone",
+						"lvl": 12,
+						"categoryId": 1153,
+						"effectIds": [683070],
+						"itemEffects": [
+							{
+								"buffId": 6263,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 5512,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Healthstone",
+						"lvl": 10,
+						"categoryId": 1153,
+						"effectIds": [683069],
+						"itemEffects": [
+							{
+								"buffId": 6262,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 9421,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Healthstone",
+						"lvl": 48,
+						"categoryId": 1153,
+						"effectIds": [688570],
+						"itemEffects": [
+							{
+								"buffId": 11732,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 11951,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Whipper Root Tuber",
+						"lvl": 45,
+						"categoryId": 1153,
+						"effectIds": [692328],
+						"itemEffects": [
+							{
+								"buffId": 15700,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 11952,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Night Dragon's Breath",
+						"lvl": 45,
+						"categoryId": 1153,
+						"effectIds": [692329, 692330],
+						"itemEffects": [
+							{
+								"buffId": 15701,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 12662,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Demonic Rune",
+						"lvl": 50,
+						"categoryId": 1153,
+						"effectIds": [694074],
+						"itemEffects": [
+							{
+								"buffId": 16666,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 15723,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Tea with Sugar",
+						"lvl": 50,
+						"categoryId": 1153,
+						"effectIds": [694971, 694972],
+						"itemEffects": [
+							{
+								"buffId": 19199,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 17747,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Razorlash Root",
+						"lvl": 40,
+						"categoryId": 1153,
+						"effectIds": [699301, 699302],
+						"itemEffects": [
+							{
+								"buffId": 21955,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 13512,
+						"type": "ConsumableTypeFlask",
+						"stats": [0, 0, 0, 0, 0, 150, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Flask of Supreme Power",
+						"lvl": 50,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 17628,
+								"onUse": {
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						]
+					},
+					{
+						"id": 13931,
+						"type": "ConsumableTypeFood",
+						"stats": [0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Nightfin Soup",
+						"lvl": 35,
+						"categoryId": 11,
+						"itemEffects": [
+							{
+								"buffId": 1249513,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						]
+					},
+					{
+						"id": 18588,
+						"type": "ConsumableTypeExplosive",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Ez-Thro Dynamite II",
+						"lvl": 30,
+						"categoryId": 24,
+						"itemEffects": [
+							{
+								"buffId": 23000,
+								"onUse": {
+									"categoryId": 24,
+									"categoryCooldownMs": 60000
+								}
+							}
+						]
+					},
+					{
+						"id": 20749,
+						"type": "ConsumableTypeImbue",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Brilliant Wizard Oil",
+						"lvl": 45,
+						"itemEffects": [
+							{
+								"buffId": 25122,
+								"onUse": {
+									"cooldownMs": 1000,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"weaponInventoryTypeMask": 6430720,
+						"temporaryEnchant": {
+							"effectId": 2628,
+							"stats": [0, 0, 0, 0, 36, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+							"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+						}
+					}
+				],
+				"spellEffects": [
+					{
+						"id": 679187,
+						"spellId": 439,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 679188,
+						"spellId": 440,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 679189,
+						"spellId": 441,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 679186,
+						"spellId": 438,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 679999,
+						"spellId": 2024,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 679151,
+						"spellId": 437,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 692902,
+						"spellId": 2370,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 692903,
+						"spellId": 2370,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 705545,
+						"spellId": 29236,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 679998,
+						"spellId": 2023,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 682787,
+						"spellId": 4042,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 689141,
+						"spellId": 11903,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 689469,
+						"spellId": 11387,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 689470,
+						"spellId": 11387,
+						"index": 1,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 695811,
+						"spellId": 17530,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 695996,
+						"spellId": 17531,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 695962,
+						"spellId": 17534,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 695927,
+						"spellId": 18832,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 695928,
+						"spellId": 18832,
+						"index": 1,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 698910,
+						"spellId": 21393,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 698530,
+						"spellId": 21394,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 698531,
+						"spellId": 21395,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 698926,
+						"spellId": 21396,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 699637,
+						"spellId": 22729,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 699638,
+						"spellId": 22729,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 1268232,
+						"spellId": 1259231,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 1268233,
+						"spellId": 1259231,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 1317896,
+						"spellId": 1295688,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 1317897,
+						"spellId": 1295688,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 1343653,
+						"spellId": 1312698,
+						"type": 136,
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 1343657,
+						"spellId": 1312702,
+						"type": 137,
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 684547,
+						"spellId": 5720,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 683044,
+						"spellId": 5723,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 683070,
+						"spellId": 6263,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 683069,
+						"spellId": 6262,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 688570,
+						"spellId": 11732,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 692328,
+						"spellId": 15700,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 692329,
+						"spellId": 15701,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 692330,
+						"spellId": 15701,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 694074,
+						"spellId": 16666,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 694971,
+						"spellId": 19199,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 694972,
+						"spellId": 19199,
+						"index": 1,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 699301,
+						"spellId": 21955,
+						"type": 6,
+						"resourceType": "ResourceTypeHealth",
+						"auraPeriodMs": 1000,
+						"durationMs": 10000
+					},
+					{
+						"id": 699302,
+						"spellId": 21955,
+						"index": 1,
+						"type": 6,
+						"resourceType": "ResourceTypeMana",
+						"auraPeriodMs": 1000,
+						"durationMs": 10000
+					}
+				]
+			}
+		},
+		"raidBuffs": {
+			"arcaneIntellect": true,
+			"prayerOfSpirit": true,
+			"markOfTheWild": true,
+			"powerWordFortitude": true,
+			"moonkinAura": true
+		},
+		"partyBuffs": {
+			"manaSpringTotem": "TristateEffectRegular"
+		},
+		"debuffs": {
+			"judgementOfWisdom": true
+		},
+		"encounter": {
+			"apiVersion": 2,
+			"duration": 180,
+			"durationVariation": 5,
+			"executeProportion20": 0.2,
+			"executeProportion35": 0.35,
+			"targets": [
+				{
+					"id": 31146,
+					"name": "Raid Target",
+					"level": 30,
+					"mobType": "MobTypeMechanical",
+					"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 3731, 0, 1428900, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					"minBaseDamage": 2601,
+					"damageSpread": 0.5,
+					"swingSpeed": 2,
+					"parryHaste": true,
+					"canCrush": true
+				}
+			]
+		},
+		"simOptions": {
+			"iterations": 12500
+		},
+		"statsToWeigh": [
+			"StatStamina",
+			"StatIntellect",
+			"StatSpirit",
+			"StatSpellDamage",
+			"StatShadowDamage",
+			"StatFireDamage",
+			"StatHitRating",
+			"StatCritRating",
+			"StatHasteRating",
+			"StatSpellPiercing",
+			"StatMP5"
+		],
+		"epReferenceStat": "StatSpellDamage",
+		"hpsReferenceStat": "StatSpellDamage"
+	}
+}

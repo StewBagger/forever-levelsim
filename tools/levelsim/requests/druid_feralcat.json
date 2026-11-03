@@ -1,0 +1,5793 @@
+{
+	"statWeights": {
+		"player": {
+			"apiVersion": 2,
+			"name": "Player",
+			"race": "RaceTauren",
+			"class": "ClassDruid",
+			"equipment": {
+				"items": [
+					{
+						"id": 8345,
+						"enchant": 1508
+					},
+					{
+						"id": 19491,
+						"enchant": 904
+					},
+					{
+						"id": 271955
+					},
+					{
+						"id": 18511,
+						"enchant": 7667
+					},
+					{
+						"id": 252484,
+						"enchant": 1891
+					},
+					{
+						"id": 19587,
+						"enchant": 7656
+					},
+					{
+						"id": 19049,
+						"enchant": 2564
+					},
+					{
+						"id": 272396
+					},
+					{
+						"id": 15065,
+						"enchant": 1508
+					},
+					{
+						"id": 20715,
+						"enchant": 1887
+					},
+					{
+						"id": 19325
+					},
+					{
+						"id": 275981
+					},
+					{
+						"id": 19120
+					},
+					{
+						"id": 270275
+					},
+					{
+						"id": 19323,
+						"enchant": 1896
+					},
+					{},
+					{
+						"id": 272427
+					}
+				]
+			},
+			"consumables": {
+				"flaskId": 274274,
+				"foodId": 250072,
+				"conjuredId": 12662,
+				"explosiveId": 260817,
+				"mhImbueId": 12643,
+				"potions": [
+					118, 858, 929, 1072, 1710, 2455, 2456, 3087, 3384, 3385, 3827, 3928, 5631, 5633, 6048, 6049, 6050, 6051, 6052, 6149, 9036, 9144, 9224,
+					13442, 13443, 13444, 13446, 13456, 13457, 13458, 13459, 13460, 13461, 14894, 17348, 17349, 17351, 17352, 18253, 18839, 18841, 250938,
+					250939, 250940, 250941, 250942, 250943, 250951, 250953, 250955, 255663, 268881, 268882, 268883, 274935, 282011, 282013
+				],
+				"conjuredItems": [1703, 5509, 5510, 5511, 5512, 7676, 9421, 11951, 11952, 12662, 15723, 17747],
+				"extraIds": [12460, 8412, 10646],
+				"elixirIds": [250328, 250338, 250329, 250341, 250351],
+				"swapMhImbueId": 12643,
+				"resourcePotId": 13444,
+				"offensivePotId": 13442
+			},
+			"bonusStats": {
+				"apiVersion": 2,
+				"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			},
+			"enableItemSwap": true,
+			"itemSwap": {
+				"items": [
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{
+						"id": 9449,
+						"enchant": 1896
+					},
+					{},
+					{}
+				],
+				"prepullBonusStats": {
+					"apiVersion": 2,
+					"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+				}
+			},
+			"buffs": {
+				"greaterBlessingOfKings": true,
+				"greaterBlessingOfMight": 1
+			},
+			"feralCatDruid": {
+				"options": {
+					"assumeBleedActive": true
+				}
+			},
+			"talentsString": "050022-53200032123012124001-055",
+			"profession1": "Engineering",
+			"profession2": "Enchanting",
+			"level": 30,
+			"cooldowns": {},
+			"rotation": {
+				"type": "TypeAPL",
+				"prepullActions": [
+					{
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "b9e696f8-d404-415c-aefe-f5265e413ff6"
+								},
+								"spellIsKnown": {
+									"spellId": {
+										"itemId": 9449
+									}
+								}
+							},
+							"itemSwap": {
+								"swapSet": "Swap1"
+							}
+						},
+						"doAtValue": {
+							"uuid": {
+								"value": "e89864e0-4955-43ec-939b-5a6ba0ba1a3b"
+							},
+							"const": {
+								"val": "-33s"
+							}
+						}
+					},
+					{
+						"action": {
+							"castSpell": {
+								"spellId": {
+									"spellId": 9913
+								}
+							}
+						},
+						"doAtValue": {
+							"uuid": {
+								"value": "6ef1a8ba-b0ac-497b-aaea-f6fd435506e0"
+							},
+							"const": {
+								"val": "-1s"
+							}
+						}
+					},
+					{
+						"action": {
+							"castSpell": {
+								"spellId": {
+									"spellId": 9821
+								}
+							}
+						},
+						"doAtValue": {
+							"uuid": {
+								"value": "46be6360-2175-4cb8-bef0-4c00514edb63"
+							},
+							"const": {
+								"val": "-0.01s"
+							}
+						}
+					}
+				],
+				"priorityList": [
+					{
+						"notes": "After MCP haste expires, re-equip the main weapon",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "cb26dfb5-891e-487e-8196-4332d90f197a"
+								},
+								"variableRef": {
+									"name": "Ready to return to the main weapon"
+								}
+							},
+							"itemSwap": {
+								"swapSet": "Main"
+							}
+						}
+					},
+					{
+						"notes": "Drop Prowl when the faster approach wins or Ravage cannot be used",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "f10f48af-d0b9-4b7a-a17c-a80a4dfec8f5"
+								},
+								"variableRef": {
+									"name": "Drop Prowl for this opener"
+								}
+							},
+							"cancelAura": {
+								"auraId": {
+									"spellId": 9913
+								}
+							}
+						}
+					},
+					{
+						"notes": "Maintain Faerie Fire for the raid before personal damage",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "51b5fc31-fbd1-4fdf-8a45-8c92b037ab7a"
+								},
+								"and": {
+									"vals": [
+										{
+											"uuid": {
+												"value": "97f5f1cb-9e54-45e5-8bf3-da67e7ef674a"
+											},
+											"spellIsKnown": {
+												"spellId": {
+													"spellId": 9907
+												}
+											}
+										},
+										{
+											"uuid": {
+												"value": "44975459-3c85-41a4-a235-559ff2046984"
+											},
+											"auraShouldRefresh": {
+												"auraId": {
+													"spellId": 9907
+												},
+												"maxOverlap": {
+													"uuid": {
+														"value": "df7ffc31-4496-42e6-abc5-52d5b4a7ad49"
+													},
+													"const": {
+														"val": "0s"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 9907
+								}
+							}
+						}
+					},
+					{
+						"notes": "Run into melee with Dash",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "7dff2e52-e5ab-4364-a7df-279604d5797a"
+								},
+								"cmp": {
+									"op": "OpGt",
+									"lhs": {
+										"uuid": {
+											"value": "941415da-bce9-4222-87c7-68c8ed5b9189"
+										},
+										"unitDistance": {}
+									},
+									"rhs": {
+										"uuid": {
+											"value": "b311412c-7ecb-4bd4-b386-46191722a5f4"
+										},
+										"const": {
+											"val": "5"
+										}
+									}
+								}
+							},
+							"move": {
+								"rangeFromTarget": {
+									"uuid": {
+										"value": "cc181ce3-82b5-4699-ac7d-2559eff22b1c"
+									},
+									"const": {
+										"val": "5"
+									}
+								}
+							}
+						}
+					},
+					{
+						"notes": "Finish closing to melee before damage abilities",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "82c8ae26-6653-4658-af0b-7076396749ea"
+								},
+								"cmp": {
+									"op": "OpGt",
+									"lhs": {
+										"uuid": {
+											"value": "e1b79c77-8ef7-4077-9470-40dd3143f2c6"
+										},
+										"unitDistance": {}
+									},
+									"rhs": {
+										"uuid": {
+											"value": "4375a0bf-4e45-4367-8475-7c579e496c6d"
+										},
+										"const": {
+											"val": "5"
+										}
+									}
+								}
+							},
+							"waitUntil": {
+								"condition": {
+									"uuid": {
+										"value": "e3fa5c95-df07-46ee-ba35-f5e1902606db"
+									},
+									"not": {
+										"val": {
+											"uuid": {
+												"value": "859dd415-a1de-4979-9bd6-e4da630d9280"
+											},
+											"cmp": {
+												"op": "OpGt",
+												"lhs": {
+													"uuid": {
+														"value": "9b7ca3ba-3452-4f69-991f-b393f35e7c91"
+													},
+													"unitDistance": {}
+												},
+												"rhs": {
+													"uuid": {
+														"value": "07c8b8cd-0ced-4fa6-bdcf-d9d5e4097e69"
+													},
+													"const": {
+														"val": "5"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					{
+						"notes": "Prowl is active: open with Ravage",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "1c0173be-0883-4cfb-be2f-73bcf1bb2a2a"
+								},
+								"auraIsActive": {
+									"auraId": {
+										"spellId": 9913
+									}
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 9867
+								}
+							}
+						}
+					},
+					{
+						"notes": "Activate the equipped MCP once in melee and out of Prowl",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "8aa716c4-0cbb-4b79-af25-5a75f7312b6f"
+								},
+								"variableRef": {
+									"name": "Ready to activate MCP"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"itemId": 9449
+								}
+							}
+						}
+					},
+					{
+						"notes": "Outside Cat Form: return after utility casts",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "bfae81b7-7109-49dc-8e2f-c5ab955e9597"
+								},
+								"not": {
+									"val": {
+										"uuid": {
+											"value": "4cc813a7-13fb-4a40-bd55-5d0c665ad9ce"
+										},
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 768
+											}
+										}
+									}
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 768
+								}
+							}
+						}
+					},
+					{
+						"notes": "Bite in the final window with enough combo points",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "b6d39bc4-1edf-4ea9-8fe5-6962eb927701"
+								},
+								"variableRef": {
+									"name": "Final-global Bite"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 22829
+								}
+							}
+						}
+					},
+					{
+						"notes": "Use other available cooldowns",
+						"action": {
+							"autocastOtherCooldowns": {}
+						}
+					},
+					{
+						"notes": "Use the selected mana potion when it fits and the remaining fight needs mana",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "78640445-8569-403f-b95d-5543e81df770"
+								},
+								"variableRef": {
+									"name": "Mana potion fits and is needed"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"otherId": "OtherActionResourcePotion"
+								},
+								"target": {
+									"type": "Self"
+								}
+							}
+						}
+					},
+					{
+						"notes": "Use Elune\u2019s Light when available",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "9dcde2a8-c066-4b7a-86ab-95fa04c51447"
+								},
+								"variableRef": {
+									"name": "Ready to use Elune's Light"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 1259799
+								}
+							}
+						}
+					},
+					{
+						"notes": "With Predatory Discipline, pool for Bite while Rip has time left; use the smaller pool at five combo points",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "d645469f-1e3d-4d7d-be8c-a5eba1c75b16"
+								},
+								"variableRef": {
+									"name": "Midfight Bite is worthwhile"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 22829
+								}
+							}
+						}
+					},
+					{
+						"notes": "Shifting Power is ready at or below its energy ceiling",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "51233e84-1ada-4383-9b30-c168692b76d7"
+								},
+								"variableRef": {
+									"name": "Shifting Power ready"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 1322605
+								}
+							}
+						}
+					},
+					{
+						"notes": "Use Thistle Tea at or below the energy ceiling for your Blood Frenzy rank",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "18c0b5f0-d1be-4b4d-b244-af3d8569ab63"
+								},
+								"variableRef": {
+									"name": "Tea is selected and energy is low"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"itemId": 7676
+								}
+							}
+						}
+					},
+					{
+						"notes": "Use Demonic Rune after Tea when missing 1500 mana",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "782d7b38-a8bf-433e-b0c3-2aa2d967ea7e"
+								},
+								"variableRef": {
+									"name": "Rune can restore mana after Tea"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"itemId": 12662
+								}
+							}
+						}
+					},
+					{
+						"notes": "In Cat Form: use the selected offensive potion",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "25997a8d-5f07-43b5-b77c-ec4eb5d24b4d"
+								},
+								"auraIsActive": {
+									"auraId": {
+										"spellId": 768
+									}
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"otherId": "OtherActionOffensivePotion"
+								}
+							}
+						}
+					},
+					{
+						"notes": "Bite near fight end when Rip is no longer worthwhile",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "d363ef4a-b37f-4439-88be-bcbe2a433715"
+								},
+								"variableRef": {
+									"name": "Fight-end Bite is worthwhile"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 22829
+								}
+							}
+						}
+					},
+					{
+						"notes": "Clearcasting is active: Shred before refreshing bleeds",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "52a250f7-b59a-4411-9766-a161682d2d52"
+								},
+								"and": {
+									"vals": [
+										{
+											"uuid": {
+												"value": "4d785333-15dd-4897-99d8-54a8db64e7ac"
+											},
+											"and": {
+												"vals": [
+													{
+														"uuid": {
+															"value": "fb1168d6-b493-4d11-856c-13cb7e5a570a"
+														},
+														"auraIsActive": {
+															"auraId": {
+																"spellId": 768
+															}
+														}
+													},
+													{
+														"uuid": {
+															"value": "5a1d9a5b-0d95-40b7-b81c-358d33ea7954"
+														},
+														"auraIsActive": {
+															"auraId": {
+																"spellId": 16870
+															}
+														}
+													}
+												]
+											}
+										},
+										{
+											"uuid": {
+												"value": "d66dc987-2dac-4843-a883-ac0a97a98969"
+											},
+											"not": {
+												"val": {
+													"uuid": {
+														"value": "9ed8fae9-c083-458b-87b3-b0e1722ef6f7"
+													},
+													"variableRef": {
+														"name": "Pool energy for Bite"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 9830
+								}
+							}
+						}
+					},
+					{
+						"notes": "Refresh Rip: with zero or two Blood Frenzy points, build to five when the next-global Rip is funded",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "7030fccb-e87a-4913-977b-8eb1ab8f9d97"
+								},
+								"and": {
+									"vals": [
+										{
+											"uuid": {
+												"value": "86084a31-964b-433d-a783-33195048c901"
+											},
+											"auraIsActive": {
+												"auraId": {
+													"spellId": 768
+												}
+											}
+										},
+										{
+											"uuid": {
+												"value": "69a8ac3e-ef1c-428c-b350-d646f65f0c7d"
+											},
+											"variableRef": {
+												"name": "Rip due"
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 9896
+								}
+							}
+						}
+					},
+					{
+						"notes": "Refresh Rake after reacting to its expiry, if enough fight time remains",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "70854ebf-ba3d-46f6-b6e9-512fdab6f205"
+								},
+								"and": {
+									"vals": [
+										{
+											"uuid": {
+												"value": "e11bb77a-d278-43c1-a628-59f2f2a9fa1e"
+											},
+											"auraIsActive": {
+												"auraId": {
+													"spellId": 768
+												}
+											}
+										},
+										{
+											"uuid": {
+												"value": "6c302486-f656-4bfd-9c3a-6537be004bc5"
+											},
+											"variableRef": {
+												"name": "Rake due"
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 9904
+								}
+							}
+						}
+					},
+					{
+						"notes": "Build combo points when affordable unless pooling for Bite",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "d26fde0e-31fa-46b7-abfc-950082e7afa9"
+								},
+								"and": {
+									"vals": [
+										{
+											"uuid": {
+												"value": "bcb9639c-294d-4c48-b3fe-27031b9b5a0c"
+											},
+											"and": {
+												"vals": [
+													{
+														"uuid": {
+															"value": "89faa636-01d2-4378-88b1-3c1c054a8989"
+														},
+														"auraIsActive": {
+															"auraId": {
+																"spellId": 768
+															}
+														}
+													},
+													{
+														"uuid": {
+															"value": "90d6ba53-a7fa-4cba-8f0d-4a2a1e50ffed"
+														},
+														"cmp": {
+															"op": "OpGe",
+															"lhs": {
+																"uuid": {
+																	"value": "ec340aef-0e9d-4703-b0e1-944aafa8b957"
+																},
+																"currentEnergy": {}
+															},
+															"rhs": {
+																"uuid": {
+																	"value": "515599ed-d5fb-4266-9cbf-71333495e4d1"
+																},
+																"spellCurrentCost": {
+																	"spellId": {
+																		"spellId": 9830
+																	}
+																}
+															}
+														}
+													}
+												]
+											}
+										},
+										{
+											"uuid": {
+												"value": "fb77ca5f-af2c-4e12-86f1-a4fdabdedd08"
+											},
+											"not": {
+												"val": {
+													"uuid": {
+														"value": "72ec834e-82df-462a-a545-9a69da016f7b"
+													},
+													"variableRef": {
+														"name": "Pool energy for Bite"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 9830
+								}
+							}
+						}
+					},
+					{
+						"notes": "Use Claw when Shred cannot land, unless pooling for Bite",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "d5ec1f39-3dae-49c0-ab77-4121edf838a8"
+								},
+								"and": {
+									"vals": [
+										{
+											"uuid": {
+												"value": "52742006-dd78-4131-aacd-e3b1a8e7beb9"
+											},
+											"and": {
+												"vals": [
+													{
+														"uuid": {
+															"value": "d57de366-1c77-4337-bf33-e4ab202f8d9e"
+														},
+														"variableRef": {
+															"name": "Claw can replace Shred"
+														}
+													},
+													{
+														"uuid": {
+															"value": "a7030bd9-624a-42ea-9dd6-9714feaed7de"
+														},
+														"cmp": {
+															"op": "OpGe",
+															"lhs": {
+																"uuid": {
+																	"value": "0f196488-1c48-4ab9-b89d-03f1ad173709"
+																},
+																"currentEnergy": {}
+															},
+															"rhs": {
+																"uuid": {
+																	"value": "6071b5e3-8fea-4986-86a4-59d165eb7be2"
+																},
+																"spellCurrentCost": {
+																	"spellId": {
+																		"spellId": 9850
+																	}
+																}
+															}
+														}
+													}
+												]
+											}
+										},
+										{
+											"uuid": {
+												"value": "fb8c3032-805b-40a5-8366-5b89ceabbef8"
+											},
+											"not": {
+												"val": {
+													"uuid": {
+														"value": "3316051b-7bee-49cd-bbb1-5dad688fd5c1"
+													},
+													"variableRef": {
+														"name": "Pool energy for Bite"
+													}
+												}
+											}
+										}
+									]
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 9850
+								}
+							}
+						}
+					},
+					{
+						"notes": "Innervate when mana is low and enough fight time remains",
+						"action": {
+							"condition": {
+								"uuid": {
+									"value": "6ca0bd1c-5195-4ea9-922d-bc66a14283c0"
+								},
+								"variableRef": {
+									"name": "Innervate can restore needed mana"
+								}
+							},
+							"castSpell": {
+								"spellId": {
+									"spellId": 29166
+								}
+							}
+						}
+					}
+				],
+				"valueVariables": [
+					{
+						"name": "Rip target CP",
+						"value": {
+							"uuid": {
+								"value": "62231000-15dc-4050-8666-e6084857c2f9"
+							},
+							"const": {
+								"val": "4"
+							}
+						}
+					},
+					{
+						"name": "Preferred Rip CP with zero or two Blood Frenzy points",
+						"value": {
+							"uuid": {
+								"value": "78a07230-28c4-4936-9b69-5bfb3960899b"
+							},
+							"const": {
+								"val": "5"
+							}
+						}
+					},
+					{
+						"name": "Rip minimum fight left",
+						"value": {
+							"uuid": {
+								"value": "c8f50675-5b0e-45b3-aa3d-251a99e8636a"
+							},
+							"const": {
+								"val": "8s"
+							}
+						}
+					},
+					{
+						"name": "Shifting Power energy ceiling",
+						"value": {
+							"uuid": {
+								"value": "7a2dd88d-8987-4eb4-8119-1985d4878602"
+							},
+							"const": {
+								"val": "57"
+							}
+						}
+					},
+					{
+						"name": "Tea energy ceiling",
+						"value": {
+							"uuid": {
+								"value": "c24f127e-06f9-4055-8337-533fe7831567"
+							},
+							"const": {
+								"val": "20"
+							}
+						}
+					},
+					{
+						"name": "Fight-end Bite CP",
+						"value": {
+							"uuid": {
+								"value": "37dcbe66-d005-4b71-9658-8e8a54b85107"
+							},
+							"const": {
+								"val": "5"
+							}
+						}
+					},
+					{
+						"name": "Fight-end Bite energy ceiling",
+						"value": {
+							"uuid": {
+								"value": "81f2fb2e-04f5-4cea-8069-e700bd4dbf11"
+							},
+							"const": {
+								"val": "55"
+							}
+						}
+					},
+					{
+						"name": "Final-global Bite CP",
+						"value": {
+							"uuid": {
+								"value": "b6c91349-dcae-4cb8-ae09-a853aac4cd35"
+							},
+							"const": {
+								"val": "2"
+							}
+						}
+					},
+					{
+						"name": "Final-global Bite window",
+						"value": {
+							"uuid": {
+								"value": "e267273b-d1a9-402d-8508-23dd9457d107"
+							},
+							"const": {
+								"val": "1s"
+							}
+						}
+					},
+					{
+						"name": "Ravage approach without Clearcasting",
+						"value": {
+							"uuid": {
+								"value": "470242ff-5ec4-4a8c-8e83-dd5ba509a0aa"
+							},
+							"const": {
+								"val": "10"
+							}
+						}
+					},
+					{
+						"name": "Ravage approach with Clearcasting",
+						"value": {
+							"uuid": {
+								"value": "2158f7d6-3e18-40c7-902a-81423e5308f6"
+							},
+							"const": {
+								"val": "35"
+							}
+						}
+					},
+					{
+						"name": "Skyborne Ravage approach without Clearcasting",
+						"value": {
+							"uuid": {
+								"value": "6acdc30d-bb64-4083-ad48-b580927853da"
+							},
+							"const": {
+								"val": "5"
+							}
+						}
+					},
+					{
+						"name": "Skyborne Ravage approach with Clearcasting",
+						"value": {
+							"uuid": {
+								"value": "0a1e7185-e2aa-483a-a22c-d12d161a953f"
+							},
+							"const": {
+								"val": "25"
+							}
+						}
+					},
+					{
+						"name": "Midfight Bite CP",
+						"value": {
+							"uuid": {
+								"value": "1a1bff51-00d5-441c-8aa1-32c6068431bc"
+							},
+							"const": {
+								"val": "4"
+							}
+						}
+					},
+					{
+						"name": "Midfight Bite minimum Rip remaining",
+						"value": {
+							"uuid": {
+								"value": "08260d61-976f-484b-b16d-c5e3dfa21d6b"
+							},
+							"const": {
+								"val": "2s"
+							}
+						}
+					},
+					{
+						"name": "Tea energy ceiling without Blood Frenzy",
+						"value": {
+							"uuid": {
+								"value": "f1b1e9ef-dcd8-44c3-816b-7751a3d2b083"
+							},
+							"const": {
+								"val": "25"
+							}
+						}
+					},
+					{
+						"name": "Bite energy target",
+						"value": {
+							"uuid": {
+								"value": "89608506-65ad-453e-a73f-3e09570aa00a"
+							},
+							"const": {
+								"val": "85"
+							}
+						}
+					},
+					{
+						"name": "Bite energy target with Clearcasting",
+						"value": {
+							"uuid": {
+								"value": "be40a0b8-0278-42b2-95ed-157ae71f137d"
+							},
+							"const": {
+								"val": "60"
+							}
+						}
+					},
+					{
+						"name": "Five-point Bite energy target",
+						"value": {
+							"uuid": {
+								"value": "fbeb9296-29ba-4fcd-824b-75371c16d5dd"
+							},
+							"const": {
+								"val": "70"
+							}
+						}
+					},
+					{
+						"name": "Five-point Bite energy target with Clearcasting",
+						"value": {
+							"uuid": {
+								"value": "a8c43a13-d553-405a-b6ec-52fb815900ab"
+							},
+							"const": {
+								"val": "50"
+							}
+						}
+					},
+					{
+						"name": "Shifting Power ready",
+						"value": {
+							"uuid": {
+								"value": "51adbf54-65b3-4fb5-b1e6-59abe123a8b0"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "ca6d486c-e1b6-4ddf-830c-bc90f22ded33"
+										},
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 768
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "f9c2dcb8-b986-451f-a631-740449966dc1"
+										},
+										"cmp": {
+											"op": "OpLe",
+											"lhs": {
+												"uuid": {
+													"value": "81a02e36-25ec-4f3c-b3fd-b7448578c01f"
+												},
+												"currentEnergy": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "b19647c5-9ec5-4659-aaa2-b17151a9edbf"
+												},
+												"variableRef": {
+													"name": "Shifting Power energy ceiling"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "dba72be8-4fd6-4f7a-a676-3bc51c8c9824"
+										},
+										"spellCanCast": {
+											"spellId": {
+												"spellId": 1322605
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Rake due",
+						"value": {
+							"uuid": {
+								"value": "087e1b20-5625-4edc-be28-b00dede8fcb2"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "fc3b22ad-899b-4faf-bcac-fa6efd8e3603"
+										},
+										"auraIsInactive": {
+											"sourceUnit": {
+												"type": "CurrentTarget"
+											},
+											"auraId": {
+												"spellId": 9904
+											},
+											"includeReactionTime": true
+										}
+									},
+									{
+										"uuid": {
+											"value": "947d4bf9-f76b-43d9-badf-8f7010e4de38"
+										},
+										"cmp": {
+											"op": "OpGt",
+											"lhs": {
+												"uuid": {
+													"value": "5e4c4840-b5b9-431c-9113-072624661bbe"
+												},
+												"remainingTime": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "d83f4bf0-2602-4968-a5e7-635d5b021a5f"
+												},
+												"const": {
+													"val": "6s"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Rip due",
+						"value": {
+							"uuid": {
+								"value": "1a0db5a7-f973-40fe-9cfb-4c4597a721e8"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "aa7cac1f-6076-4415-bd65-0e7e2e9cfe78"
+										},
+										"and": {
+											"vals": [
+												{
+													"uuid": {
+														"value": "1d1352b2-8fd7-4f4d-af53-9835b23cd6f7"
+													},
+													"cmp": {
+														"op": "OpGe",
+														"lhs": {
+															"uuid": {
+																"value": "a2a616de-4015-4d58-98b1-42fd790faaba"
+															},
+															"currentComboPoints": {}
+														},
+														"rhs": {
+															"uuid": {
+																"value": "316c6d33-f5f2-4faf-96ab-2767da891056"
+															},
+															"variableRef": {
+																"name": "Rip target CP"
+															}
+														}
+													}
+												},
+												{
+													"uuid": {
+														"value": "a9f9374c-7fb4-4019-bea1-b2aae1d220d3"
+													},
+													"or": {
+														"vals": [
+															{
+																"uuid": {
+																	"value": "de70ff39-3583-44e3-b373-a9e5c6955ea8"
+																},
+																"not": {
+																	"val": {
+																		"uuid": {
+																			"value": "8b91da29-ae10-43ce-9906-43403a85eb05"
+																		},
+																		"or": {
+																			"vals": [
+																				{
+																					"uuid": {
+																						"value": "5bc7d67e-1520-4c61-98ac-82b6576e00b9"
+																					},
+																					"variableRef": {
+																						"name": "No Blood Frenzy points"
+																					}
+																				},
+																				{
+																					"uuid": {
+																						"value": "c2f75771-f197-4ff5-8d69-d73ac6ccb899"
+																					},
+																					"variableRef": {
+																						"name": "Two Blood Frenzy points with Shifting Power"
+																					}
+																				}
+																			]
+																		}
+																	}
+																}
+															},
+															{
+																"uuid": {
+																	"value": "fa8e3635-3c38-45f6-afed-2634d5e23e15"
+																},
+																"cmp": {
+																	"op": "OpGe",
+																	"lhs": {
+																		"uuid": {
+																			"value": "9ee8b670-49ef-49a3-81dd-06403b70c260"
+																		},
+																		"currentComboPoints": {}
+																	},
+																	"rhs": {
+																		"uuid": {
+																			"value": "93b431c6-e950-4805-a132-ef7d40f85b93"
+																		},
+																		"variableRef": {
+																			"name": "Preferred Rip CP with zero or two Blood Frenzy points"
+																		}
+																	}
+																}
+															},
+															{
+																"uuid": {
+																	"value": "064e3bbe-8eee-4be7-b44d-1955108437cc"
+																},
+																"not": {
+																	"val": {
+																		"uuid": {
+																			"value": "a8a0d324-bc53-4c7f-ab08-feb95c28817e"
+																		},
+																		"variableRef": {
+																			"name": "One more Shred funds next-global Rip"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
+									{
+										"uuid": {
+											"value": "2770989f-a317-4ffc-bed3-b098f40069e6"
+										},
+										"auraIsInactive": {
+											"sourceUnit": {
+												"type": "CurrentTarget"
+											},
+											"auraId": {
+												"spellId": 9896
+											},
+											"includeReactionTime": true
+										}
+									},
+									{
+										"uuid": {
+											"value": "9f56348a-80d6-4537-81f2-25a2b9c0d5d3"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "70fea48e-7162-42e5-8e03-f893f6abd791"
+												},
+												"remainingTime": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "deda8d19-bc88-4bf4-941c-621df9b22949"
+												},
+												"variableRef": {
+													"name": "Rip minimum fight left"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Final-global Bite",
+						"value": {
+							"uuid": {
+								"value": "cc1e90e8-aa57-42e4-ace9-2359f92820cc"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "0765154c-835c-4027-8395-b676e4edfc5b"
+										},
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 768
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "cf07ae62-5b1b-419f-a7af-0cee5da855ff"
+										},
+										"cmp": {
+											"op": "OpLe",
+											"lhs": {
+												"uuid": {
+													"value": "f1c68fa0-06db-4560-ad96-7af6d4c140b8"
+												},
+												"remainingTime": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "12ad44f2-6c10-412c-85b0-32ba64b2c823"
+												},
+												"variableRef": {
+													"name": "Final-global Bite window"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "bd7f592e-633c-4a57-b096-35ddc3541d9b"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "a42f17e8-670e-45f7-9564-250fc366b59a"
+												},
+												"currentComboPoints": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "fb0486e9-cb98-4cb7-867b-3e03264f1dab"
+												},
+												"variableRef": {
+													"name": "Final-global Bite CP"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Ready to return to the main weapon",
+						"value": {
+							"uuid": {
+								"value": "fc91066a-8d30-4682-8a87-b82e10224fa9"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "ae1e2058-5261-4724-b9d1-b6e212746e31"
+										},
+										"activeItemSwapSet": {
+											"swapSet": "Swap1"
+										}
+									},
+									{
+										"uuid": {
+											"value": "62595c90-6f79-4864-822a-ff0ee9baf8e0"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "9c0cd4ba-96b8-4d1e-bd28-6c3554ad999e"
+												},
+												"currentTime": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "441d9f83-8617-43da-be9d-8280acbd2c81"
+												},
+												"const": {
+													"val": "30s"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "c74a4839-619b-4e50-aabc-c57d3a5382cd"
+										},
+										"not": {
+											"val": {
+												"uuid": {
+													"value": "bef57aaf-ac09-4214-83f7-0da24cc5d1f1"
+												},
+												"auraIsActive": {
+													"auraId": {
+														"spellId": 13494
+													}
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Ready to activate MCP",
+						"value": {
+							"uuid": {
+								"value": "85dee75f-7d27-47f3-ab14-1296f0d5cfcd"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "9bcb1a93-33ea-40d5-931a-a74c541b3bf1"
+										},
+										"not": {
+											"val": {
+												"uuid": {
+													"value": "77a18869-b535-431c-a591-c6d00ec03c43"
+												},
+												"auraIsActive": {
+													"auraId": {
+														"spellId": 9913
+													}
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "649a85d5-cad2-4adb-abde-a666fad8a681"
+										},
+										"cmp": {
+											"op": "OpLe",
+											"lhs": {
+												"uuid": {
+													"value": "2db5c59b-80a6-4c25-9d5a-9b53709a2e85"
+												},
+												"unitDistance": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "1ca8720c-0099-4433-b634-58c1364f89be"
+												},
+												"const": {
+													"val": "5"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Mana potion fits and is needed",
+						"value": {
+							"uuid": {
+								"value": "c1dc2f79-6bb8-4c08-a735-d7835f8e113f"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "3a699663-fb71-46fb-b9a7-057d6bafeb63"
+										},
+										"spellIsKnown": {
+											"spellId": {
+												"otherId": "OtherActionResourcePotion"
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "febcdbbd-d609-4701-8de1-4b798adf60af"
+										},
+										"cmp": {
+											"op": "OpLe",
+											"lhs": {
+												"uuid": {
+													"value": "e0b585e1-2341-4371-a589-4420fd9fadd7"
+												},
+												"gcdTimeToReady": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "911bc44d-b45f-4dd5-8f41-c457c46e1372"
+												},
+												"const": {
+													"val": "0s"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "6d5fdda2-9f05-423b-8a59-5914cd39391d"
+										},
+										"cmp": {
+											"op": "OpLe",
+											"lhs": {
+												"uuid": {
+													"value": "89be56c1-2951-4e67-89ab-7017c8ad05e1"
+												},
+												"spellTimeToReady": {
+													"spellId": {
+														"otherId": "OtherActionResourcePotion"
+													}
+												}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "c2ebb9fc-271b-43b1-b37a-a0d3ff117621"
+												},
+												"const": {
+													"val": "0s"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "abeb8367-bbb8-46ee-887a-67b4ca724154"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "528924d1-3364-4680-8d8e-64d67298ce68"
+												},
+												"math": {
+													"op": "OpSub",
+													"lhs": {
+														"uuid": {
+															"value": "7cf5de45-48da-49f1-a5e0-5e5be0776200"
+														},
+														"maxMana": {}
+													},
+													"rhs": {
+														"uuid": {
+															"value": "07d157e3-52f3-43b6-8ef6-0b28dace0c38"
+														},
+														"currentMana": {}
+													}
+												}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "0447819b-a99c-4cd8-837a-97853287f0ce"
+												},
+												"math": {
+													"op": "OpAdd",
+													"lhs": {
+														"uuid": {
+															"value": "fcbf3566-6619-4ee1-8744-a65125f258f0"
+														},
+														"const": {
+															"val": "2250"
+														}
+													},
+													"rhs": {
+														"uuid": {
+															"value": "221e0109-f998-4e94-8705-e557caf1f917"
+														},
+														"math": {
+															"op": "OpMul",
+															"lhs": {
+																"uuid": {
+																	"value": "08a7a11f-583c-4aa8-bc76-bf45c43600e6"
+																},
+																"currentManaRegen": {}
+															},
+															"rhs": {
+																"uuid": {
+																	"value": "f5213853-4232-47f5-ba79-bfc6a5692fe3"
+																},
+																"const": {
+																	"val": "5"
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "65eb7347-a94b-475c-a0b9-8b2bf5c1cbb4"
+										},
+										"or": {
+											"vals": [
+												{
+													"uuid": {
+														"value": "153d95db-2a61-41df-b09e-a1913d596d74"
+													},
+													"not": {
+														"val": {
+															"uuid": {
+																"value": "2690b624-e975-4432-af64-7bac0c1bb193"
+															},
+															"and": {
+																"vals": [
+																	{
+																		"uuid": {
+																			"value": "21437727-b4bd-49a4-ae92-88c1c93bc9ed"
+																		},
+																		"auraIsKnown": {
+																			"sourceUnit": {
+																				"type": "CurrentTarget"
+																			},
+																			"auraId": {
+																				"spellId": 20355,
+																				"tag": -1
+																			}
+																		}
+																	},
+																	{
+																		"uuid": {
+																			"value": "c27fe138-c785-4795-a82d-f2632e1a90ca"
+																		},
+																		"auraIsActive": {
+																			"sourceUnit": {
+																				"type": "CurrentTarget"
+																			},
+																			"auraId": {
+																				"spellId": 20355,
+																				"tag": -1
+																			}
+																		}
+																	}
+																]
+															}
+														}
+													}
+												},
+												{
+													"uuid": {
+														"value": "c91cf854-f632-400a-b1ab-dd452bff8e19"
+													},
+													"cmp": {
+														"op": "OpLt",
+														"lhs": {
+															"uuid": {
+																"value": "01ee782d-c7f6-4f53-a5a7-466feafac258"
+															},
+															"currentMana": {}
+														},
+														"rhs": {
+															"uuid": {
+																"value": "8ecf6f08-4d7b-446e-ba25-ab9c46ca83e4"
+															},
+															"math": {
+																"op": "OpAdd",
+																"lhs": {
+																	"uuid": {
+																		"value": "611b8504-216a-4046-83b9-e49853bfa3a4"
+																	},
+																	"math": {
+																		"op": "OpMul",
+																		"lhs": {
+																			"uuid": {
+																				"value": "0f24fb65-f102-47ae-bc3a-f5fce72c8aca"
+																			},
+																			"math": {
+																				"op": "OpDiv",
+																				"lhs": {
+																					"uuid": {
+																						"value": "7415a1aa-f40d-4559-99ff-c9f875dcfc17"
+																					},
+																					"min": {
+																						"vals": [
+																							{
+																								"uuid": {
+																									"value": "44f8b542-f176-4d7f-a9df-cc52b18acea5"
+																								},
+																								"remainingTime": {}
+																							},
+																							{
+																								"uuid": {
+																									"value": "596ae802-a177-47f2-8f57-805b18e4c80d"
+																								},
+																								"const": {
+																									"val": "120s"
+																								}
+																							}
+																						]
+																					}
+																				},
+																				"rhs": {
+																					"uuid": {
+																						"value": "b6951272-b293-4dce-af64-780fec004c57"
+																					},
+																					"const": {
+																						"val": "1s"
+																					}
+																				}
+																			}
+																		},
+																		"rhs": {
+																			"uuid": {
+																				"value": "33d0d2aa-407e-4cea-8f81-3d73f58763ad"
+																			},
+																			"const": {
+																				"val": "20"
+																			}
+																		}
+																	}
+																},
+																"rhs": {
+																	"uuid": {
+																		"value": "797512d8-19bc-45c5-80a9-140654f79c69"
+																	},
+																	"spellCurrentCost": {
+																		"spellId": {
+																			"spellId": 1322605
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Ready to use Elune's Light",
+						"value": {
+							"uuid": {
+								"value": "e15dcc0f-9ccd-40d9-9e5e-a5c8dce7c8e4"
+							},
+							"spellIsKnown": {
+								"spellId": {
+									"spellId": 1259799
+								}
+							}
+						}
+					},
+					{
+						"name": "Tea is selected and energy is low",
+						"value": {
+							"uuid": {
+								"value": "39fc8014-2008-46f5-a25d-e4a801d557ec"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "fce5de55-ad27-4773-8ebb-d09d88fab7b3"
+										},
+										"or": {
+											"vals": [
+												{
+													"uuid": {
+														"value": "995a5f62-4ada-4f6d-839b-f686857394fc"
+													},
+													"selectedConjured": {
+														"conjuredId": {
+															"itemId": 7676
+														}
+													}
+												},
+												{
+													"uuid": {
+														"value": "c81d27af-fe4b-44a3-bb74-e8dca947140c"
+													},
+													"selectedConjured": {
+														"conjuredId": {
+															"itemId": 12662
+														}
+													}
+												}
+											]
+										}
+									},
+									{
+										"uuid": {
+											"value": "cdc61985-e7cc-4e00-ba6a-625b814a4cec"
+										},
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 768
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "c416efdd-1954-47a3-8373-3a41d24afd8b"
+										},
+										"or": {
+											"vals": [
+												{
+													"uuid": {
+														"value": "6e6ba8c8-7064-4d16-94cb-329277fdde66"
+													},
+													"and": {
+														"vals": [
+															{
+																"uuid": {
+																	"value": "e4145ca1-210f-4188-89f6-e9ea5a7c9660"
+																},
+																"variableRef": {
+																	"name": "No Blood Frenzy points"
+																}
+															},
+															{
+																"uuid": {
+																	"value": "92b568a2-ec33-4e30-9409-d0c206431553"
+																},
+																"cmp": {
+																	"op": "OpLe",
+																	"lhs": {
+																		"uuid": {
+																			"value": "77fa65cf-5101-46b4-b022-6a490197a85b"
+																		},
+																		"currentEnergy": {}
+																	},
+																	"rhs": {
+																		"uuid": {
+																			"value": "6d196baf-26cb-411f-bc08-b7d61ca5e693"
+																		},
+																		"variableRef": {
+																			"name": "Tea energy ceiling without Blood Frenzy"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												},
+												{
+													"uuid": {
+														"value": "a269288b-935a-4531-b3ee-ee5efaf95d2b"
+													},
+													"and": {
+														"vals": [
+															{
+																"uuid": {
+																	"value": "4e8309ce-55ab-44ba-9e7b-de4f77793789"
+																},
+																"not": {
+																	"val": {
+																		"uuid": {
+																			"value": "5f4a3fc3-b187-4377-841a-13db102df21d"
+																		},
+																		"variableRef": {
+																			"name": "No Blood Frenzy points"
+																		}
+																	}
+																}
+															},
+															{
+																"uuid": {
+																	"value": "a129e4e1-88aa-4fba-b3bd-3b5d7869df5f"
+																},
+																"cmp": {
+																	"op": "OpLe",
+																	"lhs": {
+																		"uuid": {
+																			"value": "dc2f2a6a-c77b-454a-ac5c-2f320f82e7d2"
+																		},
+																		"currentEnergy": {}
+																	},
+																	"rhs": {
+																		"uuid": {
+																			"value": "16983921-7a35-44c7-800b-d28a8d830bf0"
+																		},
+																		"variableRef": {
+																			"name": "Tea energy ceiling"
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Rune can restore mana after Tea",
+						"value": {
+							"uuid": {
+								"value": "0dafe5d0-5b1f-4807-9688-0d95fbb28655"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "4a7fa51f-512d-4e4a-b83d-3f94aebd48cd"
+										},
+										"selectedConjured": {
+											"conjuredId": {
+												"itemId": 12662
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "ecbb5438-38ce-4845-9b83-553f313c8f5d"
+										},
+										"cmp": {
+											"op": "OpGt",
+											"lhs": {
+												"uuid": {
+													"value": "5b566ab4-68f0-4f55-be6f-7aecb7052a0a"
+												},
+												"spellTimeToReady": {
+													"spellId": {
+														"itemId": 7676
+													}
+												}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "6c7e4c3e-7a25-47a6-9db2-2282ae6eab8e"
+												},
+												"const": {
+													"val": "0s"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "e2917f2d-2855-419d-830a-73b0b13d9bad"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "fdce708c-682c-4fbc-8350-2d1e08aa84ce"
+												},
+												"math": {
+													"op": "OpSub",
+													"lhs": {
+														"uuid": {
+															"value": "ed30459f-2986-4afb-9976-d25669b51279"
+														},
+														"maxMana": {}
+													},
+													"rhs": {
+														"uuid": {
+															"value": "045e683a-0fdb-46f9-8778-f2d5f77b2ad9"
+														},
+														"currentMana": {}
+													}
+												}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "d1c52715-9fe9-435a-8ced-3b6c4b9f1ad7"
+												},
+												"const": {
+													"val": "1500"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "e1b7c57a-4c94-4b60-a8d3-d8148f747281"
+										},
+										"cmp": {
+											"op": "OpGt",
+											"lhs": {
+												"uuid": {
+													"value": "9a85e5c3-a95f-477d-a1ba-639da03f17d6"
+												},
+												"currentHealth": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "300228be-3de4-4422-803b-276362e5edfc"
+												},
+												"const": {
+													"val": "2000"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Fight-end Bite is worthwhile",
+						"value": {
+							"uuid": {
+								"value": "79673c6a-1ac9-4a39-a898-3d16fb718a16"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "9e06ef64-f0d0-478d-964d-626fdc9979ae"
+										},
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 768
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "1dcc1ec7-67fd-4bd8-8946-be38314203fe"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "e9b660fb-768c-46c1-9253-190c0af7d040"
+												},
+												"currentComboPoints": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "afe71bb0-49d2-4710-a7e5-9770ef77baf5"
+												},
+												"variableRef": {
+													"name": "Fight-end Bite CP"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "c5783c7d-1367-43f3-bae1-88ab7b25c6c4"
+										},
+										"or": {
+											"vals": [
+												{
+													"uuid": {
+														"value": "5e2b0845-f71e-45fd-a466-a7e5ecf050d0"
+													},
+													"variableRef": {
+														"name": "Predatory Discipline keeps Bite energy"
+													}
+												},
+												{
+													"uuid": {
+														"value": "fc230e46-7616-4ed2-aa07-4cd80ab23d97"
+													},
+													"cmp": {
+														"op": "OpLe",
+														"lhs": {
+															"uuid": {
+																"value": "2126aaef-919c-40ed-a1d9-1fcd121e673f"
+															},
+															"currentEnergy": {}
+														},
+														"rhs": {
+															"uuid": {
+																"value": "db128c26-29f7-48f9-85d8-50bfb3a242f5"
+															},
+															"variableRef": {
+																"name": "Fight-end Bite energy ceiling"
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									{
+										"uuid": {
+											"value": "f11228e0-e1e5-49cf-8ca3-0843dfdc72ba"
+										},
+										"cmp": {
+											"op": "OpLt",
+											"lhs": {
+												"uuid": {
+													"value": "c981ca00-93f0-457c-822f-080f03e49855"
+												},
+												"remainingTime": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "01026a61-9c62-43b8-a52e-4d8b29ac3eb2"
+												},
+												"variableRef": {
+													"name": "Rip minimum fight left"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Claw can replace Shred",
+						"value": {
+							"uuid": {
+								"value": "e29d5ac3-4d3b-4ca2-99ce-d179bca99ec0"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "89cf741b-e75f-4020-a3d8-85ed4d959792"
+										},
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 768
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "aed66d40-48f1-4436-894d-95900bef15ad"
+										},
+										"not": {
+											"val": {
+												"uuid": {
+													"value": "6725d11c-e90e-4425-a262-749c9495593d"
+												},
+												"spellCanCast": {
+													"spellId": {
+														"spellId": 9830
+													}
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "665feadc-0c3d-4f95-8dfb-1af25c59bfdb"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "83719f6a-4c19-401e-a4bf-938f3da72e7f"
+												},
+												"currentEnergy": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "28826499-5300-40cd-8656-d8aef362a945"
+												},
+												"spellCurrentCost": {
+													"spellId": {
+														"spellId": 9830
+													}
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Innervate can restore needed mana",
+						"value": {
+							"uuid": {
+								"value": "2105a8e5-f971-4654-85af-3b93be71ed16"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "15bcbc08-c723-438c-9da7-274afccc6a70"
+										},
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 768
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "2ff8b8c2-8dda-4910-a9fa-adedeb96167a"
+										},
+										"spellIsReady": {
+											"spellId": {
+												"spellId": 29166
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "7fffc19c-62ce-4d8d-bf60-d0ebd17fb841"
+										},
+										"or": {
+											"vals": [
+												{
+													"uuid": {
+														"value": "8fa37c20-7a47-4076-bea4-fd51ecdf364d"
+													},
+													"not": {
+														"val": {
+															"uuid": {
+																"value": "4b1cce10-6c91-4274-ab8f-2881d2b7559b"
+															},
+															"auraIsKnown": {
+																"auraId": {
+																	"spellId": 1270842
+																}
+															}
+														}
+													}
+												},
+												{
+													"uuid": {
+														"value": "ebed02fc-9baf-4b42-a524-a7dd1937d1d0"
+													},
+													"not": {
+														"val": {
+															"uuid": {
+																"value": "512eec2c-0d7e-45f7-97ea-3b2b8c4fea9a"
+															},
+															"auraIsActive": {
+																"auraId": {
+																	"spellId": 1270842
+																}
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									{
+										"uuid": {
+											"value": "f6d49a5b-4753-4b76-abe2-f71b7771ff42"
+										},
+										"cmp": {
+											"op": "OpLt",
+											"lhs": {
+												"uuid": {
+													"value": "641faf1b-e930-454c-8de1-38cf6fba786c"
+												},
+												"currentMana": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "9684f675-f88d-4bd2-a27a-ee88e335b71a"
+												},
+												"const": {
+													"val": "1400"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "ee26dd0f-189a-48a7-a882-fff49878deeb"
+										},
+										"cmp": {
+											"op": "OpLt",
+											"lhs": {
+												"uuid": {
+													"value": "880f9f15-2067-40ce-9cd4-31a269dfd038"
+												},
+												"currentMana": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "38ecb5ef-0f1d-4a2e-aaa6-5b33c89c4abb"
+												},
+												"math": {
+													"op": "OpMul",
+													"lhs": {
+														"uuid": {
+															"value": "5dacd612-49b7-4b54-a1c7-dee104c1f1cf"
+														},
+														"remainingTime": {}
+													},
+													"rhs": {
+														"uuid": {
+															"value": "c1e12de3-f7fb-484c-986b-007b65a1a8cf"
+														},
+														"const": {
+															"val": "50"
+														}
+													}
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "3ec2c97f-f8d1-4bd1-b605-6cb1ef94e169"
+										},
+										"cmp": {
+											"op": "OpLe",
+											"lhs": {
+												"uuid": {
+													"value": "a4a78eef-aed1-4e6f-a7ef-2d886607ec88"
+												},
+												"gcdTimeToReady": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "fce4c339-e35b-4daa-aeea-4de48ae6d070"
+												},
+												"const": {
+													"val": "0s"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "ae25acaa-2ab6-4141-86ff-8603c100f156"
+										},
+										"cmp": {
+											"op": "OpLe",
+											"lhs": {
+												"uuid": {
+													"value": "18305d08-62eb-412f-8988-0c1d94af75d1"
+												},
+												"currentEnergy": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "43116a05-b9f9-442d-b66b-f1e969fa362a"
+												},
+												"const": {
+													"val": "30"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "6db9bfae-191c-4d6b-97b9-0ba6cb83cc6e"
+										},
+										"not": {
+											"val": {
+												"uuid": {
+													"value": "958ff7cf-93f1-4137-b202-9d955b8e1fe0"
+												},
+												"auraIsActive": {
+													"auraId": {
+														"spellId": 16870
+													}
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "e168383a-ab36-4552-a027-3c0285f44905"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "fd4504c4-be91-4b54-9389-a4bfd4c59ef0"
+												},
+												"remainingTime": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "90d90daa-469a-4bb8-b5fc-2d9017d1cf7a"
+												},
+												"const": {
+													"val": "15s"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Ravage opener fits the approach",
+						"value": {
+							"uuid": {
+								"value": "3ae3efc9-5331-41ee-b3e8-7f96b8662a13"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "14c820cb-d631-4dec-8b7f-609aaf2ed278"
+										},
+										"auraIsKnown": {
+											"sourceUnit": {
+												"type": "CurrentTarget"
+											},
+											"auraId": {
+												"spellId": 9907,
+												"tag": -1
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "87dddb2c-005c-4c7c-a20e-1e0a6e2b1bbd"
+										},
+										"auraIsActive": {
+											"sourceUnit": {
+												"type": "CurrentTarget"
+											},
+											"auraId": {
+												"spellId": 9907,
+												"tag": -1
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "d3f5a735-44a7-42d5-8faa-4d2926ea1234"
+										},
+										"or": {
+											"vals": [
+												{
+													"uuid": {
+														"value": "8727d959-deb3-4616-af0c-c3fff86ace82"
+													},
+													"and": {
+														"vals": [
+															{
+																"uuid": {
+																	"value": "d0d78e7f-7029-4c44-a8a1-0679513c1023"
+																},
+																"auraIsActive": {
+																	"auraId": {
+																		"spellId": 16870
+																	}
+																}
+															},
+															{
+																"uuid": {
+																	"value": "e8289922-e932-40b1-96dd-72c7a5d5d48d"
+																},
+																"cmp": {
+																	"op": "OpLe",
+																	"lhs": {
+																		"uuid": {
+																			"value": "c1675b81-85cc-4ced-9e2a-0c14dd99a2e8"
+																		},
+																		"unitDistance": {}
+																	},
+																	"rhs": {
+																		"uuid": {
+																			"value": "b34d4662-1302-4ae4-b437-6c9736b07e58"
+																		},
+																		"variableRef": {
+																			"name": "Ravage approach with Clearcasting"
+																		}
+																	}
+																}
+															},
+															{
+																"uuid": {
+																	"value": "5698e8e8-1fc9-44fd-9cb6-2cb7018d747e"
+																},
+																"or": {
+																	"vals": [
+																		{
+																			"uuid": {
+																				"value": "2a88f9de-a8b5-478a-81e7-2a0ce579328b"
+																			},
+																			"not": {
+																				"val": {
+																					"uuid": {
+																						"value": "efaaf130-05ba-4d86-8b85-36507a97f469"
+																					},
+																					"or": {
+																						"vals": [
+																							{
+																								"uuid": {
+																									"value": "2e0cbd1e-cedf-433a-b893-949847fe2cc6"
+																								},
+																								"spellIsKnown": {
+																									"spellId": {
+																										"spellId": 1259705
+																									}
+																								}
+																							},
+																							{
+																								"uuid": {
+																									"value": "50ce4e15-38cf-400f-abdf-a81912505c68"
+																								},
+																								"spellIsKnown": {
+																									"spellId": {
+																										"spellId": 1259686
+																									}
+																								}
+																							}
+																						]
+																					}
+																				}
+																			}
+																		},
+																		{
+																			"uuid": {
+																				"value": "2e674392-211c-4265-b630-aca805982335"
+																			},
+																			"cmp": {
+																				"op": "OpLe",
+																				"lhs": {
+																					"uuid": {
+																						"value": "e4240a37-86b7-4f8d-bd7f-4ced3e71a2fa"
+																					},
+																					"unitDistance": {}
+																				},
+																				"rhs": {
+																					"uuid": {
+																						"value": "801d1de5-d132-4447-a271-b64fcccc6c2a"
+																					},
+																					"variableRef": {
+																						"name": "Skyborne Ravage approach with Clearcasting"
+																					}
+																				}
+																			}
+																		}
+																	]
+																}
+															}
+														]
+													}
+												},
+												{
+													"uuid": {
+														"value": "639385ec-9806-4e37-a2c7-ce526092833a"
+													},
+													"and": {
+														"vals": [
+															{
+																"uuid": {
+																	"value": "12e0672f-51f4-40c5-ac2e-8ffa32e3482e"
+																},
+																"not": {
+																	"val": {
+																		"uuid": {
+																			"value": "b280b0fa-7a07-48ea-9e7e-94257e50b9e6"
+																		},
+																		"auraIsActive": {
+																			"auraId": {
+																				"spellId": 16870
+																			}
+																		}
+																	}
+																}
+															},
+															{
+																"uuid": {
+																	"value": "a7b7a0a7-5eab-47ba-a417-5ec7eafd2c02"
+																},
+																"cmp": {
+																	"op": "OpLe",
+																	"lhs": {
+																		"uuid": {
+																			"value": "2d4a16c5-112a-43ef-93a9-361542f4c4c4"
+																		},
+																		"unitDistance": {}
+																	},
+																	"rhs": {
+																		"uuid": {
+																			"value": "a37d9158-927b-4153-8066-337697d51c36"
+																		},
+																		"variableRef": {
+																			"name": "Ravage approach without Clearcasting"
+																		}
+																	}
+																}
+															},
+															{
+																"uuid": {
+																	"value": "7d510f2e-46af-46c2-9758-8bd51a0849ff"
+																},
+																"or": {
+																	"vals": [
+																		{
+																			"uuid": {
+																				"value": "3ef58a30-04df-4bf6-9054-0e3879b13f65"
+																			},
+																			"not": {
+																				"val": {
+																					"uuid": {
+																						"value": "8f55ccaa-d1fb-49fa-a706-3fbc293c2ab1"
+																					},
+																					"or": {
+																						"vals": [
+																							{
+																								"uuid": {
+																									"value": "23849c0f-7b68-4519-bff8-78b87d9510e1"
+																								},
+																								"spellIsKnown": {
+																									"spellId": {
+																										"spellId": 1259705
+																									}
+																								}
+																							},
+																							{
+																								"uuid": {
+																									"value": "84e08308-df6b-49a2-b8fd-ed6d827b9d05"
+																								},
+																								"spellIsKnown": {
+																									"spellId": {
+																										"spellId": 1259686
+																									}
+																								}
+																							}
+																						]
+																					}
+																				}
+																			}
+																		},
+																		{
+																			"uuid": {
+																				"value": "d50e509c-45cf-4b7c-838d-bd89a1440aee"
+																			},
+																			"cmp": {
+																				"op": "OpLe",
+																				"lhs": {
+																					"uuid": {
+																						"value": "ea9ef9f7-9bb9-4047-9264-c7aaf7bb22a8"
+																					},
+																					"unitDistance": {}
+																				},
+																				"rhs": {
+																					"uuid": {
+																						"value": "71b8d260-c3f7-403e-aaf2-36a63ed18dd6"
+																					},
+																					"variableRef": {
+																						"name": "Skyborne Ravage approach without Clearcasting"
+																					}
+																				}
+																			}
+																		}
+																	]
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Drop Prowl for this opener",
+						"value": {
+							"uuid": {
+								"value": "066d3605-92ec-42f4-9e5b-317fce018fee"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "4f35d9e6-3594-445a-b93c-edc0ee0890a3"
+										},
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 9913
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "3664465c-8775-4e42-81e1-5ce652e8c198"
+										},
+										"or": {
+											"vals": [
+												{
+													"uuid": {
+														"value": "6af843ad-1d6b-4c5b-95ae-651d4c035dd6"
+													},
+													"not": {
+														"val": {
+															"uuid": {
+																"value": "78f458d7-54ff-4ee3-af42-08370fd8e050"
+															},
+															"variableRef": {
+																"name": "Ravage opener fits the approach"
+															}
+														}
+													}
+												},
+												{
+													"uuid": {
+														"value": "5b22e0c4-36ae-4f8e-b5f5-59e69c7eaffe"
+													},
+													"and": {
+														"vals": [
+															{
+																"uuid": {
+																	"value": "e22c83ab-5ec6-47aa-b6b3-0ab22ac6f29d"
+																},
+																"cmp": {
+																	"op": "OpLe",
+																	"lhs": {
+																		"uuid": {
+																			"value": "011014fb-624a-4e24-a2ee-dd4c7dfc3ecb"
+																		},
+																		"unitDistance": {}
+																	},
+																	"rhs": {
+																		"uuid": {
+																			"value": "8b850792-6e56-46d8-84b0-b60a6aadaff3"
+																		},
+																		"const": {
+																			"val": "5"
+																		}
+																	}
+																}
+															},
+															{
+																"uuid": {
+																	"value": "e626985b-59f1-4189-a00b-e4b0cff464a9"
+																},
+																"not": {
+																	"val": {
+																		"uuid": {
+																			"value": "3181f426-31ae-4b4e-a346-ab27312e3400"
+																		},
+																		"spellCanCast": {
+																			"spellId": {
+																				"spellId": 9867
+																			}
+																		}
+																	}
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Two Blood Frenzy points with Shifting Power",
+						"value": {
+							"uuid": {
+								"value": "1f79068d-7dc3-4ddd-9043-b7a9500dfac8"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "930a085e-79af-4415-a443-7c88cbc580fe"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "31076e2c-1d3b-47c7-9cc9-fd23ba455d2c"
+												},
+												"talentRank": {
+													"talentId": {
+														"spellId": 16958
+													}
+												}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "30d70d8d-9e92-4f48-874b-ad5c69f6657b"
+												},
+												"const": {
+													"val": "2"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "236ffba9-bf41-4fc5-924f-631b69d13834"
+										},
+										"talentIsKnown": {
+											"talentId": {
+												"spellId": 1322605
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "One more Shred funds next-global Rip",
+						"value": {
+							"uuid": {
+								"value": "cfc2a343-41ad-4f85-96ef-36feccb8b2f3"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "658f62bb-c2ff-4411-a3fb-c1fa5378ac8d"
+										},
+										"spellCanCast": {
+											"spellId": {
+												"spellId": 9830
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "a7ff1d93-702f-4cfb-be7c-7c718dcf7a66"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "7eba6856-cb64-4f27-a34c-95104ace3264"
+												},
+												"remainingTime": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "f2e113c6-1db1-4041-b80c-0f92123ad8f8"
+												},
+												"math": {
+													"op": "OpAdd",
+													"lhs": {
+														"uuid": {
+															"value": "9215c5b2-8057-4d5e-8567-375942436983"
+														},
+														"variableRef": {
+															"name": "Rip minimum fight left"
+														}
+													},
+													"rhs": {
+														"uuid": {
+															"value": "c65c00df-2fc8-433e-9d04-8a6b2c037999"
+														},
+														"const": {
+															"val": "1s"
+														}
+													}
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "31675eff-e61d-4eef-ab5f-953485fb3894"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "8acbbfb2-dfb0-4b36-a6c9-131fd07a7d9a"
+												},
+												"math": {
+													"op": "OpAdd",
+													"lhs": {
+														"uuid": {
+															"value": "8a028237-1fda-4857-b5ac-c05f6053ba2f"
+														},
+														"currentEnergy": {}
+													},
+													"rhs": {
+														"uuid": {
+															"value": "fd0ab1d9-55e4-41f6-b04d-213452942331"
+														},
+														"const": {
+															"val": "10"
+														}
+													}
+												}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "f0197be2-6e2d-4ac9-96fb-d528a0d23b2a"
+												},
+												"math": {
+													"op": "OpAdd",
+													"lhs": {
+														"uuid": {
+															"value": "1db686ad-8043-4a9b-9e6d-51bb4204cd5f"
+														},
+														"spellCurrentCost": {
+															"spellId": {
+																"spellId": 9830
+															}
+														}
+													},
+													"rhs": {
+														"uuid": {
+															"value": "3c05a312-cf80-4a7c-973f-35a82c6f4f07"
+														},
+														"spellCurrentCost": {
+															"spellId": {
+																"spellId": 9896
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Midfight Bite is worthwhile",
+						"value": {
+							"uuid": {
+								"value": "82348f51-1aab-40b2-828f-ae9a10febdbc"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "ae0e71dc-db3b-4a67-a845-ce739642ca00"
+										},
+										"variableRef": {
+											"name": "Bite combo points and Rip window"
+										}
+									},
+									{
+										"uuid": {
+											"value": "da069d7c-057e-4211-b293-a71025f49e0c"
+										},
+										"or": {
+											"vals": [
+												{
+													"uuid": {
+														"value": "b460170d-fdd0-4af6-9f76-25d7530eb4e1"
+													},
+													"or": {
+														"vals": [
+															{
+																"uuid": {
+																	"value": "f680f839-1b2e-4b42-aa35-4c9519a539ec"
+																},
+																"and": {
+																	"vals": [
+																		{
+																			"uuid": {
+																				"value": "be4b946a-8ab4-40a8-aab9-3fd6262c431d"
+																			},
+																			"auraIsActive": {
+																				"auraId": {
+																					"spellId": 16870
+																				}
+																			}
+																		},
+																		{
+																			"uuid": {
+																				"value": "699e9d1b-a75d-4d52-90c2-182860accc9a"
+																			},
+																			"cmp": {
+																				"op": "OpGe",
+																				"lhs": {
+																					"uuid": {
+																						"value": "d1b40e71-6efc-467f-9a49-3630e8e9c296"
+																					},
+																					"currentEnergy": {}
+																				},
+																				"rhs": {
+																					"uuid": {
+																						"value": "b246f414-ceea-4f32-a644-0dc970c4f610"
+																					},
+																					"variableRef": {
+																						"name": "Bite energy target with Clearcasting"
+																					}
+																				}
+																			}
+																		}
+																	]
+																}
+															},
+															{
+																"uuid": {
+																	"value": "39add5b5-a356-4da9-84bf-7e5ccfdf304a"
+																},
+																"and": {
+																	"vals": [
+																		{
+																			"uuid": {
+																				"value": "ade796b7-909c-4b89-85ee-854eb0e87f0d"
+																			},
+																			"not": {
+																				"val": {
+																					"uuid": {
+																						"value": "3ff63389-39d5-4905-b752-b65acae6bb8d"
+																					},
+																					"auraIsActive": {
+																						"auraId": {
+																							"spellId": 16870
+																						}
+																					}
+																				}
+																			}
+																		},
+																		{
+																			"uuid": {
+																				"value": "4fe2cde1-b177-4709-a9ab-dfc9d9a0cf1c"
+																			},
+																			"cmp": {
+																				"op": "OpGe",
+																				"lhs": {
+																					"uuid": {
+																						"value": "c1afe9be-dec9-4bbd-a1c2-8405efde6424"
+																					},
+																					"currentEnergy": {}
+																				},
+																				"rhs": {
+																					"uuid": {
+																						"value": "f9217129-40e3-4a01-84c3-47fe8fd8429a"
+																					},
+																					"variableRef": {
+																						"name": "Bite energy target"
+																					}
+																				}
+																			}
+																		}
+																	]
+																}
+															}
+														]
+													}
+												},
+												{
+													"uuid": {
+														"value": "6a756d03-e84b-46a3-8c08-ea88026addaf"
+													},
+													"and": {
+														"vals": [
+															{
+																"uuid": {
+																	"value": "708d8da2-1f58-43b3-8840-89a9396bb1fc"
+																},
+																"cmp": {
+																	"op": "OpGe",
+																	"lhs": {
+																		"uuid": {
+																			"value": "e8682147-5b4e-4a61-8b43-23306718d50c"
+																		},
+																		"currentComboPoints": {}
+																	},
+																	"rhs": {
+																		"uuid": {
+																			"value": "23546442-d9d5-4927-923f-1d1367f1ec2d"
+																		},
+																		"const": {
+																			"val": "5"
+																		}
+																	}
+																}
+															},
+															{
+																"uuid": {
+																	"value": "b9cb7e6c-f963-4bfe-83fd-133d88822f83"
+																},
+																"or": {
+																	"vals": [
+																		{
+																			"uuid": {
+																				"value": "ec8498e8-e3d3-4cff-8527-d30d9fbb818b"
+																			},
+																			"and": {
+																				"vals": [
+																					{
+																						"uuid": {
+																							"value": "91c9d720-4884-499a-a693-b7622a9e67c5"
+																						},
+																						"not": {
+																							"val": {
+																								"uuid": {
+																									"value": "e7117e01-8386-4f0f-b4a7-8f5e273aadd2"
+																								},
+																								"auraIsActive": {
+																									"auraId": {
+																										"spellId": 16870
+																									}
+																								}
+																							}
+																						}
+																					},
+																					{
+																						"uuid": {
+																							"value": "cbd4a62b-cf6d-4dab-a034-e55cb961dd15"
+																						},
+																						"cmp": {
+																							"op": "OpGe",
+																							"lhs": {
+																								"uuid": {
+																									"value": "15b067c7-d462-4320-84ae-72e5337d5f8a"
+																								},
+																								"currentEnergy": {}
+																							},
+																							"rhs": {
+																								"uuid": {
+																									"value": "ccb827cf-aa7c-44f6-875c-3eae227871b8"
+																								},
+																								"variableRef": {
+																									"name": "Five-point Bite energy target"
+																								}
+																							}
+																						}
+																					}
+																				]
+																			}
+																		},
+																		{
+																			"uuid": {
+																				"value": "ca6d5a76-7cd8-43c9-9154-de8178e135f3"
+																			},
+																			"and": {
+																				"vals": [
+																					{
+																						"uuid": {
+																							"value": "5f1a553e-08e0-4cfe-b86f-5a70ba9da904"
+																						},
+																						"auraIsActive": {
+																							"auraId": {
+																								"spellId": 16870
+																							}
+																						}
+																					},
+																					{
+																						"uuid": {
+																							"value": "a39b54ff-f97e-462e-bca7-a4645e142ec7"
+																						},
+																						"cmp": {
+																							"op": "OpGe",
+																							"lhs": {
+																								"uuid": {
+																									"value": "8a18870a-e9a5-4a84-a6f8-20ae6a3fb8e8"
+																								},
+																								"currentEnergy": {}
+																							},
+																							"rhs": {
+																								"uuid": {
+																									"value": "a6f07e5f-2dc5-4ec2-ad28-d1ff2b9157fd"
+																								},
+																								"variableRef": {
+																									"name": "Five-point Bite energy target with Clearcasting"
+																								}
+																							}
+																						}
+																					}
+																				]
+																			}
+																		}
+																	]
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "No Blood Frenzy points",
+						"value": {
+							"uuid": {
+								"value": "220bad77-0561-4886-b85b-7ae9199dec33"
+							},
+							"cmp": {
+								"op": "OpEq",
+								"lhs": {
+									"uuid": {
+										"value": "110150f4-a07f-47d7-b328-9e0817fb1274"
+									},
+									"talentRank": {
+										"talentId": {
+											"spellId": 16958
+										}
+									}
+								},
+								"rhs": {
+									"uuid": {
+										"value": "59c9a67f-db95-4a1e-b9d5-af8970b7411a"
+									},
+									"const": {
+										"val": "0"
+									}
+								}
+							}
+						}
+					},
+					{
+						"name": "Bite combo points and Rip window",
+						"value": {
+							"uuid": {
+								"value": "725832f2-8d85-4c40-ba27-3a466515c371"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "59ea00fa-f62c-41cc-a230-f752f51cf3a8"
+										},
+										"variableRef": {
+											"name": "Predatory Discipline keeps Bite energy"
+										}
+									},
+									{
+										"uuid": {
+											"value": "60b38a7f-5982-49c7-bc00-c91626db5fa0"
+										},
+										"auraIsActive": {
+											"auraId": {
+												"spellId": 768
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "834542f7-809d-4090-bba5-e3d18e011ad5"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "51331742-9a27-4516-92c9-597c3bdba1a2"
+												},
+												"currentComboPoints": {}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "7ffd9e30-8a67-4db6-b559-0ce9a3b5eaad"
+												},
+												"variableRef": {
+													"name": "Midfight Bite CP"
+												}
+											}
+										}
+									},
+									{
+										"uuid": {
+											"value": "8228a1bb-5af0-4c6d-95ec-7b3b296d5c39"
+										},
+										"cmp": {
+											"op": "OpGe",
+											"lhs": {
+												"uuid": {
+													"value": "44bf39b8-8379-4e9c-a89a-9265a868e25e"
+												},
+												"dotRemainingTime": {
+													"spellId": {
+														"spellId": 9896
+													}
+												}
+											},
+											"rhs": {
+												"uuid": {
+													"value": "b4fe8de7-9fb0-4a6e-9a90-7b19e5f88f15"
+												},
+												"variableRef": {
+													"name": "Midfight Bite minimum Rip remaining"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Pool energy for Bite",
+						"value": {
+							"uuid": {
+								"value": "4f55b8df-4ed3-40eb-b1f1-4a9b480e9112"
+							},
+							"and": {
+								"vals": [
+									{
+										"uuid": {
+											"value": "8f269e63-6e1a-496a-9b2a-caf6df237f66"
+										},
+										"variableRef": {
+											"name": "Bite combo points and Rip window"
+										}
+									},
+									{
+										"uuid": {
+											"value": "df78ca35-29f9-4b4f-a8e8-f27255e50029"
+										},
+										"not": {
+											"val": {
+												"uuid": {
+													"value": "fb86d0bd-42cb-4d56-bb9a-6992ded44ce5"
+												},
+												"variableRef": {
+													"name": "Midfight Bite is worthwhile"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": "Predatory Discipline keeps Bite energy",
+						"value": {
+							"uuid": {
+								"value": "fc8ec37a-67bd-4a47-993d-b0f8faf53e6f"
+							},
+							"talentIsKnown": {
+								"talentId": {
+									"spellId": 1328613
+								}
+							}
+						}
+					}
+				]
+			},
+			"reactionTimeMs": 250,
+			"distanceFromTarget": 25,
+			"healingModel": {},
+			"database": {
+				"items": [
+					{
+						"id": 8345,
+						"name": "Wolfshead Helm",
+						"type": "ItemTypeHead",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 26,
+								"stats": {
+									"13": 10,
+									"27": 109
+								},
+								"ilvl": 45
+							}
+						},
+						"itemEffects": [
+							{
+								"buffId": 17768,
+								"buffName": "Wolfshead Helm (17768)"
+							}
+						],
+						"classAllowlist": ["ClassDruid"]
+					},
+					{
+						"id": 19491,
+						"name": "Amulet of the Darkmoon",
+						"type": "ItemTypeNeck",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 27,
+								"stats": {
+									"0": 10,
+									"1": 19,
+									"2": 10
+								},
+								"ilvl": 65
+							}
+						}
+					},
+					{
+						"id": 271955,
+						"name": "Theramore Pauldrons",
+						"type": "ItemTypeShoulder",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 36,
+								"stats": {
+									"1": 27,
+									"2": 12,
+									"18": 14,
+									"27": 148
+								},
+								"ilvl": 65
+							}
+						}
+					},
+					{
+						"id": 18511,
+						"name": "Shifting Cloak",
+						"type": "ItemTypeBack",
+						"armorType": "ArmorTypeCloth",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 25,
+								"stats": {
+									"1": 17,
+									"2": 8,
+									"25": 12,
+									"27": 48
+								},
+								"ilvl": 62
+							}
+						}
+					},
+					{
+						"id": 252484,
+						"name": "Timbermaw Tunic",
+						"type": "ItemTypeChest",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 45,
+								"stats": {
+									"0": 33,
+									"1": 18,
+									"18": 14,
+									"27": 187
+								},
+								"ilvl": 61
+							}
+						}
+					},
+					{
+						"id": 19587,
+						"name": "Forest Stalker's Bracers",
+						"type": "ItemTypeWrist",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 27,
+								"stats": {
+									"0": 11,
+									"1": 19,
+									"2": 8,
+									"27": 86
+								},
+								"ilvl": 65
+							}
+						}
+					},
+					{
+						"id": 19049,
+						"name": "Timbermaw Brawlers",
+						"type": "ItemTypeHands",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 26,
+								"stats": {
+									"0": 21,
+									"1": 14,
+									"2": 9,
+									"27": 107
+								},
+								"ilvl": 61
+							}
+						}
+					},
+					{
+						"id": 272396,
+						"name": "Shifter's Belt",
+						"type": "ItemTypeWaist",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 33,
+								"stats": {
+									"0": 14,
+									"1": 24,
+									"2": 11,
+									"27": 104
+								},
+								"ilvl": 60
+							}
+						},
+						"classAllowlist": ["ClassDruid"]
+					},
+					{
+						"id": 15065,
+						"name": "Warbear Woolies",
+						"type": "ItemTypeLegs",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 33,
+								"stats": {
+									"0": 28,
+									"1": 18,
+									"2": 12,
+									"27": 142
+								},
+								"ilvl": 57
+							}
+						}
+					},
+					{
+						"id": 20715,
+						"name": "Dunestalker's Boots",
+						"type": "ItemTypeFeet",
+						"armorType": "ArmorTypeLeather",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 27,
+								"stats": {
+									"0": 9,
+									"1": 19,
+									"2": 10,
+									"27": 121
+								},
+								"ilvl": 63
+							}
+						}
+					},
+					{
+						"id": 19325,
+						"name": "Don Julio's Band",
+						"type": "ItemTypeFinger",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 25,
+								"stats": {
+									"2": 10,
+									"14": 14,
+									"17": 10,
+									"18": 14
+								},
+								"ilvl": 60
+							}
+						},
+						"unique": true
+					},
+					{
+						"id": 275981,
+						"name": "Warden's Signet of Ferocity",
+						"type": "ItemTypeFinger",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 27,
+								"stats": {
+									"2": 14,
+									"14": 34,
+									"17": 10
+								},
+								"ilvl": 65
+							}
+						},
+						"limitCategory": 710
+					},
+					{
+						"id": 19120,
+						"name": "Rune of the Guard Captain",
+						"type": "ItemTypeTrinket",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 16,
+								"stats": {
+									"14": 14,
+									"15": 14,
+									"17": 7
+								},
+								"ilvl": 51,
+								"areaStats": [
+									{
+										"areaType": "AreaTypeForestGrassland",
+										"stats": {
+											"14": 28,
+											"15": 28
+										}
+									}
+								]
+							}
+						},
+						"unique": true
+					},
+					{
+						"id": 270275,
+						"name": "Cleansed Vilebranch Medallion",
+						"type": "ItemTypeTrinket",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 16,
+								"stats": {
+									"14": 14,
+									"15": 14,
+									"17": 7
+								},
+								"ilvl": 51,
+								"areaStats": [
+									{
+										"areaType": "AreaTypeForestGrassland",
+										"stats": {
+											"14": 28,
+											"15": 28
+										}
+									}
+								]
+							}
+						},
+						"unique": true
+					},
+					{
+						"id": 19323,
+						"name": "The Unstoppable Force",
+						"type": "ItemTypeWeapon",
+						"weaponType": "WeaponTypeMace",
+						"handType": "HandTypeTwoHand",
+						"weaponSpeed": 3.6,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 44,
+								"weaponDamageMin": 152,
+								"weaponDamageMax": 255,
+								"unroundedDps": 56.608402,
+								"stats": {
+									"0": 18,
+									"2": 17,
+									"18": 28
+								},
+								"ilvl": 60
+							}
+						},
+						"itemEffects": [
+							{
+								"buffId": 23454,
+								"buffName": "Stun (23454)",
+								"effectDurationMs": 1000,
+								"proc": {
+									"ppm": 0.5
+								}
+							}
+						],
+						"unique": true
+					},
+					{
+						"id": 272427,
+						"name": "Howling Idol",
+						"type": "ItemTypeRanged",
+						"rangedWeaponType": "RangedWeaponTypeIdol",
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 21,
+								"ilvl": 65
+							}
+						},
+						"itemEffects": [
+							{
+								"buffId": 1291059,
+								"buffName": "Shifting Power Cooldown Reduction (1291059)"
+							}
+						]
+					},
+					{
+						"id": 9449,
+						"name": "Manual Crowd Pummeler",
+						"type": "ItemTypeWeapon",
+						"weaponType": "WeaponTypeMace",
+						"handType": "HandTypeTwoHand",
+						"weaponSpeed": 2,
+						"scalingOptions": {
+							"0": {
+								"randPropPoints": 19,
+								"weaponDamageMin": 46,
+								"weaponDamageMax": 70,
+								"unroundedDps": 29.007368,
+								"stats": {
+									"0": 16,
+									"1": 5
+								},
+								"ilvl": 34
+							}
+						},
+						"itemEffects": [
+							{
+								"buffId": 13494,
+								"buffName": "Haste (13494)",
+								"effectDurationMs": 30000,
+								"onUse": {
+									"cooldownMs": 180000,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"unique": true
+					}
+				],
+				"enchants": [
+					{
+						"effectId": 1508,
+						"name": "Lesser Arcane Amalgamation",
+						"type": "ItemTypeHead",
+						"stats": [0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"extraTypes": ["ItemTypeLegs"]
+					},
+					{
+						"effectId": 904,
+						"name": "Enchant Necklace - Agility",
+						"type": "ItemTypeNeck",
+						"stats": [0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 7667,
+						"name": "Enchant Cloak - Agility",
+						"type": "ItemTypeBack",
+						"stats": [0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 1891,
+						"name": "Enchant Chest - Greater Stats",
+						"type": "ItemTypeChest",
+						"stats": [4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 7656,
+						"name": "Enchant Bracer - Agility",
+						"type": "ItemTypeWrist",
+						"stats": [0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 2564,
+						"name": "Enchant Gloves - Superior Agility",
+						"type": "ItemTypeHands",
+						"stats": [0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 1887,
+						"name": "Enchant Boots - Greater Agility",
+						"type": "ItemTypeFeet",
+						"stats": [0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"effectId": 1896,
+						"name": "Enchant 2H Weapon - Superior Impact",
+						"type": "ItemTypeWeapon",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"enchantType": "EnchantTypeTwoHand",
+						"weaponDamage": 9
+					}
+				],
+				"itemEffectRandPropPoints": [
+					{
+						"ilvl": 65,
+						"randPropPoints": 47
+					},
+					{
+						"ilvl": 62,
+						"randPropPoints": 45
+					},
+					{
+						"ilvl": 61,
+						"randPropPoints": 45
+					},
+					{
+						"ilvl": 60,
+						"randPropPoints": 44
+					},
+					{
+						"ilvl": 63,
+						"randPropPoints": 46
+					}
+				],
+				"consumables": [
+					{
+						"id": 118,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Healing Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"effectIds": [679187],
+						"itemEffects": [
+							{
+								"buffId": 439,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 858,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Healing Potion",
+						"lvl": 3,
+						"categoryId": 4,
+						"effectIds": [679188],
+						"itemEffects": [
+							{
+								"buffId": 440,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 929,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Healing Potion",
+						"lvl": 12,
+						"categoryId": 4,
+						"effectIds": [679189],
+						"itemEffects": [
+							{
+								"buffId": 441,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 1072,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Full Moonshine",
+						"lvl": 25,
+						"categoryId": 4,
+						"effectIds": [679186],
+						"itemEffects": [
+							{
+								"buffId": 438,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 1710,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Healing Potion",
+						"lvl": 21,
+						"categoryId": 4,
+						"effectIds": [679999],
+						"itemEffects": [
+							{
+								"buffId": 2024,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 2455,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Mana Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"effectIds": [679151],
+						"itemEffects": [
+							{
+								"buffId": 437,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 2456,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Rejuvenation Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"effectIds": [692902, 692903],
+						"itemEffects": [
+							{
+								"buffId": 2370,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 3087,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Mug of Shimmer Stout",
+						"lvl": 15,
+						"categoryId": 4,
+						"effectIds": [705545],
+						"itemEffects": [
+							{
+								"buffId": 29236,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 3384,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0],
+						"name": "Minor Magic Resistance Potion",
+						"lvl": 12,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 2380,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 3385,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Mana Potion",
+						"lvl": 14,
+						"categoryId": 4,
+						"effectIds": [679186],
+						"itemEffects": [
+							{
+								"buffId": 438,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 3827,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Mana Potion",
+						"lvl": 22,
+						"categoryId": 4,
+						"effectIds": [679998],
+						"itemEffects": [
+							{
+								"buffId": 2023,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 3928,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Healing Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [682787],
+						"itemEffects": [
+							{
+								"buffId": 4042,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 5631,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Rage Potion",
+						"lvl": 4,
+						"categoryId": 4,
+						"effectIds": [684732],
+						"itemEffects": [
+							{
+								"buffId": 6612,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"classAllowlist": ["ClassWarrior", "ClassDruid"],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 5633,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Great Rage Potion",
+						"lvl": 25,
+						"categoryId": 4,
+						"effectIds": [684733],
+						"itemEffects": [
+							{
+								"buffId": 6613,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"classAllowlist": ["ClassWarrior", "ClassDruid"],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 6048,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Shadow Protection Potion",
+						"lvl": 17,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7242,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6049,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Fire Protection Potion",
+						"lvl": 23,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7233,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6050,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Frost Protection Potion",
+						"lvl": 28,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7239,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6051,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Holy Protection Potion",
+						"lvl": 10,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7245,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6052,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Nature Protection Potion",
+						"lvl": 28,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 7254,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 6149,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Mana Potion",
+						"lvl": 31,
+						"categoryId": 4,
+						"effectIds": [689141],
+						"itemEffects": [
+							{
+								"buffId": 11903,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 9036,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 50, 50, 50, 0, 0],
+						"name": "Magic Resistance Potion",
+						"lvl": 32,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 11364,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 9144,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Wildvine Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [689469, 689470],
+						"itemEffects": [
+							{
+								"buffId": 11387,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 9224,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Potion of Demon Slaying",
+						"lvl": 40,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 11406,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"],
+						"mobTypeStats": [
+							{
+								"mobTypes": ["MobTypeDemon"],
+								"stats": {
+									"14": 180
+								}
+							}
+						]
+					},
+					{
+						"id": 13442,
+						"type": "ConsumableTypePotion",
+						"stats": [60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Mighty Rage Potion",
+						"lvl": 46,
+						"categoryId": 4,
+						"effectIds": [696085],
+						"itemEffects": [
+							{
+								"buffId": 17528,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"classAllowlist": ["ClassWarrior", "ClassDruid"],
+						"potionClasses": ["PotionClassResource", "PotionClassOffensive"]
+					},
+					{
+						"id": 13443,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Mana Potion",
+						"lvl": 41,
+						"categoryId": 4,
+						"effectIds": [695811],
+						"itemEffects": [
+							{
+								"buffId": 17530,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 13444,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Mana Potion",
+						"lvl": 49,
+						"categoryId": 4,
+						"effectIds": [695996],
+						"itemEffects": [
+							{
+								"buffId": 17531,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 13446,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Healing Potion",
+						"lvl": 45,
+						"categoryId": 4,
+						"effectIds": [695962],
+						"itemEffects": [
+							{
+								"buffId": 17534,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13456,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Frost Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17544,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13457,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Fire Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17543,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13458,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Nature Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17546,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13459,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Shadow Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17548,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13460,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Holy Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17545,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 13461,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Arcane Protection Potion",
+						"lvl": 48,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 17549,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 14894,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lily Root",
+						"lvl": 51,
+						"categoryId": 4,
+						"effectIds": [695927, 695928],
+						"itemEffects": [
+							{
+								"buffId": 18832,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 17348,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Healing Draught",
+						"lvl": 45,
+						"categoryId": 4,
+						"effectIds": [698910],
+						"itemEffects": [
+							{
+								"buffId": 21393,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 300000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 17349,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Healing Draught",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [698530],
+						"itemEffects": [
+							{
+								"buffId": 21394,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 300000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 17351,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Mana Draught",
+						"lvl": 45,
+						"categoryId": 4,
+						"effectIds": [698531],
+						"itemEffects": [
+							{
+								"buffId": 21395,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 300000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 17352,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Mana Draught",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [698926],
+						"itemEffects": [
+							{
+								"buffId": 21396,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 300000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 18253,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Rejuvenation Potion",
+						"lvl": 50,
+						"categoryId": 4,
+						"effectIds": [699637, 699638],
+						"itemEffects": [
+							{
+								"buffId": 22729,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 18839,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Combat Healing Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [682787],
+						"itemEffects": [
+							{
+								"buffId": 4042,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 18841,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Combat Mana Potion",
+						"lvl": 41,
+						"categoryId": 4,
+						"effectIds": [695811],
+						"itemEffects": [
+							{
+								"buffId": 17530,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 250938,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Frenzy Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251933,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250939,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Frenzy Potion",
+						"lvl": 15,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251935,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250940,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Frenzy Potion",
+						"lvl": 25,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251936,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250941,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Frenzy Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251937,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250942,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Superior Frenzy Potion",
+						"lvl": 45,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251938,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250943,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 80, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Frenzy Potion",
+						"lvl": 55,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1251940,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250951,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Caustic Smog Potion",
+						"lvl": 45,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252525,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250953,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Dragonfire Potion",
+						"lvl": 35,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252554,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 250955,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Potion of Beast Slaying",
+						"lvl": 40,
+						"categoryId": 4,
+						"itemEffects": [
+							{
+								"buffId": 1252559,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"potionClasses": ["PotionClassOffensive"],
+						"mobTypeStats": [
+							{
+								"mobTypes": ["MobTypeBeast"],
+								"stats": {
+									"14": 180
+								}
+							}
+						]
+					},
+					{
+						"id": 255663,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Windstone",
+						"lvl": 1,
+						"categoryId": 4,
+						"effectIds": [1268232, 1268233],
+						"itemEffects": [
+							{
+								"buffId": 1259231,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 268881,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Perishable Minor Healing Potion",
+						"lvl": 5,
+						"categoryId": 4,
+						"effectIds": [679187],
+						"itemEffects": [
+							{
+								"buffId": 439,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 268882,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Perishable Lesser Healing Potion",
+						"lvl": 3,
+						"categoryId": 4,
+						"effectIds": [679188],
+						"itemEffects": [
+							{
+								"buffId": 440,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 268883,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Perishable Healing Potion",
+						"lvl": 12,
+						"categoryId": 4,
+						"effectIds": [679189],
+						"itemEffects": [
+							{
+								"buffId": 441,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 274935,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Tessa's Tonic",
+						"lvl": 35,
+						"categoryId": 4,
+						"effectIds": [1317896, 1317897],
+						"itemEffects": [
+							{
+								"buffId": 1295688,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource", "PotionClassDefensive"]
+					},
+					{
+						"id": 282011,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Restored Healing Potion",
+						"lvl": 60,
+						"categoryId": 4,
+						"effectIds": [1343653],
+						"itemEffects": [
+							{
+								"buffId": 1312698,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassDefensive"]
+					},
+					{
+						"id": 282013,
+						"type": "ConsumableTypePotion",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Restored Mana Potion",
+						"lvl": 60,
+						"categoryId": 4,
+						"effectIds": [1343657],
+						"itemEffects": [
+							{
+								"buffId": 1312702,
+								"onUse": {
+									"categoryId": 4,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"potionClasses": ["PotionClassResource"]
+					},
+					{
+						"id": 1703,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 10, 0, 0],
+						"name": "Crystal Basilisk Spine",
+						"lvl": 25,
+						"categoryId": 1153,
+						"itemEffects": [
+							{
+								"buffId": 1138,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 5509,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Healthstone",
+						"lvl": 24,
+						"categoryId": 1153,
+						"effectIds": [684547],
+						"itemEffects": [
+							{
+								"buffId": 5720,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 5510,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Healthstone",
+						"lvl": 36,
+						"categoryId": 1153,
+						"effectIds": [683044],
+						"itemEffects": [
+							{
+								"buffId": 5723,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 5511,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Lesser Healthstone",
+						"lvl": 12,
+						"categoryId": 1153,
+						"effectIds": [683070],
+						"itemEffects": [
+							{
+								"buffId": 6263,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 5512,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Minor Healthstone",
+						"lvl": 10,
+						"categoryId": 1153,
+						"effectIds": [683069],
+						"itemEffects": [
+							{
+								"buffId": 6262,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 7676,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Thistle Tea",
+						"lvl": 5,
+						"categoryId": 1153,
+						"effectIds": [684839],
+						"itemEffects": [
+							{
+								"buffId": 9512,
+								"onUse": {
+									"cooldownMs": 300000,
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						],
+						"classAllowlist": ["ClassRogue", "ClassDruid"]
+					},
+					{
+						"id": 9421,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Major Healthstone",
+						"lvl": 48,
+						"categoryId": 1153,
+						"effectIds": [688570],
+						"itemEffects": [
+							{
+								"buffId": 11732,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 11951,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Whipper Root Tuber",
+						"lvl": 45,
+						"categoryId": 1153,
+						"effectIds": [692328],
+						"itemEffects": [
+							{
+								"buffId": 15700,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 11952,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Night Dragon's Breath",
+						"lvl": 45,
+						"categoryId": 1153,
+						"effectIds": [692329, 692330],
+						"itemEffects": [
+							{
+								"buffId": 15701,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 12662,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Demonic Rune",
+						"lvl": 50,
+						"categoryId": 1153,
+						"effectIds": [694074],
+						"itemEffects": [
+							{
+								"buffId": 16666,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 15723,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Tea with Sugar",
+						"lvl": 50,
+						"categoryId": 1153,
+						"effectIds": [694971, 694972],
+						"itemEffects": [
+							{
+								"buffId": 19199,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 17747,
+						"type": "ConsumableTypeConjured",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Razorlash Root",
+						"lvl": 40,
+						"categoryId": 1153,
+						"effectIds": [699301, 699302],
+						"itemEffects": [
+							{
+								"buffId": 21955,
+								"onUse": {
+									"categoryId": 1153,
+									"categoryCooldownMs": 120000
+								}
+							}
+						]
+					},
+					{
+						"id": 12460,
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Juju Might",
+						"lvl": 60,
+						"itemEffects": [
+							{
+								"buffId": 16329,
+								"onUse": {
+									"cooldownMs": 60000,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"groupKey": "99/0",
+						"groupName": "Attack Power",
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 8412,
+						"type": "ConsumableTypeOther",
+						"stats": [0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Ground Scorpok Assay",
+						"lvl": 1,
+						"categoryId": 103,
+						"itemEffects": [
+							{
+								"buffId": 10669,
+								"onUse": {
+									"categoryId": 103,
+									"categoryCooldownMs": 3600000
+								}
+							}
+						],
+						"groupKey": "Zanza",
+						"groupName": "Zanza",
+						"potionClasses": ["PotionClassOffensive"]
+					},
+					{
+						"id": 10646,
+						"type": "ConsumableTypeExplosive",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Goblin Sapper Charge",
+						"lvl": 41,
+						"categoryId": 24,
+						"itemEffects": [
+							{
+								"buffId": 13241,
+								"onUse": {
+									"cooldownMs": 300000,
+									"categoryId": 24,
+									"categoryCooldownMs": 60000
+								}
+							}
+						],
+						"requiredProfession": "Engineering",
+						"reqProfRank": 205
+					},
+					{
+						"id": 250328,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 25, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Elixir of Cunning",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1250918,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "29/1",
+						"groupName": "Agility"
+					},
+					{
+						"id": 250338,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Elixir of Sages",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1250941,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "29/4",
+						"groupName": "Spirit",
+						"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"id": 250329,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 400, 0, 0, 0, 0, 0, 0, 0, 0, 500],
+						"name": "Elixir of the Phalanx",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1250920,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "34/0",
+						"groupName": "Health"
+					},
+					{
+						"id": 250341,
+						"type": "ConsumableTypeElixir",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Greater Mageblood Elixir",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1250948,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "85/0",
+						"groupName": "Mana Regeneration"
+					},
+					{
+						"id": 250351,
+						"type": "ConsumableTypeElixir",
+						"stats": [25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Elixir of the Grizzly",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1250986,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"groupKey": "29/0",
+						"groupName": "Strength",
+						"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+					},
+					{
+						"id": 274274,
+						"type": "ConsumableTypeFlask",
+						"stats": [0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Flask of Natural Aggression",
+						"lvl": 55,
+						"categoryId": 2593,
+						"itemEffects": [
+							{
+								"buffId": 1293741,
+								"onUse": {
+									"categoryId": 2593,
+									"categoryCooldownMs": 3000
+								}
+							}
+						],
+						"zoneStats": [
+							{
+								"zoneIds": [616, 3606],
+								"stats": {
+									"18": 56
+								}
+							}
+						]
+					},
+					{
+						"id": 250072,
+						"type": "ConsumableTypeFood",
+						"stats": [0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Swiftstrike Steak",
+						"lvl": 45,
+						"categoryId": 11,
+						"itemEffects": [
+							{
+								"buffId": 1248399,
+								"onUse": {
+									"cooldownMs": -1,
+									"categoryCooldownMs": -1
+								}
+							}
+						]
+					},
+					{
+						"id": 260817,
+						"type": "ConsumableTypeExplosive",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "EZ-Thro Dark Bomb",
+						"lvl": 60,
+						"categoryId": 24,
+						"itemEffects": [
+							{
+								"buffId": 1269334,
+								"onUse": {
+									"categoryId": 24,
+									"categoryCooldownMs": 60000
+								}
+							}
+						]
+					},
+					{
+						"id": 12643,
+						"type": "ConsumableTypeImbue",
+						"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						"name": "Dense Weightstone",
+						"lvl": 35,
+						"itemEffects": [
+							{
+								"buffId": 16622,
+								"onUse": {
+									"cooldownMs": 1000,
+									"categoryCooldownMs": -1
+								}
+							}
+						],
+						"weaponSubclassMask": 9264,
+						"temporaryEnchant": {
+							"effectId": 1703,
+							"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+							"weaponDamage": 8
+						}
+					}
+				],
+				"spellEffects": [
+					{
+						"id": 679187,
+						"spellId": 439,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 679188,
+						"spellId": 440,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 679189,
+						"spellId": 441,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 679186,
+						"spellId": 438,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 679999,
+						"spellId": 2024,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 679151,
+						"spellId": 437,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 692902,
+						"spellId": 2370,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 692903,
+						"spellId": 2370,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 705545,
+						"spellId": 29236,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 679998,
+						"spellId": 2023,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 682787,
+						"spellId": 4042,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 684732,
+						"spellId": 6612,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeRage"
+					},
+					{
+						"id": 684733,
+						"spellId": 6613,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeRage"
+					},
+					{
+						"id": 689141,
+						"spellId": 11903,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 689469,
+						"spellId": 11387,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 689470,
+						"spellId": 11387,
+						"index": 1,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 696085,
+						"spellId": 17528,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeRage",
+						"durationMs": 20000
+					},
+					{
+						"id": 695811,
+						"spellId": 17530,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 695996,
+						"spellId": 17531,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 695962,
+						"spellId": 17534,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 695927,
+						"spellId": 18832,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 695928,
+						"spellId": 18832,
+						"index": 1,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 698910,
+						"spellId": 21393,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 698530,
+						"spellId": 21394,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 698531,
+						"spellId": 21395,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 698926,
+						"spellId": 21396,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 699637,
+						"spellId": 22729,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 699638,
+						"spellId": 22729,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 1268232,
+						"spellId": 1259231,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 1268233,
+						"spellId": 1259231,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 1317896,
+						"spellId": 1295688,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 1317897,
+						"spellId": 1295688,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 1343653,
+						"spellId": 1312698,
+						"type": 136,
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 1343657,
+						"spellId": 1312702,
+						"type": 137,
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 684547,
+						"spellId": 5720,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 683044,
+						"spellId": 5723,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 683070,
+						"spellId": 6263,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 683069,
+						"spellId": 6262,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 684839,
+						"spellId": 9512,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeEnergy"
+					},
+					{
+						"id": 688570,
+						"spellId": 11732,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 692328,
+						"spellId": 15700,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 692329,
+						"spellId": 15701,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 692330,
+						"spellId": 15701,
+						"index": 1,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 694074,
+						"spellId": 16666,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 694971,
+						"spellId": 19199,
+						"type": "EffectTypeHeal",
+						"resourceType": "ResourceTypeHealth"
+					},
+					{
+						"id": 694972,
+						"spellId": 19199,
+						"index": 1,
+						"type": "EffectTypeResourceGain",
+						"resourceType": "ResourceTypeMana"
+					},
+					{
+						"id": 699301,
+						"spellId": 21955,
+						"type": 6,
+						"resourceType": "ResourceTypeHealth",
+						"auraPeriodMs": 1000,
+						"durationMs": 10000
+					},
+					{
+						"id": 699302,
+						"spellId": 21955,
+						"index": 1,
+						"type": 6,
+						"resourceType": "ResourceTypeMana",
+						"auraPeriodMs": 1000,
+						"durationMs": 10000
+					}
+				]
+			}
+		},
+		"raidBuffs": {
+			"arcaneIntellect": true,
+			"prayerOfSpirit": true,
+			"markOfTheWild": true,
+			"powerWordFortitude": true,
+			"strengthOfEarthTotem": 1,
+			"graceOfAirTotem": 1,
+			"windfuryTotem": true,
+			"battleShout": 1
+		},
+		"partyBuffs": {
+			"manaSpringTotem": "TristateEffectRegular"
+		},
+		"debuffs": {
+			"judgementOfWisdom": true,
+			"sunderArmor": true,
+			"giftOfArthas": true,
+			"vindication": true
+		},
+		"encounter": {
+			"apiVersion": 2,
+			"duration": 180,
+			"durationVariation": 5,
+			"executeProportion20": 0.2,
+			"executeProportion35": 0.35,
+			"targets": [
+				{
+					"id": 31146,
+					"name": "Raid Target",
+					"level": 30,
+					"mobType": "MobTypeMechanical",
+					"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 3731, 0, 1428900, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					"minBaseDamage": 2601,
+					"damageSpread": 0.5,
+					"swingSpeed": 2,
+					"parryHaste": true,
+					"canCrush": true
+				}
+			],
+			"areaTypes": ["AreaTypeForestGrassland", "AreaTypeMountainous"],
+			"zoneId": 616
+		},
+		"simOptions": {
+			"iterations": 12500
+		},
+		"statsToWeigh": [
+			"StatStrength",
+			"StatAgility",
+			"StatAttackPower",
+			"StatFeralAttackPower",
+			"StatPhysicalDamage",
+			"StatHitRating",
+			"StatExpertiseRating",
+			"StatCritRating",
+			"StatHasteRating",
+			"StatArmorPenetration"
+		],
+		"pseudoStatsToWeigh": ["PseudoStatMainHandDps"],
+		"epReferenceStat": "StatAgility",
+		"hpsReferenceStat": "StatAgility"
+	}
+}
