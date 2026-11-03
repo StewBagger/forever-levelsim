@@ -323,8 +323,8 @@ func (p *GearPicker) pick(ep *proto.UnitStats, weapons hands) *proto.EquipmentSp
 		sort.Slice(cands, func(i, j int) bool { return cands[i].ui.Id < cands[j].ui.Id })
 	}
 	// The highest-valued item the filter keeps, of positive value. Filling, the slot takes the best
-	// there is even at no value, the higher item level first: an empty paired slot is not a set the
-	// batch sim can group.
+	// there is even at no value, the higher item level first, so an item level 1 piece loses to a
+	// real one.
 	best := func(slot proto.ItemSlot, filter func(*core.Item) bool, fill bool) (gearCandidate, float64) {
 		var pick gearCandidate
 		top := 0.0
@@ -349,6 +349,9 @@ func (p *GearPicker) pick(ep *proto.UnitStats, weapons hands) *proto.EquipmentSp
 	wearable := func(item *core.Item) bool {
 		return !p.tank || item.ArmorType == proto.ArmorType_ArmorTypeUnknown || item.Type == proto.ItemType_ItemTypeBack || item.ArmorType == armorType
 	}
+	ofArmorType := func(item *core.Item) bool {
+		return item.Type != proto.ItemType_ItemTypeBack && item.ArmorType != proto.ArmorType_ArmorTypeUnknown && item.ArmorType == armorType
+	}
 
 	items := make([]*proto.ItemSpec, len(proto.ItemSlot_name))
 	set := func(slot proto.ItemSlot, c gearCandidate) {
@@ -361,19 +364,21 @@ func (p *GearPicker) pick(ep *proto.UnitStats, weapons hands) *proto.EquipmentSp
 		case proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand:
 			continue
 		case proto.ItemSlot_ItemSlotFinger1, proto.ItemSlot_ItemSlotTrinket1:
-			c, _ := best(slot, nil, true)
+			// A ring or trinket the EP gives no value stays out: below 40 there is often one useful
+			// trinket or none, and the batch sim groups one item with an empty slot.
+			c, _ := best(slot, nil, false)
 			set(slot, c)
 		case proto.ItemSlot_ItemSlotFinger2, proto.ItemSlot_ItemSlotTrinket2:
 			// A trinket is never doubled, since nearly every one is unique-equipped in game whatever
 			// the row says.
-			c, _ := best(slot, pairedWith(items[slot-1], slot == proto.ItemSlot_ItemSlotTrinket2), true)
+			c, _ := best(slot, pairedWith(items[slot-1], slot == proto.ItemSlot_ItemSlotTrinket2), false)
 			set(slot, c)
 		default:
 			c, _ := best(slot, wearable, false)
 			if c.ui == nil && p.tank {
-				// An item of the armor type the EP gives no value still beats one of another type;
-				// with none for the slot, the slot takes the best of any.
-				if c, _ = best(slot, wearable, true); c.ui == nil {
+				// A piece of the armor type the EP gives no value still beats one of another type or
+				// none; with none of the type for the slot, the slot takes the best of any.
+				if c, _ = best(slot, ofArmorType, true); c.ui == nil {
 					c, _ = best(slot, nil, false)
 				}
 			}
@@ -393,8 +398,9 @@ func (p *GearPicker) pick(ep *proto.UnitStats, weapons hands) *proto.EquipmentSp
 	}
 	offFilter := pairedWith(mainSpec, false)
 	if shield {
+		paired := offFilter
 		offFilter = func(i *core.Item) bool {
-			return i.WeaponType == proto.WeaponType_WeaponTypeShield && pairedWith(mainSpec, false)(i)
+			return i.WeaponType == proto.WeaponType_WeaponTypeShield && (paired == nil || paired(i))
 		}
 	}
 	offHand, offValue := best(proto.ItemSlot_ItemSlotOffHand, offFilter, shield)
@@ -410,6 +416,23 @@ func (p *GearPicker) pick(ep *proto.UnitStats, weapons hands) *proto.EquipmentSp
 	} else {
 		set(proto.ItemSlot_ItemSlotMainHand, mainHand)
 		set(proto.ItemSlot_ItemSlotOffHand, offHand)
+	}
+	// Every character holds a weapon where one can be equipped: with none the EP values, or none of
+	// the kind the weapons asked, the main hand takes the best there is, the higher item level first.
+	// A run with an empty hand weighs its weapon damage at nothing, so the next round would leave
+	// the hand empty too.
+	if items[proto.ItemSlot_ItemSlotMainHand] == nil {
+		oneHanded := func(i *core.Item) bool { return i.HandType != proto.HandType_HandTypeTwoHand }
+		if shield {
+			if c, _ := best(proto.ItemSlot_ItemSlotMainHand, oneHanded, true); c.ui != nil {
+				set(proto.ItemSlot_ItemSlotMainHand, c)
+				set(proto.ItemSlot_ItemSlotOffHand, offHand)
+			}
+		}
+		if items[proto.ItemSlot_ItemSlotMainHand] == nil {
+			c, _ := best(proto.ItemSlot_ItemSlotMainHand, nil, true)
+			set(proto.ItemSlot_ItemSlotMainHand, c)
+		}
 	}
 
 	for i := range items {

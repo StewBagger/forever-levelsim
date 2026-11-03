@@ -1,5 +1,5 @@
 import { LevelDefaultsResult } from '@generated/proto/api';
-import { ConsumesSpec, EquipmentSpec, Spec, Stat } from '@generated/proto/common';
+import { ConsumesSpec, EquipmentSpec, ItemSpec, Spec, Stat } from '@generated/proto/common';
 import { SavedTalents } from '@generated/proto/ui';
 import type { Player } from '@sim/player/player';
 import { Stats } from '@sim/proto/stats';
@@ -82,7 +82,10 @@ describe('applyLevelEdit', () => {
 		vi.restoreAllMocks();
 	});
 
-	const setup = async () => {
+	// Default gear by item id; the database serves none of them, so they only make the defaults hold gear.
+	const DEFAULT_GEAR = EquipmentSpec.create({ items: [ItemSpec.create({ id: 12640 })] });
+
+	const setup = async (gear = DEFAULT_GEAR) => {
 		const config = {
 			autoRotation: () => undefined,
 			epStats: [Stat.StatStrength],
@@ -90,7 +93,7 @@ describe('applyLevelEdit', () => {
 			presets: { epWeights: [] },
 			defaults: {
 				talents: SavedTalents.create({ talentsString: FULL_TALENTS }),
-				gear: EquipmentSpec.create(),
+				gear,
 				epWeights: new Stats(),
 				consumables: ConsumesSpec.create({ flaskId: 13510, mhImbueId: 20749 }),
 				specOptions: undefined as unknown,
@@ -135,6 +138,27 @@ describe('applyLevelEdit', () => {
 		await applyLevelEdit(host, 60);
 		expect(player.getSpecOptions().classOptions!.useBattleShout).toBe(true);
 		expect(player.getConsumes()).toMatchObject({ flaskId: 13510, mhImbueId: 20749 });
+	});
+
+	it('says the defaults loaded at 60, and works nothing out', async () => {
+		const { player, host, loads, shown } = await setup();
+		player.setLevel(40);
+		await applyLevelEdit(host, 60);
+		expect(loads).toHaveLength(0);
+		expect(shown).toHaveBeenLastCalledWith(expect.objectContaining({ variant: 'success' }));
+	});
+
+	it("works out level 60 gear for a spec with no default gear, and keeps the spec's talents", async () => {
+		const { player, host, loads, shown } = await setup(EquipmentSpec.create());
+		player.setLevel(40);
+		const edit = applyLevelEdit(host, 60);
+		const talents = player.getTalentsString();
+		await vi.waitFor(() => expect(loads).toHaveLength(1));
+		expect(vi.mocked(host.sim.levelDefaults)).toHaveBeenCalledWith(player, 60, FULL_TALENTS, expect.anything(), expect.anything(), expect.anything());
+		loads[0](LevelDefaultsResult.create({ talentsString: '5555555' }));
+		await edit;
+		expect(player.getTalentsString()).toBe(talents);
+		expect(shown).toHaveBeenLastCalledWith(expect.objectContaining({ variant: 'success' }));
 	});
 
 	it('closes the working-out toast of a load a newer edit has replaced', async () => {

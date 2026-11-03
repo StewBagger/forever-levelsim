@@ -75,9 +75,11 @@ const closeBusyToast = (player: Player<any>) => {
 	busyToasts.delete(player);
 };
 
+const loadedToast = (level: number) => toastManager.add({ variant: 'success', body: i18n.t('settings_tab.player.level.loaded', { level }) });
+
 // A level's starting talents, BIS gear and EP, worked out by the sim from the spec's default talents and the stat weights
-// request. Its result is dropped when the level has changed again before it lands.
-const loadLevelDefaults = async (host: IndividualSimHost<any>, level: number, targetFollows: boolean) => {
+// request, or with `gearOnly` its gear alone. Its result is dropped when the level has changed again before it lands.
+const loadLevelDefaults = async (host: IndividualSimHost<any>, level: number, targetFollows: boolean, gearOnly = false) => {
 	const { player, sim, individualConfig: config } = host;
 	const busy = toastManager.add({ variant: 'info', body: i18n.t('settings_tab.player.level.loading', { level }), autohide: false, canClose: false });
 	busyToasts.set(player, busy);
@@ -94,13 +96,14 @@ const loadLevelDefaults = async (host: IndividualSimHost<any>, level: number, ta
 		);
 		if (player.getLevel() != level) return;
 		batch(() => {
-			player.setTalentsString(result.talentsString);
 			if (result.equipment) player.setGear(sim.db.lookupEquipmentSpec(result.equipment));
+			if (gearOnly) return;
+			player.setTalentsString(result.talentsString);
 			if (result.dps?.epValues) player.setEpWeights(Stats.fromProto(result.dps.epValues));
 			applyDefaultOptions(host);
 			if (targetFollows) setTargetArmor(host, result.targetArmor);
 		});
-		toastManager.add({ variant: 'success', body: i18n.t('settings_tab.player.level.loaded', { level }) });
+		loadedToast(level);
 	} catch (error) {
 		// A dropped load's failure is not news: the level it was for is gone.
 		if (player.getLevel() == level) toastManager.add({ variant: 'error', body: errorHeadline(error) });
@@ -118,6 +121,12 @@ export const applyLevelEdit = (host: IndividualSimHost<any>, newValue: number): 
 	closeBusyToast(host.player);
 	if (change.level == CHARACTER_LEVEL) {
 		applySpecDefaults(host, change.targetFollows);
+		// A spec with no default gear (the warlock's) starts from the best in slot for 60 without raid gear instead of
+		// nothing.
+		if (!host.individualConfig.defaults.gear.items.some(item => item.id != 0)) {
+			return loadLevelDefaults(host, change.level, change.targetFollows, true);
+		}
+		loadedToast(change.level);
 		return Promise.resolve();
 	}
 	return loadLevelDefaults(host, change.level, change.targetFollows);

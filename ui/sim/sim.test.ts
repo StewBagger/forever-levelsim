@@ -1,4 +1,5 @@
 import {
+	BisGearResult,
 	BulkCandidatesResult,
 	BulkEnchantSlotOptions,
 	BulkSettings,
@@ -49,6 +50,8 @@ const mocks = vi.hoisted(() => ({
 	runConcurrentBulkSim: vi.fn(),
 	bulkSimAsync: vi.fn(),
 	bulkCandidates: vi.fn(),
+	bisGear: vi.fn(),
+	loadLeftoversIfNecessary: vi.fn(),
 	db: {} as Record<string, unknown>,
 }));
 
@@ -63,6 +66,7 @@ vi.mock('./workers/worker_pool', () => ({
 		reforgeOptimizeAsync = mocks.reforgeOptimizeAsync;
 		bulkSimAsync = mocks.bulkSimAsync;
 		bulkCandidates = mocks.bulkCandidates;
+		bisGear = mocks.bisGear;
 	},
 }));
 
@@ -78,7 +82,7 @@ vi.mock('./wasm', () => ({
 }));
 
 vi.mock('./proto/database', () => ({
-	Database: { get: () => Promise.resolve(mocks.db) },
+	Database: { get: () => Promise.resolve(mocks.db), loadLeftoversIfNecessary: mocks.loadLeftoversIfNecessary },
 }));
 
 const makeEnv = (): Env => ({
@@ -844,6 +848,19 @@ describe('Sim.runBulkSim', () => {
 		await sim.runBulkSim(() => {}, BulkSettings.create());
 
 		expect(mocks.runConcurrentBulkSim.mock.calls[0][0].candidates).toEqual([{ index: 0, gear: cloak }]);
+	});
+});
+
+describe('Sim.bisGear', () => {
+	it('loads the leftover items the set holds before it hands the set back', async () => {
+		const equipment = EquipmentSpec.create({ items: [ItemSpec.create({ id: 1198 })] });
+		mocks.bisGear.mockReset().mockResolvedValue(BisGearResult.create({ equipment }));
+		mocks.loadLeftoversIfNecessary.mockReset().mockResolvedValue(mocks.db);
+		const sim = makeSim();
+		const player = { toProto: () => ({}) } as any;
+
+		expect(await sim.bisGear(player, 10, new Stats())).toEqual(equipment);
+		expect(mocks.loadLeftoversIfNecessary).toHaveBeenCalledWith(equipment);
 	});
 });
 

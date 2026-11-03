@@ -110,8 +110,7 @@ func TestSourcelessPlaceholdersAreNotObtainable(t *testing.T) {
 	}
 }
 
-// The second ring and trinket keep out the first's limit category, and both slots of each pair are
-// filled even where the EP values one item only.
+// The second ring and trinket keep out the first's limit category.
 func TestPairedSlotsKeepToTheLimitCategory(t *testing.T) {
 	for _, level := range []int32{30, 40, 50} {
 		p := NewGearPicker(&proto.Player{Class: proto.Class_ClassMage, Race: proto.Race_RaceUndead, Spec: &proto.Player_Mage{Mage: &proto.Mage{}}}, level)
@@ -119,7 +118,6 @@ func TestPairedSlotsKeepToTheLimitCategory(t *testing.T) {
 		for _, pair := range [][2]proto.ItemSlot{{proto.ItemSlot_ItemSlotFinger1, proto.ItemSlot_ItemSlotFinger2}, {proto.ItemSlot_ItemSlotTrinket1, proto.ItemSlot_ItemSlotTrinket2}} {
 			a, b := core.GetItemByID(set.Items[pair[0]].GetId()), core.GetItemByID(set.Items[pair[1]].GetId())
 			if a == nil || b == nil {
-				t.Errorf("level %d: %s or %s is empty: %v", level, pair[0], pair[1], GearNames(set))
 				continue
 			}
 			if a.LimitCategory != 0 && a.LimitCategory == b.LimitCategory {
@@ -173,5 +171,63 @@ func TestBisGearKeepsTheWeaponsWorn(t *testing.T) {
 		if handsWorn(res.Equipment) != handsWorn(worn) {
 			t.Errorf("wearing %v, BisGear gave %v", GearNames(worn), GearNames(res.Equipment))
 		}
+	}
+}
+
+// With an EP that values nothing an item holds, a level 10 warrior and paladin still hold a weapon,
+// the higher item level first, and leave the rings, trinkets and armor the EP gives no value empty.
+func TestEveryCharacterHoldsAWeapon(t *testing.T) {
+	const level = 10
+	byID := uiItemsByID()
+	none := flatEP(nil, nil)
+	for _, player := range []*proto.Player{
+		{Class: proto.Class_ClassWarrior, Race: proto.Race_RaceOrc, Spec: &proto.Player_DpsWarrior{DpsWarrior: &proto.DpsWarrior{}}},
+		{Class: proto.Class_ClassPaladin, Race: proto.Race_RaceHuman, Spec: &proto.Player_RetributionPaladin{RetributionPaladin: &proto.RetributionPaladin{}}},
+	} {
+		p := NewGearPicker(player, level)
+		set := p.Pick(none)
+		mainHand := set.Items[proto.ItemSlot_ItemSlotMainHand].GetId()
+		if mainHand == 0 {
+			t.Errorf("%s: no main hand: %v", player.Class, GearNames(set))
+			continue
+		}
+		for _, c := range p.candidates {
+			if c.item.Type == proto.ItemType_ItemTypeWeapon && c.item.WeaponType != proto.WeaponType_WeaponTypeShield &&
+				c.item.WeaponType != proto.WeaponType_WeaponTypeOffHand && itemLevel(c.ui) > itemLevel(byID[mainHand]) {
+				t.Errorf("%s: %s (item level %d) over %s (item level %d)", player.Class, byID[mainHand].Name, itemLevel(byID[mainHand]), c.ui.Name, itemLevel(c.ui))
+				break
+			}
+		}
+		for slot, spec := range set.Items {
+			if spec.GetId() != 0 && proto.ItemSlot(slot) != proto.ItemSlot_ItemSlotMainHand {
+				t.Errorf("%s: %s holds %s, which the EP gives no value", player.Class, proto.ItemSlot(slot), byID[spec.Id].Name)
+			}
+		}
+	}
+}
+
+// A level 10 protection warrior wears pieces of its armor type the EP gives no value, but no
+// armor-slot item without one: the item level 1 Barrens Headband is not a helm.
+func TestTankFillsOnlyWithItsArmorType(t *testing.T) {
+	p := NewGearPicker(&proto.Player{Class: proto.Class_ClassWarrior, Race: proto.Race_RaceOrc, Spec: &proto.Player_ProtectionWarrior{ProtectionWarrior: &proto.ProtectionWarrior{}}}, 10)
+	set := p.Pick(flatEP(nil, nil))
+	worn := 0
+	for _, slot := range []proto.ItemSlot{proto.ItemSlot_ItemSlotHead, proto.ItemSlot_ItemSlotShoulder, proto.ItemSlot_ItemSlotChest, proto.ItemSlot_ItemSlotWrist,
+		proto.ItemSlot_ItemSlotHands, proto.ItemSlot_ItemSlotWaist, proto.ItemSlot_ItemSlotLegs, proto.ItemSlot_ItemSlotFeet} {
+		if item := core.GetItemByID(set.Items[slot].GetId()); item != nil {
+			worn++
+			if item.ArmorType != proto.ArmorType_ArmorTypeMail {
+				t.Errorf("%s: %s is %s", slot, item.Name, item.ArmorType)
+			}
+		}
+	}
+	if worn == 0 {
+		t.Errorf("no mail worn: %v", GearNames(set))
+	}
+	if offHand := core.GetItemByID(set.Items[proto.ItemSlot_ItemSlotOffHand].GetId()); offHand == nil || offHand.WeaponType != proto.WeaponType_WeaponTypeShield {
+		t.Errorf("off hand is not a shield: %v", GearNames(set))
+	}
+	if set.Items[proto.ItemSlot_ItemSlotMainHand].GetId() == 0 {
+		t.Errorf("no main hand: %v", GearNames(set))
 	}
 }

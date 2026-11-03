@@ -845,6 +845,9 @@ export class Sim {
 		statWeights.player!.talentsString = talentsString;
 		const result = await this.workerPool.levelDefaults(LevelDefaultsRequest.create({ statWeights, level }));
 		if (result.error) throw new SimError(result.error.message);
+		// The sim picks from every item, the common ones db.json leaves to the leftovers as well (a level 10 Claymore),
+		// and an item the page's database lacks would be dropped from the set.
+		if (result.equipment) await Database.loadLeftoversIfNecessary(result.equipment);
 		return result;
 	}
 
@@ -853,7 +856,9 @@ export class Sim {
 		await this.waitForInit();
 		const result = await this.workerPool.bisGear(BisGearRequest.create({ player: player.toProto(false, true), level, ep: ep.toProto() }));
 		if (result.error) throw new SimError(result.error.message);
-		return result.equipment ?? EquipmentSpec.create();
+		const equipment = result.equipment ?? EquipmentSpec.create();
+		await Database.loadLeftoversIfNecessary(equipment);
+		return equipment;
 	}
 
 	getUnitMetadata(ref: UnitReference | undefined, contextPlayer: Player<any> | null, defaultRef: UnitReference): UnitMetadata | undefined {

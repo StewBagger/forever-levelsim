@@ -302,8 +302,35 @@ func (generator *bulkSimCandidateGenerator) initGroupedSlotPairs() {
 				}
 			}
 		}
+		if len(pairs) == 0 {
+			pairs = generator.singleItemPairs(bulkSlot, options)
+		}
 		generator.groupedPairsBySlot[bulkSlot] = pairs
 	}
+}
+
+// With no two items that can be worn together, each item is worn alone beside an empty slot: a
+// low-level character often has one ring or trinket worth wearing, or one copy of a unique one. The
+// item keeps the slot it is worn in, and a frozen item is the only one, in its frozen slot.
+func (generator *bulkSimCandidateGenerator) singleItemPairs(bulkSlot BulkSimItemSlot, options []bulkSimCandidateOption) [][2]bulkSimCandidateOption {
+	slots := BulkSimItemSlotToItemSlotPairs[bulkSlot]
+	empty := bulkSimCandidateOption{spec: &proto.ItemSpec{}}
+	alone := func(option bulkSimCandidateOption, inSecond bool) [2]bulkSimCandidateOption {
+		if inSecond {
+			return [2]bulkSimCandidateOption{empty, option}
+		}
+		return [2]bulkSimCandidateOption{option, empty}
+	}
+	if frozenItem := generator.frozenItems[bulkSlot]; frozenItem != nil {
+		frozenOption := bulkSimCandidateOption{spec: frozenItem.ToItemSpecProto(), item: *frozenItem}
+		return [][2]bulkSimCandidateOption{alone(frozenOption, generator.frozenSlots[bulkSlot] == slots[1])}
+	}
+	pairs := make([][2]bulkSimCandidateOption, 0, len(options))
+	for _, option := range options {
+		inSecond := generator.baseEquipment[slots[0]].ID == 0 && generator.baseEquipment[slots[1]].ID == option.item.ID
+		pairs = append(pairs, alone(option, inSecond))
+	}
+	return pairs
 }
 
 // The raw combination space is a plain product over the bulk slots and nothing bounds it.
@@ -395,10 +422,15 @@ func (generator *bulkSimCandidateGenerator) newCombinationTable() combinationTab
 			pairs := generator.groupedPairsBySlot[bulkSlot]
 			choices := make([][]slotItem, 0, len(pairs))
 			for _, pair := range pairs {
-				choices = append(choices, []slotItem{
-					{slot: slots[0], spec: generator.slotSpec(slots[0], generator.resolveItem(slots[0], pair[0]))},
-					{slot: slots[1], spec: generator.slotSpec(slots[1], generator.resolveItem(slots[1], pair[1]))},
-				})
+				choice := make([]slotItem, 2)
+				for i, option := range pair {
+					// An empty side of a single-item pair is an empty slot.
+					choice[i] = slotItem{slot: slots[i]}
+					if option.spec.GetId() != 0 {
+						choice[i].spec = generator.slotSpec(slots[i], generator.resolveItem(slots[i], option))
+					}
+				}
+				choices = append(choices, choice)
 			}
 			table.digits = append(table.digits, choices)
 			continue

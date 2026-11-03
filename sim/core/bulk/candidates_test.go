@@ -1177,3 +1177,37 @@ func TestBulkCandidatesStripRingEnchantsWithoutEnchanting(t *testing.T) {
 		}
 	}
 }
+
+// A pair of slots with one item worn in either and nothing to pair it with is a valid batch: the item
+// stays in its slot beside the empty one. A level 20 character often has one trinket worth wearing.
+func TestBulkPairedSlotWithOneItemKeepsTheOtherEmpty(t *testing.T) {
+	registerPairedSlotItems()
+	for _, slots := range [][2]proto.ItemSlot{
+		{proto.ItemSlot_ItemSlotTrinket1, proto.ItemSlot_ItemSlotTrinket2},
+		{proto.ItemSlot_ItemSlotTrinket2, proto.ItemSlot_ItemSlotTrinket1},
+		{proto.ItemSlot_ItemSlotFinger1, proto.ItemSlot_ItemSlotFinger2},
+	} {
+		id := pairTrinketUnique
+		if slots[0] == proto.ItemSlot_ItemSlotFinger1 {
+			id = pairRingUniqueID
+		}
+		var equipment core.Equipment
+		equipment[slots[0]] = core.NewItem(core.ItemSpec{ID: id})
+		// A second copy of the unique item selected cannot pair with the one worn either.
+		settings := &proto.BulkSettings{Items: []*proto.ItemSpec{{Id: id}}}
+		generator, err := newBulkSimCandidateGeneratorForSpec(settings, proto.Class_ClassRogue, proto.Spec_SpecRogue, false, equipment)
+		if err != nil {
+			t.Fatalf("%s worn alone: %v", slots[0], err)
+		}
+		gear := bulkEnchantCandidateGear(t, generator)
+		if len(gear) != 1 {
+			t.Fatalf("%s worn alone: %d candidates, want 1", slots[0], len(gear))
+		}
+		if got := gear[0].GetItems()[slots[0]].GetId(); got != id {
+			t.Errorf("%s holds %d, want %d", slots[0], got, id)
+		}
+		if got := gear[0].GetItems()[slots[1]].GetId(); got != 0 {
+			t.Errorf("%s holds %d, want it empty", slots[1], got)
+		}
+	}
+}
