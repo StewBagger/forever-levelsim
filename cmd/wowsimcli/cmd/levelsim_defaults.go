@@ -133,8 +133,8 @@ func roundEP(values []float64) []float64 {
 	return out
 }
 
-// A Defaults result as the file holds it.
-func levelDefaultsEntryOf(result *proto.LevelDefaultsResult) (levelDefaultsEntry, error) {
+// A Defaults result as the file holds it. A request that weighs effective healing keeps the HPS EP its gear was picked by.
+func levelDefaultsEntryOf(req *proto.LevelDefaultsRequest, result *proto.LevelDefaultsResult) (levelDefaultsEntry, error) {
 	entry := levelDefaultsEntry{Talents: result.TalentsString, TargetArmor: result.TargetArmor, Equipment: []json.RawMessage{}}
 	for _, item := range result.Equipment.GetItems() {
 		encoded, err := protojson.Marshal(item)
@@ -144,6 +144,9 @@ func levelDefaultsEntryOf(result *proto.LevelDefaultsResult) (levelDefaultsEntry
 		entry.Equipment = append(entry.Equipment, encoded)
 	}
 	ep := result.Dps.GetEpValues()
+	if req.WeighEffectiveHealing {
+		ep = result.Hps.GetEpValues()
+	}
 	if ep == nil {
 		return entry, fmt.Errorf("the result holds no EP")
 	}
@@ -278,7 +281,7 @@ func runLevelDefaults(requestsDir, outDir string, specs []string, levels []int32
 				if result.Error != nil {
 					err = fmt.Errorf("%s", result.Error.Message)
 				} else {
-					entry, err = levelDefaultsEntryOf(result)
+					entry, err = levelDefaultsEntryOf(req, result)
 				}
 
 				mu.Lock()

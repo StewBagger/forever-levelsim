@@ -62,6 +62,7 @@ const simulate = (request: RaidSimRequest) => {
 		threat: metric(3),
 		dtps: metric(4),
 		tmi: metric(5),
+		ehps: metric(6),
 		chanceOfDeath: Number(randomSeed) / 1000,
 	});
 	return RaidSimResult.create({ raidMetrics: RaidMetrics.create({ parties: [PartyMetrics.create({ players: [player] })] }), iterationsDone: iterations });
@@ -203,6 +204,7 @@ describe('runConcurrentStatWeights', () => {
 			epReferenceStat: 0,
 			hpsReferenceStat: 0,
 			statSimRequests: [{ statData: StatWeightsStatData.create({ unitStat: 1 }), requestHigh: requestWithIterations(100, 10, seed) }],
+			effectiveHealing: false,
 		});
 		// The first 60 iterations on one worker and the last 40 on another, as the sim splits a run.
 		runConcurrentSimQueue.mockImplementation(async (sims: QueuedSim[]) => {
@@ -220,6 +222,20 @@ describe('runConcurrentStatWeights', () => {
 		const chanceOfDeath = 0 + (7 / 1000) * (60 / 100) + (67 / 1000) * (40 / 100);
 		expect(calcRequest.baseChanceOfDeath).toBe(chanceOfDeath);
 		expect(calcRequest.statPairs[0].high).toEqual(expectedPairs(100, 10, chanceOfDeath));
+	});
+
+	it('pairs effective HPS on the HPS side when the requests weigh effective healing', async () => {
+		const pool = makePool([{ statData: StatWeightsStatData.create({ unitStat: 1 }), requestHigh: requestWithIterations(100, 10) }]);
+		const requests = await pool.statWeightRequests({} as never);
+		vi.mocked(pool.statWeightRequests).mockResolvedValue({ ...requests, effectiveHealing: true });
+
+		await runConcurrentStatWeights({} as never, pool, noop, signals);
+
+		const calcRequest = vi.mocked(pool.statWeightCompute).mock.calls[0][0];
+		expect(calcRequest.statPairs[0].high).toEqual({
+			...expectedPairs(100, 10, 0),
+			hps: StatWeightsPairedSums.create({ n: 100, sum: 100 * 60, sumSq: 100 * 60 * 60 }),
+		});
 	});
 
 	it('stops at a failed sim and reports its error', async () => {

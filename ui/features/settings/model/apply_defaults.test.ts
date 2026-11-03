@@ -50,7 +50,8 @@ describe('defaults in TypeScript', () => {
 		expect(await dummiesAfterDefaults(Spec.SpecDpsWarrior)).toBe(0);
 	});
 
-	it('bring nine to a healing spec', async () => {
-		expect(await dummiesAfterDefaults(Spec.SpecHolyPaladin)).toBe(9);
+	// The tank and three damage dealers of the healer's dungeon group (ui/features/encounter/model/healing_group.ts).
+	it('bring the four of its dungeon group to a healing spec', async () => {
+		expect(await dummiesAfterDefaults(Spec.SpecHolyPaladin)).toBe(4);
 	});
 });

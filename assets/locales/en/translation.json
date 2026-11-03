@@ -372,6 +372,8 @@
 			"not_significant": "Difference is not significantly different (Z = {{z}})."
 		},
 		"action_names": {
+			"tank_damage": "Tank Damage",
+			"group_damage": "Group Damage",
 			"mana_tick": "Mana Tick",
 			"energy_tick": "Energy Tick",
 			"focus_tick": "Focus Tick",
@@ -460,7 +462,7 @@
 		"title_class": "Null Sims · Forever {{class}} simulator",
 		"description_class": "{{class}} simulations for World of Warcraft® Forever.",
 		"basic_bis_disclaimer": "<p>Preset gear lists are intended as rough approximations of BIS, and will often not be the absolute highest-DPS setup for you. Your optimal gear setup will depend on many factors; that's why we have a sim!</p><p>Items may also be omitted from the presets if they are highly contested and clearly better utilized on other classes, to encourage equitable gearing for the raid as a whole.</p>",
-		"healing_sim_disclaimer": "*** WARNING - USE AT YOUR OWN RISK ***\n\nThe entire concept of a healing sim is EXPERIMENTAL. All results should be taken with an EXTREMELY large grain of salt.\n\nThis tool is currently more similar to a spreadsheet than a true sim. Options for specifying incoming damage profiles in order to have proper reactive rotations have not yet been added.",
+		"healing_sim_disclaimer": "Healing sims are EXPERIMENTAL.\n\nThe sim heals a 5-man dungeon group at your level: a tank and three damage dealers beside you. The tank takes steady melee damage, and two members at a time take a pulse of fire damage about every 8 seconds, at rates worked out from the level. Results show your healing per second, the effective part that restored health, the overhealing, your time to run out of mana and the group's chance of a death. The group and its damage are under Encounter, Healing Group.\n\nThe damage rates are starting assumptions, not yet tuned against combat logs, so compare setups against each other rather than trusting one number on its own.",
 		"crash_modal": {
 			"title": "Extra Crash Information",
 			"header": "Please append the following complete link to the issue you just created. This will simplify debugging the issue."
@@ -1063,6 +1065,46 @@
 			"num_allies": {
 				"label": "Num Allies",
 				"tooltip": "Number of allied players in the raid."
+			},
+			"healing_group": {
+				"title": "Healing Group",
+				"level_default": "Level Default",
+				"tank_dtps": {
+					"label": "Tank DTPS",
+					"tooltip": "Physical damage per second on the tank, before its armor, on top of the boss's own melee. 0 turns it off."
+				},
+				"tank_hit_seconds": {
+					"label": "Tank Hit Interval",
+					"tooltip": "Seconds between the tank's hits; each hit is Tank DTPS times this. 0 is 2 seconds."
+				},
+				"group_damage": {
+					"label": "Group Hit Damage",
+					"tooltip": "The damage of each group pulse on each member it strikes, before resistances. 0 turns the pulses off."
+				},
+				"group_damage_variation": {
+					"label": "Group Hit +/- (%)",
+					"tooltip": "How far each pulse hit rolls either side of Group Hit Damage, as a percentage of it."
+				},
+				"group_cadence_seconds": {
+					"label": "Group Pulse Interval",
+					"tooltip": "Seconds between group pulses. 0 is 8 seconds."
+				},
+				"group_cadence_variation": {
+					"label": "Group Pulse +/-",
+					"tooltip": "How many seconds each interval rolls either side of Group Pulse Interval."
+				},
+				"group_targets": {
+					"label": "Group Pulse Targets",
+					"tooltip": "The members each pulse strikes, picked at random among the living ones. 0 strikes them all."
+				},
+				"group_school": {
+					"label": "Group Pulse School",
+					"tooltip": "The spell school of the group pulses."
+				},
+				"group_hits_tank": {
+					"label": "Pulses Hit Tank",
+					"tooltip": "If checked, a group pulse can strike the tank as well."
+				}
 			},
 			"min_base_damage": {
 				"label": "Min Base Damage",
@@ -1816,6 +1858,22 @@
 					"label": "Max Health",
 					"tooltip": "Maximum health of the unit"
 				},
+				"missing_health": {
+					"label": "Missing Health",
+					"tooltip": "Maximum health of the unit less its current health: how much a heal on it can restore before the rest is overhealing"
+				},
+				"num_allies_below_health_percent": {
+					"label": "Allies Below Health %",
+					"tooltip": "The number of living group members and pets with a health bar below a share of their maximum health",
+					"health_percent": {
+						"label": "Health %",
+						"tooltip": "The share of maximum health to count members below, 0-100"
+					},
+					"party_only": {
+						"label": "Party only",
+						"tooltip": "If checked, counts only your own party's members"
+					}
+				},
 				"current_mana": {
 					"label": "Current Mana",
 					"tooltip": "Amount of currently available Mana of the unit."
@@ -2362,7 +2420,10 @@
 					"next_target": "Next Target",
 					"player": "Player",
 					"target": "Target",
-					"pet": "Pet"
+					"pet": "Pet",
+					"lowest_health_ally": "Lowest Health Ally",
+					"lowest_health_party_member": "Lowest Health Party Member",
+					"tank": "Tank"
 				},
 				"placeholder_tooltip": "The potion of this class picked in the Consumables, before the pull or in combat.",
 				"select_variable": "Select Variable",
@@ -2755,6 +2816,7 @@
 				"cast_time": "Cast Time",
 				"hpm": "HPM",
 				"hpet": "HPET",
+				"overheal": "Overheal %",
 				"amount": "Amount",
 				"dtps": "DTPS",
 				"avg_heal": "Avg Heal",
@@ -2802,6 +2864,7 @@
 				"damage_avg_cast_tooltip": "Damage / Casts and/or Damage / Ticks",
 				"healing_avg_cast_tooltip": "Healing / Casts",
 				"healing_avg_hit_tooltip": "Healing / Hits and/or Healing / (Ticks + Critical Ticks)",
+				"healing_overheal_tooltip": "The share of the action's healing beyond what its target was missing",
 				"healing_hits_tooltip": "Healing / (Hits + Crits + Glances + Blocks) and/or Healing / Ticks + Critical Ticks",
 				"hit_miss_percent_tooltip": "Misses / (Hits + Crits + Glances + Blocks)"
 			},
@@ -3469,6 +3532,18 @@
 				"hps": {
 					"label": "HPS",
 					"tooltip": "Healing+Shielding Per Second, including overhealing."
+				},
+				"ehps": {
+					"label": "EHPS",
+					"tooltip": "Effective Healing Per Second: the healing that restored health, plus shielding, without the overhealing."
+				},
+				"ovh": {
+					"label": "Overheal",
+					"tooltip": "The share of all healing that was overhealing, beyond what the target was missing."
+				},
+				"gcod": {
+					"label": "Group Death",
+					"tooltip": "The highest chance of death of any group member, the healer included: the percentage of iterations in which that member died."
 				},
 				"tps": {
 					"label": "TPS",

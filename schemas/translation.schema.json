@@ -1306,6 +1306,8 @@
 				"action_names": {
 					"type": "object",
 					"properties": {
+						"group_damage": { "type": "string" },
+						"tank_damage": { "type": "string" },
 						"mana_tick": {
 							"type": "string"
 						},
@@ -1353,6 +1355,8 @@
 						}
 					},
 					"required": [
+						"group_damage",
+						"tank_damage",
 						"mana_tick",
 						"energy_tick",
 						"focus_tick",
@@ -3520,6 +3524,81 @@
 				"encounter": {
 					"type": "object",
 					"properties": {
+						"healing_group": {
+							"type": "object",
+							"properties": {
+								"title": { "type": "string" },
+								"level_default": { "type": "string" },
+								"tank_dtps": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"tank_hit_seconds": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"group_damage": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"group_damage_variation": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"group_cadence_seconds": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"group_cadence_variation": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"group_targets": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"group_school": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"group_hits_tank": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								}
+							},
+							"additionalProperties": false,
+							"required": [
+								"title",
+								"level_default",
+								"tank_dtps",
+								"tank_hit_seconds",
+								"group_damage",
+								"group_damage_variation",
+								"group_cadence_seconds",
+								"group_cadence_variation",
+								"group_targets",
+								"group_school",
+								"group_hits_tank"
+							]
+						},
 						"title": {
 							"type": "string"
 						},
@@ -3998,6 +4077,7 @@
 					},
 					"additionalProperties": false,
 					"required": [
+						"healing_group",
 						"title",
 						"target_inputs",
 						"duration",
@@ -6004,6 +6084,33 @@
 						"values": {
 							"type": "object",
 							"properties": {
+								"num_allies_below_health_percent": {
+									"type": "object",
+									"properties": {
+										"label": { "type": "string" },
+										"tooltip": { "type": "string" },
+										"health_percent": {
+											"type": "object",
+											"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+											"additionalProperties": false,
+											"required": ["label", "tooltip"]
+										},
+										"party_only": {
+											"type": "object",
+											"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+											"additionalProperties": false,
+											"required": ["label", "tooltip"]
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip", "health_percent", "party_only"]
+								},
+								"missing_health": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
 								"item_label": {
 									"type": "string"
 								},
@@ -7765,6 +7872,8 @@
 							},
 							"additionalProperties": false,
 							"required": [
+								"num_allies_below_health_percent",
+								"missing_health",
 								"item_label",
 								"no_condition",
 								"none",
@@ -8348,6 +8457,9 @@
 								"unit_labels": {
 									"type": "object",
 									"properties": {
+										"tank": { "type": "string" },
+										"lowest_health_party_member": { "type": "string" },
+										"lowest_health_ally": { "type": "string" },
 										"self": {
 											"type": "string"
 										},
@@ -8371,7 +8483,18 @@
 										}
 									},
 									"additionalProperties": false,
-									"required": ["self", "current_target", "previous_target", "next_target", "player", "target", "pet"]
+									"required": [
+										"tank",
+										"lowest_health_party_member",
+										"lowest_health_ally",
+										"self",
+										"current_target",
+										"previous_target",
+										"next_target",
+										"player",
+										"target",
+										"pet"
+									]
 								},
 								"placeholder_tooltip": {
 									"type": "string"
@@ -9704,6 +9827,7 @@
 						"columns": {
 							"type": "object",
 							"properties": {
+								"overheal": { "type": "string" },
 								"damage_done": {
 									"type": "string"
 								},
@@ -9866,6 +9990,7 @@
 							},
 							"additionalProperties": false,
 							"required": [
+								"overheal",
 								"damage_done",
 								"threat_done",
 								"healing_done",
@@ -9924,6 +10049,7 @@
 						"tooltips": {
 							"type": "object",
 							"properties": {
+								"healing_overheal_tooltip": { "type": "string" },
 								"damage_avg_cast": {
 									"type": "string"
 								},
@@ -9960,6 +10086,7 @@
 							},
 							"additionalProperties": false,
 							"required": [
+								"healing_overheal_tooltip",
 								"damage_avg_cast",
 								"damage_taken_per_encounter",
 								"healing_per_encounter",
@@ -11728,6 +11855,24 @@
 						"metrics": {
 							"type": "object",
 							"properties": {
+								"gcod": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"ovh": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"ehps": {
+									"type": "object",
+									"properties": { "label": { "type": "string" }, "tooltip": { "type": "string" } },
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
 								"dps": {
 									"type": "object",
 									"properties": {
@@ -11886,7 +12031,7 @@
 								}
 							},
 							"additionalProperties": false,
-							"required": ["dps", "hps", "tps", "apm", "dtps", "tmi", "cod", "dur", "tto", "oom"]
+							"required": ["gcod", "ovh", "ehps", "dps", "hps", "tps", "apm", "dtps", "tmi", "cod", "dur", "tto", "oom"]
 						},
 						"stop": {
 							"type": "string"

@@ -43,6 +43,12 @@ export const refToValue = (ref: UnitReference | undefined, player: Player<any>, 
 			return { value: ref, icon: 'arrow-left', text: label('previous_target') };
 		case UnitType.NextTarget:
 			return { value: ref, icon: 'arrow-right', text: label('next_target') };
+		case UnitType.LowestHealthAlly:
+			return { value: ref, icon: 'heart-pulse', text: label('lowest_health_ally') };
+		case UnitType.LowestHealthPartyMember:
+			return { value: ref, icon: 'heart-pulse', text: label('lowest_health_party_member') };
+		case UnitType.Tank:
+			return { value: ref, icon: 'shield', text: label('tank') };
 		case UnitType.Player: {
 			const other = player.sim.raid.getPlayer(ref.index);
 			return other ? { value: ref, iconUrl: other.getSpecIcon(), text: `${label('player')} ${ref.index + 1}` } : { value: ref };

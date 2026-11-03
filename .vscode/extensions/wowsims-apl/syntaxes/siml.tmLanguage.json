@@ -136,7 +136,7 @@
 				},
 				{
 					"name": "variable.language.unit.siml",
-					"match": "\\b(?:all_players|all_targets|next_target|previous_target|self|target|unknown_unit|(?:pet|player|target)[1-9][0-9]*)(?![A-Za-z0-9_])"
+					"match": "\\b(?:all_players|all_targets|lowest_health_ally|lowest_health_party_member|next_target|previous_target|self|tank|target|unknown_unit|(?:pet|player|target)[1-9][0-9]*)(?![A-Za-z0-9_])"
 				},
 				{
 					"name": "entity.name.function.siml",

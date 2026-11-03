@@ -59,7 +59,7 @@ stat_weights_results: {
   weights: 0
   weights: 0
   weights: 0
-  weights: 2.01252
+  weights: 2.41111
   weights: 1
   weights: 0
   weights: 0
@@ -69,12 +69,7 @@ stat_weights_results: {
   weights: 0
   weights: 0
   weights: 0
-  weights: 0.64895
-  weights: 0
-  weights: 0
-  weights: 0
-  weights: 0
-  weights: 0.05675
+  weights: 0.80856
   weights: 0
   weights: 0
   weights: 0
@@ -87,7 +82,12 @@ stat_weights_results: {
   weights: 0
   weights: 0
   weights: 0
-  weights: 2.83475
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 0
+  weights: 3.80549
   weights: 0
   weights: 0
   weights: 0
@@ -119,8 +119,8 @@ dps_results: {
 dps_results: {
  key: "TestHealerPriestGroup-Level60"
  value: {
-  tps: 45.7652
+  tps: 58.18467
   dtps: 15.50117
-  hps: 275.35446
+  hps: 275.3342
  }
 }

@@ -1,3 +1,4 @@
+import { applyHealingGroup } from '@features/encounter/model/healing_group';
 import { APLRotation, APLRotation_Type as APLRotationType } from '@generated/proto/apl';
 import { Cooldowns, Profession, Spec } from '@generated/proto/common';
 import type { Player } from '@sim/player/player';
@@ -102,9 +103,10 @@ export function applyIndividualDefaults<SpecType extends Spec>(host: DefaultsHos
 
 		host.reforger?.applyDefaults();
 
-		// defaults.siml writes the count in raid_buffs:, and leaves 0 out. Healers get a full party of allies; Balance
+		// defaults.siml writes the count in raid_buffs:, and leaves 0 out. Healers get their dungeon group below; Balance
 		// keeps one so Innervate can leave the druid.
-		sim.raid.setTargetDummies(fromFile ? config.defaults.settings!.targetDummies : healingSpec ? 9 : player.getSpec() === Spec.SpecBalanceDruid ? 1 : 0);
+		sim.raid.setTargetDummies(fromFile ? config.defaults.settings!.targetDummies : player.getSpec() === Spec.SpecBalanceDruid ? 1 : 0);
+		sim.raid.setTargetDummySettings(undefined);
 		if (config.defaults.encounter?.encounter) {
 			sim.encounter.fromProto(config.defaults.encounter.encounter);
 		} else {
@@ -127,6 +129,8 @@ export function applyIndividualDefaults<SpecType extends Spec>(host: DefaultsHos
 		} else {
 			sim.raid.setTanks([]);
 		}
+		// A healer heals the level's 5-man group through the level's damage profile.
+		if (healingSpec && !fromFile) applyHealingGroup(sim, player.getLevel());
 
 		host.statWeightActionSettings.applyDefaults();
 		host.statSweepSettings.applyDefaults();

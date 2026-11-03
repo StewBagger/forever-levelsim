@@ -1,4 +1,4 @@
-import { Raid as RaidProto } from '@generated/proto/api';
+import { Raid as RaidProto, TargetDummySettings } from '@generated/proto/api';
 import { Debuffs, RaidBuffs } from '@generated/proto/buffs';
 import { Class, UnitReference, UnitReference_Type as UnitType } from '@generated/proto/common';
 
@@ -147,6 +147,18 @@ export class Raid {
 		this.patchRaid({ targetDummies: newTargetDummies });
 	}
 
+	getTargetDummySettings(): TargetDummySettings | undefined {
+		const settings = this.raidState.targetDummySettings;
+		return settings && TargetDummySettings.clone(settings);
+	}
+
+	setTargetDummySettings(newSettings: TargetDummySettings | undefined) {
+		const settings = this.raidState.targetDummySettings;
+		if (settings === newSettings || (settings && newSettings && TargetDummySettings.equals(settings, newSettings))) return;
+
+		this.patchRaid({ targetDummySettings: newSettings && TargetDummySettings.clone(newSettings) });
+	}
+
 	getNumActiveParties(): number {
 		return this.raidState.numActiveParties;
 	}
@@ -173,6 +185,7 @@ export class Raid {
 			debuffs: this.getDebuffs(),
 			tanks: this.getTanks(),
 			targetDummies: this.getTargetDummies(),
+			targetDummySettings: this.getTargetDummySettings(),
 			numActiveParties: this.getNumActiveParties(),
 		});
 	}
@@ -183,6 +196,7 @@ export class Raid {
 			this.setDebuffs(proto.debuffs || Debuffs.create());
 			this.setTanks(proto.tanks);
 			this.setTargetDummies(proto.targetDummies);
+			this.setTargetDummySettings(proto.targetDummySettings);
 			this.setNumActiveParties(proto.numActiveParties || 5);
 
 			for (let i = 0; i < MAX_NUM_PARTIES; i++) {

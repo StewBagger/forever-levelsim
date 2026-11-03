@@ -19,6 +19,10 @@ interface LevelPreset {
 	targetArmor: number;
 }
 
+// The result's EP side the file's EP is: a healer's is its effective HPS EP, which the file holds for a healing spec.
+const withEp = (player: Player<any>, epValues: UnitStats) =>
+	player.getPlayerSpec().isHealingSpec ? { hps: StatWeightValues.create({ epValues }) } : { dps: StatWeightValues.create({ epValues }) };
+
 // A spec page's worked-out levels, and a creature's armor at each level from 1 to 60.
 export interface LevelPresetFile {
 	creatureArmor: number[];
@@ -78,7 +82,7 @@ export const presetLevelDefaults = async (
 		return LevelDefaultsResult.create({
 			talentsString: exact.talents,
 			equipment: await presetGear(exact),
-			dps: StatWeightValues.create({ epValues: UnitStats.fromJson(exact.ep) }),
+			...withEp(player, UnitStats.fromJson(exact.ep)),
 			targetArmor: exact.targetArmor,
 		});
 	}
@@ -99,7 +103,7 @@ export const presetLevelDefaults = async (
 	return LevelDefaultsResult.create({
 		talentsString,
 		equipment: await sim.bisGear(player, level, Stats.fromProto(epValues)),
-		dps: StatWeightValues.create({ epValues }),
+		...withEp(player, epValues),
 		targetArmor: file.creatureArmor[level - 1],
 	});
 };

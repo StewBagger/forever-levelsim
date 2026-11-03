@@ -347,6 +347,8 @@ export class UnitMetrics {
 	readonly classColor: string;
 	readonly dps: DistributionMetricsProto;
 	readonly hps: DistributionMetricsProto;
+	// Healing that restored health, plus shielding: hps without the overhealing.
+	readonly ehps: DistributionMetricsProto;
 	readonly tps: DistributionMetricsProto;
 	readonly dtps: DistributionMetricsProto;
 	readonly tmi: DistributionMetricsProto;
@@ -446,6 +448,7 @@ export class UnitMetrics {
 		this.classColor = this.isTarget ? '' : (PlayerClasses.getCssScheme(PlayerSpecs.getPlayerClass(this.spec as PlayerSpec<any>)) ?? '');
 		this.dps = this.metrics.dps!;
 		this.hps = this.metrics.hps!;
+		this.ehps = this.metrics.ehps ?? DistributionMetricsProto.create();
 		this.tps = this.metrics.threat!;
 		this.dtps = this.metrics.dtps!;
 		this.tmi = this.metrics.tmi!;
@@ -512,6 +515,11 @@ export class UnitMetrics {
 		} else {
 			return false; // TODO pets
 		}
+	}
+
+	// The share of hps that was overhealing, as a percentage.
+	get overhealingPercent(): number {
+		return this.metrics.overhealingPercent * 100;
 	}
 
 	get chanceOfDeath(): DistributionMetricsProto {
@@ -1039,6 +1047,10 @@ export class ActionMetrics {
 
 	get hps() {
 		return this.combinedMetrics.hps;
+	}
+
+	get overhealingPercent() {
+		return this.combinedMetrics.overhealingPercent;
 	}
 
 	get casts() {
@@ -1726,6 +1738,11 @@ class TargetedActionMetrics {
 		return (this.data.healing + this.data.shielding) / this.iterations / this.duration;
 	}
 
+	// The share of the healing and shielding that was overhealing.
+	get overhealingPercent() {
+		return percentOf(this.data.overhealing, this.data.healing + this.data.shielding);
+	}
+
 	get casts() {
 		return this.data.casts / this.iterations;
 	}
@@ -2003,6 +2020,7 @@ class TargetedActionMetrics {
 				healing: sum(actions.map(a => a.data.healing)),
 				critHealing: sum(actions.map(a => a.data.critHealing)),
 				shielding: sum(actions.map(a => a.data.shielding)),
+				overhealing: sum(actions.map(a => a.data.overhealing)),
 				castTimeMs: sum(actions.map(a => a.data.castTimeMs)),
 				ranges: mergeRangeMaps(actions.map(a => a.data.ranges)),
 				customMetrics: mergeCustomMetrics(actions.map(a => a.data.customMetrics)),

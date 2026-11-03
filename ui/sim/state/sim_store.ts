@@ -5,11 +5,12 @@
 //
 // Slices are added here as each facade is converted; a slice absent from this
 // file still lives in its class.
-import type { PlayerStats } from '@generated/proto/api';
+import type { PlayerStats, TargetDummySettings } from '@generated/proto/api';
 import { Debuffs, IndividualBuffs, PartyBuffs, RaidBuffs } from '@generated/proto/buffs';
 import {
 	type AreaType,
 	ConsumesSpec,
+	type DamageProfile,
 	Faction,
 	HealingModel,
 	type ItemSlot,
@@ -56,6 +57,8 @@ export interface EncounterSlice {
 	areaTypes: Array<AreaType>;
 	zoneId: number;
 	targets: Array<TargetProto>;
+	// The incoming damage of a healing sim; undefined adds none.
+	damageProfile: DamageProfile | undefined;
 }
 
 // Raid-wide settings (owned by Raid; partyBuffs entries owned by each Party).
@@ -66,6 +69,8 @@ export interface RaidSlice {
 	debuffs: Debuffs;
 	tanks: Array<UnitReference>;
 	targetDummies: number;
+	// What the target dummies are; undefined keeps them heal targets without a health bar.
+	targetDummySettings: TargetDummySettings | undefined;
 	numActiveParties: number;
 	// One entry per party; length equals MAX_NUM_PARTIES (5).
 	partyBuffs: Array<PartyBuffs>;
@@ -325,6 +330,7 @@ const initialState = (): SimState => ({
 		debuffs: Debuffs.create(),
 		tanks: [],
 		targetDummies: 0,
+		targetDummySettings: undefined,
 		numActiveParties: 5,
 		// 5 = MAX_NUM_PARTIES (raid.ts); not imported to avoid a module cycle.
 		partyBuffs: Array.from({ length: 5 }, () => PartyBuffs.create()),
@@ -338,6 +344,7 @@ const initialState = (): SimState => ({
 		areaTypes: [],
 		zoneId: 0,
 		targets: [],
+		damageProfile: undefined,
 	},
 	players: {},
 	reforge: {},

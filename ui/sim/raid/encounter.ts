@@ -1,5 +1,6 @@
 import {
 	AreaType,
+	DamageProfile,
 	Encounter as EncounterProto,
 	MobType,
 	PresetEncounter,
@@ -117,6 +118,17 @@ export class Encounter {
 		this.set({ useHealth: newUseHealth });
 	}
 
+	// The incoming damage of a healing sim, undefined for none.
+	getDamageProfile(): DamageProfile | undefined {
+		const profile = this.enc.damageProfile;
+		return profile && DamageProfile.clone(profile);
+	}
+	setDamageProfile(newProfile: DamageProfile | undefined) {
+		const profile = this.enc.damageProfile;
+		if (profile === newProfile || (profile && newProfile && DamageProfile.equals(profile, newProfile))) return;
+		this.set({ damageProfile: newProfile && DamageProfile.clone(newProfile) });
+	}
+
 	getAreaTypes(): Array<AreaType> {
 		return this.enc.areaTypes;
 	}
@@ -168,6 +180,7 @@ export class Encounter {
 			areaTypes: enc.areaTypes,
 			zoneId: enc.zoneId,
 			targets: enc.targets,
+			damageProfile: enc.damageProfile,
 			apiVersion: CURRENT_API_VERSION,
 		});
 	}
@@ -183,6 +196,7 @@ export class Encounter {
 			// Clone so edits in the Advanced Encounter picker cannot mutate the
 			// saved entry's (or the config default's) own target protos.
 			this.setTargets(proto.targets.map(t => TargetProto.clone(t)));
+			this.setDamageProfile(proto.damageProfile);
 		});
 	}
 

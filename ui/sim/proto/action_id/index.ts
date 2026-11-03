@@ -160,6 +160,14 @@ export class ActionId {
 				baseName = i18n.t('settings_tab.consumables.potions.offensive');
 				iconUrl = 'https://wow.zamimg.com/images/wow/icons/large/inv_alchemy_elixir_04.jpg';
 				break;
+			case OtherAction.OtherActionTankDamage:
+				baseName = i18n.t('common.action_names.tank_damage');
+				iconUrl = 'https://wow.zamimg.com/images/wow/icons/large/ability_warrior_defensivestance.jpg';
+				break;
+			case OtherAction.OtherActionGroupDamage:
+				baseName = i18n.t('common.action_names.group_damage');
+				iconUrl = 'https://wow.zamimg.com/images/wow/icons/large/spell_fire_selfdestruct.jpg';
+				break;
 			case OtherAction.OtherActionMove:
 				baseName = i18n.t('common.action_names.moving');
 				iconUrl = 'https://wow.zamimg.com/images/wow/icons/medium/inv_boots_cloth_03.jpg';

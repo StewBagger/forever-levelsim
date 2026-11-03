@@ -5,6 +5,7 @@ import { HealerPriest_Options as HealerPriestOptions, PriestOptions_Armor } from
 import { SavedTalents } from '@generated/proto/ui';
 import { Stats } from '@sim/proto/stats';
 
+import GroupApl from './apls/group.apl.json';
 import PreraidGearJson from './gear_sets/preraid.gear.json';
 
 export const DefaultOptions = HealerPriestOptions.create({
@@ -38,7 +39,11 @@ export const OtherDefaults = {
 };
 
 export const DiscTalents = PresetUtils.makePresetTalents('Disc', SavedTalents.create({ talentsString: '005025021330011531-335001030301' }));
-export const HolyTalents = PresetUtils.makePresetTalents('Holy', SavedTalents.create({ talentsString: '00520101133-33505003030121531' }));
+export const HolyTalents = PresetUtils.makePresetTalents('Holy', SavedTalents.create({ talentsString: '00500500123-33505003030121531' }));
+
+// A 5-man group's heal priority: the tank's shield and Renew, Prayer of Healing when three of the party are hurt, and the
+// lowest member's heal sized by how low it is, holding the bigger heals back once mana runs short.
+export const GroupRotation = PresetUtils.makePresetAPLRotation('Group', GroupApl);
 
 export const PreRaidGear = PresetUtils.makePresetGear('Pre-raid', PreraidGearJson, { devOnly: true });
 

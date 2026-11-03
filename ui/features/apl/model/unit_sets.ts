@@ -9,6 +9,13 @@ const ownPetRefs = (player: Player<any>) =>
 		.asList()
 		.map((_petMetadata, i) => UnitReference.create({ type: UnitType.Pet, index: i, owner: UnitReference.create({ type: UnitType.Self }) }));
 
+// The group members a healer picks by health, read at each use: the lowest in the raid, the lowest in its party, and
+// the tank. A healing spec's group of healable target dummies is what gives them a unit to name.
+const healTargetRefs = (player: Player<any>) =>
+	player.shouldEnableTargetDummies() && player.getPlayerSpec().isHealingSpec
+		? [UnitType.LowestHealthAlly, UnitType.LowestHealthPartyMember, UnitType.Tank].map(type => UnitReference.create({ type }))
+		: [];
+
 export const unitSets: Record<
 	UNIT_SET,
 	{
@@ -25,6 +32,7 @@ export const unitSets: Record<
 				UnitReference.create({ type: UnitType.CurrentTarget }),
 				UnitReference.create({ type: UnitType.PreviousTarget }),
 				UnitReference.create({ type: UnitType.NextTarget }),
+				healTargetRefs(player),
 				player.sim.raid
 					.getActivePlayers()
 					.filter(filter => filter != player)
@@ -66,7 +74,8 @@ export const unitSets: Record<
 		getUnits: player => {
 			return [
 				undefined,
-				player.sim.raid.getActivePlayers().map(player => UnitReference.create({ type: UnitType.Player, index: player.getRaidIndex() })),
+				healTargetRefs(player),
+				player.sim.raid.getActivePlayers().map(other => UnitReference.create({ type: UnitType.Player, index: other.getRaidIndex() })),
 			].flat();
 		},
 	},

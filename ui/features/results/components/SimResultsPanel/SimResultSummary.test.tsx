@@ -40,6 +40,7 @@ const player = {
 	dtps: dist(50, 1),
 	tmi: dist(2, 0.5),
 	hps: dist(20, 2),
+	ehps: dist(15, 2),
 	tto: dist(30, 3),
 	chanceOfDeath: dist(1, 0.1),
 	secondsOomAvg: 0,

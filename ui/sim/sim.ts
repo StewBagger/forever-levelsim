@@ -745,12 +745,14 @@ export class Sim {
 		options: StatWeightsOptions = {},
 	): StatWeightsRequest | null {
 		if (player.getParty() == null) return null;
-		const tanks = this.raid
+		// A healer weighs its stats on the effective healing it does for the raid's group of target dummies, which sit
+		// after it in the request's single-player raid as they do in this one, so the tank slots name the same units.
+		const healer = player.getPlayerSpec().isHealingSpec;
+		const isTank = this.raid
 			.getTanks()
 			.map(tank => tank.index)
-			.includes(player.getRaidIndex())
-			? [UnitReference.create({ type: UnitType.Player, index: 0 })]
-			: [];
+			.includes(player.getRaidIndex());
+		const tanks = healer ? this.raid.getTanks() : isTank ? [UnitReference.create({ type: UnitType.Player, index: 0 })] : [];
 		// `toDatabase()` fills items and enchants only, so without this the request carries
 		// no consumables or spell effects. lib.wasm is built without the `with_db` tag, so a
 		// worker that has not already handled a full sim request cannot resolve them and computes
@@ -770,6 +772,11 @@ export class Sim {
 				debug: false,
 			}),
 			tanks: tanks,
+			...(healer && {
+				targetDummies: this.raid.getTargetDummies(),
+				targetDummySettings: this.raid.getTargetDummySettings(),
+				effectiveHealing: true,
+			}),
 
 			statsToWeigh: epStats,
 			pseudoStatsToWeigh: epPseudoStats,
@@ -843,7 +850,8 @@ export class Sim {
 		const statWeights = this.statWeightsRequest(player, epStats, epPseudoStats, epReferenceStat);
 		if (!statWeights) throw new SimError(i18n.t('sim.run_errors.stat_weights_failed'));
 		statWeights.player!.talentsString = talentsString;
-		const result = await this.workerPool.levelDefaults(LevelDefaultsRequest.create({ statWeights, level }));
+		const weighEffectiveHealing = player.getPlayerSpec().isHealingSpec;
+		const result = await this.workerPool.levelDefaults(LevelDefaultsRequest.create({ statWeights, level, weighEffectiveHealing }));
 		if (result.error) throw new SimError(result.error.message);
 		// The sim picks from every item, the common ones db.json leaves to the leftovers as well (a level 10 Claymore),
 		// and an item the page's database lacks would be dropped from the set.

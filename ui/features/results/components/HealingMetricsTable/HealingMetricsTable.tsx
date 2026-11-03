@@ -25,6 +25,7 @@ const TOOLTIP = {
 	avgHit: 'healing-metrics-avg-hit',
 	avgHitHeader: 'healing-metrics-avg-hit-header',
 	hps: 'healing-metrics-hps',
+	overhealHeader: 'healing-metrics-overheal-header',
 };
 
 const healingGroups = (resultData: SimResultData): Array<Array<ActionMetrics>> => {
@@ -165,6 +166,15 @@ export const HealingMetricsTable = () => {
 					header: i18n.t('results_tab.details.columns.crit_percent'),
 					cell: info => attackFormat.percent(info.getValue()),
 				}),
+				helper.accessor(row => row.metric.overhealingPercent, {
+					id: 'overheal',
+					header: i18n.t('results_tab.details.columns.overheal'),
+					meta: {
+						headerTooltipId: TOOLTIP.overhealHeader,
+						headerTooltip: i18n.t('results_tab.details.tooltips.healing_overheal_tooltip'),
+					},
+					cell: info => attackFormat.percent(info.getValue()),
+				}),
 				helper.accessor(row => row.metric.healingThroughput, {
 					id: 'hpet',
 					header: i18n.t('results_tab.details.columns.hpet'),
@@ -195,6 +205,7 @@ export const HealingMetricsTable = () => {
 			<Tooltip id={TOOLTIP.avgCastHeader} />
 			<Tooltip id={TOOLTIP.hitsHeader} />
 			<Tooltip id={TOOLTIP.avgHitHeader} />
+			<Tooltip id={TOOLTIP.overhealHeader} />
 			<MetricTooltip
 				id={TOOLTIP.healing}
 				forAnchor={forAnchor}

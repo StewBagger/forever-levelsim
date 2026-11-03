@@ -105,3 +105,25 @@ func TestRunLevelDefaultsWritesEachLevel(t *testing.T) {
 		t.Errorf("a second run logged %d lines, want only its plan of no levels: %v", len(lines), lines)
 	}
 }
+
+// A healer's file holds the HPS EP its gear was picked by, a damage dealer's the DPS EP.
+func TestLevelDefaultsEntryKeepsTheWeighedEP(t *testing.T) {
+	ep := func(healingPower float64) *proto.StatWeightValues {
+		stats := make([]float64, len(proto.Stat_name))
+		stats[proto.Stat_StatHealingPower] = healingPower
+		return &proto.StatWeightValues{EpValues: &proto.UnitStats{Stats: stats}}
+	}
+	result := &proto.LevelDefaultsResult{Equipment: &proto.EquipmentSpec{}, Dps: ep(2), Hps: ep(1)}
+	for _, tc := range []struct {
+		healing bool
+		want    float64
+	}{{false, 2}, {true, 1}} {
+		entry, err := levelDefaultsEntryOf(&proto.LevelDefaultsRequest{WeighEffectiveHealing: tc.healing}, result)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got := entry.EP.Stats[proto.Stat_StatHealingPower]; got != tc.want {
+			t.Errorf("weigh effective healing %v: healing power EP %v, want %v", tc.healing, got, tc.want)
+		}
+	}
+}

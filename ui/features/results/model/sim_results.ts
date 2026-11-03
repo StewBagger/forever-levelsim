@@ -18,6 +18,9 @@ export interface ResultMetrics {
 	tmi: string;
 	dur: string;
 	hps: string;
+	ehps: string;
+	ovh: string;
+	gcod: string;
 	tps: string;
 	apm: string;
 	tto: string;
@@ -37,6 +40,9 @@ export const resultMetricCategories: { [ResultMetrics: string]: keyof ResultMetr
 	cod: 'threat',
 	tto: 'healing',
 	hps: 'healing',
+	ehps: 'healing',
+	ovh: 'healing',
+	gcod: 'healing',
 };
 
 export const showsEpRatios = (metrics: { damage: boolean; threat: boolean; healing: boolean }): boolean =>

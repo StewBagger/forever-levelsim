@@ -1,3 +1,4 @@
+import { applyHealingGroup } from '@features/encounter/model/healing_group';
 import { maxTalentPoints } from '@features/talents/model/can_set_points';
 import type { LevelDefaultsResult } from '@generated/proto/api';
 import { Stat } from '@generated/proto/common';
@@ -87,6 +88,7 @@ const loadedToast = (level: number) => toastManager.add({ variant: 'success', bo
 // has changed again before it lands.
 const loadLevelDefaults = async (host: IndividualSimHost<any>, level: number, targetFollows: boolean, gearOnly = false) => {
 	const { player, sim, individualConfig: config } = host;
+	const healer = player.getPlayerSpec().isHealingSpec;
 	let busy: string | undefined;
 	try {
 		// A gear planner page has no sim to work a level out with, and no file of worked-out levels.
@@ -108,17 +110,19 @@ const loadLevelDefaults = async (host: IndividualSimHost<any>, level: number, ta
 					config.defaults.talents.talentsString,
 					config.epStats,
 					config.epPseudoStats ?? [],
-					player.getRefStat('dpsRefStat') ?? config.epReferenceStat,
+					player.getRefStat(healer ? 'healRefStat' : 'dpsRefStat') ?? config.epReferenceStat,
 				),
 			);
 		}
 		if (player.getLevel() != level) return;
-		const { equipment, talentsString, dps, targetArmor } = result;
+		const { equipment, talentsString, targetArmor } = result;
+		// A healer's gear is picked by its effective healing EP, which is the one it keeps.
+		const ep = healer ? result.hps : result.dps;
 		batch(() => {
 			if (equipment) player.setGear(sim.db.lookupEquipmentSpec(equipment));
 			if (gearOnly) return;
 			player.setTalentsString(talentsString);
-			if (dps?.epValues) player.setEpWeights(Stats.fromProto(dps.epValues));
+			if (ep?.epValues) player.setEpWeights(Stats.fromProto(ep.epValues));
 			applyDefaultOptions(host);
 			if (targetFollows && canSim) setTargetArmor(host, targetArmor);
 		});
@@ -140,6 +144,8 @@ export const applyLevelEdit = (host: IndividualSimHost<any>, newValue: number): 
 	const change = changeLevel(host.player, newValue, host.individualConfig.minLevel);
 	if (!change) return Promise.resolve();
 	closeBusyToast(host.player);
+	// A healer's group, its damage and its boss are the level's, set before the level's stat weights are asked for.
+	if (host.player.getPlayerSpec().isHealingSpec) applyHealingGroup(host.sim, change.level);
 	if (change.level == CHARACTER_LEVEL) {
 		applySpecDefaults(host, change.targetFollows);
 		// A spec with no default gear (the warlock's) starts from the best in slot for 60 without raid gear instead of

@@ -62,7 +62,7 @@ export class HealerPriest extends PlayerSpec<Spec.SpecHealerPriest> {
 
 	static launch: SimStatus = {
 		phase: CURRENT_PHASE,
-		status: LaunchStatus.GearPlanner,
+		status: LaunchStatus.Alpha,
 	};
 
 	readonly specIndex = HealerPriest.specIndex;

@@ -19,6 +19,7 @@ const COMPARED: Array<{
 }> = [
 	{ metric: 'dps', read: result => result.raidMetrics.dps },
 	{ metric: 'hps', read: result => result.raidMetrics.hps },
+	{ metric: 'ehps', read: result => result.getFirstPlayer()!.ehps },
 	{ metric: 'tto', read: result => result.getFirstPlayer()!.tto },
 	{ metric: 'tps', read: result => result.getFirstPlayer()!.tps },
 	{ metric: 'dtps', read: result => result.getFirstPlayer()!.dtps, lowerIsBetter: true },

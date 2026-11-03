@@ -33,11 +33,11 @@ describe('HealingMetricsTable', () => {
 		mockActionMetricsMerge('healing', 'hps');
 	});
 
-	it('builds the twelve-column shell before any result', () => {
+	it('builds the thirteen-column shell before any result', () => {
 		const { container } = render(<HealingMetricsTable />);
 
 		expect(container.querySelector('[data-testid="healing-metrics-root"]')).toBeTruthy();
-		expect(container.querySelectorAll('thead th')).toHaveLength(12);
+		expect(container.querySelectorAll('thead th')).toHaveLength(13);
 		expect(rows(container)).toHaveLength(0);
 	});
 
@@ -125,14 +125,15 @@ describe('HealingMetricsTable', () => {
 		]);
 	});
 
-	it('anchors all three header tooltips on their own header cell', () => {
+	it('anchors all four header tooltips on their own header cell', () => {
 		const { container } = render(<HealingMetricsTable />);
 		const headers = [...container.querySelectorAll('thead th')];
 
 		expect(headers[5].getAttribute('data-tooltip-id')).toBe('healing-metrics-avg-cast-header');
 		expect(headers[6].getAttribute('data-tooltip-id')).toBe('healing-metrics-hits-header');
 		expect(headers[7].getAttribute('data-tooltip-id')).toBe('healing-metrics-avg-hit-header');
-		expect(headers.map(th => th.getAttribute('data-tooltip-content')).filter(Boolean)).toHaveLength(3);
+		expect(headers[10].getAttribute('data-tooltip-id')).toBe('healing-metrics-overheal-header');
+		expect(headers.map(th => th.getAttribute('data-tooltip-content')).filter(Boolean)).toHaveLength(4);
 	});
 
 	it('leaves no tooltip behind when the table unmounts while one is open', async () => {

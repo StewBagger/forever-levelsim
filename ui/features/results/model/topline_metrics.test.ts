@@ -65,6 +65,18 @@ describe('toplineResultMetrics', () => {
 		expect(keys(simResult([player({ spec: PlayerSpecs.ProtectionPaladin })]))).toEqual(['dps', 'tps', 'apm', 'dtps', 'tmi']);
 	});
 
+	// The healer's dummies are raid members in the raw metrics alone, so the group's deaths are read there.
+	it('adds effective HPS, overheal and the group chance of death for a healing spec', () => {
+		const healer = player({ spec: PlayerSpecs.HealerPriest, ehps: dist(12, 1), overhealingPercent: 40 });
+		const raidMetrics = { parties: [{ players: [{ chanceOfDeath: 0 }, { chanceOfDeath: 0.25 }, { chanceOfDeath: 0.1 }] }] };
+		const metrics = toplineResultMetrics(simResult([healer], { result: { avgIterationDuration: 300, raidMetrics }, iterations: 100 }));
+
+		expect(metrics.map(metric => metric.metric)).toEqual(['dps', 'tps', 'apm', 'dtps', 'tmi', 'cod', 'tto', 'hps', 'ehps', 'ovh', 'gcod']);
+		expect(metrics.find(metric => metric.metric === 'ehps')).toMatchObject({ average: 12, stdev: 1 });
+		expect(metrics.find(metric => metric.metric === 'ovh')).toMatchObject({ average: 40, unit: 'percentage' });
+		expect(metrics.find(metric => metric.metric === 'gcod')).toMatchObject({ average: 25, stdev: Math.sqrt((0.25 * 0.75) / 100) * 100 });
+	});
+
 	it('carries the metric, its label and its unit', () => {
 		const metrics = toplineResultMetrics(simResult([player()]));
 

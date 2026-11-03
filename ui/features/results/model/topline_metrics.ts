@@ -50,6 +50,15 @@ const column = (
 	unit: options.unit,
 });
 
+// The highest chance of death in the raid, as a percentage with its error, read off the raw metrics: the healer's target
+// dummies are raid members there and nowhere else in the result. Undefined for a raid of one.
+const groupChanceOfDeath = (simResult: SimResult): { avg: number; stdev: number } | undefined => {
+	const members = simResult.result.raidMetrics?.parties.flatMap(party => party.players) ?? [];
+	if (members.length < 2) return undefined;
+	const p = Math.max(...members.map(member => member.chanceOfDeath));
+	return { avg: p * 100, stdev: Math.sqrt((p * (1 - p)) / simResult.iterations) * 100 };
+};
+
 /** The out-of-mana column is a single-player, mana-using-class call the detailed-results rows make and the sidebar does not. */
 export const showsOutOfMana = (simResult: SimResult, filter?: SimResultFilter): boolean => {
 	const players = simResult.getRaidIndexedPlayers(filter);
@@ -105,6 +114,15 @@ export const toplineResultMetrics = (simResult: SimResult, filter?: SimResultFil
 	if (!isTank) {
 		resultColumns.push(column('tto', playerMetrics.tto.avg, { stdev: playerMetrics.tto.stdev, unit: 'seconds' }));
 		resultColumns.push(column('hps', playerMetrics.hps.avg, { stdev: playerMetrics.hps.stdev }));
+	}
+
+	// A healer is judged by the healing that landed, what it wasted and whether its group lived.
+	if (playerMetrics.spec?.isHealingSpec) {
+		const { ehps } = playerMetrics;
+		resultColumns.push(column('ehps', ehps.avg, { stdev: ehps.stdev }));
+		resultColumns.push(column('ovh', playerMetrics.overhealingPercent, { unit: 'percentage' }));
+		const deaths = groupChanceOfDeath(simResult);
+		if (deaths) resultColumns.push(column('gcod', deaths.avg, { stdev: deaths.stdev, unit: 'percentage' }));
 	}
 
 	if (simResult.request.encounter?.useHealth) {

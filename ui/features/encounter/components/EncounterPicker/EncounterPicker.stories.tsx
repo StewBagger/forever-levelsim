@@ -75,6 +75,7 @@ const meta = {
 		preset: { control: false },
 		allies: { control: false },
 		minBaseDamage: { control: false },
+		healingGroup: { control: false },
 		targetInputs: { control: false },
 	},
 } satisfies Meta<typeof EncounterPickerView>;
@@ -89,3 +90,19 @@ export const WithExecuteBands: Story = { args: { execute: EXECUTE } };
 export const Tank: Story = { args: { minBaseDamage: number('story-min-base-damage', 'Min Base Damage', 4192) } };
 
 export const WithoutDamageMetrics: Story = { args: { preset: undefined } };
+
+export const Healer: Story = {
+	args: {
+		allies: number('story-num-allies', 'Num Allies', 4),
+		healingGroup: (
+			<>
+				{number('story-tank-dtps', 'Tank DTPS', 51.9)}
+				{number('story-tank-hit-interval', 'Tank Hit Interval', 2)}
+				{number('story-group-hit-damage', 'Group Hit Damage', 87.8)}
+				{number('story-group-pulse-interval', 'Group Pulse Interval', 8)}
+				{number('story-group-pulse-targets', 'Group Pulse Targets', 2)}
+			</>
+		),
+		onHealingGroupReset: fn(),
+	},
+};

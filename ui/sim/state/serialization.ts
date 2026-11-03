@@ -44,6 +44,7 @@ export function individualSimSettingsToProto(ctx: IndividualSimSerializationCont
 			raidBuffs: ctx.sim.raid.getBuffs(),
 			debuffs: ctx.sim.raid.getDebuffs(),
 			targetDummies: ctx.sim.raid.getTargetDummies(),
+			targetDummySettings: ctx.sim.raid.getTargetDummySettings(),
 		});
 	}
 	if (exportCategory(SimSettingCategories.UISettings)) {
@@ -106,6 +107,7 @@ export function applyIndividualSimSettings(
 				party.setBuffs(settings.partyBuffs || PartyBuffs.create());
 			}
 			ctx.sim.raid.setTargetDummies(settings.targetDummies);
+			ctx.sim.raid.setTargetDummySettings(settings.targetDummySettings);
 		}
 		if (loadCategory(SimSettingCategories.Encounter)) {
 			ctx.sim.encounter.fromProto(settings.encounter || EncounterProto.create());

@@ -1,5 +1,6 @@
 import { SidebarRegistry } from '@app/sidebar_registry';
 import { initBulk } from '@features/bulk/model/init';
+import { ensureHealingGroup } from '@features/encounter/model/healing_group';
 import { watchTargetDummies } from '@features/encounter/model/target_dummies';
 import { repairTargetInputs } from '@features/encounter/model/target_inputs';
 import { registerAreaStatsNotices, registerSetBonusNotices } from '@features/gear/item_notices';
@@ -152,6 +153,7 @@ export class SimHostObject<SpecType extends Spec> implements IndividualSimHost<S
 
 		this.sim.waitForInit().then(() => {
 			repairTargetInputs(this.sim.encounter);
+			ensureHealingGroup(this.player, this.sim);
 			watchTargetDummies(this.player, this.sim);
 		});
 
