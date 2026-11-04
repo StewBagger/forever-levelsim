@@ -30,6 +30,7 @@ const prevSimResult = (): StatWeightsResult => ({
 	dtps: { weights: marker(MARKERS.dtpsWeights), epValues: marker(MARKERS.dtpsEp) },
 	tmi: { weights: marker(MARKERS.tmiWeights), epValues: marker(MARKERS.tmiEp) },
 	pDeath: { weights: marker(MARKERS.pDeathWeights), epValues: marker(MARKERS.pDeathEp) },
+	healingCapacityMultiplier: 0,
 });
 
 const makeSources = (overrides: Partial<StatsTableSources> = {}): StatsTableSources => ({
@@ -119,7 +120,7 @@ describe('statsTableColumns', () => {
 
 	it('re-reads the previous result on every call', () => {
 		let value = 1;
-		const [dpsWeight] = statsTableColumns(makeSources({ getPrevSimResult: () => ({ dps: { weights: marker(value) } }) }));
+		const [dpsWeight] = statsTableColumns(makeSources({ getPrevSimResult: () => ({ dps: { weights: marker(value) }, healingCapacityMultiplier: 0 }) }));
 
 		expect(weightMarker(dpsWeight.getWeights())).toBe(1);
 		value = 2;

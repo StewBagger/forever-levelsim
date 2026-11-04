@@ -205,6 +205,7 @@ describe('runConcurrentStatWeights', () => {
 			hpsReferenceStat: 0,
 			statSimRequests: [{ statData: StatWeightsStatData.create({ unitStat: 1 }), requestHigh: requestWithIterations(100, 10, seed) }],
 			effectiveHealing: false,
+			healingCapacityMultiplier: 0,
 		});
 		// The first 60 iterations on one worker and the last 40 on another, as the sim splits a run.
 		runConcurrentSimQueue.mockImplementation(async (sims: QueuedSim[]) => {
@@ -236,6 +237,16 @@ describe('runConcurrentStatWeights', () => {
 			...expectedPairs(100, 10, 0),
 			hps: StatWeightsPairedSums.create({ n: 100, sum: 100 * 60, sumSq: 100 * 60 * 60 }),
 		});
+	});
+
+	it("passes the requests' healing capacity on to the weights", async () => {
+		const pool = makePool([{ statData: StatWeightsStatData.create({ unitStat: 1 }), requestHigh: requestWithIterations(100, 10) }]);
+		const requests = await pool.statWeightRequests({} as never);
+		vi.mocked(pool.statWeightRequests).mockResolvedValue({ ...requests, effectiveHealing: true, healingCapacityMultiplier: 1.5 });
+
+		await runConcurrentStatWeights({} as never, pool, noop, signals);
+
+		expect(vi.mocked(pool.statWeightCompute).mock.calls[0][0].healingCapacityMultiplier).toBe(1.5);
 	});
 
 	it('stops at a failed sim and reports its error', async () => {

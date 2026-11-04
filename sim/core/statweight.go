@@ -201,6 +201,16 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 		EffectiveHealing: swr.EffectiveHealing,
 	}
 
+	// Every run of the weights, the baseline's and each stat's, takes the capacity's damage and dummies
+	// that stay up at 0 health. A search sim that fails leaves the fight as it is, and the baseline then
+	// fails on the same setup and reports it.
+	if swr.HealingCapacity && canSearchHealingCapacity(swBaseResponse.BaseRequest) {
+		if multiplier, err := searchHealingCapacity(swBaseResponse.BaseRequest, healingCapacitySim); err == nil && multiplier > 0 {
+			swBaseResponse.BaseRequest = atDamageMultiple(swBaseResponse.BaseRequest, multiplier)
+			swBaseResponse.HealingCapacityMultiplier = multiplier
+		}
+	}
+
 	// Do half the iterations with a positive, and half with a negative value for better accuracy.
 	// Hit and expertise keep only the positive half.
 	const defaultStatMod = 10.0
@@ -275,6 +285,14 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 	return swBaseResponse
 }
 
+// A healing capacity search sim, on one thread in wasm as the stat weights' own sims run there.
+func healingCapacitySim(request *proto.RaidSimRequest) *proto.RaidSimResult {
+	if IsRunningInWasm() {
+		return RunSim(request, nil, simsignals.CreateSignals())
+	}
+	return runSimConcurrent(request, nil, simsignals.CreateSignals())
+}
+
 // gen_db -gen=go-to-ts writes these to the UI as STAT_WEIGHT_*, which the stat sweep's Target ± also runs by.
 const (
 	StatWeightZ90                   = 1.645 // The two-sided 90% interval, the ± shown behind each EP.
@@ -347,7 +365,9 @@ func computeStatWeights(swcr *proto.StatWeightsCalcRequest) *proto.StatWeightsRe
 	if err != nil {
 		return &proto.StatWeightsResult{Error: err}
 	}
-	return result.ToProto()
+	resultProto := result.ToProto()
+	resultProto.HealingCapacityMultiplier = swcr.HealingCapacityMultiplier
+	return resultProto
 }
 
 func calcStatWeights(swcr *proto.StatWeightsCalcRequest) (*StatWeightsResult, *proto.ErrorOutcome) {
@@ -602,6 +622,8 @@ func runStatWeights(request *proto.StatWeightsRequest, progress chan *proto.Prog
 		ProbeIterations:    int32(len(baselineValues[0])),
 		BaselineIterations: int32(len(baselineValues[0])),
 		BaseChanceOfDeath:  baselineResult.RaidMetrics.Parties[0].Players[0].ChanceOfDeath,
+
+		HealingCapacityMultiplier: requestData.HealingCapacityMultiplier,
 	}
 
 	// Iteration i runs at seed RandomSeed+i, so a run continued at the seed after its last iteration

@@ -48,7 +48,7 @@ func TestHealerPriest(t *testing.T) {
 
 // The healer in a 5-man group at levels 30 and 60: the tank and three damage dealers as target dummies,
 // the level's damage profile from levelsim, and the group heal priority in ui/specs/priest/healer/apls/group.apl.json.
-// Records the HPS and the HPS EP on effective healing.
+// Records the HPS and the HPS EP on effective healing at the healer's healing capacity.
 func TestHealerPriestGroup(t *testing.T) {
 	var generators []core.TestGenerator
 	for _, level := range groupLevels {

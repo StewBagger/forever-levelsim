@@ -11184,6 +11184,9 @@
 										"rating_weights_description": {
 											"type": "string"
 										},
+										"healing_capacity": {
+											"type": "string"
+										},
 										"stat": {
 											"type": "string"
 										},
@@ -11458,6 +11461,7 @@
 										"rating_conversion",
 										"simulated_step",
 										"rating_weights_description",
+										"healing_capacity",
 										"stat",
 										"update",
 										"ep_ratio",

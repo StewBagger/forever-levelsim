@@ -177,6 +177,8 @@ export const runConcurrentStatWeights = async (
 		probeIterations: baselineValues[0].length,
 		baselineIterations: baselineValues[0].length,
 		baseChanceOfDeath,
+		// The requests already run at the healing capacity the worker searched for; the result reports it.
+		healingCapacityMultiplier: manualResponse.healingCapacityMultiplier,
 	});
 	const statPairs = new Map<number, StatWeightsStatPairs>();
 

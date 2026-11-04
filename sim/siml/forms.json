@@ -129,7 +129,7 @@
 			"name": "raid_buffs",
 			"category": "x",
 			"body": ["entries"],
-			"sources": [{ "path": "raid_buffs" }, { "path": "", "fields": ["target_dummies"] }],
+			"sources": [{ "path": "raid_buffs" }, { "path": "", "fields": ["target_dummies", "target_dummy_settings"] }],
 			"presence": "raid_buffs"
 		},
 		{

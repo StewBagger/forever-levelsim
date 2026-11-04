@@ -787,6 +787,11 @@ message StatWeightsRequest {
 	TargetDummySettings target_dummy_settings = 14;
 	// Weighs HPS on effective healing (UnitMetrics.ehps) in place of all healing.
 	bool effective_healing = 15;
+	// Weighs at the healer's healing capacity (sim/core/healing_capacity.go): the encounter's damage
+	// profile, tank and group damage together, scaled to the multiple at which the first player's effective
+	// healing stops keeping up, with dummies that stay up at 0 health (StatWeightsResult.healing_capacity_multiplier).
+	// Needs a damage profile and healable target dummies; without them the fight runs as it is.
+	bool healing_capacity = 16;
 }
 
 // The ± each targeted EP runs extra iterations to reach.
@@ -820,6 +825,8 @@ message StatWeightRequestsData {
 	Stat hps_reference_stat = 4;
 	// Whether the HPS side pairs UnitMetrics.ehps rather than hps.
 	bool effective_healing = 5;
+	// The damage profile multiple every request here runs at; 0 without a healing capacity search.
+	double healing_capacity_multiplier = 6;
 }
 
 // The differences of one metric between a stat run and the baseline at the same iterations, before
@@ -853,6 +860,7 @@ message StatWeightsCalcRequest {
 	int32 baseline_iterations = 6; // Every baseline run's together.
 	double base_chance_of_death = 7; // The first baseline run's.
 	repeated StatWeightsStatPairs stat_pairs = 8;
+	double healing_capacity_multiplier = 9; // StatWeightRequestsData's, passed through to the result.
 }
 
 message StatWeightsTopUpRequest {
@@ -883,6 +891,9 @@ message StatWeightsResult {
 	UnitStats sample_counts = 8; // Paired samples behind each stat's weight.
 	UnitStats step_below = 9; // How far each stat's run below the baseline moved it, as a negative; 0 without such a run.
 	UnitStats step_above = 10; // How far each stat's run above the baseline moved it, in the stat's own unit; 0 for a stat without runs.
+	// The multiple of the encounter's damage profile the weights were measured at, the healer's healing
+	// capacity; 0 when the request did not ask for it or had no profile to scale.
+	double healing_capacity_multiplier = 11;
 }
 // The defaults a character of a level starts from: its spec's talents spent up to the level's
 // points, the best gear in slot for the level without raid gear, and the EP that gear was picked by.
@@ -890,8 +901,8 @@ message LevelDefaultsRequest {
 	// The spec's setup as the site sims it; its talents are the full build the level's are taken from.
 	StatWeightsRequest stat_weights = 1;
 	int32 level = 2;
-	// Picks gear by effective HPS EP. A request without target dummies or a damage profile gets the
-	// level's healing group (levelsim.HealingGroup).
+	// Picks gear by effective HPS EP at the healer's healing capacity (StatWeightsRequest.healing_capacity).
+	// A request without target dummies or a damage profile gets the level's healing group (levelsim.WithHealingGroup).
 	bool weigh_effective_healing = 3;
 }
 message LevelDefaultsResult {
@@ -904,6 +915,8 @@ message LevelDefaultsResult {
 	double target_armor = 4;
 	int32 rounds = 5;
 	ErrorOutcome error = 6;
+	// The last round's StatWeightsResult.healing_capacity_multiplier.
+	double healing_capacity_multiplier = 8;
 }
 
 // The best gear in slot for a level without raid gear, by the EP given.

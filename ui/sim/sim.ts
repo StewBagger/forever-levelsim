@@ -746,7 +746,8 @@ export class Sim {
 	): StatWeightsRequest | null {
 		if (player.getParty() == null) return null;
 		// A healer weighs its stats on the effective healing it does for the raid's group of target dummies, which sit
-		// after it in the request's single-player raid as they do in this one, so the tank slots name the same units.
+		// after it in the request's single-player raid as they do in this one, so the tank slots name the same units. It
+		// weighs them at its healing capacity, the group damage it can no longer keep up with, which the sim searches for.
 		const healer = player.getPlayerSpec().isHealingSpec;
 		const isTank = this.raid
 			.getTanks()
@@ -776,6 +777,7 @@ export class Sim {
 				targetDummies: this.raid.getTargetDummies(),
 				targetDummySettings: this.raid.getTargetDummySettings(),
 				effectiveHealing: true,
+				healingCapacity: true,
 			}),
 
 			statsToWeigh: epStats,

@@ -21,7 +21,8 @@ const maxRoundIterations = 4000
 // its ExpectedStat armor. The gear starts from every weighed stat at 1 EP and weapon damage at 10,
 // then the set and the EP it is worn with alternate until the set stops changing. Where the set could
 // dual wield or wear a two-hander, a sim of each settles it. With weigh_effective_healing the gear is
-// picked by effective HPS EP, against the level's healing group where the request brings none.
+// picked by effective HPS EP at the healer's healing capacity, against the level's healing group where
+// the request brings none.
 func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResult) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -68,6 +69,7 @@ func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResul
 	picker := NewGearPicker(player, level)
 	var last *proto.EquipmentSpec
 	var dps, hps *proto.StatWeightValues
+	var capacity float64
 	rounds := int32(0)
 	weigh := func(set *proto.EquipmentSpec) *proto.ErrorOutcome {
 		rounds++
@@ -76,7 +78,7 @@ func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResul
 		if sw.Error != nil {
 			return sw.Error
 		}
-		dps, hps = sw.Dps, sw.Hps
+		dps, hps, capacity = sw.Dps, sw.Hps, sw.HealingCapacityMultiplier
 		ep = dps.EpValues
 		if req.WeighEffectiveHealing {
 			ep = hps.EpValues
@@ -122,6 +124,8 @@ func Defaults(req *proto.LevelDefaultsRequest) (result *proto.LevelDefaultsResul
 		Hps:           hps,
 		TargetArmor:   armor,
 		Rounds:        rounds,
+
+		HealingCapacityMultiplier: capacity,
 	}
 }
 

@@ -85,8 +85,10 @@ func HealingGroupTarget(level int32) *proto.Target {
 }
 
 // Gives a stat weights request for a single healer the level's healing group where it has none: the
-// dummies and the tank slot, the damage profile on its encounter, and effective healing as the HPS it
-// weighs.
+// dummies and the tank slot, the damage profile on its encounter, and effective healing at the healer's
+// healing capacity as the HPS it weighs. At the level's own damage the healer keeps the group up with
+// mana to spare, so more healing power only overheals; at capacity the weights count throughput and
+// mana together.
 func WithHealingGroup(swr *proto.StatWeightsRequest, level int32) {
 	if swr.TargetDummies == 0 {
 		swr.TargetDummies = HealingGroupDummies
@@ -100,4 +102,5 @@ func WithHealingGroup(swr *proto.StatWeightsRequest, level int32) {
 		swr.Encounter.DamageProfile = HealingGroupDamageProfile(level)
 	}
 	swr.EffectiveHealing = true
+	swr.HealingCapacity = true
 }

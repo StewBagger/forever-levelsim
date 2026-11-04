@@ -297,7 +297,11 @@ func runLevelDefaults(requestsDir, outDir string, specs []string, levels []int32
 					if werr := writeLevelDefaultsFile(state.path, state.file); werr != nil && writeErr == nil {
 						writeErr = werr
 					}
-					logf("[%d/%d] %s level %d in %s, %d rounds", done, len(queue), job.spec, job.level, time.Since(start).Round(time.Second), result.Rounds)
+					capacity := ""
+					if result.HealingCapacityMultiplier > 0 {
+						capacity = fmt.Sprintf(", weighed at %.2fx the level's damage", result.HealingCapacityMultiplier)
+					}
+					logf("[%d/%d] %s level %d in %s, %d rounds%s", done, len(queue), job.spec, job.level, time.Since(start).Round(time.Second), result.Rounds, capacity)
 				}
 				mu.Unlock()
 			}

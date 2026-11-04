@@ -50,6 +50,9 @@ const trackerProgress = (metrics: ProgressMetrics): ProgressTrackerProgress => (
 	total: metrics.totalIterations,
 });
 
+// The damage multiple a healer's weights were measured at, to two decimals with trailing zeros dropped (1.41, 2, 0.5).
+const formatHealingCapacity = (multiplier: number) => String(Number(multiplier.toFixed(2)));
+
 export interface EpWeightsDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
@@ -228,6 +231,13 @@ export const EpWeightsDialog = ({ open, onOpenChange, settings }: EpWeightsDialo
 						showUpdateColumn={!editOnly}
 						statAction={<StatFilterPopover {...statFilter} ariaLabel={i18n.t('stat_filters.triggers.ep')} testId="ep-stat-filter" />}
 					/>
+					{!!result?.healingCapacityMultiplier && (
+						<p className="mt-2 mb-0" data-testid="ep-healing-capacity">
+							{i18n.t('sidebar.buttons.stat_weights.modal.healing_capacity', {
+								multiplier: formatHealingCapacity(result.healingCapacityMultiplier),
+							})}
+						</p>
+					)}
 					<p className="mt-2 mb-0 text-muted">
 						{i18n.t('sidebar.buttons.stat_weights.modal.rating_weights_description')}
 						{!editOnly && (

@@ -92,10 +92,15 @@ vi.mock('@i18n/localization', () => ({
 vi.mock('../SavedEpWeights', () => ({ SavedEpWeights: () => null }));
 
 // The vitest i18n stub has no resources, so `t` answers with the key and never interpolates — which
-// would make the reference-stat half of a column tooltip invisible. This keeps the key and shows the
-// interpolation beside it.
+// would make the reference-stat half of a column tooltip, and the healing capacity's multiple, invisible.
+// This keeps the key and shows the interpolation beside it.
 vi.mock('@i18n/config', () => ({
-	default: { t: (key: string, options?: Record<string, unknown>) => (options?.refStatName ? `${key}[${options.refStatName}]` : key) },
+	default: {
+		t: (key: string, options?: Record<string, unknown>) => {
+			const shown = options?.refStatName ?? options?.multiplier;
+			return shown === undefined ? key : `${key}[${shown}]`;
+		},
+	},
 }));
 
 const toasts = vi.hoisted(() => [] as Array<{ variant: string; body: unknown }>);
@@ -344,6 +349,28 @@ describe('EpWeightsDialog', () => {
 		renderDialog();
 		expect(popup().textContent).toContain('sidebar.buttons.stat_weights.modal.rating_weights_description');
 		expect(popup().textContent).toContain('sidebar.buttons.stat_weights.modal.simulated_step_description');
+	});
+
+	it("says a healer's weights were measured at its healing capacity, and at what multiple of the level's damage", async () => {
+		player.computeStatWeights.mockResolvedValue({ ...weightsResult([[STRENGTH, 2]]), healingCapacityMultiplier: 1.4142 });
+		renderDialog();
+		const capacity = () => popup().querySelector('[data-testid="ep-healing-capacity"]');
+		expect(capacity()).toBeNull();
+
+		await act(async () => {
+			fireEvent.click(calculate());
+		});
+		expect(capacity()?.textContent).toBe('sidebar.buttons.stat_weights.modal.healing_capacity[1.41]');
+	});
+
+	it('says nothing of healing capacity for weights measured at the fight as it is', async () => {
+		player.computeStatWeights.mockResolvedValue(weightsResult([[STRENGTH, 2]]));
+		renderDialog();
+
+		await act(async () => {
+			fireEvent.click(calculate());
+		});
+		expect(popup().querySelector('[data-testid="ep-healing-capacity"]')).toBeNull();
 	});
 
 	// A gear planner never computes weights: no Calculate button, no computed columns, no Update

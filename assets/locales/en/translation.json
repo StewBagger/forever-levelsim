@@ -3313,6 +3313,7 @@
 					"copy_icon_description": "Use the copy icon above the EPs to use newly calculated EPs.",
 					"rating_conversion": "{{rating}} rating = 1%",
 					"rating_weights_description": "Hit, crit, haste, expertise, dodge, parry and block show their weights per point of rating, because gear gives them as rating, which the game converts to a percentage. The help icon next to the stat name gives the conversion.",
+					"healing_capacity": "Measured at healing capacity: {{multiplier}}× this level's dungeon damage",
 					"stat": "Stat",
 					"update": "Update",
 					"ep_ratio": "EP Ratio",

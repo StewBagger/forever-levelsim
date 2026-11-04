@@ -22,6 +22,7 @@ const result = (overrides: Partial<StatWeightsResult> = {}): StatWeightsResult =
 	dtps: values({}),
 	tmi: values({}),
 	pDeath: values({}),
+	healingCapacityMultiplier: 0,
 	...overrides,
 });
 
@@ -150,7 +151,7 @@ describe('combineScaledEpValues', () => {
 			epValuesStdev: new Stats().toProto(),
 		});
 		const [dps, hps, tps, dtps, tmi, pDeath] = perBlock.map(block);
-		return { dps, hps, tps, dtps, tmi, pDeath };
+		return { dps, hps, tps, dtps, tmi, pDeath, healingCapacityMultiplier: 0 };
 	};
 
 	it('applies the ratios in dps, hps, tps, dtps, tmi, pDeath order', () => {
@@ -188,6 +189,7 @@ describe('combineScaledWeights', () => {
 			dtps: block(0, 99),
 			tmi: block(0, 99),
 			pDeath: block(0, 99),
+			healingCapacityMultiplier: 0,
 		};
 
 		expect(combineScaledWeights(results, [2, 1, 1, 1, 1, 1]).getStat(Stat.StatAgility)).toBe(6);
